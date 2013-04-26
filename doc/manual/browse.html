@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+	  <title>VideoDB - Documentation</title>
+	  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	</head>
+	<body>
+  <a href="index.html">Table of Contents</a>
+<!-- begin content -->
+
+<h1>Usage</h1>
+
+<h2>Browsing the Database</h2>
+
+<p>The browse view allows you to list the content of your database by applying filters to the available data. On the top of the screen you'll find a row of radio buttons to list the available titles sorted by the first letter of the title.<br /> This means if you select the <code>DEF</code> filter only movies beginning with a D, E or F are shown in the list.</p>
+
+<p>When adding movies it is a good practice to move common words like <code>the</code> or <code>a</code> to the end of the title to have the sorting make more sense.</p>
+
+<p>Example: <code>A Clockwork Orange</code> becomes <code>Clockwork Orange, A</code>
+
+<p>VideoDB treats TV episodes special, which means they are not shown by default. To show them, <code>show TV episodes</code> must be enabled. You can change this behavior in the <a href="configview.html">configuration</a>.</p>
+
+<p>When selecting the <code>all</code> filter all movies are shown - please note that this can take some time if you have a very large database!<br />
+Usually the list is always sorted lexically, you may change the sort order of the <code>all</code> filter to sort by the <code>DiskID</code> in the <a href="configview.html">configuration</a>.</p>
+
+<p>The <code>unseen</code> filter just shows you the movies that are not marked as seen yet by you.</p>
+
+<p>When using the <code>new</code> filter only the 15 newest additions to your database are shown. You can change the number of shown files here in the <a href="configview.html">configuration</a>.
+
+<a name="wishlist"></a>
+<p>The last filter is the <code>Wishlist</code>. Movies shown here are not yet owned by you and will not show up in any of the other views (not even with the <code>all</code> filter). To add a movie to your wishlist just add like every other movie but set its mediatype to <code>wanted</code>.</p>
+
+
+
+<!-- end content -->
+	</body>
+</html>

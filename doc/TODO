@@ -1,0 +1,30 @@
+Here are some things that still have to be done. I add my thoughts
+about them, too. So you have an idea how likely you will see them
+in the next version. 
+If you want to do some of them *please* do so! I'm drowning in work.
+
+This file is always slightly out of date - to have full insight in
+the ongoing development process join the mailing list!
+
+* Template-Creation HOWTO
+  - which variables are available in which template and so on
+
+* Update/Add language files
+  - Yes please do so! You may even correct my bad english!
+
+* Export-Function
+  - There were some user with ideas for this
+  - export current shown list (browse, search) or all to txt,
+    pdf, csv ...
+  - Is this really needed? what for?
+  - there is mklist.pl in the contrib dir...
+
+* Platform-Independent CD-Scanner to add files
+  - I currently use videoadd.pl for that but it depends on perl
+    and mplayer
+  - a small JAVA tool would be really cool I could write one but I
+    don't know of any java libs to extract video infos from files
+  - No, there will be no PHP Disk browser in VideoDB - my webserver
+    does not even have a CDROM drive
+  - There is some Database for DVD like CDDB for AudioCDs it should
+    be used, too

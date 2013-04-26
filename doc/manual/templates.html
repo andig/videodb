@@ -1,0 +1,142 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+	  <title>VideoDB - Documentation</title>
+	  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	</head>
+	<body>
+  <a href="index.html">Table of Contents</a>
+<!-- begin content -->
+
+<h1>Development</h1>
+
+<h2>Templates</h2>
+
+<h3>General</h3>
+
+<p>VideoDB uses the <a href="http://smarty.php.net" target="_blank">Smarty Template engine</a>. Thus everybody interested in writing his own templates should have a look at the <a href="http://smarty.php.net/docs.php" target="_blank">Smarty Documentation</a></p>
+
+<p>What follows is a list of all templates used by VideoDB and the variables assigned to them. Of course you can split your templates by using Smarty's <code>{include}</code> statement.</p>
+
+<h3>All Templates</h3>
+
+<p>The following variables are available in all templates:</p>
+
+  <table cellspacing="4" cellpadding="4">
+  <tr>
+    <th valign="top" nowrap="nowrap">name</th>
+    <th valign="top" nowrap="nowrap">type</th>
+    <th valign="top">description</th>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$lang</td>
+    <td valign="top" nowrap="nowrap">associative array</td>
+    <td valign="top">Contains all language specific strings for the current language. Have a look at the files in the <code>language</code> directory for available keys.</td>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$config</td>
+    <td valign="top" nowrap="nowrap">associative array</td>
+    <td valign="top">All config options as set in the <a href="configview.html">Configuration Screen</a></td>
+  </tr>
+  </table>
+
+<h3>header.tpl</h3>
+
+  <p>This template is included at the top of every page and should set up the needed HTML headers and include the stylesheet</P>
+
+  <table cellspacing="4" cellpadding="4">
+  <tr>
+    <th valign="top" nowrap="nowrap">name</th>
+    <th valign="top" nowrap="nowrap">type</th>
+    <th valign="top">description</th>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$header</td>
+    <td valign="top" nowrap="nowrap">associative array</td>
+    <td valign="top">Contains the URLs for the top navigation. The available keys are: <code>browse, random, search, stats, new, setup, edit, view, del, borrow, imdbBrowser, help</code>. You should check if the key is empty and only display a link when an URL was given.</td>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$style</td>
+    <td valign="top" nowrap="nowrap">string</td>
+    <td valign="top">Deprecated - use <code>$config.style</code> instead.</td>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$langcode</td>
+    <td valign="top" nowrap="nowrap">string</td>
+    <td valign="top">Deprecated - use <code>$config.language</code> instead.</td>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$localnet</td>
+    <td valign="top" nowrap="nowrap">boolean</td>
+    <td valign="top">True if VideoDB is accessed from the localnet else false.</td>
+  </tr>
+  </table>
+
+<h3>footer.tpl</h3>
+
+  <p>The footer is included at the bottom of every page</p>
+
+<h3>filter.tpl</h3>
+
+  <p>This template displays the row of available filters in the browsing view.</p>
+
+  <table cellspacing="4" cellpadding="4">
+  <tr>
+    <th valign="top" nowrap="nowrap">name</th>
+    <th valign="top" nowrap="nowrap">type</th>
+    <th valign="top">description</th>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$filters</td>
+    <td valign="top" nowrap="nowrap">associative array</td>
+    <td valign="top">Contains all available filters as keys and their Names (translations) as values</td>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$filter</td>
+    <td valign="top" nowrap="nowrap">string</td>
+    <td valign="top">The currently selected filter in the browsing view</td>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$showtv</td>
+    <td valign="top" nowrap="nowrap">boolean</td>
+    <td valign="top">True if TV-Episodes are to be shown else false.</td>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$listcolumns</td>
+    <td valign="top" nowrap="nowrap">integer</td>
+    <td valign="top">This is currently only used in the modern template and determines how many columns are to be used in the browsing view.</td>
+  </tr>
+  </table>
+
+<h3>browse.tpl</h3>
+
+  <table cellspacing="4" cellpadding="4">
+  <tr>
+    <th valign="top" nowrap="nowrap">name</th>
+    <th valign="top" nowrap="nowrap">type</th>
+    <th valign="top">description</th>
+  </tr>
+
+  <tr>
+    <td valign="top" nowrap="nowrap">$</td>
+    <td valign="top" nowrap="nowrap"></td>
+    <td valign="top"></td>
+  </tr>
+  </table>
+
+
+<p>Needs to be continued...</p>
+
+
+  <!-- end content -->
+	</body>
+</html>

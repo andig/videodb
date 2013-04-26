@@ -1,0 +1,588 @@
+/**
+ * Elegant style sheet
+ *
+ * $Id: elegant.css,v 1.40 2013/03/14 17:16:35 andig2 Exp $
+ */
+
+/*
+ * Defaults
+ */
+
+body {
+	font-family: Arial, Helvetica, sans serif;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+	background-color: #e4e4e4;
+	color: #40474e
+}
+
+form, ul {
+	margin: 0px;
+}
+
+a:link, a:visited, a:active {
+	text-decoration: none;
+	color: #40474e
+}
+
+a:hover {
+	text-decoration: underline;
+	color: rgb(255,102,0);
+}
+
+table.collapse {
+	border-collapse : collapse;
+}
+
+tr {
+	vertical-align: top;
+}
+
+td {				/* this fixes a problem with opera */
+	vertical-align: top;
+	text-align: left;	
+}
+
+img {
+	border: 0px;
+}
+
+input, textarea, select {
+	font-size: 12px;
+}
+
+h3, h4 {			/* bold font, usually in action section */
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0px;
+}
+
+h4 {				/* used on edit page */
+	font-weight: normal;
+	display: inline;
+}
+
+/*
+ *	divs
+ */
+
+#container {
+	padding: 2px 8px 10px 8px;
+}
+
+#logo {
+	text-align: right;
+	float: right;
+}
+
+#logotitle, #logotitle a {
+	font: bold 20px trebuchet ms, arial, helvetica, sans-serif;
+	text-decoration: none;
+}
+
+#logohelp, #logologin, #logoprofile, #logoversion {
+	display: inline;
+}
+
+.logodivider {
+	margin: 0px 0px 0px 3px;
+}
+
+#header {
+}
+
+#headernav {
+	margin: 26px 0px 4px 0px;
+	padding: 0px;
+}
+
+#headernav li {
+	display: inline;
+	list-style-type: none;
+}
+
+#headernav2 li {
+	display: inline;
+	list-style-type: none;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+#headernav2 li:before { content: "| "; }
+
+#headernav2 li:first-child:before { content: ""; }
+
+/*IE workaround*/
+/*All IE browsers*/
+* html #headernav2 li
+{
+	border-left: 1px solid black;
+	padding: 0 0.4em 0 0.4em;
+	margin: 0 0.4em 0 -0.4em;
+}
+/*prevent first |*/
+* html #headernav2 li
+{
+	display: block;
+	float: left;
+}
+/*end workaround*/
+
+#headerhelp, #headerlogin, #headerprofile {
+	display: none;
+}
+
+#filters {
+	padding: 2px 0px 4px 0px;
+	background-color: #fff;
+	font-size: 11px;
+	text-transform: capitalize;
+	border-bottom: 1px dotted #aaa;
+}
+
+#filtersmoreless {
+	float: right;
+	padding: 3px 4px 0px 0px;
+}
+
+#filtersmoreless img.button {
+	padding: 1px;
+	background-color: white;
+	border: none;
+}	
+
+#quicksearch:hover {
+	color: #000000;
+}
+
+#quicksearch {
+	background: url(images/search_grey.gif) no-repeat scroll 0px;
+	color: #BBB;
+	padding-left: 17px;
+}
+
+#footer {
+	background-color: #fff;
+	font-size: 10px;
+	height: 19px;
+	padding: 2px;
+}
+
+#footerpages {
+	padding: 3px;
+}
+
+#footerversion {
+	float: right;
+	padding: 3px;
+	display: none;
+}
+
+#footerimage {
+	float: right;
+	padding: 2px;
+}
+
+#topspacer {
+}	
+
+#topspacer2 {
+	background-color: #fff;
+	height: 25px;
+	border-bottom: 1px dotted #aaa;
+}
+
+#actions {
+	background-color: #fff;
+	padding: 4px;
+	border-bottom: 1px dotted #aaa;
+}
+
+#actionsspacer {
+	display: none;
+}
+
+#actionsbuttons {
+}
+
+#actions form, #actions h3 {
+	display: inline;
+}
+
+#actions div {
+	display: inline;
+}
+
+#content, #listitems {
+	background-color: #fff;
+}
+
+#showheader {
+	border-bottom: 1px dotted #aaa;
+}
+
+#showheader h1 {
+	font-size: 22px;
+	font-weight: bold;
+	margin: 0px;
+}
+
+#showheader h2 {
+	font-size: 18px;
+	font-weight: bolder;
+	margin: 0px;
+}
+
+#showimage {
+	float: left;
+	padding: 5px;
+}
+
+#showplot, #showfile, #showcomment, #showcast {
+	padding: 4px;
+	text-align: justify;
+}
+
+#showfile, #showcomment, #showcast {
+	border-bottom: 1px dotted #aaa;
+}
+
+#lookup {
+	padding: 4px;
+}
+
+#editbuttons {
+	position: absolute;
+	top: 46px;
+	right: 8px;
+	float: right;
+	font-size: 12px;
+	padding: 3px 90px 0px 0px;
+	margin: 0px;
+}
+
+#permissionbuttons {
+	position: absolute;
+	top: 48px;
+	right: 8px;
+	float: right;
+	font-size: 12px;
+	padding: 3px 4px 0px 0px;
+	margin: 0px;
+}
+
+#savebutton {			
+	position: absolute;
+	top: 5px;
+	right: 4px;
+}
+
+#searchimage {
+	float: right;
+}
+
+#edit, #borrow, #statistics, #tools, #lookup, #users, #permissions, #contentlogin {
+	border-bottom: 1px dotted #aaa;
+}
+
+#borrow {
+	padding: 4px;
+}
+
+/*
+ *	classes
+ */
+
+.tabActive a:visited,
+.tabActive a:link,
+.tabActive a:hover,
+.tabInactive a:visited,
+.tabInactive a:link,
+.tabInactive a:hover {
+	font-size: 11px;
+	font-weight: bold;
+	margin: 4px 0px 0px 0px;
+	padding: 3px 6px 4px 6px;
+	text-decoration: none;
+	text-transform: capitalize;
+	white-space: nowrap;
+}
+
+.tabActive a:visited,
+.tabActive a:link,
+.tabActive a:hover {
+	background-color: #fff;
+	color: #222;
+	color: rgb(255,102,0);
+}
+.tabActive a:hover {
+	color: rgb(255,102,0);
+}
+
+.tabInactive a:visited,
+.tabInactive a:link,
+.tabInactive a:hover {
+	background-color: #f4f4f4;
+	color: #666;
+}
+.tabInactive a:hover {
+	background-color: #fff;
+	color: rgb(255,102,0);
+}
+
+.right {
+	text-align: right;
+}
+
+.center {
+	text-align: center;
+}
+
+.clear {
+	clear: both;
+}
+
+.button {
+	padding: 0px 3px 0px 3px;
+	border: 1px solid #aaa;
+	background: #eee;
+	cursor: hand;
+}
+
+.dropcap:first-letter {
+	float: left;
+	margin: 2px;
+	font-size: 32px;
+}
+
+.optionseven, .optionsodd {
+	border-bottom: 1px dotted #aaa;
+	padding: 4px;
+}
+
+.optionsleft {
+	float: left;
+	width: 25%;
+	text-align: center;
+}
+
+.optionsright {
+	float: right;
+	width: 75%;
+	text-align: left;
+}
+
+.lent {
+	background-color: #fdd;
+}
+
+.wanted {
+	background-color: #ffb;
+}
+
+.notavail {
+	font-weight: bold;
+	color: rgb(255,102,0);
+}
+
+.listeven, .listodd, #showplot, #torrents, #purchases {
+	border-bottom: 1px dotted #aaa;
+}
+
+.list_title, .list_diskid {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.list_info, .list_seen, .list_plot {
+	font-size: 11px;
+}
+
+.list_info {
+	font-style: italic;
+}
+
+.list_plot a {
+    font-weight: bold;
+}
+
+.list_item_buttons form {
+    display: inline;
+}
+
+.list_item_more {
+    float: right;
+}
+
+.list_diskid, .list_language, .list_seen, .list_item_buttons {
+    text-align: right;
+}
+
+.list_language {
+    margin-top: 2px;
+    margin-left: 2px;
+}
+
+.list_episode {
+	padding: 2px;
+}
+
+
+/*
+ * Images
+ */
+
+.cover {
+	margin: 0px 4px 0px 0px;
+}
+
+.thumb {
+	float: left;
+	margin: 0px 2px 1px 0px;
+}
+
+/* setup screenshot thumbnails */
+.setup-thumb {
+	float: left;
+	width: 105px;
+	text-align: center;
+	border: 1px solid #999;
+	margin: 0 15px 15px 0;
+	padding: 5px;
+}
+
+.setup-thumb a:hover {
+	text-decoration: none;
+}
+
+/* lookup thumbnail formatting */
+.thumbnail {
+	float: left;
+	margin: 5px;
+}
+
+#purchasecontent .thumbnail {
+	width: 300px;
+	background-color: #fff;
+	color: #000;
+}
+
+.img-shadow {
+	float: left;	
+	background: url(images/shadowalpha.png) no-repeat bottom right !important;
+	background: url(images/shadow.gif) no-repeat bottom right;
+	margin: 10px 0 0 10px !important;
+	margin: 10px 0 0 5px;
+}
+
+.img-shadow img {
+	display: block;
+	position: relative;
+	background-color: #fff;
+	border: 1px solid #a9a9a9;
+	margin: -8px 6px 6px -8px !important;
+	margin: -8px 6px 6px -4px;
+	padding: 1px;
+}
+
+/*
+ * Ajax Stuff
+ */
+
+.hidden {
+	display: none;
+}
+
+div.autocomplete {
+	position:absolute;
+	width:250px;
+	background-color:white;
+	border:1px solid #ccc;
+	border-width: 1px 0 0 0;
+	margin:0px;
+	padding:0px;
+	opacity:0.90;
+}
+div.autocomplete ul {
+	list-style-type:none;
+	margin:0px;
+	padding:0px;
+}
+div.autocomplete ul li {
+	list-style-type:none;
+	display:block;
+	margin:0;
+	padding:2px;
+	border: 1px solid #ccc;
+	border-width: 0 1px 1px 1px;
+	cursor:pointer;
+}
+div.autocomplete ul li.selected { 
+	background: #4173CC; 
+	color: #fff; 
+}
+div.autocomplete ul li em {
+	font-weight: bold; 
+	font-style: normal; 
+	background: #ccc;
+}
+div.autocomplete ul li.selected em { 
+	background: none; 
+}
+
+
+/* Rating */
+.rating_container {
+	white-space: nowrap; 
+	clear: both;
+	display: inline;
+}
+
+.rating_container a {
+	float:left;
+	display:block;
+	width:20px;
+	height:20px;
+	border:0;
+}
+
+.rating_container a.rating_off {
+	background-image:url("images/starempty.gif");
+}
+
+.rating_container a.rating_half {
+	background-image:url("images/starhalf.gif");
+}
+
+.rating_container a.rating_on {
+	background-image:url("images/starfull.gif");
+}
+
+.rating_container a.rating_selected {
+	background-image:url("images/starselected.gif");
+}
+
+/* Image lookup */
+#images, #images .thumbnail a {
+    background-color: #aaa;
+    color: #fff;
+}
+#images2 {
+    padding: 5px 5px 0px 5px;
+}
+
+/*
+ * Help Browser
+ */
+
+.helpbrowser code {font-family: monospace; color: #044;}
+.helpbrowser td th {background-color: #eee;}
+.helpbrowser h1 {text-align: center; font-size: 15pt; font-weight: bolder; margin-top: 0px}
+.helpbrowser h2 {margin-left: 10px; font-size: 13pt; font-weight: bolder;}
+.helpbrowser h3 {margin-left: 30px; font-size: 11pt; font-weight: bolder; font-variant: small-caps}
+.helpbrowser p  {text-align: justify; margin-left: 50px; width: 90%}
+.helpbrowser pre {margin-left: 50px; font-family: monospace; color: #044;}
+.helpbrowser table ul dl {margin-left: 50px; width: 90%}
+.helpbrowser dd {margin-bottom: 10px;}
+

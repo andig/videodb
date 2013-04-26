@@ -1,0 +1,14 @@
+If you want to add a new language just put a flag image in this directory.
+
+I got all my flags from www.blueflash.de - Unfortunately the images are no
+longer available there but you can still get them from the Webarchive at:
+http://web.archive.org/web/20020205113643/www.blueflash.de/flaggen/landlist.html
+
+Please email videodb-devel@lists.sf.net if you want your flag to be included in 
+the standard distribution.
+
+Note:
+
+To limit the number of flags displayed in the options dialog, a number of flags 
+has been moved into the additional folder. To use these flags, they must be
+copied to the images/flags folder.

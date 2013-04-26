@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+	  <title>VideoDB - Documentation</title>
+	  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	</head>
+	<body>
+  <a href="index.html">Table of Contents</a>
+<!-- begin content -->
+
+<h1>Additional Scripts</h1>
+
+<h2>General</h2>
+
+<p>VideoDB comes with some additional Scripts to do certain tasks, using them is completely optional and not needed for a functional VideoDB. All these files are stored in the <code>contrib</code> directory.<br />
+Some of them are written in Perl and you have to edit them to match your database auth options. Some knowledge of Perl and SQL may be helpful.</p>
+
+<p>If you wrote something you think others could find useful just send it to the developers mailing list (<a href="mailto:videodb-devel@lists.sourceforge.net">videodb-devel@lists.sourceforge.net</a>) or join the <a href="http://lists.sourceforge.net/mailman/listinfo/videodb-devel">Developer Mailinglist</a> and post it there.</p>
+
+<a name="mklist"></a>
+<h2>mklist.pl</h2>
+
+<p>This generates a plaintextlist of all files in the database. Edit the variables at the top</p>
+
+<a name="setgenre"></a>
+<h2>setGenre.pl</h2>
+
+<p>This script is useful to set the same genres for a bunch of entries based on their title. For example setting all <code>Simpsons</code> episodes to <code>Animation</code> and <code>Comedy</code>. You have to edit some variables at top of the file to make it do what you want.</p>
+
+<a name="videoadd"></a>
+<h2>videoadd.pl</h2>
+
+<p>This tool is very useful to automatically add some videofiles to the database. It mounts your CD-ROM drive, searches for video files, tries to guess the title and some other infos from the filename and adds them to the database. It uses <a href="http://www.mplayerhq.hu/">mPlayer</a> to extract video informations from the file. It accepts the path to your CD-ROM drive as argument.</p>
+
+<a name="direxport"></a>
+<h2>direxport.pl</h2>
+
+<p>This creates single html pages from the movies in the database. It allows me to browse the database content with my <a href="http://splitbrain.org/go/irfc">IR File Chooser</a> tool.</p>
+
+<a name="langcheck"></a>
+<h2>langcheck.php</h2>
+
+<p>This PHP tool checks all language files for missing translations and displays the missing keys. This is useful for <a href="translate.html">Translators</a>. Just call it from your webbrowser like this: <code>http://myserver.com/videodb/contrib/langcheck.php</code></p>
+
+<a name="tvtome"></a>
+<h2>tvtome.php</h2>
+
+<p>To use this PHP tool call it from your webbrowser like this: <code>http://myserver.com/videodb/contrib/twtome.php</code>. This tool can fetch episode infos from <a href="http://www.tvtome.com">www.tvtome.com</a> and add the data to the episodes in your VideoDB.</p>
+
+<p>You need to enter the complete URL to the TV shows episode guide at tvtome (eg. <code>http://www.tvtome.com/Futurama/guide.html</code> for Futurama) and some Searchstring to select the episodes of this show stored in your VideoDB (eg. <code>Futurama*</code> to find all movies with their titles beginning with Futurama)</p>
+
+<p>After you press the "submit query" button the tool fetches the episode guide and lists all episodes. For each episode you have to choose the matching movie in your VideoDB. The tool tries to suggest the matching title based upon an similarity comparison. For each episodes data you want to import you need to check the checkbox. Then pressing thefinal submit button the selected data is imported.</p>
+
+<p>You need to have Admin rights to use this tool in multiuser mode.</p>
+
+<!-- end content -->
+	</body>
+</html>

@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+	  <title>VideoDB - Documentation</title>
+	  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	</head>
+	<body>
+  <a href="index.html">Table of Contents</a>
+<!-- begin content -->
+
+<h1>Usage</h1>
+
+<h2>Frequently Asked Questions</h2>
+
+<p>Here are some frequently asked questions:</p>
+
+<dl>
+  <dt><b>I installed the database and changed the config.inc.php but when I try to browse the videodb it doesn't work.</b></dt>
+  <dd>Make sure your PHP installation has 'short_open_tag' enabled (should be by default).</dd>
+
+  <dt><b>I want more Inputfields!</b></dt>
+  <dd>There are four custom fields! Use them! Read the comments in custom.php for informations how to change the output and input of them.</dd>
+
+  <dt><b>My videos are not in english, german, french or spanish! What should I put into the language box?</b></dt>
+  <dd>Just put in your desired language it is just a freeform textfield. If you want to have a country flag displayed for it, place a GIF image named like the language into the flags directory. It should be 30x15 pixels in size. There is a README in the images/flags directory - read it.</dd>
+
+  <dt><b>I can't borrow a video! How is this done?</b></dt>
+  <dd>You have to assign a diskid to it! If you have done so, select the video and click on [ borrow ] in the top row.</dd>
+
+  <dt><b>My movies are stored on some really weird media! How can I add some new mediatypes?</b></dt>
+  <dd>Use your favourite MySQL tool to add them into the mediatypes table. Does anyone own LaserDisks? Should they be in by default?</dd>
+
+  <dt><b>The Adult genre never get's filled by an IMDB lookup!</b></dt>
+  <dd>Yes - there is no such category in IMDB - You have to mark your pr0n yourself ;-)</dd>
+
+  <dt><b>How does the wishlist work?</b></dt>
+  <dd>To add a movie to wishlist find the wanted movie on IMDB, add the movie as usual  but choose <code>wanted</code> as mediatype - the movie will appear on your wishlist. When you finally get the movie you can change the mediatype setting to appropriated in the edit screen.</dd>
+
+  <dt><b>I enabled the multiuser support. But now I can't login to add users!</b></dt>
+  <dd>There is a default user named <code>admin</code> created on database creation. An his password is - you guessed it - <code>admin</code>. BTW: Be sure to change the password once you logged in.</dd>
+
+  <dt><b>Some of my movies are spread about multiple disks. How do I add them?</b></dt>
+  <dd>There are two ways people handle this. What I do is adding them twice (or how many disks you have) with some label like "CD2" or something in the title or subtitle field. Others use a custom field to store the number of disks - but this makes the file information fields a little bit useless. All other solutions would require drastic database changes.</dd>
+
+  <dt><b>I have multiple movies on one disk. Is that a problem?</b></dt>
+  <dd>No. Just add any movie and give each the same diskID - All movies on the same disk become unavailable if you borrow the disk.</dd>
+
+  <dt><b>Can I add some more genres?</b></dt>
+  <dd>Just add them with your favourite MySQL tool to the genres table.</dd>
+
+  <dt><b>I tried to translate the english language file but when I select my newly created language everything stays in english!?</b></dt>
+  <dd>If there is a bug in the language file the default one is used. Try to load your file directly in the browser. This will parse the file and display an error message which should help you. Another hint: You have to escape doublequotes with a backslash.</dd>
+
+  <dt><b>My cache/imdb directory is getting large - Can I delete the files in it?</b></dt>
+  <dd>Yes. Or just use the cache controlbar in the <a href="configview.html">Config Screen</a></dd>
+
+  <dt><b>Arghh! I locked my self out from the config screen by making a mistake in the localnet option.</b></dt>
+  <dd>Use your favourite MySQL tool to delete the option from the config table: <code>DELETE FROM config WHERE opt='localnet';</code></dd>
+
+  <dt><b>Hey your tool is great! Can I do anything for you?</b></dt>
+  <dd>Read, inform yourself and think before voting your next president.</dd>
+
+  <dt><b>I want to support you and the development of VideoDB - can I donate something?</b></dt>
+  <dd>Of course you can :-D Use the <a href="https://www.paypal.com/xclick/business=cpuidle%40gmx.de&item_name=videoDB&no_note=1&tax=0&currency_code=EUR">PayPal Account</a></dd>
+
+  <dt><b>Are all these questions really asked frequently or do you just make them up?</b></dt>
+  <dd>Yes :-)</dd>
+
+</dl>
+
+<p>your question isn't answered here? just mail me :-)</p>
+
+<!-- end content -->
+	</body>
+</html>

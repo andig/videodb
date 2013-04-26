@@ -1,0 +1,74 @@
+INSTALL
+
+  - Be sure to have a recent PHP version! At least 5.3 with GD library is required
+  - copy all files in a directory somewhere below your webserver root
+  
+  Do one of these steps:
+
+    -  point your browser the install.php and follow the instructions
+
+  or (not recommended since v2.0)
+
+    - create a MySQL-Database using the table definitions in
+      install/install.sql
+    - edit the config.inc.php to match your database
+
+  - point your browser to your new VideoDB and add some movies
+  - customize everything in the config screen
+
+UPDATING FROM A PRIOR VERSION
+
+  - extract the new videoDB archive into the same folder as your old installation
+  - open videoDB- the system will recognize that upgrade is required and start install.php
+  
+  or
+
+    - manually point your browser to install.php
+    
+  - follow the instructions
+
+  or (not recommended since v2.0)
+
+    - run doc/updatedb.sql over your existing database with the -f option to
+      force mysql to ignore errors. This *should* not delete any of your data.
+      e.g.
+        mysql -p -f VideoDB < doc/updatedb.sql
+
+  - check out new config options in the config screen
+
+CUSTOMIZING
+
+  - You can define up to four custom fields in the config screen
+  - You can add input and output functions for them in custom.php
+  - You can add additional stylesheets by dropping them into the template
+    directory (e.g. templates/default/)
+  - You can create your own templates by putting them into their own
+    directory in templates/
+  - Whenever you do anything of the above please send it to me
+
+READ MORE
+
+  - Be sure to check out the HTML manual in doc/manual or check out
+    the Wiki at http://www.splitbrain.org/dokuwiki/vdb:videodb
+
+PROBLEMS/FEEDBACK
+
+  - Use the mailinglist to contact the developers at
+    http://lists.sourceforge.net/mailman/listinfo/videodb-devel
+  - Consult the current documentation at
+    http://www.splitbrain.org/dokuwiki/vdb:videodb
+
+THANKS
+
+  - all the people mentioned in the CHANGELOG
+  - all th people who made the wonderful free software this project is
+    based on (e.g. Developers of PHP, Smarty, Apache, MySQL, Linux)
+  
+LICENSE
+
+  VideoDB is released under the GNU General Public License (GPL)
+  See COPYING for more Info
+  
+  VideoDB comes with the Smarty Template Engine
+  Smarty is released under the GNU Lesser General Public License (LGPL)
+  See COPYING.lib in the smarty directory for more Info

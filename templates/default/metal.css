@@ -1,0 +1,98 @@
+body      {font-family:sans-serif;font-size:16px; background-image:url(metal/alu.jpg);}
+
+input,textarea,select,option {background-color:#C7C7D1; background-image:url(metal/alu.jpg);}
+
+a:link    {text-decoration:none; color:#333366;}
+a:visited {text-decoration:none; color:#333366;}
+a:active  {text-decoration:none; color:#333366;}
+a:hover   {text-decoration:none; color:#333399;}
+
+.even {background-image:url(metal/alu3.jpg);}
+.odd  {background-image:url(metal/alu2.jpg);}
+.lent {background-image:url(metal/alu4.jpg);}
+
+.center {text-align: center;}
+
+.filter {font-size:12px}
+
+.list_title {font-weight:bold}
+.list_diskid {font-weight:bold;font-size:12px}
+.list_seen {font-size:12px}
+.list_info {font-style:italic}
+.list_plot {font-size:12px}
+
+.tableborder {border-width:1px;
+              border-style:solid;
+              border-left-color:#ffffff;
+              border-right-color:#555555;
+              border-top-color:#ffffff;
+              border-bottom-color:#555555;}
+.infobox {    border-width:1px;
+              border-style:solid;
+              border-left-color:#ffffff;
+              border-right-color:#555555;
+              border-top-color:#ffffff;
+              border-bottom-color:#555555; font-size:18px;
+              text-align:center;}
+.infobox td {text-align:center}
+.toplink {    padding:2px;
+              background-image:url(metal/alu3.jpg);
+              border-width:1px;
+              border-style:solid;
+              border-left-color:#ffffff;
+              border-right-color:#555555;
+              border-top-color:#ffffff;
+              border-bottom-color:#555555;}
+.splitbrain { font-size:10px;}
+.version {    font-size:10px;
+              border-width:1px;
+              border-style:solid;
+              border-left-color:#555555;
+              border-right-color:#555555;#ffffff;
+              border-top-color:#555555;
+              border-bottom-color:#ffffff;}
+
+.show_title {font-size:20pt; font-weight:bolder;}
+.show_subtitle {font-size:16pt; font-weight:bolder;}
+.show_id {font-size:16pt; font-weight:bolder;}
+
+.notavail {color:#ff0000; font-weight:bold}
+
+.logo {font-size:28px; font-weight:bolder; font-style:italic;}
+
+.example {font-family:monospace; color:#004444;}
+
+.textbox {font-family:sans-serif; font-size:12px; width:300px; height:120px }
+
+/* setup screenshot thumbnails */
+.setup-thumb {
+	float: left;
+	width: 105px;
+	text-align: center;
+	font-size: 12px;
+	border: 1px solid #999;
+	margin: 0 15px 15px 0;
+	padding: 5px;
+}
+
+.setup-thumb a:hover {
+	text-decoration: none;
+}
+
+/* this fixes a problem with opera */
+tr {vertical-align: top;}
+td {vertical-align: top; text-align:left}
+
+/* special formatings for stuff in the helpbrowser */
+.helpbrowser code {font-family:monospace; color:#00cc00;}
+.helpbrowser td {background-color:#EEEEEE;}
+.helpbrowser th {background-color:#EEEEEE;}
+.helpbrowser h1 {text-align:center; font-size:20pt; font-weight:bolder;}
+.helpbrowser h2 {margin-left:10px; font-size:16pt; font-weight:bolder;}
+.helpbrowser h3 {margin-left:30px; font-size:12pt; font-weight:bolder; font-variant:small-caps}
+.helpbrowser p  {text-align:justify; margin-left:50px; width:90%}
+.helpbrowser pre {margin-left:50px; font-family:monospace; color:#004444;}
+.helpbrowser ul {margin-left:50px; width:90%}
+.helpbrowser dl {margin-left:50px; width:90%}
+.helpbrowser dd {margin-bottom:10px;}
+.helpbrowser table  {margin-left:50px; width:90%}

@@ -1,0 +1,12 @@
+#
+# Apache access control 
+#
+# @author Andreas Goetz <cpuidle@gmx.de>
+# $Id: .htaccess,v 1.2 2008/03/01 10:19:07 andig2 Exp $
+#
+
+# avoid image expiry
+<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresDefault "access plus 1 month"
+</IfModule>

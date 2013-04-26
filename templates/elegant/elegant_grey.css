@@ -1,0 +1,128 @@
+/**
+ * Grey style sheet
+ *
+ * $Id: elegant_grey.css,v 1.1 2013/03/14 17:16:36 andig2 Exp $
+ */
+
+
+/*
+ * Defaults
+ */
+
+body {
+	font-family: Tahoma, Verdana, sans serif;
+	background-color: #f8f8f8;
+	color: #000;
+}
+
+a:link, a:visited, a:active {
+	color: #000;
+}
+
+#logotitle {
+	font: bold 20px tahoma, trebuchet ms, arial, helvetica, sans-serif; 	
+}
+		 
+#filters {
+	background-color: #ddd;
+}
+#footer {
+	background-color: #ddd;
+}
+
+#topspacer, #topspacer2 {
+	background-color: #ddd;
+	height: 10px;
+}	
+#actions {
+	background-color: #ddd;
+	padding: 4px;
+}
+
+#content {
+	background-color: #eee;
+}
+
+#showheader {
+	border-bottom: 1px solid #aaa;
+}
+
+#showplot, #showfile, #showcomment, #showcast, #torrents, #purchases {
+	padding: 4px;
+	text-align: justify;
+	border-bottom: 1px solid #aaa;
+}
+
+#lookup {
+	padding: 4px;
+}
+
+#edit, #borrow, #statistics, #tools, #lookup, #users {
+}
+
+
+.tabActive a:visited,
+.tabActive a:link,
+.tabActive a:hover {
+	background-color: #ddd; 
+	color: #000;
+} 
+.tabActive a:hover {
+	color: #fff;
+}
+
+.tabInactive a:visited,
+.tabInactive a:link,
+.tabInactive a:hover {
+	background-color: #aaa; 
+	color: #fff; 
+} 
+.tabInactive a:hover {
+	background-color: #ddd; 
+}
+
+.button {
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-right: 3px;
+	padding-left: 3px;
+}
+
+.dropcap:first-letter {
+}
+
+.listeven {
+	background-color: #fff;
+	clear: both;
+}
+
+.listodd {
+	background-color: #eee;
+	clear: both;
+}
+
+.listdivider {
+	clear: both;
+}
+
+.listcell {
+	float: left;
+}
+
+.lent {
+	background-color: #fcc;
+}
+
+.wanted {
+	background-color: #ff9;
+}
+
+.notavail {
+	color: #f00; 
+}
+	
+.listeven, .listodd {
+	border-bottom: 1px dotted #aaa;
+}
+
+

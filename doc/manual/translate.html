@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+	  <title>VideoDB - Documentation</title>
+	  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	</head>
+	<body>
+  <a href="index.html">Table of Contents</a>
+<!-- begin content -->	
+
+<h1>Development</h1>
+
+<h2>Languages</h2>
+
+<p>VideoDB already comes with a lot of languages, but if your's isn't supported why don't you become a translator?</p>
+
+<p>The first thing you should do is to join the <a href="http://lists.sourceforge.net/mailman/listinfo/videodb-devel" target="_blank">Developer Mailinglist</a> at SourceForge to stay informed when new language strings are added.</p>
+
+<p>To create a new language file just copy the <code>en.php</code> file in the <code>language</code> directory and translate the all the contained strings to your language. I think you'll get the system when you have a look at it ;-).<br />
+However pay attention to the <code>$lang[encoding]</code> field. This contains the character encoding you used in the file. You may use another encoding than <code>iso-8859-1</code>. See the <code>bg.php</code> as an example.<br />
+You should adjust the the header at the top of the file to reflect your authorship, too. ;-). When updating or correcting a file of someone else just add another <code>@author</code> line with your name.</p>
+
+<p>After translation you should send the file to the mailing list to be included in the next release.</p>
+
+<p>Sometimes translations get slightly behind the english version. Missing translations will are always replaced by the english strings.</p>
+
+<p>Hint: The <a href="contrib.html#langcheck">langcheck.php</a> tool can be very helpful to see a list of missing translations</p>
+
+<!-- end content -->	
+	</body>
+</html>

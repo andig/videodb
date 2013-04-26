@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+    <head>
+      <title>VideoDB - Documentation</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    </head>
+    <body>
+  <a href="index.html">Table of Contents</a>
+<!-- begin content -->
+
+<h1>Installation</h1>
+
+  <p>The examples in this document assumes you're using Linux and Apache. The Apaches document root is in <code>/var/www</code> and VideoDB is to be installed in <code>/var/www/videodb</code>. But it shouldn't be difficult for you to follow the steps with any other environment.</p>
+
+<a name="requirements"></a>
+<h2>Requirements</h2>
+
+  <p>VideoDB works with the typical LAMP and WAMP environments. Here are the requirements in detail:</p>
+
+  <ul>
+    <li>A Webserver wich supports PHP (<a href="http://httpd.apache.org" target="_blank">Apache</a> recommended)</li>
+    <li>A recent version of <a href="http://www.php.net" target="_blank">PHP 4</a>, at least 4.1.0 is required</li>
+    <li>A <a href="http://www.mysql.com" target="_blank">MySQL</a> Database</li>
+    <li>A WebBrowser (something new is probably better)</li>
+  </ul>
+
+
+<a name="firsttime"></a>
+<h2>First time installation</h2>
+
+  <p>Unzip the tarball into a directory below your webserver document root and make the cache directories writable.</p>
+
+  <p>Example:</p>
+  <pre>
+  $> cd /var/www
+  $> tar -xzvf ~/videodb-*.tgz
+  $> chmod 777 videodb/cache/*
+  </pre>
+
+  <p>Then create a new database using the <code>install.sql</code> file in the <code>install</code> directory</p>
+
+  <p>Example:</p>
+  <pre>
+  $> mysqladmin -p create videodb
+  $> mysql -p videodb < /var/www/videodb/install/install.sql
+  </pre>
+
+
+  <p>Now edit the <code>config.inc.php</code> file to match your database settings.</p>
+
+  <p>Thats it. Now point your webbrowser to your new videodb and add some movies</p>
+
+
+<a name="update"></a>
+<h2>Update from a previous version</h2>
+
+  <p>For updating from a previous version just delete all files but the cache directory and keep your database. Then unzip the new tarball as described <a href="installation.html#firsttime">above</a>. Then apply the <code>upgrade.sql</code> to your database using the the <code>-f</code> parameter to ignore errors.</p>
+
+  <p>Example:</p>
+  <pre>
+  $> mysql -p -f videodb < /var/www/videodb/install/upgrade.sql
+  </pre>
+
+  <!-- end content -->
+    </body>
+</html>

@@ -1,0 +1,42 @@
+#
+# Apache access control 
+#
+# @author Andreas Goetz <cpuidle@gmx.de>
+# $Id: .htaccess,v 1.2 2008/04/29 13:32:48 andig2 Exp $
+#
+
+# Don't show directory listings for URLs which map to a directory.
+Options -Indexes
+
+# go directly to index.php
+DirectoryIndex index.php
+
+# make sure Apache doesn't set default charset on it's own (bug 1943523)
+AddDefaultCharset utf-8
+
+# PHP 4, Apache 1.
+<IfModule mod_php4.c>
+  php_value magic_quotes_gpc                0
+  php_value default_charset utf-8
+</IfModule>
+
+# PHP 4, Apache 2.
+<IfModule sapi_apache2.c>
+  php_value magic_quotes_gpc                0
+  php_value default_charset utf-8
+</IfModule>
+
+# PHP 5, Apache 1 and 2.
+<IfModule mod_php5.c>
+  php_value magic_quotes_gpc                0
+  php_value default_charset utf-8
+</IfModule>
+
+# enable compression
+<IfModule mod_deflate_DISABLED.c>
+	# Deflate zum zippen
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml ap plication/xhtml+xml text/javascript text/css
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4.0[678] no-gzip
+	BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+</IfModule>

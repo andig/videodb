@@ -1,0 +1,1 @@
+{*  Template for the video detailview  $Id: contrib.tpl,v 1.3 2005/05/22 10:29:57 andig2 Exp $*}<!-- {$smarty.template} --><div id="topspacer"></div><div id="content"><div id="tools">	<br/>	<ul id="contriblist">	{foreach item=file from=$files}		<li><a href="{$file[0]}">{$file[1]}</a></li>	{/foreach}	</ul>	<br/></div><!-- /tools --></div><!-- /content -->

@@ -1,0 +1,230 @@
+/**
+ * $Id: compact.css,v 2.16 2007/08/08 19:03:37 andig2 Exp $
+ */
+ 
+body {
+	font-family: Tahoma, Verdana, sans serif;
+	font-size:12px;
+	margin: 0px;
+	padding: 0px;
+}
+
+tr {
+	vertical-align: top;
+}
+
+td {
+	vertical-align: top;	/* this fixes a problem with opera */
+	text-align: left;	/* this fixes a problem with opera */
+	font-size: 12px; 
+}
+
+th {
+	font-size: 12px; 
+}
+
+img {
+	border: 0px;
+}
+
+a:link, a:visited, a:active {
+	text-decoration: none; 
+	color: #004;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#topspacer {
+	height: 10px;
+}
+
+/*
+ * AJAX styles
+ */
+.hidden {
+	display: none;
+}
+
+.even {background-color:#fff;}
+.odd  {background-color:#eee;}
+.lent {background-color:#fcc;}
+.wanted {background-color:#ff9;}
+
+.filter {
+	font-size:10px
+}
+
+.list_title,
+.list_diskid { font-weight:bold; font-size:12px; }
+.list_info { font-style:italic; font-size:10px; }
+.list_seen,
+.list_plot { font-size:10px; }
+.list_episode { padding: 2px; }
+
+.tableborder {width:100%; background-color: #fff; }
+.tablefilter, #topspacer {width:100%; background-color:#ccf;  border-bottom: 1px solid #339; }
+.tablefooter {width:100%; background-color:#ccf;  border-top: 1px solid #339; }
+.tablemenu {width:100%; background-color: #339;}
+
+.show_title {
+	font-size: 18px;
+	font-weight: bolder;
+}
+.show_subtitle,
+.show_id {
+	font-size: 18px; 
+	font-weight: bolder;
+}
+.show_info {
+	background-color:#f0f0f0;  
+	border-bottom: 1px solid #bbbbbb;
+}
+.show_plot {
+	background-color:#f6f6f6;  
+	border-bottom: 1px solid #bbbbbb;
+}
+.notavail {color:#ff0000; font-weight:bold}
+
+.logo, a.logo, a.logo:hover, a.logo:visited {
+	font-size:18px; 
+	font-weight:bolder; 
+	font-style:italic; 
+	text-decoration: none;
+	color:	#ffffff;
+	float:	right;
+	margin-right: 3px;	/* right margin on logo */
+}
+
+.splitbrain,
+.version {
+	font-size: 10px;
+}
+
+.center {
+	text-align: center;
+}
+
+.tabActive A:visited,
+.tabActive A:link,
+.tabActive A:hover {
+	font-size: 11px; 
+	font-weight:bold; 
+	height: 22px; 
+	border-color:#ffffff #333399 #ffffff #ffffff; 
+	border-style: groove; 
+	border-width: 2px 1px 0px 2px; 
+	padding: 2px 6px 2px 6px; 
+	background-color:#ccccff; 
+	color:#333399; 
+	text-decoration:none;  
+	text-transform: capitalize; 
+} 
+.tabActive A:hover {
+	background-color:#ccccff;
+	color:#6666cc;
+}
+
+.tabInactive A,
+.tabInactive A:visited,
+.tabInactive A:link,
+.tabInactive A:hover {
+	font-size: 11px; 
+	font-weight: bold; 
+	height: 18px; 
+	border-color: #ccccff #333399 #ccccff #ccccff; 
+	border-style: groove; 
+	border-width: 2px 1px 0px 2px ;
+	margin: 4px 0px 0px 0px;
+	padding: 0px 6px 0px 6px;
+	background-color:#6666cc; 
+	color:#ffffff; 
+	text-decoration: none;  
+	text-transform: capitalize;
+} 
+.tabInactive A:hover {
+	background-color:#ccccff;
+	color:#6666cc;
+}
+
+.filterlink A,
+.filterlink A:visited,
+.filterlink A:link,
+.filterlink A:hover,
+.filterlink {
+	font-weight: bold;
+	color: #339;
+	text-transform: capitalize;
+}
+
+form {
+	margin: 0px;
+}
+
+input, textarea, select {
+	font-size: 12px; 
+}
+
+input.button {
+	text-transform: capitalize;
+	font-size: 12px; 
+}
+
+.caption,
+.editcaption {
+	text-transform: capitalize;
+}
+.caption {
+	font-weight: bold;
+}
+
+.cover
+{
+	margin: 0px 4px 1px 0px;
+}
+
+.thumb
+{
+	float: left;
+	margin: 0px 2px 1px 0px;
+}
+
+/* setup screenshot thumbnails */
+.setup-thumb {
+	float: left;
+	width: 105px;
+	text-align: center;
+	border: 1px solid #999;
+	margin: 0 15px 15px 0;
+	padding: 5px;
+}
+
+.setup-thumb a:hover {
+	text-decoration: none;
+}
+
+/* lookup.tpl thumbnail formatting */
+.thumbnail
+{
+	float: left;
+	margin: 5px;
+}
+
+#topspacer {
+	height: 10px;
+}	
+
+/* special formatings for stuff in the helpbrowser */
+.helpbrowser code {font-family:monospace; color:#004444;}
+.helpbrowser td {background-color:#EEEEEE;}
+.helpbrowser th {background-color:#EEEEEE;}
+.helpbrowser h1 {text-align:center; font-size:15pt; font-weight:bolder;}
+.helpbrowser h2 {margin-left:10px; font-size:13pt; font-weight:bolder;}
+.helpbrowser h3 {margin-left:30px; font-size:11pt; font-weight:bolder; font-variant:small-caps}
+.helpbrowser p  {text-align:justify; margin-left:50px; width:90%}
+.helpbrowser pre {margin-left:50px; font-family:monospace; color:#004444;}
+.helpbrowser ul {margin-left:50px; width:90%}
+.helpbrowser dl {margin-left:50px; width:90%}
+.helpbrowser dd {margin-bottom:10px;}
+.helpbrowser table  {margin-left:50px; width:90%}

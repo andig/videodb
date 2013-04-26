@@ -1,0 +1,160 @@
+/**
+ * Nexgen style sheet
+ *
+ * $Id: nexgen.css,v 1.9 2013/03/21 16:27:57 andig2 Exp $
+ */
+
+/* general styles */
+body { background: none repeat scroll 0% 0% white; }
+
+/* make layout fluid */
+.row, .th { max-width: 100%; }
+.inline { display: inline !important; }
+.centered { text-align: center; }
+/* Foundation 4.0.5 fix */
+/*[class*="block-grid-"] > li.clear { clear: both !important; }*/
+
+/* forms */
+form .row .row { margin: 0px -0.5em; }
+textarea.large { height: 8.1em; }
+
+/* IMDB inframe */
+iframe {
+    border: 0px;
+    width: 100% !important; 
+    height: 100% !important; }
+
+/* multi-column text */
+@media only screen {
+    .small-cols-2, .small-cols-3, .small-cols-4 { -webkit-column-gap: 30px; -moz-column-gap: 30px; }
+    .small-cols-2 { -webkit-column-count: 2; -moz-column-count: 2; }
+    .small-cols-3 { -webkit-column-count: 3; -moz-column-count: 3; } 
+    .small-cols-4 { -webkit-column-count: 4; -moz-column-count: 4; } }
+@media only screen and (min-width: 48em) {
+    .large-cols-2, .large-cols-3, .large-cols-4 { -webkit-column-gap: 30px; -moz-column-gap: 30px; }
+    .large-cols-2 { -webkit-column-count: 2; -moz-column-count: 2; }
+    .large-cols-3 { -webkit-column-count: 3; -moz-column-count: 3; } 
+    .large-cols-4 { -webkit-column-count: 4; -moz-column-count: 4; } }
+    
+/* button groups */
+ul.button-group { 
+    display: inline-block; }
+
+/* top-bar forms */
+.top-bar input, .top-bar .button { font-size: 0.8125em; }
+/* logo */
+.top-bar .name h1 a { color: #53d8ff !important; font-family: Exo;}
+
+/* header */
+.header {
+    background-color: rgb(238, 238, 238);
+    padding: 12px 0px 8px 0px;
+    margin: -33px 0px 33px 0px; }
+
+    .header .button-group { 
+        margin-top: -5px; }
+
+    .header .button, .header .sub-nav, .header input { 
+        margin-bottom: 0px; }
+
+/* align alert-box below top-bar similar to header */
+.alert-box.sticky { margin-top: -34px; }
+
+/* footer */
+footer {
+    background-color: rgb(43, 166, 203);
+    background-color: rgb(238, 238, 238);
+    padding: 12px 0px 12px 0px; }
+
+    footer .pagination {
+        margin: 0px; }
+
+ul.itemlist { 
+    margin: -10px -10px 10px -10px; }
+
+    ul.itemlist a div {
+        color: rgb(43, 43, 43) !important;
+        font-weight: bold;
+        text-align: center;
+        height: 1.6em;
+        overflow: hidden;
+        opacity: 0.7;
+   }
+
+/* show columns */
+.show-cover { 
+    text-align: center; }
+
+    .show-cover h2 { 
+        margin: 7px 0px 12px 0px; }
+
+.show-details { 
+    padding-top: 17px; }
+    
+    .show-details ul { /* actors */
+        line-height: 1.2 }
+
+/* top bar large dropdown */
+.dropdown.large {
+    padding: 8px 8px 12px 0px;
+    margin-left: -100px !important;
+    background: none repeat scroll 0% 0% rgb(43, 43, 43) !important; }
+
+.dropdown.large dl.sub-nav {
+    margin: 0px 0px 0px 0px;
+    padding-left: 100px;
+    width: 900px;
+    line-height: 1.8; }
+
+    .dropdown.large dl.sub-nav dt {
+        float: left; 
+        clear: left; 
+        width: 100px; 
+        margin-left: -100px; 
+        text-align: right; 
+        color: rgb(153, 153, 153); }
+
+    .dropdown.large dl.sub-nav dd a { 
+        padding: 2px 7px 2px 7px !important; 
+        color: rgb(255, 255, 255); }
+
+        .dropdown.large dl.sub-nav dd a:hover {
+            -webkit-border-radius: 1000px;
+            border-radius: 1000px; }
+
+        .dropdown.large dl.sub-nav dd:not(.active):not(:hover) a {
+            background: none repeat scroll 0% 0% rgb(43, 43, 43) !important; }
+
+/* default sub nav styling */
+dl.sub-nav dt, dl.sub-nav dd { 
+    margin-bottom: 2px;
+    color: rgb(77, 77, 77); }
+
+    dl.sub-nav dt a, dl.sub-nav dd a { 
+        padding: 0.1875em 0.5625em;
+        color: rgb(43, 166, 203); }
+
+    dl.sub-nav dd.active a { 
+        background: none repeat scroll 0% 0% rgb(43, 166, 203); }
+
+/* rating style */
+dl.sub-nav.tight dd { 
+    margin-left: 0.1875em; }
+    dl.sub-nav.tight dd:first-child { 
+        margin-left: 0.5625em; }
+        dl.sub-nav.tight dd:first-child a { 
+            padding: 0.1875em 0.1875em 0.1875em 0.5625em; }
+    dl.sub-nav.tight dd a { 
+        padding: 0.1875em 0.3em; }
+
+/* Tabs ---------------------- */
+.tabs { list-style: none; border-bottom: solid 1px #e6e6e6; display: block; height: 40px; padding: 0; margin-bottom: 0px; }
+.tabs.contained { margin-bottom: 0; margin-left: 0; }
+.tabs dt, .tabs li.section-title { color: #b3b3b3; cursor: default; display: block; float: left; font-size: 12px; height: 40px; line-height: 40px; padding: 0; padding-right: 9px; padding-left: 20px; font-weight: normal; width: auto; text-transform: uppercase; }
+.tabs dt:first-child, .tabs li.section-title:first-child { padding: 0; padding-right: 9px; }
+.tabs dd, .tabs li { display: block; float: left; padding: 0; margin: 0; }
+.tabs dd a, .tabs li a { color: #6f6f6f; display: block; font-size: 14px; height: 40px; line-height: 40px; padding: 0px 23.8px; }
+.tabs dd a:focus, .tabs li a:focus { font-weight: bold; color: #2ba6cb; }
+.tabs dd.active, .tabs li.active { border-top: 3px solid #2ba6cb; margin-top: -3px; }
+.tabs dd.active a, .tabs li.active a { cursor: default; color: #3c3c3c; background: #fff; border-left: 1px solid #e6e6e6; border-right: 1px solid #e6e6e6; font-weight: bold; }
+.tabs dd:first-child, .tabs li:first-child { margin-left: 0; }
