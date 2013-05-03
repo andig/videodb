@@ -10,15 +10,22 @@ Introduction
 
 You can use videoDB to manage your video and CD collection, be it DVD, BluRay or plain Files:
 
-![Browse Movies](https://raw.github.com/andig/videodb/doc/screenshots/0.png)
+![Browse Movies](https://raw.github.com/andig/videodb/master/doc/screenshots/0.png)
 
-![View Details](https://raw.github.com/andig/videodb/doc/screenshots/1.png)
+
+![View Details](https://raw.github.com/andig/videodb/master/doc/screenshots/1.png)
+
 
 All data is editable in nice layed out forms:
-![Edit](https://raw.github.com/andig/videodb/doc/screenshots/2.png)
+
+![Edit](https://raw.github.com/andig/videodb/master/doc/screenshots/2.png)
+
 
 New movies are easily added directly from IMDB or other sources:
-![IMDB](https://raw.github.com/andig/videodb/doc/screenshots/3.png)
+
+![IMDB](https://raw.github.com/andig/videodb/master/doc/screenshots/3.png)
+
 
 videoDB is also highly customizable- almost every aspect can be changed from template selection to detailed customization:
-![Config](https://raw.github.com/andig/videodb/doc/screenshots/4.png)
+
+![Config](https://raw.github.com/andig/videodb/master/doc/screenshots/4.png)
