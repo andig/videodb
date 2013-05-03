@@ -14,7 +14,7 @@
 
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="lib/foundation4/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" href="lib/foundation4/css/foundation.css" />
+	<link rel="stylesheet" type="text/css" href="lib/foundation4/css/foundation.min.css" />
 	<link rel="stylesheet" type="text/css" href="lib/foundation4/fonts/general_foundicons.css" />
 	<link rel="stylesheet" type="text/css" href="{$style}" />
 <!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="lib/foundation4/css/ltie9.css" /><![endif]-->
@@ -24,9 +24,7 @@
 	<!-- js -->
 	<script>document.write('<script src="lib/foundation4/js/vendor/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.js"><\/script>');</script> 
 	<script type="text/javascript" src="lib/foundation4/js/vendor/custom.modernizr.js"></script>
-	<!-- <script type="text/javascript" src="lib/foundation4/js/foundation.min.js"></script> -->
-	<script src="lib/foundation4/js/foundation/foundation.js"></script>
-	<script src="lib/foundation4/js/foundation/foundation.forms.js"></script>
+	<script src="lib/foundation4/js/foundation.min.js"></script>
 	<script type="text/javascript" src="{$template}js/app.js"></script>
 	{literal}<script>$(document).ready(function(){$(document).foundation()});</script>{/literal}
 </head>

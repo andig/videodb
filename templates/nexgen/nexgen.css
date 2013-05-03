@@ -11,11 +11,10 @@ body { background: none repeat scroll 0% 0% white; }
 .row, .th { max-width: 100%; }
 .inline { display: inline !important; }
 .centered { text-align: center; }
-/* Foundation 4.0.5 fix */
-/*[class*="block-grid-"] > li.clear { clear: both !important; }*/
 
 /* forms */
 form .row .row { margin: 0px -0.5em; }
+
 textarea.large { height: 8.1em; }
 
 /* IMDB inframe */
@@ -78,8 +77,7 @@ ul.itemlist {
         text-align: center;
         height: 1.6em;
         overflow: hidden;
-        opacity: 0.7;
-   }
+        opacity: 0.7; }
 
 /* show columns */
 .show-cover { 
@@ -147,7 +145,7 @@ dl.sub-nav.tight dd {
     dl.sub-nav.tight dd a { 
         padding: 0.1875em 0.3em; }
 
-/* Tabs ---------------------- */
+/* Foundation 3 Tabs */
 .tabs { list-style: none; border-bottom: solid 1px #e6e6e6; display: block; height: 40px; padding: 0; margin-bottom: 0px; }
 .tabs.contained { margin-bottom: 0; margin-left: 0; }
 .tabs dt, .tabs li.section-title { color: #b3b3b3; cursor: default; display: block; float: left; font-size: 12px; height: 40px; line-height: 40px; padding: 0; padding-right: 9px; padding-left: 20px; font-weight: normal; width: auto; text-transform: uppercase; }

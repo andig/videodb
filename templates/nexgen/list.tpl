@@ -20,10 +20,10 @@
 
 		<ul class="small-block-grid-2 large-block-grid-{$listcolumns} itemlist">
 			{foreach $list as $video name=col}
-			<li {if ($smarty.foreach.col.index) % $listcolumns == 0}class="clear"{/if}>
+			<li>
 				<a href="show.php?id={$video.id}" class="th radius">
 {* 
-					Uncomment this if you want title/subtitle to be shown above the cover image:
+					<!-- Uncomment this if you want title/subtitle to be shown above the cover image: -->
 					<div>{$video.title}{if $video.subtitle} - {$video.subtitle}{/if}</div>
 *}
 					{if $video.imgurl}{html_image file=$video.imgurl max_width=$max_width max_height=$max_height}{/if}

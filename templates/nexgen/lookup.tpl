@@ -8,15 +8,6 @@
 
 <!-- {$smarty.template} -->
 
-<!-- load js -->
-<script> document.write('<script src="lib/foundation4/js/vendor/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.js"><\/script>'); </script> 
-<script src="{$template}js/app.js"></script>
-<script src="lib/foundation4/js/vendor/custom.modernizr.js"></script>
-<script src="lib/foundation4/js/foundation.min.js"></script>
-<script> $(document).ready(function(){ldelim}$(document).foundation();{rdelim}); </script>
-
-<script type="text/javascript" src="{$template}js/lookup.js"></script>
-
 <dl class="tabs">
     {foreach key=e item=eng from=$engines}
 	<dd class="{if $engine == $e}active{/if}"><a href="{if $engine == $e}#{else}{$eng.url}{/if}">{$eng.name}</a></dd>
@@ -57,9 +48,9 @@
         <h4 class="subheader">{$lang.l_select}</h4>
 
         {if $searchtype == 'image'}
-		<ul class="small-block-grid-4 small">
+		<ul class="small-block-grid-4">
 			{foreach item=match from=$imdbresults name="col"}
-			<li {if ($smarty.foreach.col.index) % 4 == 0}class="clear"{/if}>
+			<li>
 				<a href="javascript:void(returnImage('{$match.coverurl}'))" title="Select">
 					<img src="{$match.imgsmall}" max-width="90" max-height="60" />
 				</a>

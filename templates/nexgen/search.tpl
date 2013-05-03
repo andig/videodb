@@ -7,6 +7,9 @@
 
 <script type="text/javascript" src="{$template}js/search.js"></script>
 
+{assign var=max_width value=220}
+{assign var=max_height value=400}
+
 <form action="search.php" id="search" name="search" method="get">
 
 	<div class="row">
@@ -17,7 +20,7 @@
 	        {if $config.imdbBrowser}
 				{assign var="link" value="trace.php?iframe=1&videodburl=$link"}
 	        {/if}
-			<a href='{$link}' class="th">{html_image file=$imgurl}</a>
+			<a href='{$link}' class="th radius">{html_image file=$imgurl max_width=$max_width max_height=$max_height}</a>
 		</div>
 		{/if}
 

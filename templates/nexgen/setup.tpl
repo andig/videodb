@@ -19,7 +19,7 @@
 
 
 	{if $cacheclear}
-	<div class="alert-box">
+	<div class="alert-box sticky">
 		Cache cleared.
 		<a href="#" class="close">&times;</a>
 	</div>

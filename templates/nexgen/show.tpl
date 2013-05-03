@@ -7,11 +7,16 @@
 
 <script type="text/javascript">
 
-function showTrailer(title)
-{
+function showTrailer(title) {
 	open('trailer.php?title=' + escape(title), 'trailer',
 		 'width=500,height=500,menubar=no,resizable=yes,scrollbars=yes,status=yes,toolbar=no');
 }
+
+{if $config.boxeeHost}
+function boxeePlay(id) {
+	$.getJSON("show.php?method=boxeePlay&id="+id);
+}
+{/if}
 
 </script>
 
@@ -28,6 +33,11 @@ function showTrailer(title)
 			<ul class="button-group">
 				<li><a class="button small {if !$video.copyable}disabled{/if}" href="edit.php?id={$video.id}">{$lang.edit}</a></li>
 			</ul><!-- button-group -->
+			{if $config.boxeeHost}
+			<ul class="button-group">
+				<li><a class="button small {if !$video.filename}disabled{/if}" href="#" onclick="javascipt:boxeePlay({$video.id})">{$lang.play}</a></li>
+			</ul><!-- button-group -->
+			{/if}
 		</div>
 
 		<ul class="button-group hide-for-small">
@@ -72,7 +82,7 @@ function showTrailer(title)
 
 	<!-- main block -->
 	<div class="small-12 large-9 columns show-details">
-		<h4 class="subheader">Main Details</h4>
+		<h4 class="subheader">{$lang.main_details}</h4>
 
 		<div class="row">
 			<div class="small-12 large-6 columns">
@@ -181,7 +191,7 @@ function showTrailer(title)
 
 
 		{if $video.plot}
-		<h4 class="subheader">Synopsis</h4>
+		<h4 class="subheader">{$lang.synopsis}</h4>
 
 		<div class="row">
 			<div class="small-12 columns">
@@ -194,7 +204,7 @@ function showTrailer(title)
 
 
 		{if $video.filename}
-		<h4 class="subheader">File Details</h4>
+		<h4 class="subheader">{$lang.file_details}</h4>
 
 		<div class="row">
 			<div class="small-6 large-4 columns">
@@ -281,7 +291,7 @@ function showTrailer(title)
 			<div class="small-12 columns">
 				<ul class="small-block-grid-1 large-block-grid-4">
 					{foreach $video.cast as $actor name=col}
-					<li {if ($smarty.foreach.col.index) % 4 == 0}class="clear"{/if}>
+					<li>
 						<div class="row collapse">
 							<div class="small-4 columns">
 								{if $actor.imgurl}
@@ -301,26 +311,6 @@ function showTrailer(title)
 					</li><!-- col -->
 					{/foreach}
 				</ul><!-- row -->
-{*
-				<ul class="small-block-grid-2 large-block-grid-8">
-					{foreach $video.cast as $actor name=col}
-					<li class="text-right {if ($smarty.foreach.col.index) % 4 == 0}clear{/if}">
-						<a href="search.php?q=%22{$actor.name|escape:url}%22&amp;isname=1">{$actor.name}</a>
-						{foreach $actor.roles as $role name="loop"}<br/>{$role}{/foreach}
-					</li><!-- col -->
-					<li>
-						{if $actor.imgurl}
-							{assign var="link" value=$actor.imdburl}
-							{if $config.imdbBrowser}
-								{assign var="link" value=$link|escape:url}
-								{assign var="link" value="trace.php?iframe=1&amp;videodburl=$link"}
-							{/if}
-							<a href="{$link}">{html_image file=$actor.imgurl max_width=60 max_height=90}</a>
-						{/if}
-					</li><!-- col -->
-					{/foreach}
-				</ul><!-- row -->
-*}
 			</div><!-- col -->
 		</div><!-- row -->
 		{/if}
