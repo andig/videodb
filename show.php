@@ -15,6 +15,45 @@ require_once './core/custom.php';
 require_once './core/output.php';
 
 /**
+ * Play movie on configured Boxee box
+ */
+function boxeePlay($filename) {
+    global $config;
+
+    $socket = fsockopen($config['boxeeHost'], $config['boxeePort']);
+    if (!$socket) {
+        throw new Exception("Couldn't connect to boxee on ".$config['boxeeHost'].':'.$config['boxeePort']);
+    }
+
+    $data = array(
+        'id' => 1,
+        'jsonrpc' => '2.0', 
+        'method' => 'XBMC.Play', 
+        'params' => array('file' => $filename)
+        );
+
+    $json = json_encode($data, JSON_FORCE_OBJECT);
+
+    fputs($socket, $json);
+/*
+    $response = '';
+    while (!(feof($socket))) {
+        $response .= fgets($socket);
+    }
+*/
+    // close socket
+    $status = stream_get_meta_data($socket);
+    fclose($socket);
+
+    // check for timeout
+    if (@$status['timed_out']) {
+        $response['error'] = "Connection timed out";
+    }
+
+    return trim($response);
+}
+
+/**
  * Toggle seen status
  *
  * @author  Andreas Goetz   <cpuidle@gmx.de>
@@ -236,6 +275,10 @@ if (!empty($id))
 		}
 	}
 	session_set('breadcrumbs', $breadcrumbs);
+}
+
+if ($method == 'boxeePlay') {
+    boxeePlay($video['filename']);
 }
 
 // prepare templates
