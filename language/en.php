@@ -70,6 +70,7 @@ $lang['cancel']        		 = 'Cancel';
 # Show
 #
 
+$lang['synopsis']			 = 'Synopsis';
 $lang['purchase']            = 'Purchase';
 $lang['torrents']            = 'Torrents';
 
@@ -171,6 +172,12 @@ $lang['help']                = "Help";
 $lang['profile']             = "Profile";
 $lang['users']             	 = "Users";
 $lang['filter']              = "Filter";
+
+#
+# Media player (boxee) controls
+#
+
+$lang['play']               = "Play";
 
 #
 # Radio-Buttons
