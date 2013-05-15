@@ -1,600 +1,731 @@
-13.03.13
-	    - Upgraded to Smarty 3.1.10
-	    - Added Foundation4 library
-	    - Created nexgen template
-        - Released videoDB 4.0pre
-04.03.12
-	    - Upgraded to Smarty 3.1.8
-	    - Various PHP 5.4 compatibility fixes (Andreas Götz)
-13.02.11
-	    - Released 3.1
-	    - Loads of engine fixes, especially but not limited to IMDB
-	    - All bundled libraries upgraded
-01.04.10
-	    - Various PHP 5.3 compatibility fixes (Andreas Götz)
-	    - Enhanced PDF output (Muddle)
-	    - Upgraded to Smarty 3 (Andreas Götz)
-19.01.10
-    	- Added support for mod_fastcgi Basic authentication (Muddle)
-25.03.09
-    	- Replaced outdated amazon engine with new Amazon Web Service (Andreas Götz)
-    	- Replaced partically broken google images engine with new google REST api (Andreas Götz)
-05.03.09  
-	    - Released v3.0.3
-25.02.09
-        - Fixed dvdb engine (Chinamann)
-        - Fixed ofdb engine (Chinamann)
-        - Fixed test classes for dvdb and dvdpalace engines (Chinamann)
-        - Added test class for ofdb engine (Chinamann)
-        - Fixed allocine engine and test (Martin Vauchel & Andreas Götz)
-        - Fixed various character encoding issues (Andreas Götz)
-        - Rewrote basic authentication code- should now provide seamless integration (Andreas Götz)
-21.08.08
-        - Fixed dvdb engine (Chinamann)
-        - Fixed add_dvdb_barcode contrib (Chinamann)
-        - Fixed OFDB engine (Chinamann)
-20.01.08  v3.0a1
-        - Upgraded database schema to utf8- you can now have videos of various languages in one db
-        - Revamped elegant template to support AJAX
-        - Out-of-the-box thumbnail generation for better image quality and performance
-        - Out-of-the-box support for PDF export
-        - Various performance fixes
-        - Added cantonese (Hong Kong) flag
-03.12.07  
-	- pre v3.0
-        - Added bundled fpdf and phpthumb libraries (Andreas Götz)
-01.12.07
-        - Fixed IMDB engine (Andreas Götz)
-        - Upgraded xajax library to 0.5 (Andreas Götz)
-        - Improved setup screen by calculating cache size in background (Andreas Götz)
-        - Fixed various test cases (Andreas Götz)
-08.09.07
-        - Fixed PHP short tags (Andreas Götz)
-        - Moved Smarty to /libs folder (Andreas Götz)
-18.08.07
-        - Fixed tv.com engine (Victor)
-        - Fixed allocine.fr engine (tedemo)
-10.08.07
-        - Added support for youTube trailers (youtube developer key required)
-        - More engine test cases (Sebastien)
-15.07.07
-        - Released videoDB 2.3.0
-        - Upgraded Smarty to 2.6.18 (Andreas Götz)
-        - Zillions of engine fixes
-        - Added automated test cases for engines (Andreas Götz)
-06.02.07
-        - Completely rewritten OFDB engine (beta state) (Chinamann)
-05.02.07
-        - Fixed less privileged users can't use random, search, borrow and new/edit views even if the should (Chinamann)
-17.01.07
-        - Fixed security hole in show.php which enabled users to see movies they don't have access to (Chinamann)
-        - Bugfix in stats.php: Don't count movies which are on the wishlist (Chinamann)
-16.01.07
-        - Fixed dvdb engine and improved fetching performance (Chinamann)
-        - Fixed dvdpalace engine (Chinamann)
-        - Fixed JavaScript error in elegant.css (Chinamann)
-        - Added session status restore in httpClient (Chinamann)
-11.11.06
-        - Added template screenshots for selected templates (Andreas Götz)
-        - Fixed an installer issue when upgrading (Andreas Götz)
-        - Fixed [ 1596452 ] displaying movie takes a long time (Andreas Götz)
-10.10.06
-        - Upgraded Smarty to 2.6.14 (Andreas Götz)
-04.10.06
-        - Updated dvdfr engine (Seb)
-        - Updated release scripts for new SF CVS settings (Andreas Götz)
-03.10.06
-        - Fixed IMDB cast issue (Andreas Götz)
-        - Fixed include security issue Secunia advisory SA22184 (Andreas Götz)
-05.07.06
-        - Updated google image search engine according to google website updates (Andreas Götz)
-28.03.06
-        - added Aka search for IMDB (Andreas Götz)
-        - split xml.tpl from header scripts for advanced and jeckyl template (Andreas Götz)
-25.01.06
-        - upgraded Smarty to 2.6.12 (Andreas Götz)
-27.12.05
-        - upgraded Smarty to 2.6.11 (Andreas Götz)
-27.09.05
-        - added dvdb user login support to acess FSK18 movies (Chinamann)
-23.09.05
-        - added favicons by Paul Leclair (Andreas Götz)
-        - added previous/next navigation to show template (Andreas Götz)
-        - added new auto DiskId calculation. Now: "next free" before: "highest+1" (Chinamann)
-        - fixed external search (Chinamann)
-        - added convert_engines contrib to switch between dvdpalace and dvdb engine (Chinamann)
-        - added user and engine filter to refetchAllInfos contrib (Chinamann)
-        - added imdbID prefix history functions to dvdb and dvdpalace engine (Chinamann)
-        - fixed dvdb engine to avoid bad results if httpClient sends "Request Timeout" (Chinamann)
-21.09.05
-        - added DVDB.de engine (Chinamann)
-        - changed barcode based adding contrib to use DVDB.de engine (Chinamann)
-        - changed LableWriter Export to use DVDB.de engine (Chinamann)
-        - added UTF8 support to httpClient (Chinamann)
-        - added imdb-id-prefix also to imdb and changed it in dvdpalace engine (Chinamann)
-01.09.05
-        - PDF title formatting fix (Justin Pasher)
-        - Excel export (Chinamann)
-        - added Amazon.com engine (Andreas Götz)
-        - added more IMDB genres (Andreas Götz)
-        - added HTTP caching support (Andreas Götz)
-        - upgraded Smarty to latest 2.6.10 (Andreas Götz)
-31.07.05
-        - Image max width/height values (pdf config file) (Justin Pasher)
-        - Image width/height values (in the generated PDF) (pdf config file) (Justin Pasher)
-        - Overall font size (pdf config file) (Justin Pasher)
-        - Display mediatype next to diskid in the title for the movies (Justin Pasher)
-        - Search form now display "Video Codec" in the "Search Fields" box (Justin Pasher)
-15.06.05
-        - fixed db prefix problems in create- and upgradescripts (Chinamann)
-        - fixed "database not empty" problem even if different prefix is selected (Chinamann)
-        - fixed bug [ 1199833 ] Database prefix not added when MySQL database is not empty (Chinamann)
-24.05.05
-        - added user to user permissions (Chinamann)
-        - updated dvdpalace engine (Chinamann)
-        - fixed bug [ 1122052 ] Automatic DiskID generation problem (Chinamann)
-01.04.05
-        - upgraded Smarty to latest 2.6.8 (Andreas Götz)
-23.02.05
-        - added engine config options (Andreas Götz)
-        - added prelimenary improved episodes support (Andreas Götz)
-        - added add_tv_episodes
-10.02.05
-        - added support for common table prefix for hosting environments (Andreas Götz)
-        - added content drilldown to DvdInside engine (Andreas Götz)
-        - added support for regrouping of articles (Andreas Götz)
-        - added default values for list- and castcolumns to createtables.sql (Andreas Götz)
-        - upgraded Smarty to latest 2.6.7 (Andreas Götz)
-        - moved some language flags to images/flags/additional (Andreas Götz)
-25.01.05
-        - added HTTP basic auth support for use by RSS feed readers (Andreas Götz)
-        - disabled IMDB browser access for anonymous users for security reasons
-        - added new language flags (Constantinos Neophytou)
-21.01.05
-        - added langcheck tooltips update (Constantinos Neophytou)
-        - added greek language files (Constantinos Neophytou)
-        - applied multi-language patch (Constantinos Neophytou)
-17.01.05
-        - added https patch (Andreas Götz, thanks to Robert Hendricks)
-        - added removal of html tags in title and subtitle (Andreas Götz)
-05.01.05
-        - security fix for javascript attacks (Andreas Götz, thanks to Holger van Lengerich)
-28.12.04
-        - fixed phpthumb code sometimes generating duplicate thumbnails
-        - fixed custom fields not being copied from IMDB
-24.12.04
-        - added cache-less mode to avoid caching of IMDB queries (Andreas Götz)
-        - various template fixes (bug 1084553, etc)
-        - added swedish translations (Nisse Hellberg)
-        - several security fixes (Andreas Götz, Steve Kemp)
-15.11.04
-        - even more PDF export fixes (Andreas Götz)
-05.11.04
-        - PDF export fixes
-        - removed 'Adult' genres for users without permissions (Andreas Götz)
-        - added default adult genre to the setup SQL (Andreas Götz)
-27.10.04
-        - added PDF export (Andreas Götz)
-        - added advanced template (Elkin)
-15.10.04
-        - added thumbnail scaling using phpThumb for saving bandwidth (Andreas Götz)
-20.09.04
-        - moved javascripts to separate files for re-use (Andreas Götz)
-        - moved xml headers to separate template file for re-use (Andreas Götz)
-        - added xml import/export (Andreas Götz)
-        - separated search field names in templates from physical columns names (Andreas Götz)
-        - upgraded smarty to 2.6.5 (Andreas Götz)
-        - added custom smarty function html_checkbox to get rid of the {if $video.seen}{else}{/if} (Andreas Götz)
-        - added tool to decode html entities into ANSI characters (contrib/decode_entities.php)
-        - fixed user dropdown (Mike Clark)
-10.09.04
-        - added hierarchical language files (Idea by Elkin)
-        - added tool for finding recommendations (contrib/add_recommended_movies.php)
-        - added owner dropdown for multiuser mode (PimpGoblin)
-24.08.2004
-        - added support for google image lookup (edit.tpl)
-        - allowed to store engine as id prefix (experimental: imdb:081547)
-        - upgraded search functionality to search any external site
-        - added tool to remove orphans from image cache (contrib/clean_unused_images.php)
-        - updated delete functionality to remove cover of deleted movie
-16.08.2004
-        - updated to allow drilldown on individual countries (if separated by ,)
-        - major overhaul of installer (Andreas Götz)
-15.08.2004
-        - major overhaul of internal database structure
-        - improved developer documentation
-01.08.2004
-        - Added indian language flag
-        - small updates to the manual
-03.07.2004
-        - Not working search IMDB button fixed in default template
-29.06.2004
-        - Bugfix for PHP installation with missing '.' in include_path
-28.06.2004
-        - Bugfix for SQL error on user insert (Kris Senden)
-27.06.2004
-        - install.php (Andreas Götz)
-          - upgrade accross multiple versions at once
-          - jumps directly into upgrade step
-21.06.2004
-        - french update by Cyril Duveau
-        - bugfix for german language file
-19.06.2004
-        - fixed support for admin to change owner
-        - added per user seen value (statistics not updated yet)
-        - bugfix for default lookup.tpl (no engine support yet)
-11.06.2004
-        - added amazon webservice (experimental) (Andreas Götz)
-        - added compact.css (Andreas Götz)
-        - modified imdboverwrite to be more flexible (Andreas Götz)
-09.06.2004
-        - small bugfix for contrib/tvtome.php
-        - added access keys to default template
-05.06.2004
-        - Andreas Götz:
-          - upgraded smarty 2.5 to 2.6.3 to ensure php5 compatibility
-          - modified html_image to allow max_width and max_height parameters for
-            modern template
-        - Andreas Gohr:
-          - fixed permission problems when logging out and in within the same
-            browser session
-          - added profile support to modern template
-          - fetching gueststars in contrib/tvtome.php
-03.06.2004
-        - added <title> support for speaking html page titles (Andreas Götz)
-01.06.2004
-        - added installer support to write configuration back to
-      config.inc.php (Andreas Götz)
-28.05.2004
-        - Various changes by Andreas Götz
-          - added httpClient support for gzip-encoding
-          - added httpClient support to remember redirects
-          - reformatted error messages and added links to install.php
-          - added preliminary multi-engine support
-          - added improved video copy support
-        - added referer patch by Mike Clark
-16.05.2004
-        - added user profiles
-13.05.2004
-        - bugfix for names containing quotes
-        - bugfix for modern template CSS by Justin Pasher
-10.05.2004
-        - swedish language file by Nisse added
-        - spanish update by Elkin Fricke
-        - bugfix for tvtome.php by Elkin Fricke
-09.05.2004
-        - Multiuser Bug on deletion fixed by Stephan Hesmer
-        - added a index.html (thx to Merle Reine)
-        - added dvdadd.pl to contrib (based upon sample script by Elkin
-          Fricke)
-        - Request to Borrow Feature added some time in between ;-)
-        - multiple minor changes and fixes by Andreas Götz and some
-          others including some fixes on the IMDB integration
-04.02.2004
-        - language updates
-29.12.2003
-        - videoadd.pl supports the owner field
-        - default template now uses the full screen width
-21.12.2003
-        - minor code cleanup
-        - manual additions
-        - use of security mechanisms for tvtome.php
-        - all images are tried in the template directory first
-        - VideoDB now checks for a loaded mysql PHP extension
-        - videoadd.pl now sets the created timestamp
-        - the # filter now matches foreign characters and special
-          chars, too (thx to Justin Lim)
-        - Now all fields from the videodata table are selected for list
-          views (index and search) - more freedom for template designers
-19.12.2003
-        - bugfix for russian language file by Eugene Surov
-        - Optional adult check for certain genres
-29.11.2003
-        - bugfix for IMDB Problem (thx to Andreas Götz and others)
-        - more effective session init (Andreas Götz)
-05.11.2003
-        - no edit links on missing permissions in modern template
-        - admin can change owner (thx to Mike Clark)
-02.11.2003
-        - small doc updates
-26.10.2003
-        - New custom type for MPAA ratings by Tim M. Sanders
-        - bulgarian language update by drJekyll
-        - polish update by Maciej Witkowiak
-25.10.2003
-        - french language update by Cyril Duveau
-        - minor tweaks for modern template
-23.10.2003
-        - dutch language update by Kees de Bruin
-        - german language updated
-21.10.2003
-        - small update for french language by Daniel Caujolle-Bert
-19.10.2003
-        - added new cutom type 'movix' by Antonio Giungato
-        - added new default style 'metal'    
-15.10.2003
-        - new Multiplayer code based on many code contributions by Mike
-          Clark and some by "weber"
-03.10.2003
-        - added new stylesheet for the default template by Joakim Sandén
-21.09.2003
-        - spanish update by Elkin Fricke
-        - DB versioning
-17.09.2003
-        - Added missing <?xml ?> header
-16.09.2003
-        - Dutch update by Kees de Bruin
-15.09.2003
-        - Manual and Helpbrowser added
-        - random view does no longer show wishlist items
-        - French update by Cyril Duveau
-        - Bulgarian Update by drJekyll
-        - movies are only marked as new when added not when changed anymore
-14.09.2003
-        - Portuguese update by Tiago Fonseca, Brasilian Portuguese
-          by Marcus Leandro
-08.09.2003
-        - Italian update by Antonio Giungato
-07.09.2003
-        - language checker added to the contrib directory
-04.09.2003
-        - all IMDB functions now use the new link formats
-        - imdbData now returns a hash
-30.08.2003
-        - bugfix for new imdb link format by Charles Morgan
-29.08.2003
-        - french update by Cyril Duveau
-        - patch to enable upload from an URL in Konquerer by Stephan
-          Zalewski
-        - Userdefinable config table (by Stephan Zalewski)
-        - Brazillian portuguese Language by Marcus Leandro added
-27.08.2003
-        - custom type for original title by Stephan Zalewski
-        - better cachedirectory checks
-26.08.2003
-        - POST support for HTTP client by Andreas Götz
-        - IMDB-Browser by Andreas Götz
-25.08.2003
-        - bulgarian language update by drJekyll
-23.08.2003
-        - spanish update by Elkin Fricke
-        - bugfix for HTTP caching on windows
-        - lots of comments added its now possible to generate a API doc
-          with phpDocumentor
-21.08.2003
-        - small wishlist bugfix by Andreas Götz
-        - Number of shown movies in new filter is cutomizable now (Patch
-          by Stephan Zalewski)
-        - improvements to the year statistic
-18.08.2003
-        - minor template tweaks (default)
-        - updated spanish translation by Elkin Fricke
-        - idea for year statistic implemented not finished yet
-17.08.2003
-        - setup.php uses REPLACE now
-        - merged multi template with default
-        - new template by Andreas Götz: modern
-        - Fixed bug with interfering environment variables (Thanks to
-          Raymond Scholz pointing that out)
-        - nocover image is now a transparent gif - Templates can use
-          their own.
-        - Added a new rating custom type which uses the IMDB rating as
-          a default
-        - Search now works with ' in queries (Fixes Ed O'Neill)
-        - Fixed error when selecting random on an empty database
-        - New Mediatype 'wanted' for building a wishlist of movies (Idea by
-          Andreas Götz)
-        - Cover-Upload by Stephan Zalewski
-        - some template tuning
-11.08.2003
-        - bugfix by Harald Leithner for mediadefault in setup.php
-        - bulgarian update by drJekyll
-        - minor template fixes
-10.08.2003
-        - Enhancement of the imdbActor function
-        - Updated french language by Cyril Duveau
-        - local files in the cover field now work again
-        - setup.tpl is now independent from the available setup options
-        - changed the random function again please send me a mail if it
-          isn't random enough
-09.08.2003
-        - New template (multi) and some minor codechanges (Andreas Götz)
-        - Fix for missing director and country fields in show.php
-        - Not found actorthumbnails are retried after specified age
-07.08.2003
-        - Patches by Andreas Götz:
-          - fix for chunked encoding which makes http/1.1 possible
-          - enhanced imdbActor function
-          - bugfix for IMDB caching function
-        - Bulgarian language update by drJekyll
-05.08.2003
-        - Spanish language updates by Elkin Fricke
-03.08.2003
-        - IMDB cache reimplemented
-        - small fix for imdbActors by Andreas Götz
-        - Translation update for russian language by Konstantin Boudnik
-31.07.2003
-        - Dutch translation updated by Kees de Bruin
-30.07.2003
-        - update for the portuguese languagefile by Nuno Nunes
-        - Some updates to the new proxy enabled download function
-        - Experimental support for actor fotos by Andreas Götz
-29.07.2003
-        - Bulgarian languagefile by drJekyll added
-        - spanish language update by ctRl
-        - Proxy support by Andreas Götz
-28.07.2003
-        - Bugfix for the ID assigning problem which made adding new videos
-          impossible (sorry folks)
-        - image cacheing is now handled seperately by img.php
-26.07.2003
-        - Small fix by Andreas Götz for autoDiskID calculation
-20-25.07.2003
-        - Everything is better now! :-) I like to call it Version 2
-          - Templates with Smarty
-          - Webbased, database stored config
-          - SQL function now returns associative arrays
-          - much code cleanup
-          - display bug in Linux Opera fixed
-          - a TODO file was added
-        - Style by drJeckyll added
-20.07.2003
-        - Patch by Andreas Götz to fix the genre links in show.php
-        - The TV-Episode switch is now stored in the session (Patch by Thomas
-          Zajik)
-17.07.2003
-        - Now checkboxlabels are clickable (patch by Kjetil Thuen)
-16.07.2003
-        - Fixed the random function to produce more random values
-15.07.2003
-        - Unavailable movies are now shown in red on the browsing view
-          (Thanks to Alexandre Thomas for the idea)
-        - The french translation was corrected by Alexandre Thomas
-14.07.2003
-        - Added russian language file by Konstantin Boudnik
-        - bugfix for orderallbydiskid
-05.07.2003
-        - Incorporated lots of changes by Nicola Asuni (www.tecnick.com
-          info@tecnick.com)
-          - The output is in XHTML 1.0 Transitional
-          - some PHP bugs has been removed
-          - code cleanup
-          - directory hierachy was redesigned
-        - Added portuguese languagefile by Nuno Nunes
-        - The style can be changed from the config file
-21.06.2003
-        - changed error_reporting to show fatal errors and parse errors this
-          should make debugging of custom function easier
-20.06.2003
-        - added polish language file by Maciej Witkowiak
-        - charsetencoding is now set with the languagefile
-        - czech and polish flags added
-19.06.2003
-        - You can now define your own input/output functions for the custom
-          fields. see custom.php
-        - videoadd.pl now uses mplayer for getting video informations, it
-          can create md4 sums for edonkey links, too (thx to Frank Schubert
-          for the idea)
-        - The recursion bug in videoadd now really is fixed
-12.06.2003
-        - added missing top.gif
-09.06.2003
-        - some more language flags and a new config option for language
-          quick select buttons were added
-        - cosmetic changes
-        - infinite recursion fixed in videoadd.pl
-01.06.2003
-        - Cast is displayed in multiple columns now (Idea by Andreas Götz)
-        - videoadd.pl now scans recursivly for files - this should work with
-      (S)VCDs can anyone confirm that?
-30.05.2003
-        - fixed a small bug in the IMDB cast parser
-28.05.2003
-        - Updated the README a little bit
-25.05.2003
-        - back to top link on every page
-        - Patches by Andreas Götz
-          - addslashes for delete JavaScript (fixes problems with
-        "Charlie's Angels")
-          - The filtersetting is now saved in a session
-24.05.2003
-        - added french language file by Cyril Duveau
-        - disabled error_reporting in nondebugmode
-09.05.2003
-        - Patches by Andreas Götz
-        - bug fix for the new Cast IMDB parser (bad HREFs removed)
-        - you can set a default language for new movies
-        - thumbnails when browsing - sweet :-)
-22.04.2003
-        - added patches by Raymond Scholz:
-          - little bug on custom fields fixed
-          - IMDB parser now gets the runtime right on movies >999 min
-          - The cast is now fetched from the extended credits page
-17.04.2003
-        - videoadd.pl now always sets the mediatype to CD-R and a bug in
-          the titelguesser was fixed
-23.03.2003
-        - more statistics
-18.03.2003
-        - Dutch translation by Kees de Bruin added
-        - IMDB parser now splits Title from Subtitle at " - " instead of "-"
-          (patch by Kees de Bruin)
-17.03.2003
-        - added some JavaScript to enable the IMDB lookup by default when
-          the IMBD-ID is changed
-        - added an option to let IMDB lookups replace existing data
-16.03.2003
-        - various patches by "unknown":
-          - saving new items without a genre with no errors from
-            functions.php line 87
-          - stop imdb lookup when searching on empty title/subtitle (window
-            still shows but it is faster as it does nothing)
-          - stop imdb lookup when selected checkbox "lookup missing data from
-            imdb" and there is no imdb item value before clicking save
-          - option to show listing entries sorted by diskid
-          - allow editing seen option from inside edit screen
-          - show total hours seen (watched) in statistics
-          - added "Adult" genre
-        - IMDB caching now works on redirects, too
-15.03.2003
-        - added spanish translation contributed by "Orko"
-06.03.2003
-        - linked the categories from the statistics page to the search
-02.03.2003
-        - applied some Patches by Cameron W. Johnston to add support for
-          various writable DVD formats
-04.02.2003
-        - fixed a problem with duplicate keys on genre inserts
-02.02.2003
-        - The default filter can be set in the config (thx to Dale Blount)
-        - removed the useless 'Edit' and 'View' link on the respective pages
-          (thx to Stephen Tomkinson)
-        - only nonempty fields are shown in the movie view (thx to Stephen
-          Tomkinson)
-        - Category names are linked to the search (thx to Stephen again)
-        - empty years default to 0000 instead 2002 now
-        - Version tag added
-30.01.2003
-        - Useragent of IMDB grabber is now IE and IMDB queries are now cached
-          locally (thx to Marc Schoenefeld and Andreas Götz)
-25.01.2003
-        - new Perl script direxport.pl added
-        - splitbrain link at the bottom now links directly to the videodb page
-24.01.2003
-        - fixed another small bugs in the IMDBgrabber and added a new search.gif
-          (again: all the fame goes to Antonio :-))
-23.01.2003
-        - made search DISTINCT (thx to Antonio Giungato)
-        - IMDBfetcher now grabs 'Runtime: USA: 110 min' correctly
-          (thx to Antonio again)
-        - added mediatype dropdown (thx to Rob Vonk)
-        - added custom fields
-        - limit edit to localnet only (thx to Jens Oberender)
-20.01.2003
-        - "column 'comment' specified twice" error removed (ARGG! STUPID ME!)
-        - languages with no flag available don't result in a broken image anymore
-19.01.2003
-        - started a changefile ;-)
-        - you may add a comment to each movie (currently 255 chars - mail
-          me if that is a problem)
-        - "lent tofred" solved 
-        - diskid '0' is possible now
-        - actors and director is linked to the search (works pretty well)
-        - changed the link color
-        - borrow manager links to the first movie on disk
-        - magic quote problems hopfully solved forever
-16.01.2003
-        - better borrowmanager, various smaller bugfixes and improvements
-12.01.2003
-        - It now works with register_globals=off.
-        - Title and subtilefetching added.
-        - Problems with gpc_magicquotes solved.
-11.01.2003
-        - Much better IMDB Search :-)
-06.01.2003 17:00
-        - Fixed a typo in the english language file
-        - Grabbing the plot and image URL from IMDB now works again.
-06.01.2003
-        - Thanks to Marcel Spitau <marcel at spitau dot de> VideoDB now supports
-          multiple languages. Currently english and german is available. But adding
-          your own language is easy. If you do so please send in your language file!
+# Version History
+
+## videoDB Rel. 4.0
+
+### 13.03.13
+- Created nexgen template based on Foundation CSS library
+- Added Foundation4 library
+- Upgraded to Smarty 3.1.10
+- Released videoDB 4.0pre
+
+### 04.03.12
+- Upgraded to Smarty 3.1.8
+- Various PHP 5.4 compatibility fixes (Andreas Götz)
+
+## videoDB Rel. 3.0
+
+### 13.02.11 (3.1)
+- Loads of engine fixes, especially but not limited to IMDB
+- All bundled libraries upgraded
+
+### 01.04.10
+- Various PHP 5.3 compatibility fixes (Andreas Götz)
+- Enhanced PDF output (Muddle)
+- Upgraded to Smarty 3 (Andreas Götz)
+
+### 19.01.10
+- Added support for mod_fastcgi Basic authentication (Muddle)
+
+### 25.03.09
+- Replaced outdated amazon engine with new Amazon Web Service (Andreas Götz)
+- Replaced partically broken google images engine with new google REST api (Andreas Götz)
+
+### 05.03.09  
+- Released v3.0.3
+
+### 25.02.09
+- Fixed dvdb engine (Chinamann)
+- Fixed ofdb engine (Chinamann)
+- Fixed test classes for dvdb and dvdpalace engines (Chinamann)
+- Added test class for ofdb engine (Chinamann)
+- Fixed allocine engine and test (Martin Vauchel & Andreas Götz)
+- Fixed various character encoding issues (Andreas Götz)
+- Rewrote basic authentication code- should now provide seamless integration (Andreas Götz)
+
+### 21.08.08
+- Fixed dvdb engine (Chinamann)
+- Fixed add_dvdb_barcode contrib (Chinamann)
+- Fixed OFDB engine (Chinamann)
+
+### 20.01.08 (3.0a1)
+- Upgraded database schema to utf8- you can now have videos of various languages in one db
+- Revamped elegant template to support AJAX
+- Out-of-the-box thumbnail generation for better image quality and performance
+- Out-of-the-box support for PDF export
+- Various performance fixes
+- Added cantonese (Hong Kong) flag
+
+### 03.12.07 (pre v3.0)
+- Added bundled fpdf and phpthumb libraries (Andreas Götz)
+
+## videoDB Rel. 2.0
+
+### 01.12.07
+- Fixed IMDB engine (Andreas Götz)
+- Upgraded xajax library to 0.5 (Andreas Götz)
+- Improved setup screen by calculating cache size in background (Andreas Götz)
+- Fixed various test cases (Andreas Götz)
+
+### 08.09.07
+- Fixed PHP short tags (Andreas Götz)
+- Moved Smarty to /libs folder (Andreas Götz)
+
+### 18.08.07
+- Fixed tv.com engine (Victor)
+- Fixed allocine.fr engine (tedemo)
+
+### 10.08.07
+- Added support for youTube trailers (youtube developer key required)
+- More engine test cases (Sebastien)
+
+### 15.07.07
+- Released videoDB 2.3.0
+- Upgraded Smarty to 2.6.18 (Andreas Götz)
+- Zillions of engine fixes
+- Added automated test cases for engines (Andreas Götz)
+
+### 06.02.07
+- Completely rewritten OFDB engine (beta state) (Chinamann)
+
+### 05.02.07
+- Fixed less privileged users can't use random, search, borrow and new/edit views even if the should (Chinamann)
+
+### 17.01.07
+- Fixed security hole in show.php which enabled users to see movies they don't have access to (Chinamann)
+- Bugfix in stats.php: Don't count movies which are on the wishlist (Chinamann)
+
+### 16.01.07
+- Fixed dvdb engine and improved fetching performance (Chinamann)
+- Fixed dvdpalace engine (Chinamann)
+- Fixed JavaScript error in elegant.css (Chinamann)
+- Added session status restore in httpClient (Chinamann)
+
+### 11.11.06
+- Added template screenshots for selected templates (Andreas Götz)
+- Fixed an installer issue when upgrading (Andreas Götz)
+- Fixed [ 1596452 ] displaying movie takes a long time (Andreas Götz)
+
+### 10.10.06
+- Upgraded Smarty to 2.6.14 (Andreas Götz)
+
+### 04.10.06
+- Updated dvdfr engine (Seb)
+- Updated release scripts for new SF CVS settings (Andreas Götz)
+
+### 03.10.06
+- Fixed IMDB cast issue (Andreas Götz)
+- Fixed include security issue Secunia advisory SA22184 (Andreas Götz)
+
+### 05.07.06
+- Updated google image search engine according to google website updates (Andreas Götz)
+
+### 28.03.06
+- added Aka search for IMDB (Andreas Götz)
+- split xml.tpl from header scripts for advanced and jeckyl template (Andreas Götz)
+
+### 25.01.06
+- upgraded Smarty to 2.6.12 (Andreas Götz)
+
+### 27.12.05
+- upgraded Smarty to 2.6.11 (Andreas Götz)
+
+### 27.09.05
+- added dvdb user login support to acess FSK18 movies (Chinamann)
+
+### 23.09.05
+- added favicons by Paul Leclair (Andreas Götz)
+- added previous/next navigation to show template (Andreas Götz)
+- added new auto DiskId calculation. Now: "next free" before: "highest+1" (Chinamann)
+- fixed external search (Chinamann)
+- added convert_engines contrib to switch between dvdpalace and dvdb engine (Chinamann)
+- added user and engine filter to refetchAllInfos contrib (Chinamann)
+- added imdbID prefix history functions to dvdb and dvdpalace engine (Chinamann)
+- fixed dvdb engine to avoid bad results if httpClient sends "Request Timeout" (Chinamann)
+
+### 21.09.05
+- added DVDB.de engine (Chinamann)
+- changed barcode based adding contrib to use DVDB.de engine (Chinamann)
+- changed LableWriter Export to use DVDB.de engine (Chinamann)
+- added UTF8 support to httpClient (Chinamann)
+- added imdb-id-prefix also to imdb and changed it in dvdpalace engine (Chinamann)
+
+### 01.09.05
+- PDF title formatting fix (Justin Pasher)
+- Excel export (Chinamann)
+- added Amazon.com engine (Andreas Götz)
+- added more IMDB genres (Andreas Götz)
+- added HTTP caching support (Andreas Götz)
+- upgraded Smarty to latest 2.6.10 (Andreas Götz)
+
+### 31.07.05
+- Image max width/height values (pdf config file) (Justin Pasher)
+- Image width/height values (in the generated PDF) (pdf config file) (Justin Pasher)
+- Overall font size (pdf config file) (Justin Pasher)
+- Display mediatype next to diskid in the title for the movies (Justin Pasher)
+- Search form now display "Video Codec" in the "Search Fields" box (Justin Pasher)
+
+### 15.06.05
+- fixed db prefix problems in create- and upgradescripts (Chinamann)
+- fixed "database not empty" problem even if different prefix is selected (Chinamann)
+- fixed bug [ 1199833 ] Database prefix not added when MySQL database is not empty (Chinamann)
+
+### 24.05.05
+- added user to user permissions (Chinamann)
+- updated dvdpalace engine (Chinamann)
+- fixed bug [ 1122052 ] Automatic DiskID generation problem (Chinamann)
+
+### 01.04.05
+- upgraded Smarty to latest 2.6.8 (Andreas Götz)
+
+### 23.02.05
+- added engine config options (Andreas Götz)
+- added prelimenary improved episodes support (Andreas Götz)
+- added add_tv_episodes
+
+### 10.02.05
+- added support for common table prefix for hosting environments (Andreas Götz)
+- added content drilldown to DvdInside engine (Andreas Götz)
+- added support for regrouping of articles (Andreas Götz)
+- added default values for list- and castcolumns to createtables.sql (Andreas Götz)
+- upgraded Smarty to latest 2.6.7 (Andreas Götz)
+- moved some language flags to images/flags/additional (Andreas Götz)
+
+### 25.01.05
+- added HTTP basic auth support for use by RSS feed readers (Andreas Götz)
+- disabled IMDB browser access for anonymous users for security reasons
+- added new language flags (Constantinos Neophytou)
+
+### 21.01.05
+- added langcheck tooltips update (Constantinos Neophytou)
+- added greek language files (Constantinos Neophytou)
+- applied multi-language patch (Constantinos Neophytou)
+
+### 17.01.05
+- added https patch (Andreas Götz, thanks to Robert Hendricks)
+- added removal of html tags in title and subtitle (Andreas Götz)
+
+### 05.01.05
+- security fix for javascript attacks (Andreas Götz, thanks to Holger van Lengerich)
+
+### 28.12.04
+- fixed phpthumb code sometimes generating duplicate thumbnails
+- fixed custom fields not being copied from IMDB
+
+### 24.12.04
+- added cache-less mode to avoid caching of IMDB queries (Andreas Götz)
+- various template fixes (bug 1084553, etc)
+- added swedish translations (Nisse Hellberg)
+- several security fixes (Andreas Götz, Steve Kemp)
+
+### 15.11.04
+- even more PDF export fixes (Andreas Götz)
+
+### 05.11.04
+- PDF export fixes
+- removed 'Adult' genres for users without permissions (Andreas Götz)
+- added default adult genre to the setup SQL (Andreas Götz)
+
+### 27.10.04
+- added PDF export (Andreas Götz)
+- added advanced template (Elkin)
+
+### 15.10.04
+- added thumbnail scaling using phpThumb for saving bandwidth (Andreas Götz)
+
+### 20.09.04
+- moved javascripts to separate files for re-use (Andreas Götz)
+- moved xml headers to separate template file for re-use (Andreas Götz)
+- added xml import/export (Andreas Götz)
+- separated search field names in templates from physical columns names (Andreas Götz)
+- upgraded smarty to 2.6.5 (Andreas Götz)
+- added custom smarty function html_checkbox to get rid of the {if $video.seen}{else}{/if} (Andreas Götz)
+- added tool to decode html entities into ANSI characters (contrib/decode_entities.php)
+- fixed user dropdown (Mike Clark)
+
+### 10.09.04
+- added hierarchical language files (Idea by Elkin)
+- added tool for finding recommendations (contrib/add_recommended_movies.php)
+- added owner dropdown for multiuser mode (PimpGoblin)
+
+### 24.08.2004
+- added support for google image lookup (edit.tpl)
+- allowed to store engine as id prefix (experimental: imdb:081547)
+- upgraded search functionality to search any external site
+- added tool to remove orphans from image cache (contrib/clean_unused_images.php)
+- updated delete functionality to remove cover of deleted movie
+
+### 16.08.2004
+- updated to allow drilldown on individual countries (if separated by ,)
+- major overhaul of installer (Andreas Götz)
+
+### 15.08.2004
+- major overhaul of internal database structure
+- improved developer documentation
+
+### 01.08.2004
+- Added indian language flag
+- small updates to the manual
+
+### 03.07.2004
+- Not working search IMDB button fixed in default template
+
+### 29.06.2004
+- Bugfix for PHP installation with missing '.' in include_path
+
+### 28.06.2004
+- Bugfix for SQL error on user insert (Kris Senden)
+
+### 27.06.2004
+- install.php (Andreas Götz)
+- upgrade accross multiple versions at once
+- jumps directly into upgrade step
+
+### 21.06.2004
+- french update by Cyril Duveau
+- bugfix for german language file
+
+### 19.06.2004
+- fixed support for admin to change owner
+- added per user seen value (statistics not updated yet)
+- bugfix for default lookup.tpl (no engine support yet)
+
+### 11.06.2004
+- added amazon webservice (experimental) (Andreas Götz)
+- added compact.css (Andreas Götz)
+- modified imdboverwrite to be more flexible (Andreas Götz)
+
+### 09.06.2004
+- small bugfix for contrib/tvtome.php
+- added access keys to default template
+
+### 05.06.2004
+- Andreas Götz:
+- upgraded smarty 2.5 to 2.6.3 to ensure php5 compatibility
+- modified html_image to allow max_width and max_height parameters for
+modern template
+- Andreas Gohr:
+- fixed permission problems when logging out and in within the same
+browser session
+- added profile support to modern template
+- fetching gueststars in contrib/tvtome.php
+
+### 03.06.2004
+- added <title> support for speaking html page titles (Andreas Götz)
+
+### 01.06.2004
+- added installer support to write configuration back to
+config.inc.php (Andreas Götz)
+
+### 28.05.2004
+- Various changes by Andreas Götz
+- added httpClient support for gzip-encoding
+- added httpClient support to remember redirects
+- reformatted error messages and added links to install.php
+- added preliminary multi-engine support
+- added improved video copy support
+- added referer patch by Mike Clark
+
+### 16.05.2004
+- added user profiles
+
+### 13.05.2004
+- bugfix for names containing quotes
+- bugfix for modern template CSS by Justin Pasher
+
+### 10.05.2004
+- swedish language file by Nisse added
+- spanish update by Elkin Fricke
+- bugfix for tvtome.php by Elkin Fricke
+
+### 09.05.2004
+- Multiuser Bug on deletion fixed by Stephan Hesmer
+- added a index.html (thx to Merle Reine)
+- added dvdadd.pl to contrib (based upon sample script by Elkin
+Fricke)
+- Request to Borrow Feature added some time in between ;-)
+- multiple minor changes and fixes by Andreas Götz and some
+others including some fixes on the IMDB integration
+
+### 04.02.2004
+- language updates
+
+### 29.12.2003
+- videoadd.pl supports the owner field
+- default template now uses the full screen width
+
+### 21.12.2003
+- minor code cleanup
+- manual additions
+- use of security mechanisms for tvtome.php
+- all images are tried in the template directory first
+- VideoDB now checks for a loaded mysql PHP extension
+- videoadd.pl now sets the created timestamp
+- the # filter now matches foreign characters and special
+chars, too (thx to Justin Lim)
+- Now all fields from the videodata table are selected for list
+views (index and search) - more freedom for template designers
+
+### 19.12.2003
+- bugfix for russian language file by Eugene Surov
+- Optional adult check for certain genres
+
+### 29.11.2003
+- bugfix for IMDB Problem (thx to Andreas Götz and others)
+- more effective session init (Andreas Götz)
+
+### 05.11.2003
+- no edit links on missing permissions in modern template
+- admin can change owner (thx to Mike Clark)
+
+### 02.11.2003
+- small doc updates
+
+### 26.10.2003
+- New custom type for MPAA ratings by Tim M. Sanders
+- bulgarian language update by drJekyll
+- polish update by Maciej Witkowiak
+
+### 25.10.2003
+- french language update by Cyril Duveau
+- minor tweaks for modern template
+
+### 23.10.2003
+- dutch language update by Kees de Bruin
+- german language updated
+
+### 21.10.2003
+- small update for french language by Daniel Caujolle-Bert
+
+### 19.10.2003
+- added new cutom type 'movix' by Antonio Giungato
+- added new default style 'metal'    
+
+### 15.10.2003
+- new Multiplayer code based on many code contributions by Mike
+Clark and some by "weber"
+
+### 03.10.2003
+- added new stylesheet for the default template by Joakim Sandén
+
+### 21.09.2003
+- spanish update by Elkin Fricke
+- DB versioning
+
+### 17.09.2003
+- Added missing <?xml ?> header
+
+### 16.09.2003
+- Dutch update by Kees de Bruin
+
+### 15.09.2003
+- Manual and Helpbrowser added
+- random view does no longer show wishlist items
+- French update by Cyril Duveau
+- Bulgarian Update by drJekyll
+- movies are only marked as new when added not when changed anymore
+
+### 14.09.2003
+- Portuguese update by Tiago Fonseca, Brasilian Portuguese
+by Marcus Leandro
+
+### 08.09.2003
+- Italian update by Antonio Giungato
+
+### 07.09.2003
+- language checker added to the contrib directory
+
+### 04.09.2003
+- all IMDB functions now use the new link formats
+- imdbData now returns a hash
+
+### 30.08.2003
+- bugfix for new imdb link format by Charles Morgan
+
+### 29.08.2003
+- french update by Cyril Duveau
+- patch to enable upload from an URL in Konquerer by Stephan Zalewski
+- Userdefinable config table (by Stephan Zalewski)
+- Brazillian portuguese Language by Marcus Leandro added
+
+### 27.08.2003
+- custom type for original title by Stephan Zalewski
+- better cachedirectory checks
+
+### 26.08.2003
+- POST support for HTTP client by Andreas Götz
+- IMDB-Browser by Andreas Götz
+
+### 25.08.2003
+- bulgarian language update by drJekyll
+
+### 23.08.2003
+- spanish update by Elkin Fricke
+- bugfix for HTTP caching on windows
+- lots of comments added its now possible to generate a API doc with phpDocumentor
+
+### 21.08.2003
+- small wishlist bugfix by Andreas Götz
+- Number of shown movies in new filter is cutomizable now (Patch by Stephan Zalewski)
+- improvements to the year statistic
+
+### 18.08.2003
+- minor template tweaks (default)
+- updated spanish translation by Elkin Fricke
+- idea for year statistic implemented not finished yet
+
+### 17.08.2003
+- setup.php uses REPLACE now
+- merged multi template with default
+- new template by Andreas Götz: modern
+- Fixed bug with interfering environment variables (Thanks to
+Raymond Scholz pointing that out)
+- nocover image is now a transparent gif - Templates can use
+their own.
+- Added a new rating custom type which uses the IMDB rating as
+a default
+- Search now works with ' in queries (Fixes Ed O'Neill)
+- Fixed error when selecting random on an empty database
+- New Mediatype 'wanted' for building a wishlist of movies (Idea by
+Andreas Götz)
+- Cover-Upload by Stephan Zalewski
+- some template tuning
+
+### 11.08.2003
+- bugfix by Harald Leithner for mediadefault in setup.php
+- bulgarian update by drJekyll
+- minor template fixes
+
+### 10.08.2003
+- Enhancement of the imdbActor function
+- Updated french language by Cyril Duveau
+- local files in the cover field now work again
+- setup.tpl is now independent from the available setup options
+- changed the random function again please send me a mail if it
+isn't random enough
+
+### 09.08.2003
+- New template (multi) and some minor codechanges (Andreas Götz)
+- Fix for missing director and country fields in show.php
+- Not found actorthumbnails are retried after specified age
+
+### 07.08.2003
+- Patches by Andreas Götz:
+- fix for chunked encoding which makes http/1.1 possible
+- enhanced imdbActor function
+- bugfix for IMDB caching function
+- Bulgarian language update by drJekyll
+
+### 05.08.2003
+- Spanish language updates by Elkin Fricke
+
+### 03.08.2003
+- IMDB cache reimplemented
+- small fix for imdbActors by Andreas Götz
+- Translation update for russian language by Konstantin Boudnik
+
+### 31.07.2003
+- Dutch translation updated by Kees de Bruin
+
+### 30.07.2003
+- update for the portuguese languagefile by Nuno Nunes
+- Some updates to the new proxy enabled download function
+- Experimental support for actor fotos by Andreas Götz
+
+### 29.07.2003
+- Bulgarian languagefile by drJekyll added
+- spanish language update by ctRl
+- Proxy support by Andreas Götz
+
+### 28.07.2003
+- Bugfix for the ID assigning problem which made adding new videos impossible (sorry folks)
+- image cacheing is now handled seperately by img.php
+
+### 26.07.2003
+- Small fix by Andreas Götz for autoDiskID calculation
+
+### 20-25.07.2003
+- Everything is better now! :-) I like to call it Version 2
+- Templates with Smarty
+- Webbased, database stored config
+- SQL function now returns associative arrays
+- much code cleanup
+- display bug in Linux Opera fixed
+- a TODO file was added
+- Style by drJeckyll added
+
+### 20.07.2003
+- Patch by Andreas Götz to fix the genre links in show.php
+- The TV-Episode switch is now stored in the session (Patch by Thomas Zajik)
+
+### 17.07.2003
+- Now checkboxlabels are clickable (patch by Kjetil Thuen)
+
+### 16.07.2003
+- Fixed the random function to produce more random values
+
+### 15.07.2003
+- Unavailable movies are now shown in red on the browsing view (Thanks to Alexandre Thomas for the idea)
+- The french translation was corrected by Alexandre Thomas
+
+### 14.07.2003
+- Added russian language file by Konstantin Boudnik
+- bugfix for orderallbydiskid
+
+### 05.07.2003
+- Incorporated lots of changes by Nicola Asuni (www.tecnick.com
+info@tecnick.com)
+- The output is in XHTML 1.0 Transitional
+- some PHP bugs has been removed
+- code cleanup
+- directory hierachy was redesigned
+- Added portuguese languagefile by Nuno Nunes
+- The style can be changed from the config file
+
+### 21.06.2003
+- changed error_reporting to show fatal errors and parse errors this
+should make debugging of custom function easier
+
+### 20.06.2003
+- added polish language file by Maciej Witkowiak
+- charsetencoding is now set with the languagefile
+- czech and polish flags added
+
+### 19.06.2003
+- You can now define your own input/output functions for the custom fields. see custom.php
+- videoadd.pl now uses mplayer for getting video informations, it can create md4 sums for edonkey links, too (thx to Frank Schubert for the idea)
+- The recursion bug in videoadd now really is fixed
+
+### 12.06.2003
+- added missing top.gif
+
+### 09.06.2003
+- some more language flags and a new config option for language quick select buttons were added
+- cosmetic changes
+- infinite recursion fixed in videoadd.pl
+
+### 01.06.2003
+- Cast is displayed in multiple columns now (Idea by Andreas Götz)
+- videoadd.pl now scans recursivly for files - this should work with (S)VCDs can anyone confirm that?
+
+### 30.05.2003
+- fixed a small bug in the IMDB cast parser
+
+### 28.05.2003
+- Updated the README a little bit
+
+### 25.05.2003
+- back to top link on every page
+- Patches by Andreas Götz
+- addslashes for delete JavaScript (fixes problems with "Charlie's Angels")
+- The filtersetting is now saved in a session
+
+### 24.05.2003
+- added french language file by Cyril Duveau
+- disabled error_reporting in nondebugmode
+
+### 09.05.2003
+- Patches by Andreas Götz
+- bug fix for the new Cast IMDB parser (bad HREFs removed)
+- you can set a default language for new movies
+- thumbnails when browsing - sweet :-)
+
+### 22.04.2003
+- added patches by Raymond Scholz:
+- little bug on custom fields fixed
+- IMDB parser now gets the runtime right on movies >999 min
+- The cast is now fetched from the extended credits page
+
+### 17.04.2003
+- videoadd.pl now always sets the mediatype to CD-R and a bug in the titelguesser was fixed
+
+### 23.03.2003
+- more statistics
+
+### 18.03.2003
+- Dutch translation by Kees de Bruin added
+- IMDB parser now splits Title from Subtitle at " - " instead of "-" (patch by Kees de Bruin)
+
+### 17.03.2003
+- added some JavaScript to enable the IMDB lookup by default when the IMBD-ID is changed
+- added an option to let IMDB lookups replace existing data
+
+### 16.03.2003
+- various patches by "unknown":
+- saving new items without a genre with no errors from functions.php line 87
+- stop imdb lookup when searching on empty title/subtitle (window still shows but it is faster as it does nothing)
+- stop imdb lookup when selected checkbox "lookup missing data from imdb" and there is no imdb item value before clicking save
+- option to show listing entries sorted by diskid
+- allow editing seen option from inside edit screen
+- show total hours seen (watched) in statistics
+- added "Adult" genre
+- IMDB caching now works on redirects, too
+
+### 15.03.2003
+- added spanish translation contributed by "Orko"
+
+### 06.03.2003
+- linked the categories from the statistics page to the search
+
+### 02.03.2003
+- applied some Patches by Cameron W. Johnston to add support for
+various writable DVD formats
+
+### 04.02.2003
+- fixed a problem with duplicate keys on genre inserts
+
+### 02.02.2003
+- The default filter can be set in the config (thx to Dale Blount)
+- removed the useless 'Edit' and 'View' link on the respective pages (thx to Stephen Tomkinson)
+- only nonempty fields are shown in the movie view (thx to Stephen Tomkinson)
+- Category names are linked to the search (thx to Stephen again)
+- empty years default to 0000 instead 2002 now
+- Version tag added
+
+### 30.01.2003
+- Useragent of IMDB grabber is now IE and IMDB queries are now cached locally (thx to Marc Schoenefeld and Andreas Götz)
+
+### 25.01.2003
+- new Perl script direxport.pl added
+- splitbrain link at the bottom now links directly to the videodb page
+
+### 24.01.2003
+- fixed another small bugs in the IMDBgrabber and added a new search.gif (again: all the fame goes to Antonio :-))
+
+### 23.01.2003
+- made search DISTINCT (thx to Antonio Giungato)
+- IMDBfetcher now grabs 'Runtime: USA: 110 min' correctly (thx to Antonio again)
+- added mediatype dropdown (thx to Rob Vonk)
+- added custom fields
+- limit edit to localnet only (thx to Jens Oberender)
+
+### 20.01.2003
+- "column 'comment' specified twice" error removed (ARGG! STUPID ME!)
+- languages with no flag available don't result in a broken image anymore
+
+### 19.01.2003
+- started a changefile ;-)
+- you may add a comment to each movie (currently 255 chars - mail me if that is a problem)
+- "lent tofred" solved 
+- diskid '0' is possible now
+- actors and director is linked to the search (works pretty well)
+- changed the link color
+- borrow manager links to the first movie on disk
+- magic quote problems hopfully solved forever
+
+### 16.01.2003
+- better borrowmanager, various smaller bugfixes and improvements
+
+### 12.01.2003
+- It now works with register_globals=off.
+- Title and subtilefetching added.
+- Problems with gpc_magicquotes solved.
+
+### 11.01.2003
+- Much better IMDB Search :-)
+
+### 06.01.2003 17:00
+- Fixed a typo in the english language file
+- Grabbing the plot and image URL from IMDB now works again.
+
+### 06.01.2003
+- Thanks to Marcel Spitau <marcel at spitau dot de> VideoDB now supports multiple languages. Currently english and german is available. But adding your own language is easy. If you do so please send in your language file!
