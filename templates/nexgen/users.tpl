@@ -59,7 +59,7 @@
 
 
 		<h3 class="subheader">{$lang.existingusers}</h3>
-{*
+
 		<table class="small-12">
 		<thead>
 			<tr>
@@ -114,8 +114,8 @@
 			{/foreach}
 		</tbody>
 		</table>
-*}
 
+{*
 		{foreach item=user from=$userlist}
 		<h5 class="subheader">{$user.name}</h5>
 
@@ -167,7 +167,7 @@
 		</div>
 		</form>
 		{/foreach}
-		
+*}
 	</div><!-- col -->
 </div><!-- row -->
 
