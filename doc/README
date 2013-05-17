@@ -9,8 +9,7 @@ INSTALL
 
   or (not recommended since v2.0)
 
-    - create a MySQL-Database using the table definitions in
-      install/install.sql
+    - create a MySQL-Database using the table definitions in install/install.sql
     - edit the config.inc.php to match your database
 
   - point your browser to your new VideoDB and add some movies
@@ -46,17 +45,10 @@ CUSTOMIZING
     directory in templates/
   - Whenever you do anything of the above please send it to me
 
-READ MORE
-
-  - Be sure to check out the HTML manual in doc/manual or check out
-    the Wiki at http://www.splitbrain.org/dokuwiki/vdb:videodb
-
 PROBLEMS/FEEDBACK
 
   - Use the mailinglist to contact the developers at
     http://lists.sourceforge.net/mailman/listinfo/videodb-devel
-  - Consult the current documentation at
-    http://www.splitbrain.org/dokuwiki/vdb:videodb
 
 THANKS
 
