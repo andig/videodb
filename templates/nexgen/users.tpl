@@ -115,6 +115,7 @@
 		</tbody>
 		</table>
 
+
 {*
 		{foreach item=user from=$userlist}
 		<h5 class="subheader">{$user.name}</h5>
