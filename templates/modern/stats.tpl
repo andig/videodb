@@ -44,7 +44,7 @@
               <tr>
                 <td valign="bottom" align="left" style="text-align:left"><small>{$stats.first_year|spacify:"<br/>"}</small></td>
                 <td colspan="2" valign="bottom" align="left" class="odd">
-                {foreach key=year item=count from=$stats.count_year}<a href="search.php?q={$year}&fields=year&nowild=1"><img src="images/bar.gif" width="7" height="{math equation="round(80/y*x)" x=$count y=$stats.max_count}" title="{$year}: {$count}" alt="{$year}: {$count}" /></a>{/foreach}
+                {foreach key=year item=count from=$stats.count_year}<a href="search.php?q={$year}&fields=year&nowild=1"><img src="images/bar.gif" width="7" height="{if $count==0}0{else}{math equation="round(80/y*x)" x=$count y=$stats.max_count}{/if}" title="{$year}: {$count}" alt="{$year}: {$count}" /></a>{/foreach}
                 </td>
                 <td valign="bottom" align="right" style="text-align:right"><small>{$stats.last_year|spacify:"<br/>"}</small></td>
               </tr>
