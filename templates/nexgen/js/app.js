@@ -39,6 +39,11 @@ $(document).ready(function() {
 	// prevent tabbing through <i> tags
 	$('i').parent().attr('tabindex', '-1');
 
+	// lazy-load images
+	if (typeof jQuery == "function" && typeof jQuery().lazyload == "function") {
+		$("img.lazy").lazyload({threshold: 500});
+	}
+
 	// substitute input[file] with custom control
 	$("input[type=file]").each(function() {
 		var proxy = $('<input type="text" value="'+$(this).val()+'" />');
@@ -64,7 +69,7 @@ $(document).ready(function() {
 		var a = $(this).find("a");
 		// create proxy element
 		if ($(this).hasClass("active") && $("#"+a.attr("href")).length == 0) {
-			$($(this).closest("form")).append(
+			$(this).closest("form").append(
 				$('<input type="hidden" name="'+a.attr("href")+'" id="'+a.attr("href")+'" value="'+a.attr("value")+'" />')
 			);
 		}
@@ -83,16 +88,15 @@ $(document).ready(function() {
 	// dl.input-checkbox
 	$("dl[input-checkbox] dd").each(function() {
 		var a = $(this).find("a");
-		var id = a.attr("href").replace("[]","")+a.attr("value");
+		var id = $(this).closest("form").attr("id")+a.attr("href").replace("[]","")+a.attr("value");
 
 		// create proxy elements
 		if ($("#"+id).length == 0) {
-			$($(this).closest("form")).append(
-				$(
-					'<input type="hidden" name="'+a.attr("href")+'" id="'+id+'" value="'+(
+// alert($(this).closest("form").attr("id"));
+			$(this).closest("form").append(
+				$('<input type="hidden" name="'+a.attr("href")+'" id="'+id+'" value="' + (
 					($(this).hasClass("active")) ? a.attr("value") : ''
-					) + '" />'
-				)
+				) + '" />')
 			);
 		}
 
@@ -101,7 +105,8 @@ $(document).ready(function() {
 			$(this).toggleClass("active");
 			// set proxy value
 			var a = $(this).find("a");
-			var id = a.attr("href").replace("[]","")+a.attr("value");
+			var id = $(this).closest("form").attr("id")+a.attr("href").replace("[]","")+a.attr("value");
+// alert($("#"+id).closest("form").attr("action") +"/"+$("#"+id).closest("form").attr("id") +" "+ "#"+id + ":" + (($(this).hasClass("active")) ? a.attr("value") : ""));
 			$("#"+id).val(($(this).hasClass("active")) ? a.attr("value") : "");
 			return(false);
 		});

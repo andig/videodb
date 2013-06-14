@@ -60,67 +60,10 @@
 
 		<h3 class="subheader">{$lang.existingusers}</h3>
 
-		<table class="small-12">
-		<thead>
-			<tr>
-				<th><h5 class="subheader">{$lang.username}</h5></th>
-				<th><h5 class="subheader">{$lang.permissions}</h5></th>
-				<th><h5 class="subheader">{$lang.email}</h5></th>
-				<th><h5 class="subheader">{$lang.password}</h5></th>
-				<th colspan="3"><h5 class="subheader">{$lang.action}</h5></th>
-			</tr>
-		</thead>
-
-		<tbody>
-			{foreach item=user from=$userlist}
-			<tr>
-				<form action="users.php" method="post">
-				<input type="hidden" name="id" value="{$user.id}" />
-				<td>
-					<input type="text" name="name" value="{$user.name}" />
-				</td>
-				<td>
-					{html_checkbox name="readflag"  value="1" id="readflag"|cat:$user.name  checked=$user.read  label=$lang.perm_readall}
-					{html_checkbox name="writeflag" value="1" id="writeflag"|cat:$user.name checked=$user.write label=$lang.perm_writeall}
-					{html_checkbox name="adultflag" value="1" id="adultflag"|cat:$user.name checked=$user.adult label=$lang.perm_adult}
-					{html_checkbox name="adminflag" value="1" id="adminflag"|cat:$user.name checked=$user.admin label=$lang.perm_admin}
-				</td>
-				<td>
-					{if !$user.guest}
-					<input type="text" name="email" value="{$user.email|escape}" />
-					{/if}
-				</td>
-				<td>
-					{if !$user.guest}
-					<input type="text" name="password" />
-					{/if}
-				</td>
-				<td>
-					<a href="#" class="button small submit">{$lang.update}</a>
-				</td>
-				</form>
-				<td>
-					{if !$user.guest}
-					<a href="#" class="button small" data-reveal-id="delete-modal-{$user.id}"/>{$lang.delete}</a>
-					{/if}
-				</td>
-				<td>
-					<form action="permissions.php" method="post">
-						<input type="hidden" name="from_uid" value="{$user.id}" />
-						<a href="#" class="button small submit">{$lang.perm}</a>
-					</form>
-				</td>
-			</tr>
-			{/foreach}
-		</tbody>
-		</table>
-
-
-{*
 		{foreach item=user from=$userlist}
 		<h5 class="subheader">{$user.name}</h5>
 
-		<form action="users.php" method="post">
+		<form action="users.php" method="post" id="{$user.id}">
 		<input type="hidden" name="id" value="{$user.id}" />
 
 		<div class="row">
@@ -168,7 +111,7 @@
 		</div>
 		</form>
 		{/foreach}
-*}
+
 	</div><!-- col -->
 </div><!-- row -->
 
