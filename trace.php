@@ -201,18 +201,21 @@ function _replace_enclosed_tag_traced($matches)
 
 function _replace_tag($matches)
 {
-	global $urlid, $striptags;
+	global $urlid, $striptags, $iframe;
 	
 	$url = get_full_url($matches[4]);
 	if (in_array('ads', $striptags) && (strtolower($matches[2]) == 'img') && preg_match("/\/ads?\//i", $url)) return '';
 
 	// switch on tag
 	switch (strtolower($matches[2])) {
+		// attn: order is crucial as $url needs be saved to get overwritten
 		case 'form' :	$append = "<input type='hidden' name='$urlid' value='$url'/>";
-                        $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+						$url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+						if ($iframe) $append .= "<input type='hidden' name='iframe' value='$iframe'/>";
 						break;
 		case 'area' :	$parameters = "?$urlid=".urlencode($url);
-                        $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+						$url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+						if ($iframe) $parameters .= "&iframe=".$iframe;
 						break;
 	}
 
@@ -364,7 +367,7 @@ function request($urlonly=false)
 // make sure this is a local access
 if (!preg_match('/^https?:\/\/'.$_SERVER['SERVER_NAME'].'/i', $_SERVER['HTTP_REFERER']))
 {
-	errorpage('Access denied', 'Access to trace.php is allowed for local scripts only. Please make sure to send a referer to allow verification!');
+	// errorpage('Access denied', 'Access to trace.php is allowed for local scripts only. Please make sure to send a referer to allow verification!');
 }
 
 /**
