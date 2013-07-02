@@ -180,6 +180,7 @@ function smarty_function_html_image($params, $template)
     $extra = '';
     $prefix = '';
     $suffix = '';
+    $path_only = false;
     $path_prefix = '';
     $server_vars = $_SERVER;
     $basedir = isset($server_vars['DOCUMENT_ROOT']) ? $server_vars['DOCUMENT_ROOT'] : '';
@@ -190,6 +191,7 @@ function smarty_function_html_image($params, $template)
             case 'height':
             case 'width':
             case 'dpi':
+            case 'path_only':
             case 'path_prefix':
             case 'basedir':
 			//!! cpuidle@gmx.de
@@ -311,14 +313,15 @@ function smarty_function_html_image($params, $template)
 
     if (isset($params['dpi']))
     {
-        if(strstr($server_vars['HTTP_USER_AGENT'], 'Mac')) {
-            $dpi_default = 72;
-        } else {
-            $dpi_default = 96;
-        }
+        $dpi_default = (strstr($server_vars['HTTP_USER_AGENT'], 'Mac')) ? 72 : 96;
         $_resize = $dpi_default/$params['dpi'];
         $width  = round($width * $_resize);
         $height = round($height * $_resize);
+    }
+
+    if ($path_only) {
+        // we only need the image path
+        return($file);
     }
 
 	$result = $prefix . '<img src="'.$file.'" alt="'.$alt;

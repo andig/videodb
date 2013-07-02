@@ -15,8 +15,8 @@
 <div class="row">
 	<div class="small-12 columns small-centered">
 
-		{assign var=max_width value=220}
-		{assign var=max_height value=400}
+		{assign var=max_width value=300}
+		{assign var=max_height value=500}
 
 		<ul class="small-block-grid-2 large-block-grid-{$listcolumns} itemlist">
 			{foreach $list as $video name=col}
@@ -26,7 +26,12 @@
 					<!-- Uncomment this if you want title/subtitle to be shown above the cover image: -->
 					<div>{$video.title}{if $video.subtitle} - {$video.subtitle}{/if}</div>
 *}
-					{if $video.imgurl}{html_image file=$video.imgurl max_width=$max_width max_height=$max_height}{/if}
+{*
+					<!-- Uncomment this if you want to use lazy-load together with full-scale images (requires larger bandwidth - don't use for moile access) -->
+					{if $video.imgurl}<img class="lazy" src="{$video.imgurl}"/>{/if}
+*}
+					<!-- Uncomment this if you want to use lazy-load together with image thumbnails - suited for mobile access -->
+					{if $video.imgurl}<img class="lazy" src="templates/nexgen/images/nocover.png" data-original="{html_image file=$video.imgurl max_width=$max_width max_height=$max_height path_only=1}"/>{/if}
 				</a>
 			</li><!--col-->
 			{/foreach}

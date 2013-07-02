@@ -22,9 +22,11 @@
 	<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Exo:600' type='text/css'>
 
 	<!-- js -->
-	<script>document.write('<script src="lib/foundation4/js/vendor/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.js"><\/script>');</script> 
+	<!-- for now, we're only using jquery, no zepto -->
+	<script>document.write('<script src="lib/foundation4/js/vendor/' + ('__proto__' in {} ? 'jquery' : 'jquery') + '.js"><\/script>');</script>
+	<script type="text/javascript" src="javascript/jquery.lazyload.min.js"></script>
 	<script type="text/javascript" src="lib/foundation4/js/vendor/custom.modernizr.js"></script>
-	<script src="lib/foundation4/js/foundation.min.js"></script>
+	<script type="text/javascript" src="lib/foundation4/js/foundation.min.js"></script>
 	<script type="text/javascript" src="{$template}js/app.js"></script>
 	{literal}<script>$(document).ready(function(){$(document).foundation()});</script>{/literal}
 </head>
