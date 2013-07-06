@@ -2,6 +2,7 @@
   Lookup template
   $Id: lookup.tpl,v 1.4 2013/03/16 14:29:47 andig2 Exp $
 *}
+<script type="text/javascript" src="{$template}js/lookup.js"></script>
 {include file="xml.tpl"}
 
 <body>
