@@ -191,11 +191,15 @@ if ($lookup && $imdbID)
         {
             foreach ($gnames as $gname)
             {
-                // check if genre is found- otherwise fail silently
-                if (is_numeric($genre = getGenreId($gname)))
-                {
-                    $genres[] = $genre;
-                }
+                if (is_numeric($gname)){
+					$genres[]=$gname;
+				}else{
+					// check if genre is found- otherwise fail silently
+					if (is_numeric($genre = getGenreId($gname)))
+					{
+						$genres[] = $genre;
+					}
+				}
             }
         }
     }
