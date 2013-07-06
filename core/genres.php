@@ -96,8 +96,9 @@ function getItemGenres($id, $names = false)
 	
     $genres = array();
     if (empty($id)) return $genres;
-	
-    $lang_suffix = ($config['language']==='en' || ($config['language'] !=='es' && $config['language']!=='fr' && $config['language'] !=='de') ) ? '' : '_'.$config['language'] ;
+
+	$lang_suffix = ($config['language']==='en' || ($config['language'] !=='es' && $config['language']!=='fr' && $config['language'] !=='de') ) ? '' : '_'.$config['language'] ;
+
     $SELECT = 'SELECT genres.id, genres.name'.$lang_suffix.
                  ' as name FROM '.TBL_GENRES.' AS genres, '.TBL_VIDEOGENRE.' AS videogenre
                 WHERE genres.id = videogenre.genre_id
