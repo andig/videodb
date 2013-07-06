@@ -8,7 +8,7 @@
  * @author  Loïc Devaux   <devloic@gmail.com>
  */
 
-require_once dirname(__FILE__).'./inc/allocine_lib.inc.php';
+require_once dirname(__FILE__).'/inc/allocine_lib.inc.php';
  
 $GLOBALS['ac_url_api']='http://api.allocine.fr/rest/v3/';
 $GLOBALS['ac_partner_id']='100043982026';
