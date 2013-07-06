@@ -1,23 +1,21 @@
 <?php
 /**
- * allocine.fr JSON API Parser
+ * filmstarts.de JSON API Parser
  *
- * retrieves data from the allocine.fr
+ * retrieves data from the filmstarts.de (german)
  *
  * @package Engines
- * @author  Loïc Devaux   <devloic@gmail.com>
+ * @author  Loic Devaux   <devloic@gmail.com>
  */
 
 require_once basename(__DIR__).'./inc/allocine_lib.inc.php';
  
-$GLOBALS['ac_url_api']='http://api.allocine.fr/rest/v3/';
-$GLOBALS['ac_partner_id']='100043982026';
-$GLOBALS['ac_partner_key']='29d185d98c984a359e6e6f26a0474269';
-$GLOBALS['ac_idPrefix']='allocine:';
-$GLOBALS['ac_server']= 'http://www.allocine.fr/film/fichefilm_gen_cfilm=XXXX.html';
-$GLOBALS['ac_actor']= 'http://www.allocine.fr/personne/fichepersonne_gen_cpersonne=XXXX.html';
-
-
+$GLOBALS['ac_url_api']='http://api.filmstarts.de/rest/v3/';
+$GLOBALS['ac_partner_id']='100076894460';
+$GLOBALS['ac_partner_key']='b9a1eb52eded459a99d7ba3b9a5d2245';
+$GLOBALS['ac_server']='http://www.filmstarts.de/kritiken/XXXX.html';
+$GLOBALS['ac_idPrefix']= 'filmstarts:';
+$GLOBALS['ac_actor']= 'http://www.filmstarts.de/personen/XXXX-.html';
 
 
 
@@ -27,45 +25,47 @@ $GLOBALS['ac_actor']= 'http://www.allocine.fr/personne/fichepersonne_gen_cperson
  * @todo    Include image search capabilities etc in meta information
  */
 
-function allocineMeta()
+function filmstartsMeta()
 {
-    return array('name' => 'Allocine (fr)');
+    return array('name' => 'Filmstarts (de)');
 }
 
 
 
 /**
- * Get Url to search Allocine for a movie
+ * Get Url to search Filmstarts for a movie
  *
  * @author  Douglas Mayle <douglas@mayle.org>
  * @author  Andreas Goetz <cpuidle@gmx.de>
  * @param   string    The search string
  * @return  string    The search URL (GET)
  */
-function allocineSearchUrl($title)
+function filmstartsSearchUrl($title)
 {
-	return searchUrl($title);
+	
+		return searchUrl($title);
+
 }
 
 /**
- * Get Url to visit Allocine for a specific movie
+ * Get Url to visit Filmstarts for a specific movie
  *
  * @author  Douglas Mayle <douglas@mayle.org>
  * @author  Andreas Goetz <cpuidle@gmx.de>
  * @param   string    $id    The movie's external id
  * @return  string        The visit URL
  */
-function allocineContentUrl($id)
+function filmstartsContentUrl($id)
 {
-	
-   return contentUrl($id);
+   
+	return contentUrl($id);
 }
 
 
 /**
  * Search a Movie
  *
- * Searches for a given title on Allocine and returns the found links in
+ * Searches for a given title on Filmstarts and returns the found links in
  * an array
  *
  * @author  Douglas Mayle <douglas@mayle.org>
@@ -74,40 +74,42 @@ function allocineContentUrl($id)
  * @param   string    The search string
  * @return  array     Associative array with id and title
  */
-function allocineSearch($title)
+function filmstartsSearch($title)
 {
+		$result=search($title);
+		return $result;
 
-
-    return search($title);
 }
 
 /**
- * Fetches the data for a given Allocine-ID
+ * Fetches the data for a given Filmstarts-ID
  *
  * @author  Douglas Mayle <douglas@mayle.org>
  * @author  Tiago Fonseca <t_r_fonseca@yahoo.co.uk>
  * @param   int   imdb-ID
  * @return  array Result data
  */
-function allocineData($imdbID)
+function filmstartsData($imdbID)
 {
-	$data=data($imdbID);
-	return $data;
+    	$data=data($imdbID);
+		
+		return $data;
+
 }
 
-
 /**
- * Get Url to visit allocine for a specific actor
+ * Get Url to visit filmstarts for a specific actor
  *
  * @param   string  $name   The actor's name
  * @param   string  $id The actor's external id
  * @return  string      The visit URL
  */
-function allocineActorUrl($name, $id)
+function filmstartsActorUrl($name, $id)
 {
-   
-    $actorUrl=actorUrl($name, $id);
-
+  
+    //bug with filmstarts.de , wrong actor ID so we remove the code so that the videodburl doesn't get generated
+	//$actorUrl=actorUrl($name, $id);
+	$actorUrl=	urlencode('http://www.filmstarts.de/suche/5/?q='.$name);
     return $actorUrl;
 }
 
@@ -123,9 +125,10 @@ function allocineActorUrl($name, $id)
  * @param  string  $name  Name of the Actor
  * @return array          array with Actor-URL and Thumbnail
  */
-function allocineActor($name, $actorid)
+function filmstartsActor($name, $actorid)
 {
-    return actor($name, $actorid);
+     $actor = actor($name, $actorid);
+	 return $actor;
 }
 
 ?>
