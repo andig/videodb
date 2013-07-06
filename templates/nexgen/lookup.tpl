@@ -6,6 +6,8 @@
 
 <body>
 
+<script type="text/javascript" src="{$template}js/lookup.js"></script>
+
 <!-- {$smarty.template} -->
 
 <dl class="tabs">
