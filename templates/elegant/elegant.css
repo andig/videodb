@@ -40,7 +40,7 @@ tr {
 }
 
 td {				/* this fixes a problem with opera */
-	vertical-align: top;
+	vertical-align: baseline;
 	text-align: left;	
 }
 
@@ -390,12 +390,12 @@ h4 {				/* used on edit page */
 	border-bottom: 1px dotted #aaa;
 }
 
-.list_title, .list_diskid {
+.list_title, .list_diskid, .list_rating {
 	font-size: 12px;
 	font-weight: bold;
 }
 
-.list_info, .list_seen, .list_plot {
+.list_info, .list_seen, .list_plot, .list_imdbid {
 	font-size: 11px;
 }
 
@@ -415,11 +415,11 @@ h4 {				/* used on edit page */
     float: right;
 }
 
-.list_diskid, .list_language, .list_seen, .list_item_buttons {
+.list_diskid, .list_language, .list_seen, .list_item_buttons, .list_mediatype, .list_imdbid, .list_rating {
     text-align: right;
 }
 
-.list_language {
+.list_language, .list_mediatype, .list_seen {
     margin-top: 2px;
     margin-left: 2px;
 }

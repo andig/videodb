@@ -47,6 +47,21 @@ function ajax_render()
 
     header('X-JSON: '.json_encode(array('count' => count($result))));
     echo $content;
+    
+    if (isset($rating))
+    {
+        // Permission check same as edit.php
+        // check for localnet
+        localnet_or_die();
+
+        // multiuser permission check
+        if (empty($id))
+            permission_or_die(PERM_WRITE);
+        else
+            permission_or_die(PERM_WRITE, get_owner_id($ajax_update));
+            
+        runSQL('UPDATE '.TBL_DATA.' SET rating='.$rating.' WHERE id='.$ajax_update);
+    }
 
     exit;
 }
@@ -205,16 +220,20 @@ if (isset($q) &! (isset($default) && empty($q)))
 
     $select = 'SELECT DISTINCT '.TBL_DATA.'.id, '.TBL_DATA.'.diskid,
                       title, subtitle, language, year, director, plot, imgurl,
-                      md5, comment, disklabel, imdbID, actors, runtime,
+                      md5, comment, disklabel, imdbID, rating, actors, runtime,
                       country, filename, filesize, filedate, audio_codec,
                       video_codec, video_width, video_height, istv,
                       lastupdate, mediatype, created,
                       custom1, custom2, custom3, custom4,
+                      !ISNULL('.TBL_USERSEEN.'.video_id) AS seen,
                       '.TBL_LENT.'.who, '.TBL_USERS.'.name AS owner, '.TBL_MEDIATYPES.'.name AS mediatypename
                  FROM '.TBL_DATA.'
             LEFT JOIN '.TBL_USERS.' ON owner_id = '.TBL_USERS.'.id
             LEFT JOIN '.TBL_LENT.' ON '.TBL_DATA.'.diskid = '.TBL_LENT.'.diskid
             LEFT JOIN '.TBL_MEDIATYPES.' ON '.TBL_DATA.'.mediatype = '.TBL_MEDIATYPES.'.id'."
+            LEFT JOIN ".TBL_USERSEEN.' ON '.TBL_DATA.'.id = '.TBL_USERSEEN.'.video_id AND '.TBL_USERSEEN.'.user_id = '.addslashes($_COOKIE['VDBuserid'])."
+            
+            
                $JOINS
                 WHERE ".$WHERES.'
              ORDER BY title, subtitle';

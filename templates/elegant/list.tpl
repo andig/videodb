@@ -60,10 +60,20 @@
                     </div>
                     {/if}
 
-                    <div class="list_diskid">
+{* For quicker searching ond oneddl.com -obsolete- *}									
+{*					{if $video.mediatype==$smarty.const.MEDIA_WISHLIST}
+					<div class="list_imdbid">
+						tt{$video.imdbID|replace:"imdb:":""}
+					</div>
+					{/if}
+*}					
+                  	<div class="list_rating">
+                  	{if $video.rating}{$lang.rating}: {$video.rating}{/if}
+                    </div>
+{*                    <div class="list_diskid">
                         <a href="search.php?q={$video.diskid}&fields=diskid&nowild=1">{$video.diskid}</a>
                     </div>
-
+*}
                     <div class="list_language">
                         {foreach $video.language as $itemlang}
                             {if $itemlang}<a href="search.php?q={$itemlang|escape:url}&amp;fields=language">
@@ -75,13 +85,25 @@
                             {/if}
                         {/foreach}
                     </div>
+                    
+                       <div class="list_mediatype" style=width:"18">
+                        {foreach $video.mediatypename as $mediatype}
+                            {if $mediatype}<a href="search.php?q={$mediatype|escape:url}&amp;fields=mediatype">
+                                {if $video.mediatypename[$mediatype]}
+                                    <img src="./images/media/{$mediatype}.png" alt="{$mediatype}" width="40"/>
+                                {else}
+                                    {$mediatype}
+                                {/if}</a>
+                            {/if}
+                        {/foreach}
+					</div>
 
-                    {if $video.seen}
+                   {if $video.seen}
                     <div class="list_seen"><!--<a href="index.php?filter=seen">--><img src="{$template}images/eye.gif" filter="seen" alt="{$lang.seen}"/><!--</a>--></div>
                     {/if}
                 </div>
 {/if}
-
+                
                 <div class="list_item_content">
                     <div class="list_title"><a href="show.php?id={$video.id}">{$video.title}{if $video.subtitle} - {$video.subtitle}{/if}</a></div>
 

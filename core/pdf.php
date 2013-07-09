@@ -269,7 +269,7 @@ class PDF extends FPDF2File
  */
 function getMediaImage($mediatype)
 {
-	if (preg_match("/^(DVD([+-]R)?|DivX|CD|VCD|SVCD|VHS)/i", $mediatype, $matches))
+	if (preg_match("/^(DVD([+-]R)?|DivX|CD|VCD|SVCD|VHS|blu-ray|avchd|hd-dvd|hdd)/i", $mediatype, $matches))
 	{
 		$type_image = strtolower($matches[1]).'.png';
 	}
@@ -383,6 +383,11 @@ function pdfexport($WHERE)
 			$tech['A'] = "Audio: ".$row['audio_codec'];
 		}
 		
+		unset($tech['F']);
+		if ($row['filename']) {
+			$tech['F'] = "File: ".$row['filename'];
+		}
+		
 		unset($tech['D']);
 		if ($row['created']) {
 			$tech['D'] = "Date: ".$row['created'];
@@ -393,13 +398,14 @@ function pdfexport($WHERE)
 		$pdf->SetFont($font_title, 'B', $font_size-3);
 		$pdf->SetXY($left_margin + $image_width + $margin, $ypos+ 4);
 		$pdf->Cell(0, 0, $techinfo, 0,1, 'L',0);
-
+		
 		// plot
 		$plot = leftString($row['plot'], $text_length);
 		$pdf->SetFont($font_plot, '', $font_size-1);
 		$pdf->SetXY($left_margin + $image_width + $margin, $ypos+3 +3);
 		$pdf->SetLeftMargin($left_margin + $image_width + $margin);
 		$pdf->WriteHTML($plot);
+		
 
 		// image
 		$file = getThumbnail($row['imgurl']);
