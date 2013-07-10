@@ -242,7 +242,7 @@ Event.observe(document, 'dom:loaded', function() {
 <!-- /purchases -->
 
 <div id="torrents" class="hidden">
-    <h3>{$lang.torrents}:</h3>
+    <h3>{$lang.downloads}:</h3>
     <div id="torrentcontent"></div>
     <div class="clear"></div>
 </div>

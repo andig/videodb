@@ -59,6 +59,30 @@ $lang['extid']                = 'Externe Id';
 $lang['purchase']             = 'Kaufen';
 
 #
+# Edit
+#
+
+$lang['main_details']        = 'Hauptdetails';
+$lang['media_details']       = 'Mediadetails';
+$lang['file_details']        = 'Dateidetails';
+$lang['cancel']        		 = 'Abrechen';
+
+#
+# Show
+#
+
+$lang['synopsis']			 = 'Zusammenfassung';
+$lang['purchase']            = 'Kaufen';
+$lang['torrents']            = 'Torrents';
+$lang['downloads']            = 'Downloads';
+
+#
+# Search
+#
+
+$lang['target']              = 'Ziel';
+
+#
 # Multiuser
 #
 $lang['enterusername']       = "Bitte Nutzernamen und Passwort eingeben.";
