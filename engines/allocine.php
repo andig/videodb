@@ -5,7 +5,7 @@
  * retrieves data from the allocine.fr
  *
  * @package Engines
- * @author  Loïc Devaux   <devloic@gmail.com>
+ * @author  LoÃ¯c Devaux   <devloic@gmail.com>
  */
 
 require_once dirname(__FILE__).'/inc/allocine_lib.inc.php';
@@ -77,7 +77,7 @@ function allocineContentUrl($id)
 function allocineSearch($title)
 {
 
-
+	
     return search($title);
 }
 
