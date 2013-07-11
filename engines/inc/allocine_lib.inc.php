@@ -146,8 +146,7 @@ function data($movieID)
 
 		$movie = recup($urlAPI);
 		$movie=$movie['movie'];
-
-   
+		
 	$data   = array(); // result
     $ary    = array(); // temp
 
@@ -157,8 +156,7 @@ function data($movieID)
    
     $data['id'] = $GLOBALS['ac_idPrefix'].$movieIDshort;
     $data['title']    = $movie['title'];
-	//todo ?
-    $data['subtitle'] = ''; //$movie['title'];
+	$data['subtitle'] = $movie['originalTitle']; 
 	
 
     /*
@@ -285,19 +283,15 @@ function data($movieID)
   
     $data['origtitle'] = $movie['originalTitle'];
 
-    /*
-      Title and Subtitle
-      If sub-title is blank, we'll try to fill in the original title for foreign films.
-    */
-    if (empty($data['subtitle']))
-    {
-        if ($data['origtitle'])
-        {
-            $data['subtitle'] = $data['title'];
-            $data['title']  = $data['origtitle'];
-        }
+    if (isset($movie['language'])){
+		foreach ($movie["language"] as $language){
+			$data['language'].=','.$language['$'];
+		}
+		$data['language']=substr($data['language'],1);
+    }else{
+    	$data['language']='';
     }
-
+	
 	// Return the data collected
 	
 	return $data;
