@@ -14,6 +14,7 @@ define(THUMB_CACHE_TARGET, true);
 
 /** 
  * This function is to replace PHP's extremely buggy realpath(). 
+ * http://stackoverflow.com/questions/4049856/replace-phps-realpath
  * @param string The original path, can be relative etc. 
  * @return string The resolved path, it might not exist. 
  */ 
@@ -21,7 +22,10 @@ function truepath($path){
 	// whether $path is unix or not 
 	$unipath=strlen($path)==0 || $path{0}!='/';
 	// attempts to detect if path is relative in which case, add cwd 
-	if(strpos($path,':')===false && $unipath) $path=getcwd().DIRECTORY_SEPARATOR.$path;
+	if(strpos($path,':')===false && $unipath) {
+		$path=getcwd().DIRECTORY_SEPARATOR.$path;
+		$unipath=false;
+	}
 	// resolve path parts (single dot, double dot and double delimiters) 
 	$path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
 	$parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
