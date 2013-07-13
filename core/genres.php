@@ -92,11 +92,15 @@ function getGenreId($name)
  */
 function getItemGenres($id, $names = false)
 {
+    global $config;
+	
     $genres = array();
     if (empty($id)) return $genres;
-    
-    $SELECT = 'SELECT genres.id, genres.name
-                 FROM '.TBL_GENRES.' AS genres, '.TBL_VIDEOGENRE.' AS videogenre
+
+	$lang_suffix = ($config['language']==='en' || ($config['language'] !=='es' && $config['language']!=='fr' && $config['language'] !=='de') ) ? '' : '_'.$config['language'] ;
+
+    $SELECT = 'SELECT genres.id, genres.name'.$lang_suffix.
+                 ' as name FROM '.TBL_GENRES.' AS genres, '.TBL_VIDEOGENRE.' AS videogenre
                 WHERE genres.id = videogenre.genre_id
                   AND videogenre.video_id = '.$id;
     $result = runSQL($SELECT);
