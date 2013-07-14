@@ -62,6 +62,9 @@ define('DB_CHARSET', 'UTF8');
 // use UTF8_GENERAL_CI or other valid MySQL collation to override
 define('DB_COLLATION', '');
 
+// additional localizations made in database (ex: genres table)
+define('DB_TRANSLATIONS', 'de,fr,es');
+
 // Required database version
 define('DB_REQUIRED', 41);
 
