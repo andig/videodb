@@ -63,6 +63,6 @@ define('DB_CHARSET', 'UTF8');
 define('DB_COLLATION', '');
 
 // Required database version
-define('DB_REQUIRED', 40);
+define('DB_REQUIRED', 41);
 
 ?>
