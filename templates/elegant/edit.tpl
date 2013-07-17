@@ -28,24 +28,6 @@ Event.observe(document, 'dom:loaded', function() {
 });
 </script>
 
-<script language="JavaScript" type="text/javascript" src="./javascript/prototype/control.modal.js"></script>
-<style>
-#modal_container {
-    padding:5px;
-    background-color:#fff;
-    border:1px solid #666;
-    overflow:auto;
-    font-family:"Lucida Grande",Verdana;
-    font-size:12px;
-    color:#333;
-    text-align:left;
-}
-
-#modal_overlay {
-    background-color:#000;
-}
-</style>
-
 {if $video.id || $xmlimport}
     <div id="actions">
     {if $video.id}
@@ -292,6 +274,7 @@ Event.observe(document, 'dom:loaded', function() {
     <div id="imagecontent"></div>
     <div class="clear"></div>
 </div>
+<div class="clear"></div>
 <!-- /images -->
 
 </div>
