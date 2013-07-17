@@ -9,8 +9,8 @@
 
 require_once('./lib/phpthumb/phpthumb.class.php');
 
-define(THUMB_CACHE_SOURCE, true);
-define(THUMB_CACHE_TARGET, true);
+define('THUMB_CACHE_SOURCE', true);
+define('THUMB_CACHE_TARGET', true);
 
 /** 
  * This function is to replace PHP's extremely buggy realpath(). 
@@ -20,29 +20,34 @@ define(THUMB_CACHE_TARGET, true);
  */ 
 function truepath($path){ 
 	// whether $path is unix or not 
-	$unipath=strlen($path)==0 || $path{0}!='/';
-	// attempts to detect if path is relative in which case, add cwd 
-	if(strpos($path,':')===false && $unipath) {
-		$path=getcwd().DIRECTORY_SEPARATOR.$path;
-		$unipath=false;
+	$relpath = strlen($path)==0 || $path{0}!='/';
+	// attempts to detect if path is relative in which case, add cwd
+	if (strpos($path,':')===false && $relpath) {
+		$path = getcwd().DIRECTORY_SEPARATOR.$path;
+        $relpath = false;
 	}
 	// resolve path parts (single dot, double dot and double delimiters) 
 	$path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
 	$parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
 	$absolutes = array();
 	foreach ($parts as $part) { 
-	if ('.' == $part) continue;
+		if ('.' == $part) continue;
 		if ('..' == $part) { 
 			array_pop($absolutes);
 		} else { 
 			$absolutes[] = $part;
 		} 
 	} 
-	$path=implode(DIRECTORY_SEPARATOR, $absolutes);
+	$path = implode(DIRECTORY_SEPARATOR, $absolutes);
 	// resolve any symlinks 
-	if(file_exists($path) && linkinfo($path)>0)$path=readlink($path);
-	// put initial separator that could have been lost 
-	$path=!$unipath ? '/'.$path : $path;
+	if (file_exists($path) && linkinfo($path)>0) {
+		$path = readlink($path);
+	// } else {
+    } elseif (strpos($path,':') === false && !$relpath) {
+		// put back initial unix separator that could have been lost 
+		// $path = (strpos($path,':')>=0 || $relpath) ? $path : '/'.$path;
+        $path = '/'.$path;
+	}
 	return $path;
 }
 
