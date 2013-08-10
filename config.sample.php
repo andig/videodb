@@ -19,8 +19,6 @@ $config['db_prefix']    = 'videodb_';   // Database table prefix (for use in hos
 
 $config['offline']      = 0;            // Use to take videoDB offline
 
-$config['offline']          = 0;        // videoDB is offline
-
 // Boxee box configuration
 $config['boxeeHost']        	= '';	// boxee box host
 $config['boxeePort']        	= 9090;	// boxee box port
