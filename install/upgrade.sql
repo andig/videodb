@@ -395,6 +395,53 @@ REPLACE INTO config (opt,value) VALUES ('template', 'nexgen::nexgen');
 REPLACE INTO config (opt,value) VALUES ('actorpics', '1');
 REPLACE INTO config (opt,value) VALUES ('imdbBrowser', '1');
 
+
+#
+# changes in DB version 41
+#
+
+ALTER TABLE `genres` ADD COLUMN `name_de`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `name`;
+ALTER TABLE `genres` ADD COLUMN `name_fr`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `name_de`;
+ALTER TABLE `genres` ADD COLUMN `name_es`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `name_fr`;
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('1', 'Action', 'Action', 'Action', 'Acción');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('2', 'Adventure', 'Abenteuer', 'Aventure', 'Aventura');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('3', 'Animation', 'Animation', 'Animation', 'Animación');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('4', 'Comedy', 'Komödie', 'Comédie', 'Comedia');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('5', 'Crime', 'Krimi', 'Policier', 'Crimen');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('6', 'Documentary', 'Dokumentarfilm', 'Documentaire', 'Documental');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('7', 'Drama', 'Drama', 'Drame', 'Drama');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('8', 'Family', 'Familienfilm', 'Famille', 'Familia');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('9', 'Fantasy', 'Fantasy', 'Fantastique', 'Fantasía');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('10', 'Film-Noir', 'Film noir', 'Film noir', 'Cine negro');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('11', 'Horror', 'Horror', 'Epouvante-horreur', 'Terror');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('12', 'Musical', 'Musical', 'Comédie musicale', 'Comedia musical');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('13', 'Mystery', 'Mysteryfilm', 'Mistère', 'Misterio');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('14', 'Romance', 'Romanze', 'Romance', 'Romántico');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('15', 'Sci-Fi', 'Science fiction', 'Science fiction', 'Ciencia ficción');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('16', 'Short', 'Kurzfilm', 'Court métrage', 'Cortometraje ');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('17', 'Thriller', 'Thriller', 'Thriller', 'Suspense');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('18', 'War', 'Kriegfilm', 'Guerre', 'Guerra');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('19', 'Western', 'Western', 'Western', 'Western');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('20', 'Adult', 'Erwachsen', 'Adulte', 'Adulto');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('21', 'Music', 'Musik', 'Musical', 'Musical');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('22', 'Biography', 'Biografie', 'Biopic', 'Biografía');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('23', 'History', 'Geschichte', 'Historique', 'Histórico');
+REPLACE INTO `genres` (id, name, name_de, name_fr, name_es) VALUES ('24', 'Sport', 'Sport', 'Sport', 'Deporte');
+INSERT INTO `genres` (name,name_de,name_fr,name_es) VALUES ('Martial Arts', 'Martial Arts', 'Arts Martiaux', 'Artes Marciales')
+ , ('Bollywood', 'Bollywood', 'Bollywood', 'Bollywood')
+ , ('Classics', 'Klassiker', 'Classique', 'Clásico')
+ , ('Tragicomedy', 'Tragikomödie', 'Comédie dramatique', 'Comedia dramática')
+ , ('Concert', 'Konzert', 'Concert', 'Concierto')
+ , ( 'Divers', 'Unbekannt', 'Unknown', 'Desconocido')
+ , ( 'Erotic', 'Erotik', 'Erotique', 'Erótico')
+ , ( 'Espionage', 'Spionage', 'Espionnage', 'Espionaje')
+ , ( 'Experimental', 'Experimentalfilm', 'Expérimental', 'Experimental')
+ , ( 'Judiciary', 'Gericht', 'Judiciaire', 'Judicial')
+ , ( 'Opera', 'Opera', 'Opera', 'Opera')
+ , ( 'Epic', 'Monumentalfilm', 'Péplum', 'Épico')
+ , ( 'Show', 'Show', 'Show', 'Show');
+
+
 # 
 # IMPORTANT
 # 
@@ -402,4 +449,6 @@ REPLACE INTO config (opt,value) VALUES ('imdbBrowser', '1');
 # core/constants.php when changing the database structure!
 # 
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 40);
+
+
+REPLACE INTO config (opt,value) VALUES ('dbversion', 41);

@@ -20,9 +20,8 @@ require_once './core/functions.php';
 function getGenres()
 {	
 	global $config;
+	$lang_suffix = in_array( $config['language'], split (',' , DB_TRANSLATIONS) ) ?  '_' . $config['language'] : '' ;
 	
-	$lang_suffix = ($config['language']==='en' || ($config['language'] !=='es' && $config['language']!=='fr' && $config['language'] !=='de') ) ? '' : '_'.$config['language'] ;
-
     $SELECT = 'SELECT id, name'.$lang_suffix.
                  ' as name FROM '.TBL_GENRES.'
              ORDER BY name';
