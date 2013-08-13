@@ -18,10 +18,14 @@ require_once './core/functions.php';
  * Return list of valid genres from db
  */
 function getGenres()
-{
-    $SELECT = 'SELECT id, name
-                 FROM '.TBL_GENRES.'
+{	
+	global $config;
+	$lang_suffix = in_array( $config['language'], split (',' , DB_TRANSLATIONS) ) ?  '_' . $config['language'] : '' ;
+	
+    $SELECT = 'SELECT id, name'.$lang_suffix.
+                 ' as name FROM '.TBL_GENRES.'
              ORDER BY name';
+			 
     $result = runSQL($SELECT);
     
     return $result;

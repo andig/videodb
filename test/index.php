@@ -61,9 +61,20 @@ echo "Starting tests.<br/>";
 
 foreach ($res as $case => $file)
 {
-    $test = new TestSuite($case);
-    $test->addFile($file);
-    $test->run(new HtmlReporter('utf-8'));
+	if (isset($run_engines) ){
+		if (in_array($case, $run_engines)){
+			$test = new TestSuite($case);
+			$test->addFile($file);
+			$test->run(new HtmlReporter('utf-8'));
+		}
+		
+	}else{
+		$test = new TestSuite($case);
+		$test->addFile($file);
+		$test->run(new HtmlReporter('utf-8'));
+	}
+	
+	
 }
 
 echo "<br/>All tests completed.<br/>";

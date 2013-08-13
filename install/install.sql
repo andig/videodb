@@ -12,6 +12,9 @@
 CREATE TABLE genres (
 	id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	name VARCHAR(255) NOT NULL,
+	name_de varchar(255) NOT NULL,
+    name_fr varchar(255) NOT NULL,
+    name_es varchar(255) NOT NULL,
 	PRIMARY KEY (id)
 ) CHARACTER SET UTF8;
 
@@ -83,30 +86,43 @@ CREATE TABLE videogenre (
 
 # add genres
 
-INSERT INTO genres (id, name) VALUES (1,'Action');
-INSERT INTO genres (id, name) VALUES (2,'Adventure');
-INSERT INTO genres (id, name) VALUES (3,'Animation');
-INSERT INTO genres (id, name) VALUES (4,'Comedy');
-INSERT INTO genres (id, name) VALUES (5,'Crime');
-INSERT INTO genres (id, name) VALUES (6,'Documentary');
-INSERT INTO genres (id, name) VALUES (7,'Drama');
-INSERT INTO genres (id, name) VALUES (8,'Family');
-INSERT INTO genres (id, name) VALUES (9,'Fantasy');
-INSERT INTO genres (id, name) VALUES (10,'Film-Noir');
-INSERT INTO genres (id, name) VALUES (11,'Horror');
-INSERT INTO genres (id, name) VALUES (12,'Musical');
-INSERT INTO genres (id, name) VALUES (13,'Mystery');
-INSERT INTO genres (id, name) VALUES (14,'Romance');
-INSERT INTO genres (id, name) VALUES (15,'Sci-Fi');
-INSERT INTO genres (id, name) VALUES (16,'Short');
-INSERT INTO genres (id, name) VALUES (17,'Thriller');
-INSERT INTO genres (id, name) VALUES (18,'War');
-INSERT INTO genres (id, name) VALUES (19,'Western');
-INSERT INTO genres (id, name) VALUES (20,'Adult');
-INSERT INTO genres (id, name) VALUES (21,'Music');
-INSERT INTO genres (id, name) VALUES (22,'Biography');
-INSERT INTO genres (id, name) VALUES (23,'History');
-INSERT INTO genres (id, name) VALUES (24,'Sport');
+INSERT INTO `genres` VALUES ('1', 'Action', 'Action', 'Action', 'Acción');
+INSERT INTO `genres` VALUES ('2', 'Adventure', 'Abenteuer', 'Aventure', 'Aventura');
+INSERT INTO `genres` VALUES ('3', 'Animation', 'Animation', 'Animation', 'Animación');
+INSERT INTO `genres` VALUES ('4', 'Comedy', 'Komödie', 'Comédie', 'Comedia');
+INSERT INTO `genres` VALUES ('5', 'Crime', 'Krimi', 'Policier', 'Crimen');
+INSERT INTO `genres` VALUES ('6', 'Documentary', 'Dokumentarfilm', 'Documentaire', 'Documental');
+INSERT INTO `genres` VALUES ('7', 'Drama', 'Drama', 'Drame', 'Drama');
+INSERT INTO `genres` VALUES ('8', 'Family', 'Familienfilm', 'Famille', 'Familia');
+INSERT INTO `genres` VALUES ('9', 'Fantasy', 'Fantasy', 'Fantastique', 'Fantasía');
+INSERT INTO `genres` VALUES ('10', 'Film-Noir', 'Film noir', 'Film noir', 'Cine negro');
+INSERT INTO `genres` VALUES ('11', 'Horror', 'Horror', 'Epouvante-horreur', 'Terror');
+INSERT INTO `genres` VALUES ('12', 'Musical', 'Musical', 'Comédie musicale', 'Comedia musical');
+INSERT INTO `genres` VALUES ('13', 'Mystery', 'Mysteryfilm', 'Mistère', 'Misterio');
+INSERT INTO `genres` VALUES ('14', 'Romance', 'Romanze', 'Romance', 'Romántico');
+INSERT INTO `genres` VALUES ('15', 'Sci-Fi', 'Science fiction', 'Science fiction', 'Ciencia ficción');
+INSERT INTO `genres` VALUES ('16', 'Short', 'Kurzfilm', 'Court métrage', 'Cortometraje ');
+INSERT INTO `genres` VALUES ('17', 'Thriller', 'Thriller', 'Thriller', 'Suspense');
+INSERT INTO `genres` VALUES ('18', 'War', 'Kriegfilm', 'Guerre', 'Guerra');
+INSERT INTO `genres` VALUES ('19', 'Western', 'Western', 'Western', 'Western');
+INSERT INTO `genres` VALUES ('20', 'Adult', 'Erwachsen', 'Adulte', 'Adulto');
+INSERT INTO `genres` VALUES ('21', 'Music', 'Musik', 'Musical', 'Musical');
+INSERT INTO `genres` VALUES ('22', 'Biography', 'Biografie', 'Biopic', 'Biografía');
+INSERT INTO `genres` VALUES ('23', 'History', 'Geschichte', 'Historique', 'Histórico');
+INSERT INTO `genres` VALUES ('24', 'Sport', 'Sport', 'Sport', 'Deporte');
+INSERT INTO `genres` VALUES ('25', 'Martial Arts', 'Martial Arts', 'Arts Martiaux', 'Artes Marciales');
+INSERT INTO `genres` VALUES ('26', 'Bollywood', 'Bollywood', 'Bollywood', 'Bollywood');
+INSERT INTO `genres` VALUES ('27', 'Classics', 'Klassiker', 'Classique', 'Clásico');
+INSERT INTO `genres` VALUES ('28', 'Tragicomedy', 'Tragikomödie', 'Comédie dramatique', 'Comedia dramática');
+INSERT INTO `genres` VALUES ('29', 'Concert', 'Konzert', 'Concert', 'Concierto');
+INSERT INTO `genres` VALUES ('30', 'Divers', 'Unbekannt', 'Unknown', 'Desconocido');
+INSERT INTO `genres` VALUES ('31', 'Erotic', 'Erotik', 'Erotique', 'Erótico');
+INSERT INTO `genres` VALUES ('32', 'Espionage', 'Spionage', 'Espionnage', 'Espionaje');
+INSERT INTO `genres` VALUES ('33', 'Experimental', 'Experimentalfilm', 'Expérimental', 'Experimental');
+INSERT INTO `genres` VALUES ('34', 'Judiciary', 'Gericht', 'Judiciaire', 'Judicial');
+INSERT INTO `genres` VALUES ('35', 'Opera', 'Opera', 'Opera', 'Opera');
+INSERT INTO `genres` VALUES ('36', 'Epic', 'Monumentalfilm', 'Péplum', 'Épico');
+INSERT INTO `genres` VALUES ('37', 'Show', 'Show', 'Show', 'Show');
 
 # add mediatypes
 
@@ -230,4 +246,4 @@ INSERT IGNORE INTO users (id, name, passwd, permissions) VALUES (10000 ,'Guest',
 # core/constants.php when changing the database structure!
 #
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 40);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 41);

@@ -7,7 +7,7 @@
  *
  * @package Core
  * @author  Andreas Gohr    <a.gohr@web.de>
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas Gï¿½tz    <cpuidle@gmx.de>
  * @version $Id: genres.php,v 1.14 2008/01/29 10:59:52 veal Exp $
  */
 
@@ -92,11 +92,15 @@ function getGenreId($name)
  */
 function getItemGenres($id, $names = false)
 {
+    global $config;
+	
     $genres = array();
     if (empty($id)) return $genres;
-    
-    $SELECT = 'SELECT genres.id, genres.name
-                 FROM '.TBL_GENRES.' AS genres, '.TBL_VIDEOGENRE.' AS videogenre
+
+	$lang_suffix = in_array( $config['language'], split (',' , DB_TRANSLATIONS ) ) ?  '_' . $config['language'] : '' ;
+
+    $SELECT = 'SELECT genres.id, genres.name'.$lang_suffix.
+                 ' as name FROM '.TBL_GENRES.' AS genres, '.TBL_VIDEOGENRE.' AS videogenre
                 WHERE genres.id = videogenre.genre_id
                   AND videogenre.video_id = '.$id;
     $result = runSQL($SELECT);
