@@ -252,11 +252,11 @@ function redirect($dest)
  *
  * Sample: array_extract( 0=>(a=>1a, b=1b) 1=>(a=>2a, b=>2b), "a" ) gives 0=>1a, 1=>2a
  *
+ * TODO     Check if this can be replaced by PHP5.5 array_column() function
+ *
  * @author  Andreas Goetz   <cpuidle@gmx.de>
  * @param   $ary    SQL result array
  * @param   $key    key index name
- *
- * TODO     Check if this can be replaced by PHP5.5 array_column() function
  */
 function array_extract($ary, $columnKey)
 {
@@ -271,6 +271,8 @@ function array_extract($ary, $columnKey)
  * If $value is false, the whole array is associated instead of a specific value
  *
  * Sample: array_associate( 0=>(a=>1a, b=1b) 1=>(a=>2a, b=>2b), "a", false ) gives 1a=>(b=>1b), 2a=>(b=>2b
+ *
+ * TODO     Check if this can be replaced by PHP5.5 array_column() function
  *
  * @author  Andreas Goetz   <cpuidle@gmx.de>
  * @param   $ary    SQL result array
