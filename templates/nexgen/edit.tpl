@@ -172,7 +172,7 @@
 						<label for="diskid">{$lang.diskid}</label>
 						<input type="text" name="diskid" id="diskid" value="{$video.q_diskid}" />
 					</div><!-- col -->
-				</div></div><!-- col/row -->
+				</div></div><!-- row/col -->
 
 				<div class="small-12 large-6 columns">
 				<div class="row">
@@ -197,7 +197,7 @@
 							</div><!-- col -->
 						</div><!-- row -->
 					</div><!-- col -->
-				</div></div><!-- col/row -->
+				</div></div><!-- row/col -->
 			</div><!-- row -->
 
 			<div class="row">
