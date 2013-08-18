@@ -73,6 +73,7 @@ $lang['cancel']        		 = 'Cancel';
 $lang['synopsis']			 = 'Synopsis';
 $lang['purchase']            = 'Purchase';
 $lang['torrents']            = 'Torrents';
+$lang['downloads']            = 'Downloads';
 
 #
 # Search

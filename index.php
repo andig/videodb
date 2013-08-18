@@ -30,6 +30,22 @@ function ajax_render()
 #    if (!$smarty->is_cached('list.tpl', get_current_user_id().'|'.$filter.$pageno)) {
     // add some delay for debugging
     if ($config['debug'] && $_SERVER['SERVER_ADDR'] == '127.0.0.1')  usleep(rand(200,1000)*1000);
+    
+    if (isset($rating))
+    {
+        // Permission check same as edit.php
+        // check for localnet
+        localnet_or_die();
+
+        // multiuser permission check
+        if (empty($id))
+            permission_or_die(PERM_WRITE);
+        else
+            permission_or_die(PERM_WRITE, get_owner_id($ajax_update));
+            
+        runSQL('UPDATE '.TBL_DATA.' SET rating='.$rating.' WHERE id='.$ajax_update);
+    }
+
 
     // load languages and config into Smarty
     tpl_language();
@@ -99,7 +115,7 @@ switch ($filter)
                     $WHERES .= ' AND ISNULL('.TBL_USERSEEN.'.video_id)';# AND mediatype != '.MEDIA_WISHLIST;
                     break;
     case 'new':
-#                    $WHERES = 'mediatype != '.MEDIA_WISHLIST;
+                    $WHERES .= ' AND ISNULL('.TBL_USERSEEN.'.video_id)';# AND mediatype != '.MEDIA_WISHLIST;
                     $ORDER  = 'created DESC, lastupdate DESC ';
                     $LIMIT  = ' LIMIT '.$config['shownew'];
                     break;
@@ -228,12 +244,15 @@ $SQL    = 'SELECT '.TBL_DATA.'.id, '.TBL_DATA.'.diskid,
                   md5, comment, disklabel, imdbID, actors, runtime,
                   country, filename, filesize, filedate, audio_codec,
                   video_codec, video_width, video_height, istv,
-                  lastupdate, mediatype,
+                  lastupdate, mediatype, rating,
                   custom1, custom2, custom3, custom4, 
-                  created, !ISNULL('.TBL_USERSEEN.'.video_id) AS seen
+                  created, !ISNULL('.TBL_USERSEEN.'.video_id) AS seen,
+                  '.TBL_MEDIATYPES.'.name AS mediatypename
              FROM '.TBL_DATA.'
         LEFT JOIN '.TBL_USERS.' ON '.TBL_DATA.'.owner_id = '.TBL_USERS.'.id 
         LEFT JOIN '.TBL_USERSEEN.' ON '.TBL_DATA.'.id = '.TBL_USERSEEN.'.video_id AND '.TBL_USERSEEN.'.user_id = '.get_current_user_id().'
+        LEFT JOIN '.TBL_MEDIATYPES.'
+        ON '.TBL_DATA.'.mediatype = '.TBL_MEDIATYPES.'.id
         LEFT JOIN '.TBL_LENT.' ON '.TBL_DATA.'.diskid = '.TBL_LENT.'.diskid'."
            $JOINS 
             WHERE $WHERES

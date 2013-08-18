@@ -75,15 +75,15 @@ function FetchSaveMovie($id,$lookup)
 		//
 		// NOTE: comment out any of the following lines if you do not want them updated
 		//
-		$video[0][title]=$imdbdata[title];
-		$video[0][subtitle]=$imdbdata[subtitle];
+//		$video[0][title]=$imdbdata[title];
+//		$video[0][subtitle]=$imdbdata[subtitle];
 		$video[0][year]=$imdbdata[year];
 		$video[0][imgurl]=$imdbdata[coverurl];
 		$video[0][runtime]=$imdbdata[runtime];
 		$video[0][director]=$imdbdata[director];
 		$video[0][rating]=$imdbdata[rating];
 		$video[0][country]=$imdbdata[country];
-		$video[0][language]=$imdbdata[language];
+//		$video[0][language]=$imdbdata[language];
 		$video[0][actors]=$imdbdata[cast];
 		$video[0][plot]=$imdbdata[plot];
 	}

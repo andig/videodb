@@ -151,8 +151,8 @@ Event.observe(document, 'dom:loaded', function() {
             <td colspan="2">
 				<div>
 					{if $engines.trailer}<span id="youtube" class="hidden"><a href="#" onclick='showTrailer("{$video.title|escape:javascript|escape:html}"); return false;'><img src="{$template}images/youtube32.png" alt="{$lang.trailer_show}" /></a></span>&nbsp;{/if}
-					{if $engines.purchase}<span id="purchase" class="hidden"><a href="#" onclick="toggler('purchases');return false;"><img src="{$template}images/rss32.png" alt="" /></a></span>&nbsp;{/if}
-					{if $engines.download}<span id="torrent" class="hidden"><a href="#" onclick="toggler('torrents');return false"><img src="{$template}images/torrent32.png" alt="" /></a></span>&nbsp;{/if}
+					{if $engines.purchase}<span id="purchase" class="hidden"><a href="#" onclick="toggler('purchases');return false;"><img src="{$template}images/basket32.png" alt="" /></a></span>&nbsp;{/if}
+					{if $engines.download}<span id="torrent" class="hidden"><a href="#" onclick="toggler('torrents');return false"><img src="{$template}images/download32.png" alt="" /></a></span>&nbsp;{/if}
 				</div>
             </td>
           </tr>
@@ -242,7 +242,7 @@ Event.observe(document, 'dom:loaded', function() {
 <!-- /purchases -->
 
 <div id="torrents" class="hidden">
-    <h3>{$lang.torrents}:</h3>
+    <h3>{$lang.downloads}:</h3>
     <div id="torrentcontent"></div>
     <div class="clear"></div>
 </div>

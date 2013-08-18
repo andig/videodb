@@ -3,7 +3,7 @@
  * isohunt torrent search
  *
  * @package Engines
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas Gï¿½tz    <cpuidle@gmx.de>
  *
  * @link    http://www.isohunt.com
  * @link    http://www.isohunt.com/js/rss/greys+anatomy
