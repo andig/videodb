@@ -175,7 +175,7 @@ function imdbData($imdbID)
         $data['subtitle'] = trim($s);
     }
     # orig. title
-    preg_match('/<span class="title-extra".+?>\s*(.*?)\s*<i>\(original title\)<\/i>\s*</si', $resp['data'], $ary);
+    preg_match('/<span class="title-extra".+?>\s*"?(.*?)"?\s*<i>\(original title\)<\/i>\s*</si', $resp['data'], $ary);
     $data['origtitle'] = trim($ary[1]);
 
     // Cover URL
