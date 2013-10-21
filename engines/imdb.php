@@ -269,15 +269,15 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // Cast
-    if (preg_match('#<table class="cast">(.*)#si', $resp['data'], $match))
+    if (preg_match('#<table class="cast_list">(.*?)</table#si', $resp['data'], $match))
     {
-        if (preg_match_all('#<td class="nm"><a href="/name/(.*?)/?".*?>(.*?)</a>.*?<td class="char">(.*?)</td>#si', $match[1], $ary, PREG_PATTERN_ORDER))
+        if (preg_match_all('#<td .*? itemprop="actor".*?>\s+<a href="/name/(nm\d+)/?.*?".*?>(.*?)</a>.*?<td class="character">(.*?)</td>#si', $match[1], $ary, PREG_PATTERN_ORDER))
         {
             for ($i=0; $i < sizeof($ary[0]); $i++)
             {
                 $actorid    = trim(strip_tags($ary[1][$i]));
                 $actor      = trim(strip_tags($ary[2][$i]));
-                $character  = trim(strip_tags($ary[3][$i]));
+                $character  = trim( preg_replace('/\s+/', ' ', strip_tags($ary[3][$i])));
                 $cast  .= "$actor::$character::$imdbIdPrefix$actorid\n";
             }
         }
