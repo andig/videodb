@@ -277,7 +277,7 @@ function imdbData($imdbID)
             {
                 $actorid    = trim(strip_tags($ary[1][$i]));
                 $actor      = trim(strip_tags($ary[2][$i]));
-                $character  = trim( preg_replace('/\s+/', ' ', strip_tags($ary[3][$i])));
+                $character  = trim( preg_replace('/\s+/', ' ', strip_tags( preg_replace('/&nbsp;/', ' ', $ary[3][$i]))));
                 $cast  .= "$actor::$character::$imdbIdPrefix$actorid\n";
             }
         }
