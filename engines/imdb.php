@@ -269,9 +269,13 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // Cast
-    if (preg_match('#<table class="cast_list">(.*?)</table#si', $resp['data'], $match))
+    if (preg_match('#<table class="cast_list">(.*)#si', $resp['data'], $match))
     {
-        if (preg_match_all('#<td .*? itemprop="actor".*?>\s+<a href="/name/(nm\d+)/?.*?".*?>(.*?)</a>.*?<td class="character">(.*?)</td>#si', $match[1], $ary, PREG_PATTERN_ORDER))
+        // no idea why it does not always work with (.*?)</table
+        // could be some maximum length of .*?
+        // anyways, I'm cutting it here
+        $casthtml = substr($match[1],0,strpos( $match[1],'</table'));
+        if (preg_match_all('#<td .*? itemprop="actor".*?>\s+<a href="/name/(nm\d+)/?.*?".*?>(.*?)</a>.*?<td class="character">(.*?)</td>#si', $casthtml, $ary, PREG_PATTERN_ORDER))
         {
             for ($i=0; $i < sizeof($ary[0]); $i++)
             {
