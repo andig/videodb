@@ -414,7 +414,7 @@ function imdbActor($name, $actorid)
     // now we should have loaded the best match
 
     // only search in img_primary <td> - or we get far to many useless images
-    preg_match('/<td\s+id="img_primary".*?>(.*?)<\/td>/si',$resp['data'], $match);
+    preg_match('/<td.*?id="img_primary".*?>(.*?)<\/td>/si',$resp['data'], $match);
 
     if (preg_match('/.*?<a.*?href="(.+?)"\s*?>\s*<img\s+.*?src="(.*?)"/si', $match[1], $m))
     {
