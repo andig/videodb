@@ -117,6 +117,10 @@ class TestIMDB extends UnitTestCase
     	$this->assertTrue($data['runtime'] >= 99 && $data['runtime'] <= 101);
     }
 
+    /*
+        Disabled test.
+        Runtime of this movie was removed on IMDB
+        
     function testMovie6() {
     	// She's Out of My League
     	// http://www.imdb.com/title/tt0815236/
@@ -127,6 +131,7 @@ class TestIMDB extends UnitTestCase
 
     	$this->assertEqual($data['runtime'], 104);
     }
+    */
 
     function testMovie7() {
     	// Romasanta
