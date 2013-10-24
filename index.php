@@ -230,11 +230,13 @@ $SQL    = 'SELECT '.TBL_DATA.'.id, '.TBL_DATA.'.diskid,
                   video_codec, video_width, video_height, istv,
                   lastupdate, mediatype,
                   custom1, custom2, custom3, custom4, 
-                  created, !ISNULL('.TBL_USERSEEN.'.video_id) AS seen
+                  created, !ISNULL('.TBL_USERSEEN.'.video_id) AS seen,
+                  '.TBL_MEDIATYPES.'.name AS mediatypename
              FROM '.TBL_DATA.'
         LEFT JOIN '.TBL_USERS.' ON '.TBL_DATA.'.owner_id = '.TBL_USERS.'.id 
         LEFT JOIN '.TBL_USERSEEN.' ON '.TBL_DATA.'.id = '.TBL_USERSEEN.'.video_id AND '.TBL_USERSEEN.'.user_id = '.get_current_user_id().'
-        LEFT JOIN '.TBL_LENT.' ON '.TBL_DATA.'.diskid = '.TBL_LENT.'.diskid'."
+        LEFT JOIN '.TBL_LENT.' ON '.TBL_DATA.'.diskid = '.TBL_LENT.'.diskid
+        LEFT JOIN '.TBL_MEDIATYPES.' ON '.TBL_DATA.'.mediatype = '.TBL_MEDIATYPES.'.id'."
            $JOINS 
             WHERE $WHERES
          ORDER BY $ORDER
