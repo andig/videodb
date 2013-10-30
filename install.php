@@ -143,15 +143,15 @@ switch ($step)
                  */
 
                 // connect to database server
-                $dbh = @mysql_connect($db_server, $db_user, $db_password);
-				if (!$dbh) {
-					error("Can't connect: ".mysql_error());
+                $dbh = mysqli_connect($db_server, $db_user, $db_password);
+				if (mysqli_connect_error()) {
+					error("Can't connect: ".mysqli_error());
 					$step--;
 					break;
 				}
 
                 // check database existance
-				if (mysql_select_db($db_database, $dbh))
+				if (mysqli_select_db($dbh, $db_database))
                 {
 					error("DB already exists: ".$db_database);
 				}
@@ -161,18 +161,18 @@ switch ($step)
 					info("Creating database...");
 
                     // try to create the database..
-                    if (!@mysql_query("CREATE DATABASE `".$db_database."`".((DB_CHARSET) ? " DEFAULT CHARACTER SET '".DB_CHARSET."'" : ''), $dbh))
+                    if (!@mysqli_query($dbh, "CREATE DATABASE `".$db_database."`".((DB_CHARSET) ? " DEFAULT CHARACTER SET '".DB_CHARSET."'" : '')))
                     {
-						error("Can't create database: ".mysql_error($dbh));
+						error("Can't create database: ".mysqli_error($dbh));
 						$step--;
 						continue;
 					}
                     else
                     {
                         // ..and select it
-						if (!mysql_select_db($db_database, $dbh))
+						if (!mysqli_select_db($dbh, $db_database))
                         {
-							error("Can't select database: ".mysql_error($dbh));
+							error("Can't select database: ".mysqli_error($dbh));
 							$step--;
 							continue;
 						}
@@ -181,8 +181,8 @@ switch ($step)
 
                 // check if tables with this prefix already exist
                 global $db_prefix;
-				$rs = mysql_query("SHOW TABLES FROM `".$db_database."` LIKE '".$db_prefix."%'" ) or trigger_error("Can't execute: ".mysql_error($dbh), E_USER_ERROR);
-				if (mysql_num_rows($rs) > 0)
+				$rs = mysqli_query($dbh, "SHOW TABLES FROM `".$db_database."` LIKE '".$db_prefix."%'" ) or trigger_error("Can't execute: ".mysqli_error($dbh), E_USER_ERROR);
+				if (mysqli_num_rows($rs) > 0)
                 {
 					error("DB has already tables with this prefix!");
 					break;
@@ -209,19 +209,20 @@ switch ($step)
 					// re-connect if not continued from step 3
 					if (!isset($dbh))
                     {
-						$dbh = @mysql_connect($db_server, $db_user, $db_password) or trigger_error("Can't connect: ".mysql_error(), E_USER_ERROR);
-						mysql_select_db($db_database, $dbh) or trigger_error("Can't select database: ".mysql_error($dbh), E_USER_ERROR);
+						$dbh = @mysqli_connect($db_server, $db_user, $db_password);
+                        if (mysqli_connect_error()) trigger_error("Can't connect: ".mysqli_error(), E_USER_ERROR);
+						mysqli_select_db($dbh, $db_database) or trigger_error("Can't select database: ".mysqli_error($dbh), E_USER_ERROR);
 					}
 
 					// get version
 					$sql = "SELECT value FROM {$db_prefix}config WHERE opt = 'dbversion'";
-					$rs = mysql_query($sql, $dbh);
-					if ($rs) list($version) = mysql_fetch_row($rs);
+					$rs = mysqli_query($dbh, $sql);
+					if ($rs) list($version) = mysqli_fetch_row($rs);
 
                     // successfully retrieved installed version?
 					if (!($rs && $version))
                     {
-						error("Error getting DB version, try full install instead of upgrade: ".mysql_error($dbh));
+						error("Error getting DB version, try full install instead of upgrade: ".mysqli_error($dbh));
 						error("<br/><br/><pre>$sql</pre>");
 						$step--;
 						break;
@@ -277,8 +278,9 @@ switch ($step)
 
 					// re-connect if not continued from step 3
 					if (!$dbh) {
-						$dbh = @mysql_connect($db_server, $db_user, $db_password) or trigger_error("Can't connect: ".mysql_error(), E_USER_ERROR);
-						mysql_select_db($db_database, $dbh) or trigger_error("Can't select database: ".mysql_error($dbh), E_USER_ERROR);
+						$dbh = @mysqli_connect($db_server, $db_user, $db_password);
+                        if (mysqli_connect_error()) trigger_error("Can't connect: ".mysqli_error(), E_USER_ERROR);
+						mysqli_select_db($dbh, $db_database) or trigger_error("Can't select database: ".mysqli_error($dbh), E_USER_ERROR);
 					}
 
 					// open SQL script from doc directory
@@ -286,7 +288,7 @@ switch ($step)
                     if (!$sql) trigger_error('Couldn\'t open SQL file: '.$install_sql, E_USER_ERROR);
 
                     if (runSQL($sql, $dbh) === false) {
-						error('Error creating tables: '.mysql_error($dbh));
+						error('Error creating tables: '.mysqli_error($dbh));
 						error('<br/><br/><pre>'.$sql.'</pre>');
 						$step--;
 					}
