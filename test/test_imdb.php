@@ -117,6 +117,10 @@ class TestIMDB extends UnitTestCase
     	$this->assertTrue($data['runtime'] >= 99 && $data['runtime'] <= 101);
     }
 
+    /*
+        Disabled test.
+        Runtime of this movie was removed on IMDB
+        
     function testMovie6() {
     	// She's Out of My League
     	// http://www.imdb.com/title/tt0815236/
@@ -127,6 +131,7 @@ class TestIMDB extends UnitTestCase
 
     	$this->assertEqual($data['runtime'], 104);
     }
+    */
 
     function testMovie7() {
     	// Romasanta
@@ -235,7 +240,7 @@ class TestIMDB extends UnitTestCase
         $this->assertTrue( in_array('Jonathan Frakes::Commander William T. Riker::imdb:nm0000408', $cast) );
         $this->assertTrue( in_array('Marina Sirtis::Counselor Deanna Troi::imdb:nm0000642', $cast) );
         $this->assertTrue( in_array('John de Lancie::Q (as John deLancie)::imdb:nm0209496', $cast) );
-        $this->assertTrue( in_array('Rob Bowman::Borg (voice)::imdb:nm0101385', $cast) );
+        $this->assertTrue( in_array('Rob Bowman::Borg (voice) (uncredited)::imdb:nm0101385', $cast) );
         $this->assertTrue( sizeof($cast) > 15 );
         $this->assertTrue( sizeof($cast) < 30 );
 

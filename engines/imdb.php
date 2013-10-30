@@ -175,7 +175,7 @@ function imdbData($imdbID)
         $data['subtitle'] = trim($s);
     }
     # orig. title
-    preg_match('/<span class="title-extra".+?>\s*(.*?)\s*<i>\(original title\)<\/i>\s*</si', $resp['data'], $ary);
+    preg_match('/<span class="title-extra".+?>\s*"?(.*?)"?\s*<i>\(original title\)<\/i>\s*</si', $resp['data'], $ary);
     $data['origtitle'] = trim($ary[1]);
 
     // Cover URL
@@ -269,15 +269,19 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // Cast
-    if (preg_match('#<table class="cast">(.*)#si', $resp['data'], $match))
+    if (preg_match('#<table class="cast_list">(.*)#si', $resp['data'], $match))
     {
-        if (preg_match_all('#<td class="nm"><a href="/name/(.*?)/?".*?>(.*?)</a>.*?<td class="char">(.*?)</td>#si', $match[1], $ary, PREG_PATTERN_ORDER))
+        // no idea why it does not always work with (.*?)</table
+        // could be some maximum length of .*?
+        // anyways, I'm cutting it here
+        $casthtml = substr($match[1],0,strpos( $match[1],'</table'));
+        if (preg_match_all('#<td .*? itemprop="actor".*?>\s+<a href="/name/(nm\d+)/?.*?".*?>(.*?)</a>.*?<td class="character">(.*?)</td>#si', $casthtml, $ary, PREG_PATTERN_ORDER))
         {
             for ($i=0; $i < sizeof($ary[0]); $i++)
             {
                 $actorid    = trim(strip_tags($ary[1][$i]));
                 $actor      = trim(strip_tags($ary[2][$i]));
-                $character  = trim(strip_tags($ary[3][$i]));
+                $character  = trim( preg_replace('/\s+/', ' ', strip_tags( preg_replace('/&nbsp;/', ' ', $ary[3][$i]))));
                 $cast  .= "$actor::$character::$imdbIdPrefix$actorid\n";
             }
         }
@@ -410,7 +414,7 @@ function imdbActor($name, $actorid)
     // now we should have loaded the best match
 
     // only search in img_primary <td> - or we get far to many useless images
-    preg_match('/<td\s+id="img_primary".*?>(.*?)<\/td>/si',$resp['data'], $match);
+    preg_match('/<td.*?id="img_primary".*?>(.*?)<\/td>/si',$resp['data'], $match);
 
     if (preg_match('/.*?<a.*?href="(.+?)"\s*?>\s*<img\s+.*?src="(.*?)"/si', $match[1], $m))
     {
