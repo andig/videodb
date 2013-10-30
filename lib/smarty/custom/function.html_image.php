@@ -53,7 +53,7 @@ function truepath($path){
 
 function html_image_get_cache($tag, &$width, &$height)
 {
-    $res = runSQL("SELECT * FROM ".TBL_CACHE." WHERE tag='".mysql_real_escape_string($tag)."'");
+    $res = runSQL("SELECT * FROM ".TBL_CACHE." WHERE tag='".escapeSQL($tag)."'");
 
     if (count($res))
     {
@@ -69,7 +69,7 @@ function html_image_get_cache($tag, &$width, &$height)
 
 function html_image_put_cache($tag, $value)
 {
-    $res = runSQL("REPLACE INTO ".TBL_CACHE." SET tag='".mysql_real_escape_string($tag)."', value='".mysql_real_escape_string($value)."'");
+    $res = runSQL("REPLACE INTO ".TBL_CACHE." SET tag='".escapeSQL($tag)."', value='".escapeSQL($value)."'");
 }
 
 /**

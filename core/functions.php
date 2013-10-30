@@ -15,16 +15,13 @@
  */
 
 // add pwd to include_path
-ini_set('include_path', '.'.PATH_SEPARATOR.ini_get('include_path'));
-
-// Remove environment variables from global scope- ensures clean namespace
-foreach (array_keys($_ENV) as $key) unset($GLOBALS[$key]);
+ini_set('include_path', '.' . PATH_SEPARATOR . ini_get('include_path'));
 
 // global const CONFIG_FILE is not yet defined at this point
 if (!@include_once './config.inc.php')
 {
-	errorpage('Could not find configuration file <code>config.inc.php</code>',
-	          "<p>Please make sure you've run the <a href='install.php'>installation script</a>.</p>");
+    errorpage('Could not find configuration file <code>config.inc.php</code>',
+              "<p>Please make sure you've run the <a href='install.php'>installation script</a>.</p>");
 }
 
 if (@$config['offline'])
@@ -32,11 +29,16 @@ if (@$config['offline'])
     errorpage('Maintenance', 'videoDB is currently offline for maintenance. Please check back later.');
 }
 
+
 // Uncomment the following line to enable phpIDS
 // requires phpIDS to be installed in lib/IDS
 // require_once './core/ids.php';
 
 require_once './core/functions.core.php';
+
+// exception handling beyond this point
+set_exception_handler('exception_handler');
+
 require_once './core/constants.php';
 require_once './core/session.php';
 require_once './core/encoding.php';
@@ -50,12 +52,15 @@ require_once './lib/smarty/SmartyBC.class.php';
 
 error_reporting($config['debug'] ? E_ALL ^ E_NOTICE : E_ERROR + E_PARSE);
 
+// Remove environment variables from global scope- ensures clean namespace
+foreach (array_keys($_ENV) as $key) unset($GLOBALS[$key]);
+
 // force magic quotes off
 ini_set('magic_quotes_runtime', 0);
 if (get_magic_quotes_gpc())
 {
-	if (!empty($_REQUEST)) remove_magic_quotes($_REQUEST);
-	ini_set('magic_quotes_gpc', 0);
+    if (!empty($_REQUEST)) remove_magic_quotes($_REQUEST);
+    ini_set('magic_quotes_gpc', 0);
 }
 
 // register_globals off? Well I like it...
@@ -67,10 +72,10 @@ if ($ajax_update) validate_input($ajax_update);
 
 // Smarty setup
 $smarty = new SmartyBC();
-$smarty->compile_dir	 = './cache/smarty';	        // path to compiled templates
-$smarty->cache_dir		 = './cache/smarty';	        // path to cached html
+$smarty->compile_dir     = './cache/smarty';            // path to compiled templates
+$smarty->cache_dir       = './cache/smarty';            // path to cached html
 $smarty->plugins_dir     = array('./lib/smarty/custom', './lib/smarty/plugins');
-$smarty->use_sub_dirs	 = 0;                           // restrict caching to one folder
+$smarty->use_sub_dirs    = 0;                           // restrict caching to one folder
 $smarty->loadFilter('output', 'trimwhitespace');        // remove whitespace from output
 #$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 #$smarty->force_compile  = true;
@@ -89,6 +94,14 @@ if (basename($_SERVER['PHP_SELF']) != 'login.php') auth_check();
  */
 
 /**
+ * Global exception handler
+ */
+function exception_handler($exception)
+{
+    errorpage('An exception occured: ', $exception->getMessage(), true);
+}
+
+/**
  * Checks if the cache directories exist and are writable by the webserver.
  * If they don't exist it tries to create them. If this fails, too a simple
  * error page is displayed.
@@ -99,7 +112,7 @@ function verify_installation($return = false)
     global $config;
 
     // check MySQL extension
-    if (!extension_loaded('mysql'))
+    if (!extension_loaded('mysqli'))
     {
         errorpage('MySQL extension for PHP not loaded',
                   '<p>The MySQL extension for PHP is not loaded.</p>
@@ -139,27 +152,26 @@ function verify_installation($return = false)
 function load_config($force_reload = false)
 {
 	global $config, $lang, $smarty;
-
-	// configuration cached and not outdated?
+    // configuration cached and not outdated?
     if (!$force_reload && !$config['recompile'] && session_get('config') &&
        (session_get('config_userid') === $_COOKIE['VDBuserid']) &&
        (session_get('config_timestamp') == filemtime(CONFIG_FILE)))
-	{
+    {
         // load from cache
         $config = session_get('config');
     }
-	else
-	{
+    else
+    {
         // check MySQL extension and cache directories
         verify_installation();
 
-		// remember modification time
+        // remember modification time
         session_set('config_timestamp', filemtime(CONFIG_FILE));
 
-		// get config options from the database
-		$SELECT = 'SELECT opt,value
+        // get config options from the database
+        $SELECT = 'SELECT opt,value
                      FROM '.TBL_CONFIG;
-		$result = runSQL($SELECT);
+        $result = runSQL($SELECT);
         $config = array_merge($config, array_associate($result, 'opt', 'value'));
 
         // check if database matches the current version
@@ -169,38 +181,38 @@ function load_config($force_reload = false)
             redirect('install.php?action=upgrade');
         }
 
-		// get user config options from the database
+        // get user config options from the database
         // does not use get_current_user_id() to allow fallback to login page after loading config
         if (is_numeric($user_id = $_COOKIE['VDBuserid']))
-		{
+        {
             // store user id in session to identify reload point for config
             session_set('config_userid', $user_id);
 
-			$SQL    = 'SELECT opt, value
+            $SQL    = 'SELECT opt, value
                          FROM '.TBL_USERCONFIG.'
-			            WHERE user_id = '.$user_id;
+                        WHERE user_id = '.$user_id;
             $result = runSQL($SQL);
             $config = array_merge($config, array_associate($result, 'opt', 'value'));
-		}
-		
-		// set some defaults
-		if (empty($config['language'])) $config['language'] = 'en';
-		if (empty($config['template'])) $config['template'] = 'modern::compact';
-		if (empty($config['filterdefault'])) $config['filterdefault'] = 'unseen';
+        }
 
-//		if ($config['IMDBage'] < 1) $config['IMDBage']          = 60*60*24*5;
-		if ($config['castcolumns'] < 1) $config['castcolumns']  = 4;
-		if ($config['listcolumns'] < 1) $config['listcolumns']  = 1;
-		if ($config['thumbAge'] < 1) $config['thumbAge']        = 60*60*24*7*3;
-		if ($config['shownew'] < 1) $config['shownew']          = 12;
-		
-		// prepare som options for later use
-		$config['languages']    = explode('::', $config['languageflags']);
-		
-		// prepare template/style
+        // set some defaults
+        if (empty($config['language'])) $config['language'] = 'en';
+        if (empty($config['template'])) $config['template'] = 'modern::compact';
+        if (empty($config['filterdefault'])) $config['filterdefault'] = 'unseen';
+
+//      if ($config['IMDBage'] < 1) $config['IMDBage']          = 60*60*24*5;
+        if ($config['castcolumns'] < 1) $config['castcolumns']  = 4;
+        if ($config['listcolumns'] < 1) $config['listcolumns']  = 1;
+        if ($config['thumbAge'] < 1) $config['thumbAge']        = 60*60*24*7*3;
+        if ($config['shownew'] < 1) $config['shownew']          = 12;
+
+        // prepare som options for later use
+        $config['languages']    = explode('::', $config['languageflags']);
+
+        // prepare template/style
         $tpl                    = explode('::', $config['template']);
-		$config['style']        = 'templates/'.$tpl[0].'/'.$tpl[1].'.css';
-		$config['templatedir']  = 'templates/'.$tpl[0].'/';
+        $config['style']        = 'templates/'.$tpl[0].'/'.$tpl[1].'.css';
+        $config['templatedir']  = 'templates/'.$tpl[0].'/';
 /*
         // multiple style files - use template name as base (e.g. elegant_grey.css)
         if (!file_exists($config['style']))
@@ -210,9 +222,9 @@ function load_config($force_reload = false)
                                         'templates/'.$tpl[0].'/'.$tpl[0].'_'.$tpl[1].'.css');
         }
 */
-		// check if selected template is valid
-		if (!file_exists($config['style']))
-		{
+        // check if selected template is valid
+        if (!file_exists($config['style']))
+        {
             $config['template']    = 'elegant::grey';
             $config['templatedir'] = 'templates/elegant/';
             $config['style']       = 'templates/elegant/grey.css';
@@ -234,7 +246,7 @@ function load_config($force_reload = false)
                 if ($config['engine'.$engine])
                 {
                     $config['engine'][$engine] = $config['engine'.$engine];
-                    
+
                     // add meta-engine if enabled
                     engine_setup_meta($engine, $meta);
                 }
@@ -259,16 +271,16 @@ function load_config($force_reload = false)
 		// store loaded configuration
         session_set('config', $config);
 	}
-	
-	// setup smarty
-	$smarty->template_dir = array($config['templatedir'], 'templates/modern');
+
+    // setup smarty
+    $smarty->template_dir = array($config['templatedir'], 'templates/modern');
     $smarty->assign('template', $config['templatedir']);
-	
+
     // initialize languages
     $lang = array();
 
-	// load english language as default
-	require './language/en.php';
+    // load english language as default
+    require './language/en.php';
 
     // override it with local language if nessesary:
     if ($config['language'] != 'en')
@@ -311,7 +323,7 @@ function errorpage($title = 'An error occured', $body = '', $stacktrace = false)
     {
         $body .= '<br/>'.dump(xdebug_get_function_stack(), true);
     }
-    
+
     echo '<?xml version="1.0" encoding="en"?>';
     echo "
     <html xmlns='http:// www.w3.org/1999/xhtml' xml:lang='en' lang='en' dir='ltr'>
@@ -459,7 +471,7 @@ function getThumbnail($imgurl, $name = '')
 //      if (file_exists($localname) && filesize($localname)) return($localname);
         if (@filesize($localname) > 0) return($localname);
     }
-    
+
     // really an image?
     if (preg_match('/\.(jpe?g|gif|png)$/i', $imgurl, $matches))
 	{
@@ -474,7 +486,7 @@ function getThumbnail($imgurl, $name = '')
 	            return($cache_file);
 			}
 		}
-        else 
+        else
 		{
             // add cache_ignore=1& to suppress additional cache lookup in img.php
             return('img.php?url='.urlencode($imgurl));
@@ -487,7 +499,7 @@ function getThumbnail($imgurl, $name = '')
 
 
 /**
- * Authorizatoin and access 
+ * Authorizatoin and access
  */
 
 /**
@@ -499,8 +511,8 @@ function login_as($userid, $permanent = false)
 {
     global $config;
 
-    if (!$userid || !is_numeric($userid)) error_page('Error', 'Invalid login attempt');
-    
+    if (!$userid || !is_numeric($userid)) errorpage('Error', 'Invalid login attempt');
+
     $RandNumber = rand(100000000, 999999999);
 
     // permanent cookie: 1 year, otherwise session only
@@ -560,14 +572,13 @@ function auth_check($redirect = true)
         // auth cookies present?
         if (preg_match('/[a-z]+/i', $user) && preg_match('/[0-9]+/', $pass) && is_numeric($userid))
         {
-            
             // Dummy-Query to establish mysql connection.
-            // VERY UGLY hack - without an established connection mysql_real_escape_string returns false in some PHP/Mysql versions
+            // VERY UGLY hack - without an established connection escapeSQL returns false in some PHP/Mysql versions
             // and this leads to getting logged out all the time
             runSQL('SELECT 1');
-            
+
             // This is the crucial bit, lets just test the cookiecode with SQL again.
-            $res    = runSQL("SELECT cookiecode FROM ".TBL_USERS." WHERE name='".mysql_real_escape_string($user)."' AND id=$userid");
+            $res    = runSQL("SELECT cookiecode FROM ".TBL_USERS." WHERE name='".escapeSQL($user)."' AND id=$userid");
             $result = $res[0]['cookiecode'] == $pass;
         }
 
@@ -594,14 +605,14 @@ function auth_check($redirect = true)
             if (preg_match('/[a-z]/i', $user))
             {
                 // auth successful if password matches
-                $res    = runSQL("SELECT * FROM ".TBL_USERS." WHERE name='".mysql_real_escape_string($user)."'");
-                
+                $res    = runSQL("SELECT * FROM ".TBL_USERS." WHERE name='".escapeSQL($user)."'");
+
                 // if user is found, set cookie to make sure he's recognized
-                if (count($res)) 
+                if (count($res))
                 {
                     $result = md5($pass) == $res[0]['passwd'];
                     if ($result) login_as($res[0]['id']);
-                }    
+                }
             }
         }
 
