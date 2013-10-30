@@ -8,10 +8,9 @@
  * @author  Mike Clark <Mike.Clark@Cinven.com>
  * @version $Id: login.php,v 2.27 2010/04/04 10:34:21 andig2 Exp $
  */
- 
+
 require_once './core/session.php';
 require_once './core/functions.php';
-
 
 /**
  * Remove all session data after login or logout

@@ -83,7 +83,7 @@ if ($ajax_prefetch_id || $ajax_autocomplete_title || $ajax_autocomplete_subtitle
 // duplicate check
 if ($ajax_check_duplicate)
 {
-    $q      = mysql_real_escape_string($ajax_check_duplicate);
+    $q      = escapeSQL($ajax_check_duplicate);
     $res    = runSQL("SELECT id, title FROM ".TBL_DATA." WHERE imdbid='".$q."' OR title LIKE '%".$q."%' AND owner_id=".get_current_user_id());
     
     header('X-JSON: '.json_encode($res));
