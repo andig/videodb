@@ -141,7 +141,7 @@ if ($config['multiuser'])
 // searching?
 if ($ajax_quicksearch || $quicksearch)
 {
-    $qs      = mysql_real_escape_string($ajax_quicksearch ? $ajax_quicksearch : $quicksearch);
+    $qs      = escapeSQL($ajax_quicksearch ? $ajax_quicksearch : $quicksearch);
     $WHERES .= ' AND (title LIKE "%'.$qs.'%" OR subtitle LIKE "%'.$qs.'%")';
 }
 

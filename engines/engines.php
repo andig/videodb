@@ -4,13 +4,13 @@
  *
  * @package Engines
  *
- * @todo    Investigate and remove global $cache variable
+ * @todo    Remove global $cache variable
  *
  * @author  Andreas Goetz <cpuidle@gmx.de>
  * @version $Id: engines.php,v 1.45 2010/10/15 08:13:01 andig2 Exp $
  */
 
-require_once './core/httpclient.php';
+require_once './core/httpclient.php';   // include for all engines
 require_once './core/encoding.php';
 
 /**
@@ -22,7 +22,7 @@ require_once './core/encoding.php';
 function engineGetDefault()
 {
     global $config;
-    
+
     if (!empty($config['enginedefault']))
     {
         $engine = $config['enginedefault'];
@@ -33,7 +33,7 @@ function engineGetDefault()
         $engine = $engine_list[0];
     }
     else $engine = 'imdb'; // last resort
-    
+
     return $engine;
 }
 
@@ -49,7 +49,7 @@ function engineGetDefault()
 function engineGetEngine($id)
 {
     global $config;
-    
+
 	// recognize engine from id
 	if ($id)
 	{
@@ -58,7 +58,7 @@ function engineGetEngine($id)
         if (preg_match('/^(\w+):/', $id, $match)) $engine = $match[1];
 #       elseif (preg_match('/^\d+-\d+$/', $id)) $engine = 'tvcom';
         elseif (preg_match('/^DP[0-9]/', $id)) $engine = 'dvdpalace'; // German Movie Database
-        elseif (preg_match('/^[0-9A-Z]{10,}$/', $id)) $engine = 'amazonaws'; // Amazon 
+        elseif (preg_match('/^[0-9A-Z]{10,}$/', $id)) $engine = 'amazonaws'; // Amazon
         elseif (preg_match('/^GR[0-9]/', $id)) $engine = 'gamerankings';
         elseif (preg_match('/^DI[0-9]/', $id)) $engine = 'dvdinside';
 #		elseif (preg_match('/^[0-9a-z]{6,}$/', $id)) $engine = 'freedb';
@@ -78,7 +78,7 @@ function engineGetEngine($id)
 function engineGetData($id, $engine = 'imdb')
 {
 	global $lang, $cache;
-	
+
 	require_once($engine.'.php');
 	$func = $engine.'Data';
 
@@ -96,12 +96,12 @@ function engineGetData($id, $engine = 'imdb')
 	$source_encoding = ($result['encoding']) ? $result['encoding'] : $lang['encoding'];
 	$target_encoding = 'utf-8';
     unset($result['encoding']);
-	
+
 	// convert to unicode
 	if ($source_encoding != $target_encoding)
 	{
         $result = iconv_array($source_encoding, $target_encoding, $result);
-	}	
+	}
 	engine_clean_input($result);
 
 	return $result;
@@ -129,7 +129,7 @@ function engineSearch($find, $engine = 'imdb', $para1 = null, $para2 = null)
         // check if additional parameters given to avoid overriding default values
         $result = (isset($para1)) ? $func($find, $para1, $para2) : $func($find);
     }
-    
+
     // make sure all engines properly return the encoding type
 #    if (empty($result['encoding'])) errorpage('Engine Error', 'Engine does not properly return encoding');
 
@@ -137,13 +137,13 @@ function engineSearch($find, $engine = 'imdb', $para1 = null, $para2 = null)
     $source_encoding = ($result['encoding']) ? $result['encoding'] : $lang['encoding'];
     $target_encoding = 'utf-8';
     unset($result['encoding']);
-    
+
     // convert to unicode
     if ($source_encoding != $target_encoding)
     {
         #dump("Converting from $source_encoding to $target_encoding");
         $result = iconv_array($source_encoding, $target_encoding, $result);
-    }   
+    }
 
     // obtain unique entries
     $result = engine_deduplicate_result($result);
@@ -211,7 +211,7 @@ function engine_setup_meta($engine, $meta)
         foreach ($meta['capabilities'] as $caps) {
             $config['engine'][$caps][] = $engine;
         }
-    }    
+    }
 }
 
 /**
@@ -231,7 +231,7 @@ function engineMeta()
             if ((preg_match("/(.*)\.php$/", $file, $matches)) && ($matches[1] != 'engines'))
             {
                 // engine file
-                $engine = $matches[1];            
+                $engine = $matches[1];
 
                 // get meta data
                 require_once('./engines/'.$engine.'.php');
@@ -247,7 +247,7 @@ function engineMeta()
                     {
                         unset($engines[$engine]);
                     }
-                }    
+                }
             }
         }
         closedir($dh);
@@ -352,7 +352,7 @@ function engine_get_capability($engine, $searchtype)
 /**
  * Get list of engines which have certain capability
  *
- * 'movie' search capability is assumed as default, either if 
+ * 'movie' search capability is assumed as default, either if
  * $searchtype is empty or engine does not maintain specific capability
  *
  * @return  array   list of capable engines
@@ -382,18 +382,18 @@ function engine_clean_input(&$data)
 {
     if (is_array($data)) foreach ($data as $key => $val)
 	{
-		if (is_array($val)) 
+		if (is_array($val))
 			engine_clean_input($data[$key]);
 		else
         {
             $val        = html_to_text($val);
             $data[$key] = html_clean_utf8($val);
-        }    
+        }
 	}
 }
 
 /**
- * Filter result set for unique engine ids. 
+ * Filter result set for unique engine ids.
  * This avoids deduplication of search results inside every single engine.
  */
 function engine_deduplicate_result($data)
@@ -405,7 +405,7 @@ function engine_deduplicate_result($data)
         // early exit if engine (e.g. google images) doesn't return ids
         if (!$id) return $data;
         // exclude duplicates
-        if (in_array($id, $keys)) 
+        if (in_array($id, $keys))
             unset($data[$i]);
         else
             $keys[] = $id;
