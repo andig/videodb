@@ -125,9 +125,9 @@ elseif (empty($step))
 <?php
 
 // check MySQL availability
-if (!extension_loaded('mysql'))
+if (!extension_loaded('mysqli'))
 {
-    error("Missing MySQL: extension not loaded.", true);
+    error("PHP configuration error: mysqli extension not loaded.", true);
     die;
 }
 
