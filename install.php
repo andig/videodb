@@ -48,9 +48,9 @@ if (isset($formPrevious))
 elseif (isset($action) && stristr($action, 'upgrade'))
 {
     $upgrading = true;
-    
+
     // load configuration
-	include_once(CONFIG_FILE);  
+	include_once(CONFIG_FILE);
 
     // begin of upgrade?
 	if (empty($step))
@@ -124,6 +124,12 @@ elseif (empty($step))
 
 <?php
 
+// check MySQL availability
+if (!extension_loaded('mysql'))
+{
+    error("Missing MySQL: extension not loaded.", true);
+    die;
+}
 
 // no messages yet
 $message = '';
@@ -143,7 +149,7 @@ switch ($step)
 					$step--;
 					break;
 				}
-				
+
                 // check database existance
 				if (mysql_select_db($db_database, $dbh))
                 {
@@ -172,7 +178,7 @@ switch ($step)
 						}
 					}
 				}
-				
+
                 // check if tables with this prefix already exist
                 global $db_prefix;
 				$rs = mysql_query("SHOW TABLES FROM `".$db_database."` LIKE '".$db_prefix."%'" ) or trigger_error("Can't execute: ".mysql_error($dbh), E_USER_ERROR);
@@ -192,7 +198,7 @@ switch ($step)
 
                 // continue with table installation
 				$step++;
-				
+
 
     case 4:     /*
                  * continue installation by upgrading or installing tables and (re)moving files (upgrade only)
@@ -241,7 +247,7 @@ switch ($step)
                         // upgrade
                         info("<br/>Upgrading tables...");
                         info("Old database version: $version");
-                    
+
 						$sql_array = array();
 						// select the relevant upgrades (> current version)
 						foreach ($upgrades as $ver => $value)
@@ -308,7 +314,6 @@ switch ($step)
 				}
 
 				break;
-				
 }
 
 
@@ -502,7 +507,7 @@ switch ($step)
 				</td></tr>
 <?php			break;
 
-	case 1:		
+	case 1:
 	default:	// start setup
 
 ?>				<tr><td colspan="2">
