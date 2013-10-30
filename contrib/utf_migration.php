@@ -72,41 +72,36 @@ function sql_native($sql_string)
 
     if (!is_resource($db_native))
     {
-        $db_native =  mysql_pconnect($config['db_server'], $config['db_user'], $config['db_password']) or
-                errorpage('DB Connection Error',
-                          "<p>Edit the database settings in <code>".CONFIG_FILE."</code>.</p>
-                           <p>Alternatively, consider running the <a href='install.php'>installation script</a>.</p>");
-
-        mysql_select_db($config['db_database'], $db_native) || 
-                errorpage('DB Connection Error',
-                          "Couldn't select database: ".$config['db_database'].
-                          "<p>Please verify your database is up and running any validate your database settings in <code>".CONFIG_FILE."</code>.</p>
-                           <p>Alternatively, consider running the <a href='install.php'>installation script</a>.</p>");
+        $db_native =  mysqli_pconnect($config['db_server'], $config['db_user'], $config['db_password'], $config['db_database']);
+        if (mysqli_connect_error())
+            errorpage('DB Connection Error',
+                      "<p>Edit the database settings in <code>".CONFIG_FILE."</code>.</p>
+                       <p>Alternatively, consider running the <a href='install.php'>installation script</a>.</p>");
     }
     
-    $res  = mysql_query($sql_string, $db_native);
+    $res  = mysqli_query($db_native, $sql_string);
     
-    // mysql_db_query returns either positive result ressource or true/false for an insert/update statement
+    // mysqli_db_query returns either positive result ressource or true/false for an insert/update statement
     if ($res === false)
     {
         // report DB Problem
-        errorpage('Database Problem', mysql_error($db_native)."\n<br />\n".$sql_string);
+        errorpage('Database Problem', mysqli_error($db_native)."\n<br />\n".$sql_string);
     }
     elseif ($res === true)
     {
         // on insert, return id of created record
-        $result = mysql_insert_id($db_native);
+        $result = mysqli_insert_id($db_native);
     }
     else
     {
         // return associative result array
         $result = array();
 
-        for ($i=0; $i<mysql_num_rows($res); $i++)
+        for ($i=0; $i<mysqli_num_rows($res); $i++)
         {
-            $result[] = mysql_fetch_assoc($res);
+            $result[] = mysqli_fetch_assoc($res);
         }
-        mysql_free_result($res);
+        mysqli_free_result($res);
     }
 
     return $result;
@@ -114,9 +109,11 @@ function sql_native($sql_string)
 
 function db_encode($s)
 {
+	global $db_native;
+	
     if (is_numeric($s)) return $s;
     elseif (empty($s)) return 'NULL';
-    else return "'".mysql_escape_string($s)."'";
+    else return "'".mysqli_escape_string($db_native, $s)."'";
 }
 
 $db_encodings   = array('iso-8859-1'=>'latin1', 'iso-8859-7'=>'latin7', 'iso-8859-9'=>'latin9', 'windows-1251'=>'cp1251', 'koi8-r'=>'koi8r', 'utf-8'=>'utf8');
@@ -128,7 +125,7 @@ $db_sourceencoding = $db_encodings[$sourceencoding];
 $db_targetencoding = $db_encodings[$targetencoding];
 
 if ($sourceencoding && $targetencoding && ($sourceencoding != $targetencoding))
-{    
+{
 #    if (!preg_match('/^(\w\d)+$/', $sourceencoding)) die ('Security violation');
 #    if (!preg_match('/^(\w\d)+$/', $targetencoding)) die ('Security violation');
 
@@ -171,7 +168,7 @@ if ($sourceencoding && $targetencoding && ($sourceencoding != $targetencoding))
             dump($SQL);
             
             if (!$simulate) sql_native($SQL);
-        }    
+        }
     }
 }
 

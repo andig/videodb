@@ -20,7 +20,7 @@ if (!function_exists('errorpage')) {
 }
 
 /**
- * Output debug info  						
+ * Output debug info
  *
  * @author  Andreas Goetz   <cpuidle@gmx.de>
  * @param   mixed   $var    Variable to dump
@@ -35,7 +35,7 @@ function dump($var, $ret = false, $plain = false)
         $var = print_r($var, 1);
     else if (is_bool($var))
     	$var = ($var) ? 'TRUE' : 'FALSE';
-    	
+
     $var .= (count($argv) > 0 || $plain) ? "\n" : "<br/>\n";
 
     if ($ret) return $var;
@@ -114,6 +114,44 @@ function getmicrotime()
 }
 
 /**
+ * Return mysqli db connection object
+ * @return resource database handle
+ */
+function getConnection()
+{
+    global $config, $dbh;
+
+    $dbh = mysqli_connect('p:'.$config['db_server'], $config['db_user'], $config['db_password'], $config['db_database']);
+    if (mysqli_connect_error())
+        errorpage('DB Connection Error',
+                  "<p>Edit the database settings in <code>".CONFIG_FILE."</code>.</p>
+                   <p>Alternatively, consider running the <a href='install.php'>installation script</a>.</p>");
+
+    if (DB_CHARSET)
+    {
+        if (mysqli_set_charset($dbh, DB_CHARSET) === false)
+             errorpage('DB Link Error', 'Couldn\'t set encoding to '.DB_ENCODING);
+    }
+
+    return($dbh);
+}
+
+/**
+ * escape SQL string according to current DB charset settings
+ * @param  string $sql_string SQL string to escape
+ * @return string             escaped string
+ */
+function escapeSQL($sql_string)
+{
+    global $dbh;
+
+    if (!is_resource($dbh))
+        $dbh = getConnection();
+
+    return(mysqli_real_escape_string($dbh, $sql_string));
+}
+
+/**
  * SQL wrapper for all Database accesses
  *
  * @param  string $sql_string The SQL-Statement to execute
@@ -121,7 +159,7 @@ function getmicrotime()
  */
 function runSQL($sql_string, $verify = true)
 {
-    global $config, $db_link, $SQLtrace;
+    global $config, $dbh, $SQLtrace;
 
 	if ($config['debug'])
     {
@@ -131,56 +169,35 @@ function runSQL($sql_string, $verify = true)
 		$timestamp = getmicrotime();
 	}
 
-    if (!is_resource($db_link))
-    {
-        $db_link =	mysql_pconnect($config['db_server'], $config['db_user'], $config['db_password']) or
-            errorpage('DB Connection Error',
-                      "<p>Edit the database settings in <code>".CONFIG_FILE."</code>.</p>
-                       <p>Alternatively, consider running the <a href='install.php'>installation script</a>.</p>");
+    if (!is_resource($dbh))
+        $dbh = getConnection();
+    $res  = mysqli_query($dbh, $sql_string);
 
-        mysql_select_db($config['db_database'], $db_link) ||
-            errorpage('DB Connection Error',
-                      "Couldn't select database: ".$config['db_database'].
-                      "<p>Please verify your database is up and running and validate your database settings in <code>".CONFIG_FILE."</code>.</p>
-                       <p>Alternatively, consider running the <a href='install.php'>installation script</a>.</p>");
-
-        if (DB_CHARSET)
-        {
-            mysql_query("SET NAMES '".DB_CHARSET."'", $db_link) ||
-                errorpage('DB Link Error', 'Couldn\'t set encoding to '.DB_ENCODING);
-        }        
-    }
-	$res  = mysql_query($sql_string, $db_link);
-	
-	// mysql_db_query returns either positive result ressource or true/false for an insert/update statement
-	if ($res === false)
+    // mysqli_db_query returns either positive result ressource or true/false for an insert/update statement
+    if ($res === false)
     {
-		if ($verify)
+        $result = false;
+        if ($verify)
         {
-        	// report DB Problem
-            errorpage('Database Problem', mysql_error($db_link)."\n<br />\n".$sql_string, true);
-        }
-        else
-        {
-        	// ignore problem but forward the information
-        	$result = false;	
+            // report DB Problem
+            errorpage('Database Problem', mysqli_error($dbh)."\n<br />\n".$sql_string, true);
         }
 	}
 	elseif ($res === true)
 	{
         // on insert, return id of created record
-		$result = mysql_insert_id($db_link);
+		$result = mysqli_insert_id($dbh);
 	}
 	else
 	{
         // return associative result array
         $result = array();
 
-		for ($i=0; $i<mysql_num_rows($res); $i++)
+		for ($i=0; $i<mysqli_num_rows($res); $i++)
 		{
-            $result[] = mysql_fetch_assoc($res);
+            $result[] = mysqli_fetch_assoc($res);
 		}
-		mysql_free_result($res);
+		mysqli_free_result($res);
 	}
 	
 	if ($config['debug'])
@@ -191,7 +208,7 @@ function runSQL($sql_string, $verify = true)
         $SQLtrace[] = array('sql' => $sql_string, 'time' => $timestamp);
 	}
 	
-#	mysql_close($db_link);
+#	mysqli_close($dbh);
 	return $result;
 }
 

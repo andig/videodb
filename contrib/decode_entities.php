@@ -59,7 +59,7 @@ foreach ($result as $video)
 			$keys[] = $key;
 
 			if ($SQL) $SQL .= ', ';
-			$SQL .= "$key = '".mysql_escape_string($new)."'";
+			$SQL .= "$key = '".escapeSQL($new)."'";
 		}
 	}    
 

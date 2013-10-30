@@ -129,11 +129,11 @@ class phpthumb {
 	var $config_cache_prefix                         = '';    // default value set in the constructor below
 
 	// * MySQL
-	var $config_mysql_query                          = null;
-	var $config_mysql_hostname                       = null;
-	var $config_mysql_username                       = null;
-	var $config_mysql_password                       = null;
-	var $config_mysql_database                       = null;
+	var $config_mysqli_query                          = null;
+	var $config_mysqli_hostname                       = null;
+	var $config_mysqli_username                       = null;
+	var $config_mysqli_password                       = null;
+	var $config_mysqli_database                       = null;
 
 	// * Security
 	var $config_high_security_enabled                = false;
