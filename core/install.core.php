@@ -187,7 +187,7 @@ function parse_upgrades($upgrade_file)
 function sql_add_prefix($match)
 {
     global $db_prefix;
-    
+
     $match[2] = preg_replace('/(\'?\w+\'?)(\s*\w*)(,?)/', "`$db_prefix$1`$2$3", $match[2]);
     return join(array_slice($match, 1, 3));
 }
@@ -227,20 +227,20 @@ function prefix_query($query)
 function runSQL($sql, $dbh, $verify = false)
 {
     $result = true;
-    foreach (explode(';', $sql) as $query) 
+    foreach (explode(';', $sql) as $query)
     {
         $query = trim($query);
         if (empty($query)) continue;
 
         $query  = prefix_query($query);
-        $result = mysql_query($query, $dbh);
+        $result = mysqli_query($dbh, $query);
 
         // error running SQL?
-        if ($result === false) 
+        if ($result === false)
         {
             $sql = $query;
             break;
-        }    
+        }
     }
 
     // error running SQL?
@@ -249,21 +249,21 @@ function runSQL($sql, $dbh, $verify = false)
         if ($verify)
         {
             error("Error in SQL statement:<br/>".
-                  "<code>$sql</code><br/>".mysql_error($dbh));
+                  "<code>$sql</code><br/>".mysqli_error($dbh));
         }
-    }    
+    }
 
     // result set returned?
     elseif ($result !== true)
     {
         $res = array();
-        
-        for ($i=0; $i < mysql_num_rows($result); $i++)
+
+        for ($i=0; $i < mysqli_num_rows($result); $i++)
         {
-            $res[] = mysql_fetch_assoc($result);
+            $res[] = mysqli_fetch_assoc($result);
         }
-        mysql_free_result($result);
-        
+        mysqli_free_result($result);
+
         return $res;
     }
     
@@ -287,10 +287,10 @@ function db_upgrade($upgrade_steps)
 
         if (runSQL($sql, $dbh) === false)
         {
-            error('Error upgrading database, try full install instead of upgrade:<br/>'.mysql_error($dbh).
+            error('Error upgrading database, try full install instead of upgrade:<br/>'.mysqli_error($dbh).
                   '<br/><br/><pre>'.$sql.'</pre>');
             return false;
-        }		
+        }
 
         // perform additional upgrade steps
         $upgrade_file = "./install/upgrade_v$ver.php";
