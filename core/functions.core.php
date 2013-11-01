@@ -147,8 +147,7 @@ function escapeSQL($sql_string)
 {
     global $dbh;
 
-    if (!is_resource($dbh))
-        $dbh = getConnection();
+    if (!is_resource($dbh)) $dbh = getConnection();
 
     return(mysqli_real_escape_string($dbh, $sql_string));
 }
@@ -171,8 +170,7 @@ function runSQL($sql_string, $verify = true)
 		$timestamp = getmicrotime();
 	}
 
-    if (!is_resource($dbh))
-        $dbh = getConnection();
+    if (!is_resource($dbh)) $dbh = getConnection();
     $res  = mysqli_query($dbh, $sql_string);
 
     // mysqli_db_query returns either positive result ressource or true/false for an insert/update statement
