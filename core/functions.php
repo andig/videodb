@@ -35,10 +35,6 @@ if (@$config['offline'])
 // require_once './core/ids.php';
 
 require_once './core/functions.core.php';
-
-// exception handling beyond this point
-set_exception_handler('exception_handler');
-
 require_once './core/constants.php';
 require_once './core/session.php';
 require_once './core/encoding.php';
@@ -48,8 +44,10 @@ require_once './core/compatibility.php';
 require_once './lib/smarty/SmartyBC.class.php';
 
 /* --------------------------------------------------------------------*/
-// Set up some defaults
+// exception handling beyond this point
+set_exception_handler('exception_handler');
 
+// Set up some defaults
 error_reporting($config['debug'] ? E_ALL ^ E_NOTICE : E_ERROR + E_PARSE);
 
 // Remove environment variables from global scope- ensures clean namespace
