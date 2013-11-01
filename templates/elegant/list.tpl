@@ -63,6 +63,12 @@
                     <div class="list_diskid">
                         <a href="search.php?q={$video.diskid}&fields=diskid&nowild=1">{$video.diskid}</a>
                     </div>
+                    
+                    {if $video.mediatypename}
+                    <div class="list_diskid">
+                        <a href="search.php?q={$video.mediatypename}&fields=mediatype&nowild=1">{$video.mediatypename}</a>
+                    </div>
+                    {/if}
 
                     <div class="list_language">
                         {foreach $video.language as $itemlang}
