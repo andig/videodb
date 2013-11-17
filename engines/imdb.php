@@ -298,7 +298,7 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // Plot
-    preg_match('/<P CLASS="plotpar">(.+?)<\/P>/is', $resp['data'], $ary);
+    preg_match('/<P CLASS="plotSummary">(.+?)<\/P>/is', $resp['data'], $ary);
     if ($ary[1])
     {
         $data['plot'] = trim($ary[1]);
