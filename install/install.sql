@@ -44,7 +44,7 @@ CREATE TABLE videodata (
   year INT(4) UNSIGNED NOT NULL DEFAULT '0',
   imgurl VARCHAR(255) DEFAULT NULL,
   director VARCHAR(255) DEFAULT NULL,
-  actors TEXT,
+  actors MEDIUMTEXT,
   runtime INT(10) UNSIGNED DEFAULT NULL,
   country VARCHAR(255) DEFAULT NULL,
   plot TEXT,
@@ -230,4 +230,4 @@ INSERT IGNORE INTO users (id, name, passwd, permissions) VALUES (10000 ,'Guest',
 # core/constants.php when changing the database structure!
 #
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 40);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 41);
