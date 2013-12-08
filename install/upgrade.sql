@@ -395,9 +395,10 @@ REPLACE INTO config (opt,value) VALUES ('template', 'nexgen::nexgen');
 REPLACE INTO config (opt,value) VALUES ('actorpics', '1');
 REPLACE INTO config (opt,value) VALUES ('imdbBrowser', '1');
 
-*
-* changes in DB 41
-*
+#
+# changes in DB 41
+#
+
 ALTER TABLE videodata MODIFY actors MEDIUMTEXT;
 
 # 
