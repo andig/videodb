@@ -7,7 +7,7 @@
  *
  * @package Core
  * @link    http://www.fpdf.org
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas Gï¿½tz    <cpuidle@gmx.de>
  * @version $Id: pdf.php,v 1.36 2013/03/15 16:42:46 andig2 Exp $
  */
 
@@ -269,7 +269,7 @@ class PDF extends FPDF2File
  */
 function getMediaImage($mediatype)
 {
-	if (preg_match("/^(DVD([+-]R)?|DivX|CD|VCD|SVCD|VHS)/i", $mediatype, $matches))
+	if (preg_match("/^(DVD([+-]R)?|DivX|CD|VCD|SVCD|VHS|BLU-RAY|AVCHD|HDD|HD-DVD)/i", $mediatype, $matches))
 	{
 		$type_image = strtolower($matches[1]).'.png';
 	}
