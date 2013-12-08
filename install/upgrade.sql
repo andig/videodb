@@ -395,6 +395,11 @@ REPLACE INTO config (opt,value) VALUES ('template', 'nexgen::nexgen');
 REPLACE INTO config (opt,value) VALUES ('actorpics', '1');
 REPLACE INTO config (opt,value) VALUES ('imdbBrowser', '1');
 
+*
+* changes in DB 41
+*
+ALTER TABLE videodata MODIFY actors MEDIUMTEXT;
+
 # 
 # IMPORTANT
 # 
@@ -402,4 +407,4 @@ REPLACE INTO config (opt,value) VALUES ('imdbBrowser', '1');
 # core/constants.php when changing the database structure!
 # 
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 40);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 41);
