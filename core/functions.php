@@ -511,8 +511,8 @@ function login_as($userid, $permanent = false)
 
     if (!$userid || !is_numeric($userid)) errorpage('Error', 'Invalid login attempt');
 
-    $RandNumber = rand(100000000, 999999999);
-
+    $CookieCode = get_user_hash($userid); 
+    if(!$CookieCode) $CookieCode = rand(100000000, 999999999);
     // permanent cookie: 1 year, otherwise session only
     $validtime  = ($permanent) ? time() + 60*60*24*365 : null;
     $username   = get_username($userid);
@@ -522,7 +522,7 @@ function login_as($userid, $permanent = false)
 
     setcookie('VDBuserid',   $userid, $validtime, $subdir);
     setcookie('VDBusername', $username, $validtime, $subdir);
-    setcookie('VDBpassword', $RandNumber, $validtime, $subdir);
+    setcookie('VDBpassword', $CookieCode, $validtime, $subdir);
 
     // make cookies available right away
     $_COOKIE['VDBuserid']   = $userid;
@@ -530,10 +530,21 @@ function login_as($userid, $permanent = false)
 
     if ($userid != $config['guestid'])
     {
-        runSQL('UPDATE '.TBL_USERS." SET cookiecode='$RandNumber' WHERE id=$userid");
+        runSQL('UPDATE '.TBL_USERS." SET cookiecode='$CookieCode' WHERE id=$userid");
     }
 }
 
+/**
+ * Create a user specific hash value to be used as the RememberMe cookie code
+ */
+function get_user_hash($userid)
+{
+    $res = runSQL("SELECT name,passwd,email FROM ".TBL_USERS." WHERE id=$userid");
+    if(count($res)) {
+        return md5($res[0]['name']."|".$res[0]['email']."|".substr($res[0]['passwd'],0,10)."|".$userid);
+    }
+    return false;
+}
 /**
  * Checks if the user was authenticated and if the received auth cookie is valid.
  * Function is called for every page except login.php!
