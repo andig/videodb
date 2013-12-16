@@ -395,9 +395,14 @@ REPLACE INTO config (opt,value) VALUES ('template', 'nexgen::nexgen');
 REPLACE INTO config (opt,value) VALUES ('actorpics', '1');
 REPLACE INTO config (opt,value) VALUES ('imdbBrowser', '1');
 
-
 #
 # changes in DB version 41
+#
+
+ALTER TABLE `videodata` MODIFY actors MEDIUMTEXT;
+
+#
+# changes in DB version 42
 #
 
 ALTER TABLE `genres` ADD COLUMN `name_de`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `name`;
@@ -451,4 +456,4 @@ INSERT INTO `genres` (name,name_de,name_fr,name_es) VALUES ('Martial Arts', 'Mar
 
 
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 41);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 42);

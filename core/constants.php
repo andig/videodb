@@ -66,6 +66,6 @@ define('DB_COLLATION', '');
 define('DB_TRANSLATIONS', 'de,fr,es');
 
 // Required database version
-define('DB_REQUIRED', 41);
+define('DB_REQUIRED', 42);
 
 ?>
