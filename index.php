@@ -43,7 +43,7 @@ function ajax_render()
     exit($content);
 }
 
-function prepareSorting($m) {
+function prepareOrder($m) {
        switch($m) {
                case 1:
                        $ORDER = "rating desc";
@@ -105,8 +105,10 @@ switch ($filter)
 {
     case 'all':
 #                    $WHERES = 'mediatype != '.MEDIA_WISHLIST;
-                    //$ORDER  = ($config['orderallbydisk'])  ? 'diskid, ' : '';
-                    //$ORDER .= 'title, subtitle';
+					if($config['orderallbydisk']) 
+					{
+						$ORDER  = 'diskid asc, title, subtitle';
+					}
                     break;
     case 'seen':
                     $WHERES .= ' AND !ISNULL('.TBL_USERSEEN.'.video_id)';# AND mediatype != '.MEDIA_WISHLIST;
@@ -132,13 +134,20 @@ switch ($filter)
                     $WHERES .= ' AND title RLIKE \''.utf8_encode($filter_expr[$filter]).'\'';# AND mediatype != '.MEDIA_WISHLIST;
 }
 
-// default order
-//if (!$ORDER)  $ORDER   = 'title, subtitle';
-if($order) {
-    $ORDER = prepareSorting($order);
-    session_set('order', $order);
+if(!$ORDER)
+{
+	if($order)
+	{
+		$ORDER = prepareOrder($order);
+		session_set('order', $order);
+	} else {
+		$ORDER   = prepareOrder(-1);
+		session_set('order', -1);
+	}
 }
-if (!$ORDER)  $ORDER   = prepareSorting(-1);
+    
+
+if (!$ORDER)  
 
 if (!$showtv) $WHERES .= ' AND istv = 0';
 
