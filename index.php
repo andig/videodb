@@ -145,9 +145,6 @@ if(!$ORDER)
 		session_set('order', -1);
 	}
 }
-    
-
-if (!$ORDER)  
 
 if (!$showtv) $WHERES .= ' AND istv = 0';
 
