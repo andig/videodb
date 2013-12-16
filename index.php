@@ -43,6 +43,21 @@ function ajax_render()
     exit($content);
 }
 
+function prepareSorting($m) {
+       switch($m) {
+               case 1:
+                       $ORDER = "rating desc";
+                       break;
+               case 2:
+                       $ORDER = "created DESC, lastupdate DESC";
+                       break;
+               default:
+                       $ORDER = "title, subtitle asc";
+                       break;
+       }
+       return $ORDER;
+}
+
 function get_mediatype_sql($m)
 {
     switch ($m) {
@@ -64,6 +79,7 @@ session_default('filter', $config['filterdefault']);
 session_default('showtv', $config['showtv']);
 session_default('listcolumns', $config['listcolumns']);
 session_default('mediafilter', -1);
+session_default('order', -1);
 
 // enable redirects to last list view for delete.php
 session_set('listview', 'index.php');
@@ -89,8 +105,8 @@ switch ($filter)
 {
     case 'all':
 #                    $WHERES = 'mediatype != '.MEDIA_WISHLIST;
-                    $ORDER  = ($config['orderallbydisk'])  ? 'diskid, ' : '';
-                    $ORDER .= 'title, subtitle';
+                    //$ORDER  = ($config['orderallbydisk'])  ? 'diskid, ' : '';
+                    //$ORDER .= 'title, subtitle';
                     break;
     case 'seen':
                     $WHERES .= ' AND !ISNULL('.TBL_USERSEEN.'.video_id)';# AND mediatype != '.MEDIA_WISHLIST;
@@ -117,7 +133,13 @@ switch ($filter)
 }
 
 // default order
-if (!$ORDER)  $ORDER   = 'title, subtitle';
+//if (!$ORDER)  $ORDER   = 'title, subtitle';
+if($order) {
+    $ORDER = prepareSorting($order);
+    session_set('order', $order);
+}
+if (!$ORDER)  $ORDER   = prepareSorting(-1);
+
 if (!$showtv) $WHERES .= ' AND istv = 0';
 
 // owner selection for multiuser mode- by default this is the logged in user
@@ -228,7 +250,7 @@ $SQL    = 'SELECT '.TBL_DATA.'.id, '.TBL_DATA.'.diskid,
                   md5, comment, disklabel, imdbID, actors, runtime,
                   country, filename, filesize, filedate, audio_codec,
                   video_codec, video_width, video_height, istv,
-                  lastupdate, mediatype,
+                  lastupdate, mediatype, rating,
                   custom1, custom2, custom3, custom4, 
                   created, !ISNULL('.TBL_USERSEEN.'.video_id) AS seen,
                   '.TBL_MEDIATYPES.'.name AS mediatypename

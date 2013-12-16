@@ -220,6 +220,12 @@ function tpl_filters($filter, $showtv)
     $smarty->assign('mediafilter', out_mediatypes(array(-2 => $lang['filter_any'], -1 => $lang['filter_available'])));
     if (!$mediatype) $mediatype = session_get('mediafilter'); //!! default media type hack
     $smarty->assign('mediatype', $mediatype);
+	
+	   // create sorting selectbox
+    $smarty->assign('order_options', array(-1 => $lang['title'], 1 => $lang['rating'], 2 => $lang['date']));
+    if(!$order) $order = session_get('order');
+    $smarty->assign('order',  $order);
+
 
     // enable dynamic columns in list view
     $smarty->assign('listcolumns', session_get('listcolumns'));

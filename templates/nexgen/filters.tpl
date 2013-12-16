@@ -42,4 +42,17 @@
 	{/if}
 </div><!-- row -->
 
+<div class="row">
+	{if $order_options}
+	<div class="small-12 columns">
+		<dl class="sub-nav">
+		<dt>{$lang.order}:</dt>
+			{foreach from=$order_options key=k item=v}
+			<dd {if $order==$k}class="active"{/if}><a href="index.php?order={$k|escape:url}">{$v|escape}</a></dd>
+			{/foreach}
+		</dl>
+	</div><!-- col -->
+	{/if}
+</div><!-- row -->
+
 *}
