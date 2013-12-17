@@ -238,7 +238,11 @@ function ofdbscraperData($id)
 	}
 
 	// Cover URL
-    if (preg_match('#<img src="(http://img.ofdb.de/film/.*?\.jpg)"#i', $resp['data'], $ary))
+    if (preg_match('#<img src="(http://img.ofdb.de/film/na.gif)"#i', $resp['data'], $ary))
+    {
+        $data['coverurl'] = "";
+    }
+    else if (preg_match('#<img src="(http://img.ofdb.de/film/.*?\.jpg)"#i', $resp['data'], $ary))
     {
         $data['coverurl'] =  trim($ary[1]);
     }
