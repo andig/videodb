@@ -81,6 +81,9 @@
                             {/if}
                         {/foreach}
                     </div>
+                    {if $video.has3d}
+                    <div class="list_seen"><a href="search.php?q=1&amp;fields=has3d"><img src="{$template}images/3d.gif" filter="seen" alt="3D"/></a></div>
+                    {/if}
 
                     {if $video.seen}
                     <div class="list_seen"><!--<a href="index.php?filter=seen">--><img src="{$template}images/eye.gif" filter="seen" alt="{$lang.seen}"/><!--</a>--></div>

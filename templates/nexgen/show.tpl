@@ -159,7 +159,7 @@ function boxeePlay(id) {
 
 		<div class="row">
 			{if $video.owner}
-			<div {if $video.istv || $video.seen || $video.3d}class="small-6 large-3 columns"{else}class="small-12 large-12 columns"{/if}>
+			<div {if $video.istv || $video.seen || $video.has3d}class="small-6 large-3 columns"{else}class="small-12 large-12 columns"{/if}>
 				<p>{$lang.owner}: <a href="search.php?q={$video.owner|escape:url}&amp;fields=owner&amp;nowild=1">{$video.owner}</a>
 					{if $loggedin && $video.email && $video.owner != $loggedin && $video.who == '' && $video.diskid}
 					<a href="javascript:void(open('borrowask.php?id={$video.id|escape:url}&amp;diskid={$video.diskid|escape:url}','borrowask','width=300,height=300,menubar=no,resizable=yes,scrollbars=yes,status=yes,toolbar=no'))" class="button tiny">{$lang.borrowask}</a>
@@ -168,7 +168,7 @@ function boxeePlay(id) {
 			</div><!-- col -->
 			{/if}
 
-			{if $video.istv || $video.seen || $video.3d}
+			{if $video.istv || $video.seen || $video.has3d}
 			<div {if $video.owner}class="small-6 large-9 columns"{else}class="small-12 large-12 columns"{/if}>
 				{if $video.istv}
 				<dl class="sub-nav inline" input-checkbox>
@@ -180,9 +180,9 @@ function boxeePlay(id) {
 					<dd {if $video.seen}class="active"{/if}><a href="seen" value="1">{$lang.seen}</a></dd>
 				</dl>
 				{/if}
-				{if $video.3d}
+				{if $video.has3d}
 				<dl class="sub-nav inline" input-checkbox>
-					<dd {if $video.3d}class="active"{/if}><a href="3d" value="1">{$lang.3d}3D</a></dd>
+					<dd {if $video.has3d}class="active"{/if}><a href="has3d" value="1">3D</a></dd>
 				</dl>
 				{/if}
 			</div><!-- col -->

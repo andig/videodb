@@ -401,6 +401,12 @@ REPLACE INTO config (opt,value) VALUES ('imdbBrowser', '1');
 
 ALTER TABLE videodata MODIFY actors MEDIUMTEXT;
 
+#
+# changes in DB version 42
+#
+
+ALTER TABLE `videodata` ADD `has3d` tinyINT(1) UNSIGNED NOT NULL DEFAULT '0' 
+
 # 
 # IMPORTANT
 # 
@@ -408,4 +414,4 @@ ALTER TABLE videodata MODIFY actors MEDIUMTEXT;
 # core/constants.php when changing the database structure!
 # 
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 41);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 42);

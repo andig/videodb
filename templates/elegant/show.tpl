@@ -146,7 +146,11 @@ Event.observe(document, 'dom:loaded', function() {
               </form>
             </td>
           </tr>
-
+	  <tr>
+	  {if $video.has3d}
+          <td colspan="2"><img src="{$template}images/3d.gif" filter="seen" alt="3D"/></td>
+	  {/if}
+	  </tr>
           <tr>
             <td colspan="2">
 				<div>

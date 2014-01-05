@@ -15,7 +15,7 @@ require_once './core/security.php';
 $imdb_set_fields    = array('md5','title','subtitle','language','diskid','mediatype','comment','disklabel',
                             'imdbID','year','imgurl','director','actors','runtime','country','plot','filename',
                             'filesize','filedate','audio_codec','video_codec','video_width','video_height','istv',
-                            'rating', 'custom1','custom2','custom3','custom4');
+                            'rating', 'custom1','custom2','custom3','custom4','has3d');
 
 // list of fields to be overwritten by refetchAllInfos-Script
 $imdb_overwrite_fields = array('comment','disklabel','imdbID','year','director','actors','runtime','country','plot',
