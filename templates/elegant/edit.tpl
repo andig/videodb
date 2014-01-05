@@ -106,6 +106,10 @@ Event.observe(document, 'dom:loaded', function() {
           <td><h4><label for="seen">{$lang.seen}</label>:</h4></td>
           <td><input type="checkbox" name="seen" id="seen" value="1" {if $video.seen}checked="checked"{/if}/></td>
         </tr>
+	<tr>
+          <td><h4><label for="has3d">3D</label>:</h4></td>
+          <td><input type="checkbox" name="has3d" id="has3d" value="1" {if $video.has3d}checked="checked"{/if}/></td>
+        </tr>
 
         <tr>
           <td><h4>{$lang.filename}:</h4></td>

@@ -228,7 +228,7 @@ $SQL    = 'SELECT '.TBL_DATA.'.id, '.TBL_DATA.'.diskid,
                   md5, comment, disklabel, imdbID, actors, runtime,
                   country, filename, filesize, filedate, audio_codec,
                   video_codec, video_width, video_height, istv,
-                  lastupdate, mediatype,
+                  lastupdate, mediatype,has3d,
                   custom1, custom2, custom3, custom4, 
                   created, !ISNULL('.TBL_USERSEEN.'.video_id) AS seen,
                   '.TBL_MEDIATYPES.'.name AS mediatypename

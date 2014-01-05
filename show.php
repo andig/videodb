@@ -187,7 +187,7 @@ if (!empty($id))
                       disklabel, imdbID, year, imgurl, director, actors, runtime,  
                       country, plot, filename, filesize, filedate, audio_codec,  
                       video_codec, video_width, video_height, istv, lastupdate,  
-                      email, rating, custom1, custom2, custom3, custom4, 
+                      email, rating, custom1, custom2, custom3, custom4,has3d, 
                       !ISNULL('.TBL_USERSEEN.'.video_id) AS seen,
                       '.TBL_USERS.'.name AS owner, '.TBL_MEDIATYPES.'.name AS mediatype  
                  FROM '.TBL_DATA.'   

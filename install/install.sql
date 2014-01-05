@@ -57,6 +57,7 @@ CREATE TABLE videodata (
   video_width INT(10) UNSIGNED DEFAULT NULL,
   video_height INT(10) UNSIGNED DEFAULT NULL,
   istv tinyINT(1) UNSIGNED NOT NULL DEFAULT '0',
+  has3d tinyINT(1) UNSIGNED NOT NULL DEFAULT '0',
   lastupdate TIMESTAMP NOT NULL,
   mediatype INT(10) UNSIGNED NOT NULL DEFAULT '0',
   custom1 VARCHAR(255) DEFAULT NULL,
@@ -230,4 +231,4 @@ INSERT IGNORE INTO users (id, name, passwd, permissions) VALUES (10000 ,'Guest',
 # core/constants.php when changing the database structure!
 #
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 41);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 42);
