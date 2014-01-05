@@ -137,7 +137,7 @@
 					</dl>
 
 					<dl class="sub-nav inline" input-checkbox>
-						<dd {if $video.3d}class="active"{/if}><a href="3d" value="1">{$lang.3d}3D</a></dd>
+						<dd {if $video.has3d}class="active"{/if}><a href="has3d" value="1">3D</a></dd>
 					</dl>
 				</div><!-- col -->
 			</div><!-- row -->

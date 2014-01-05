@@ -208,7 +208,7 @@ if (isset($q) &! (isset($default) && empty($q)))
                       md5, comment, disklabel, imdbID, actors, runtime,
                       country, filename, filesize, filedate, audio_codec,
                       video_codec, video_width, video_height, istv,
-                      lastupdate, mediatype, created,
+                      lastupdate, mediatype, created,has3d,
                       custom1, custom2, custom3, custom4,
                       '.TBL_LENT.'.who, '.TBL_USERS.'.name AS owner, '.TBL_MEDIATYPES.'.name AS mediatypename,
                       !ISNULL('.TBL_USERSEEN.'.video_id) AS seen
