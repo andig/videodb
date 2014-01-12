@@ -282,4 +282,6 @@ $lang['records']             = "Einträgen";
 
 $lang['warn_noOwner']        = "Daten nicht gespeichert - bitte wählen einen Besitzer!";
 
+$lang['order']				 = "Sortierung";
+
 ?>

@@ -60,6 +60,17 @@
 						</dl>
 					</li>
 					{/if}
+					
+					{if $order_options}
+					<li>
+						<dl class="sub-nav">
+						<dt>{$lang.order}:</dt>
+							{foreach from=$order_options key=k item=v}
+							<dd {if $order==$k}class="active"{/if}><a href="index.php?order={$k|escape:url}">{$v|escape}</a></dd>
+							{/foreach}
+						</dl>
+					</li>
+					{/if}
 				</ul>
 				{/if}
 			</li>

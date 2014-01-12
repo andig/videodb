@@ -130,6 +130,16 @@ Event.observe(document, 'dom:loaded', function()
         });
     });
 
+	/**
+     * Order selection
+     */
+    $$('#order').invoke('observe', 'change', function(event) {
+        new Ajax.Request('index.php', {
+            parameters: {ajax_render: 1, order: $F('order')},
+            onSuccess: render_list
+        });
+    });
+
     /**
      * Quicksearch
      */

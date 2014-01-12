@@ -326,4 +326,6 @@ $lang['records']             = "records";
 
 $lang['warn_noOwner']        = "Data not saved - you have to select an owner first!";
 
+$lang['order']				 = "Sort by";
+
 ?>
