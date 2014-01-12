@@ -4,7 +4,7 @@
  *
  * @package Contrib
  * @author  Andreas Goetz   <cpuidle@gmx.de>
- * @version $Id: add_recommended_movies.php,v 1.8 2008/06/29 11:13:12 andig2 Exp $
+ * @version $Id: add_recommended_movies.php,v 1.8 2014/01/11 13:14:12 kec2 Exp $
  */
 
 // move out of contrib for includes
@@ -61,7 +61,8 @@ if ($submit)
             echo "Fetching recommendations for {$video['title']} (IMDB Id {$video['imdbID']})<br/>\n";
             flush();
 
-            $url = 'http://uk.imdb.com/title/tt'.$video['imdbID'].'/recommendations';
+            $imdbId = preg_replace('/^imdb:/', '', $video['imdbID']);
+            $url = 'http://www.imdb.com/title/tt'.$imdbId.'/recommendations';
 
             $resp = httpClient($url, true);
             if (!$resp['success']) 
@@ -96,7 +97,7 @@ if ($submit)
 
                 if (empty($rating) || ($rating >= $required_rating))
                 {
-                    $available = (count(runSQL("SELECT * FROM ".TBL_DATA." WHERE imdbID = '$id'")) > 0);
+                    $available = (count(runSQL("SELECT * FROM ".TBL_DATA." WHERE imdbID = 'imdb:$id'")) > 0);
 
                     if ($available)
                     {
