@@ -13,8 +13,8 @@ chdir('..');
 require_once './core/functions.php';
 require_once './engines/engines.php';
 
-// since we don't need session functionality, use this as workaround 
-// for php bug #22526 session_start/popen hang 
+// since we don't need session functionality, use this as workaround
+// for php bug #22526 session_start/popen hang
 session_write_close();
 
 ?>
@@ -27,7 +27,7 @@ session_write_close();
     <meta name="description" content="VideoDB" />
 <!--
     <link rel="stylesheet" href="../templates/modern/compact.css" type="text/css" />
--->    
+-->
     <style>
         .green { color:green }
     </style>
@@ -52,7 +52,7 @@ if ($submit)
     $result = runSQL($SQL);
 
     foreach ($result as $video)
-    {   
+    {
         if (empty($video['imdbID'])) continue;
 
         $engine = engineGetEngine($video['imdbID']);
@@ -61,10 +61,10 @@ if ($submit)
             echo "Fetching recommendations for {$video['title']} (IMDB Id {$video['imdbID']})<br/>\n";
             flush();
 
-            $url = 'http://uk.imdb.com/title/tt'.$video['imdbID'].'/recommendations';
+            $url = engineGetRecommendationsUrl($video['imdbID'], 'imdb');
 
             $resp = httpClient($url, true);
-            if (!$resp['success']) 
+            if (!$resp['success'])
             {
                 echo($resp['error']."<br/>");
                 continue;
@@ -79,7 +79,7 @@ if ($submit)
                 if (preg_match('/<img/', $title)) continue;
 
                 $rating = '';
-                if (preg_match("#$id.+?<b>(\d+\.\d+)</b>#i", $resp['data'], $match)) 
+                if (preg_match("#$id.+?<b>(\d+\.\d+)</b>#i", $resp['data'], $match))
                 {
                     $rating = $match[1];
                     // matching at least required rating?
@@ -96,7 +96,7 @@ if ($submit)
 
                 if (empty($rating) || ($rating >= $required_rating))
                 {
-                    $available = (count(runSQL("SELECT * FROM ".TBL_DATA." WHERE imdbID = '$id'")) > 0);
+                    $available = (count(runSQL("SELECT * FROM ".TBL_DATA." WHERE imdbID like '%$id'")) > 0);
 
                     if ($available)
                     {
@@ -106,18 +106,17 @@ if ($submit)
                     {
                         $add_movie = '<a class="green" href="../edit.php?save=1&mediatype='.MEDIA_WISHLIST.'&lookup=1&imdbID='.$id.
                                      '&title='.urlencode($title).'" target="_blank">'.$title.' <img src="../images/add.gif" border="0"/></a>';
-                    }    
+                    }
 
-                    $add_movie = 'Recommended: '.$add_movie." (IMDB Id $id) $rating<br/>\n";             
+                    $add_movie = 'Recommended: '.$add_movie." (IMDB Id $id) $rating<br/>\n";
                     echo $add_movie;
 
                     if ($download && !$available) engineGetData($id);
-                }    
+                }
             }
         }
         echo "<br/>\n\n";
     }
-
 }
 else
 {

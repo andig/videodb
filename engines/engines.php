@@ -50,9 +50,9 @@ function engineGetEngine($id)
 {
     global $config;
 
-	// recognize engine from id
-	if ($id)
-	{
+    // recognize engine from id
+    if ($id)
+    {
         // engine prefixed (imdb:081547)
         // currently working for imdb, amazon, amazoncom and tvcom
         if (preg_match('/^(\w+):/', $id, $match)) $engine = $match[1];
@@ -61,10 +61,10 @@ function engineGetEngine($id)
         elseif (preg_match('/^[0-9A-Z]{10,}$/', $id)) $engine = 'amazonaws'; // Amazon
         elseif (preg_match('/^GR[0-9]/', $id)) $engine = 'gamerankings';
         elseif (preg_match('/^DI[0-9]/', $id)) $engine = 'dvdinside';
-#		elseif (preg_match('/^[0-9a-z]{6,}$/', $id)) $engine = 'freedb';
-	}
-	if (empty($engine)) $engine = 'imdb';
-	return $engine;
+#        elseif (preg_match('/^[0-9a-z]{6,}$/', $id)) $engine = 'freedb';
+    }
+    if (empty($engine)) $engine = 'imdb';
+    return $engine;
 }
 
 /**
@@ -77,10 +77,10 @@ function engineGetEngine($id)
  */
 function engineGetData($id, $engine = 'imdb')
 {
-	global $lang, $cache;
+    global $lang, $cache;
 
-	require_once($engine.'.php');
-	$func = $engine.'Data';
+    require_once($engine.'.php');
+    $func = $engine.'Data';
 
     $result = array();
     if (function_exists($func))
@@ -92,19 +92,19 @@ function engineGetData($id, $engine = 'imdb')
     // make sure all engines properly return the encoding type
     if (empty($result['encoding'])) errorpage('Engine Error', 'Engine does not properly return encoding');
 
-	// set default encoding iso-8859-1
-	$source_encoding = ($result['encoding']) ? $result['encoding'] : $lang['encoding'];
-	$target_encoding = 'utf-8';
+    // set default encoding iso-8859-1
+    $source_encoding = ($result['encoding']) ? $result['encoding'] : $lang['encoding'];
+    $target_encoding = 'utf-8';
     unset($result['encoding']);
 
-	// convert to unicode
-	if ($source_encoding != $target_encoding)
-	{
+    // convert to unicode
+    if ($source_encoding != $target_encoding)
+    {
         $result = iconv_array($source_encoding, $target_encoding, $result);
-	}
-	engine_clean_input($result);
+    }
+    engine_clean_input($result);
 
-	return $result;
+    return $result;
 }
 
 /**
@@ -148,7 +148,7 @@ function engineSearch($find, $engine = 'imdb', $para1 = null, $para2 = null)
     // obtain unique entries
     $result = engine_deduplicate_result($result);
 
-	engine_clean_input($result);
+    engine_clean_input($result);
 
     return $result;
 }
@@ -164,10 +164,34 @@ function engineSearch($find, $engine = 'imdb', $para1 = null, $para2 = null)
 function engineGetContentUrl($id, $engine = 'imdb')
 {
     if (empty($id)) return '';
-    
+
     require_once($engine.'.php');
     $func = $engine.'ContentUrl';
-    
+
+    $result = '';
+    if (function_exists($func))
+    {
+        $result = $func($id);
+    }
+
+    return $result;
+}
+
+/**
+ * Get recommendation URL in external site
+ *
+ * @author  Klaus Christiansen <klaus_edwin@hotmail.com>
+ * @param   string    item id
+ * @param   string    engine name
+ * @return  string    item details url
+ */
+function engineGetRecommendationsUrl($id, $engine = 'imdb')
+{
+    if (empty($id)) return '';
+
+    require_once($engine.'.php');
+    $func = $engine.'RecommendationsUrl';
+
     $result = '';
     if (function_exists($func))
     {
@@ -189,7 +213,7 @@ function engineGetSearchUrl($find, $engine = 'imdb')
 {
     require_once($engine.'.php');
     $func = $engine.'SearchUrl';
-    
+
     $result = '';
     if (function_exists($func))
     {
@@ -223,7 +247,7 @@ function engine_setup_meta($engine, $meta)
 function engineMeta()
 {
     $engines = array();
-    
+
     if ($dh = @opendir('./engines'))
     {
         while (($file = readdir($dh)) !== false)
@@ -273,7 +297,7 @@ function engineGetActorEngine($id)
         elseif (preg_match('/^tv\d+$/', $id)) $engine = 'tvcom';
     }
     if (empty($engine)) $engine = 'imdb';
-    
+
     return $engine;
 }
 
@@ -290,7 +314,7 @@ function engineGetActorUrl($name, $id, $engine = 'imdb')
 {
     require_once($engine.'.php');
     $func = $engine.'ActorUrl';
-    
+
     $result = '';
     if (function_exists($func))
     {
@@ -335,7 +359,7 @@ function engineActor($name, $id, $engine = 'imdb')
 function engine_get_capability($engine, $searchtype)
 {
     global $config;
-    
+
     // get the meta information
     $engine = $config['engines'][$engine];
 
@@ -362,7 +386,7 @@ function engine_get_capable_engines($searchtype)
     global $config;
 
     if (!$searchtype) $searchtype = 'movie';
-    
+
     $engines = array();
     foreach ($config['engines'] as $engine => $meta)
     {
@@ -376,20 +400,20 @@ function engine_get_capable_engines($searchtype)
 /**
  * Clean HTML tags from hierarchical associative array
  *
- * @param   array	$data	string or hierarchical array to convert
+ * @param   array    $data    string or hierarchical array to convert
  */
 function engine_clean_input(&$data)
 {
     if (is_array($data)) foreach ($data as $key => $val)
-	{
-		if (is_array($val))
-			engine_clean_input($data[$key]);
-		else
+    {
+        if (is_array($val))
+            engine_clean_input($data[$key]);
+        else
         {
             $val        = html_to_text($val);
             $data[$key] = html_clean_utf8($val);
         }
-	}
+    }
 }
 
 /**
@@ -398,7 +422,7 @@ function engine_clean_input(&$data)
  */
 function engine_deduplicate_result($data)
 {
-	$keys = array();
+    $keys = array();
     for ($i=0; $i<count($data); $i++)
     {
         $id = $data[$i]['id'];

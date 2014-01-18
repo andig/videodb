@@ -53,6 +53,18 @@ function imdbContentUrl($id)
 }
 
 /**
+ * Get Url to visit IMDB recommendations for a specific movie
+ *
+ * @author  Klaus Christiansen <klaus_edwin@hotmail.com>
+ * @param   string  $id The movie's external id
+ * @return  string      The visit URL
+ */
+function imdbRecommendationsUrl($id)
+{
+    return imdbContentUrl($id).'recommendations';
+}
+
+/**
  * Search a Movie
  *
  * Searches for a given title on the IMDB and returns the found links in
@@ -81,7 +93,7 @@ function imdbSearch($title, $aka=null)
 
     // add encoding
     $data['encoding'] = get_response_encoding($resp);
-    
+
     // direct match (redirecting to individual title)?
     if (preg_match('/^'.preg_quote($imdbServer,'/').'\/[Tt]itle(\?|\/tt)([0-9?]+)\/?/', $resp['url'], $single))
     {
@@ -110,7 +122,7 @@ function imdbSearch($title, $aka=null)
                 $info['year']   = $ary[3];
                 $data[]         = $info;
             }
-            
+
 #           dump($info);
         }
     }
@@ -161,7 +173,7 @@ function imdbData($imdbID)
         preg_match('/<meta name="title" content="&quot;(.*?)&quot;\s+(.*?)(.TV episode .*?)?( - IMDB)?"/si', $resp['data'], $ary);
         $data['title'] = trim($ary[1]);
         $data['subtitle'] = trim($ary[2]);
-#dlog($ary);        
+#dlog($ary);
         if (preg_match('/<h1 class="header".*?>.*?<span class="nobr">\(.*?(\d\d\d\d)\)</si', $resp['data'], $ary)) {
             $data['year'] = $ary[1];
         }
@@ -170,7 +182,7 @@ function imdbData($imdbID)
 #dlog($ary);
         $data['year'] = trim($ary[3]);
         # split title - subtitle
-        list($t, $s)	= explode(' - ', trim($ary[2]), 2);
+        list($t, $s)    = explode(' - ', trim($ary[2]), 2);
         $data['title'] = trim($t);
         $data['subtitle'] = trim($s);
     }
@@ -338,8 +350,8 @@ function imdbFixEncoding($data, $resp)
  * Get Url of Cover Image
  *
  * @author  Roland Obermayer <robelix@gmail.com>
- * @param   string  $data	IMDB Page data
- * @return  string		Cover Image URL
+ * @param   string  $data    IMDB Page data
+ * @return  string        Cover Image URL
  */
 function imdbGetCoverURL($data) {
 
@@ -349,7 +361,7 @@ function imdbGetCoverURL($data) {
 
     # link to big-image-page?
     if (preg_match('/<td .*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?<\/td>/si', $data, $ary) ) {
-    
+
         // Fetch the image page
         $resp = httpClient($imdbServer.$ary[1], $cache);
         if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
