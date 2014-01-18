@@ -53,6 +53,18 @@ function imdbContentUrl($id)
 }
 
 /**
+ * Get Url to visit IMDB recommendations for a specific movie
+ *
+ * @author  Klaus Christiansen <klaus_edwin@hotmail.com>
+ * @param   string  $id The movie's external id
+ * @return  string      The visit URL
+ */
+function imdbRecommendationsUrl($id)
+{
+    return imdbContentUrl($id).'recommendations/';
+}
+
+/**
  * Search a Movie
  *
  * Searches for a given title on the IMDB and returns the found links in
