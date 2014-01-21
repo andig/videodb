@@ -178,6 +178,30 @@ function engineGetContentUrl($id, $engine = 'imdb')
 }
 
 /**
+ * Get item details URL in external site
+ *
+ * @author  Klaus Christiansen <klaus_edwin@hotmail.com>
+ * @param   string    item id
+ * @param   string    engine name
+ * @return  string    item details url
+ */
+function engineGetRecommendationsUrl($id, $engine = 'imdb')
+{
+    if (empty($id)) return '';
+
+    require_once($engine.'.php');
+    $func = $engine.'RecommendationsUrl';
+
+    $result = '';
+    if (function_exists($func))
+    {
+        $result = $func($id);
+    }
+
+    return $result;
+}
+
+/**
  * Get complete search URL for external site
  *
  * @author  Andreas Goetz <cpuidle@gmx.de>
