@@ -4,229 +4,338 @@
  *
  * @package Language
  * @author  Maciej Witkowiak <ytm@elysium.pl>
- * @version $Id: pl.php,v 2.16 2013/03/16 10:10:07 andig2 Exp $
+ * @author  mboczek <mboczek@gmail.com>
+ * @version $current v 2.17 2014/01/25$
  */
 
-$lang['encoding']            = "iso-8859-2";
+$lang['encoding']            = "utf-8";
 
 $lang['audiocodec']          = "Kodek audio";
-$lang['borrowto']            = "wypo¿ycza";
+$lang['borrowto']            = "wypoÅ¼ycza";
 $lang['cast']                = "Obsada";
 $lang['country']             = "Kraj";
-$lang['coverurl']            = "URL ok³adki";
+$lang['coverurl']            = "URL okÅ‚adki";
 $lang['dimension']           = "Rozmiary";
-$lang['director']            = "Re¿yser";
+$lang['director']            = "ReÅ¼yser";
 $lang['diskid']              = "DiskID";
 $lang['filedate']            = "Data pliku";
 $lang['filename']            = "Nazwa pliku";
 $lang['filesize']            = "Rozmiar pliku";
 $lang['genre']               = "Gatunek";
 $lang['genres']              = "Gatunki";
-$lang['keywords']            = "S³owa kluczowe";
-$lang['language']            = "Jêzyk";
-$lang['length']              = "D³ugo¶æ";
-$lang['less']		           = "mniej";
-$lang['more']                = "wiêcej";
-$lang['plot']                = "Fabu³a";
+$lang['keywords']            = "SÅ‚owa kluczowe";
+$lang['language']            = "JÄ™zyk";
+$lang['length']              = "DÅ‚ugoÅ›Ä‡";
+$lang['less']		         = "mniej";
+$lang['more']                = "wiÄ™cej";
+$lang['plot']                = "FabuÅ‚a";
 $lang['runtime']             = "Czas";
-$lang['subtitle']            = "podtytu³";
-$lang['title']               = "Tytu³";
+$lang['subtitle']            = "PodtytuÅ‚";
+$lang['title']               = "TytuÅ‚";
 $lang['tvepisode']           = "Odcinek TV";
 $lang['seen']                = "Obejrzane";
 $lang['videocodec']          = "Kodek video";
 $lang['year']                = "Rok";
 $lang['yes']                 = "Tak";
+$lang['no']                  = "Nie";
 $lang['comment']             = "Komentarz";
-$lang['mediatype']           = "Rodzaj no¶nika";
+$lang['mediatype']           = "Rodzaj noÅ›nika";
 $lang['save']                = "Zapisz";
-$lang['coverupload']         = "Wgraj ok³adkê";
-$lang['visit']               = "Odwied¼";
+$lang['back']                = "PowrÃ³t";
+$lang['coverupload']         = "Wgraj okÅ‚adkÄ™";
+$lang['visit']               = "OdwiedÅº";
+$lang['input_browse']        = "Wybierz";
 $lang['date']                = "Data";
 $lang['fetchtime']           = "Pobierz czas";
 $lang['cachesize']           = "Rozmiar cache";
-$lang['cacheexpired']        = "Wygas³o";
-$lang['cachecleanup']        = "Wyczy¶æ";
-$lang['cacheempty']          = "Opró¼nij cache";
+$lang['cacheexpired']        = "WygasÅ‚o";
+$lang['cachecleanup']        = "WyczyÅ›Ä‡";
+$lang['cacheempty']          = "OprÃ³Åºnij cache";
 $lang['okay']                = "Ok";
-$lang['asactor']              = "jako";
-$lang['displayed']            = "pokazane";
-$lang['add_another']          = "Dodaj jeszcze jedna";
+$lang['asactor']             = "jako";
+$lang['displayed']           = "pokazane";
+$lang['add_another']         = "Dodaj nastÄ™pny";
+$lang['rating']              = 'Ocena';
+$lang['extid']               = 'ZewnÄ™trzne Id';
+$lang['bytes']				 = 'BajtÃ³w';
 
 #
-#Multiuser
+# Edit
 #
-$lang['enterusername']       = "Proszê podaæ nazwê u¿ytkownika i has³o.";
-$lang['stayloggedin']        = "pozostañ zalogowany z tego komputera";
-$lang['login']               = "zaloguj siê";
+
+$lang['main_details']        = 'SzczegÃ³Å‚y';
+$lang['media_details']       = 'Media';
+$lang['description_details'] = 'Opis';
+$lang['file_details']        = 'Plik';
+$lang['custom_details']      = 'WÅ‚asne pola';
+$lang['cancel']        		 = 'Anuluj';
+$lang['create_']             = 'UtwÃ³rz:';
+
+#
+# Show
+#
+
+$lang['synopsis']			 = 'Opis';
+$lang['purchase']            = 'Kup';
+$lang['torrents']            = 'Torrenty';
+
+#
+# Search
+#
+
+$lang['target']              = 'Cel';
+
+#
+# Multiuser
+#
+
+$lang['enterusername']       = "ProszÄ™ podaÄ‡ nazwÄ™ uÅ¼ytkownika i hasÅ‚o.";
+$lang['stayloggedin']        = "pozostaÅ„ zalogowany z tego komputera";
+$lang['login']               = "zaloguj siÄ™";
 $lang['logout']              = "wyloguj";
-$lang['owner']               = "W³a¶ciciel";
-$lang['loggedinas']          = "Jeste¶ zalogowany jako";
+$lang['owner']               = "WÅ‚aÅ›ciciel";
+$lang['loggedinas']          = "JesteÅ› zalogowany jako";
 
-$lang['username']            = "Nazwa u¿ytkownika";
-$lang['password']            = "Has³o";
+$lang['username']            = "Nazwa uÅ¼ytkownika";
+$lang['password']            = "HasÅ‚o";
 $lang['permissions']         = "Uprawnienia";
 $lang['perm_admin']          = "Administracja";
-$lang['perm_writeall']       = "Zmiany cudzych filmów";
-$lang['perm_write']          = "Zmiany w³asnych filmów";
-$lang['perm_adult']          = "Widzi filmy dla doros³ych";
+$lang['perm_readall']        = "Widzi cudze filmy";
+$lang['perm_writeall']       = "Zmiany cudzych filmÃ³w";
+$lang['perm_write']          = "Zmiany wÅ‚asnych filmÃ³w";
+$lang['perm_adult']          = "Widzi filmy dla dorosÅ‚ych";
+$lang['write']               = "Zmiana filmÃ³w";
+$lang['read']                = "Widok filmÃ³w";
 $lang['update']              = "zapisz";
-$lang['create']              = "utwórz";
-$lang['existingusers']       = "Aktualni u¿ytkownicy";
-$lang['createuser']          = "Dodaj nowego u¿ytkownika";
+$lang['create']              = "UtwÃ³rz";
+$lang['action']              = "Akcja";
+$lang['existingusers']       = "Aktualni uÅ¼ytkownicy";
+$lang['selecteduser']     	 = "Wybrany uÅ¼ytkownik";
+$lang['permforuser']         = "Uprawnienia uÅ¼ytkownika";
+$lang['permtouser']          = "Permissions related to user";
+$lang['createuser']          = "Dodaj nowego uÅ¼ytkownika";
 $lang['email']               = "E-Mail";
-$lang['borrowask']           = "Pytaj o po¿yczanie";
+$lang['borrowask']           = "Pytaj o poÅ¼yczanie";
 
-$lang['msg_usercreated']     = "Dodano u¿ytkownika";
-$lang['msg_permpassupd']     = "Uaktualniono uprawnienia i has³o";
+$lang['msg_usercreated']     = "Dodano uÅ¼ytkownika";
+$lang['msg_usernotcreated']  = "Nie moÅ¼na dodaÄ‡ uÅ¼ytkownika";
+$lang['msg_permpassupd']     = "Uaktualniono uprawnienia i hasÅ‚o";
 $lang['msg_permupd']         = "Uaktualniono uprawnienia";
-$lang['msg_userdel']         = "Usuniêto u¿ytkownika";
-$lang['msg_loggedoff']       = "Zosta³e¶ wylogowany";
-$lang['msg_invalidchar']     = "Niedozwolone znaki w nazwie u¿ytkownika";
-$lang['msg_loginfailed']     = "Logowanie nie powiod³o siê";
-$lang['msg_borrowasksubject']= "[VideoDB] Pro¶ba o po¿yczenie %title%";
-$lang['msg_borrowaskmail']   = "U¿ytkownik %user% (%usermail%) poprosi³ o po¿yczenie filmu \"%title%\" (DiskID %diskid%) od Ciebie.\n\nVideo-URL: %url%\n\n\n\n-- \nWys³ane przez VideoDB";
-$lang['msg_borrowaskok']     = "Twoja pro¶ba zosta³a wys³ana do w³a¶ciciela filmu. Wkrótce powinien wys³aæ odpowied¼.";
-$lang['msg_borrowaskfail']   = "Wys³anie twojej pro¶by nie uda³o siê. Skontaktuj siê z w³a¶cicielem filmu w inny sposób.";
+$lang['msg_userdel']         = "UsuniÄ™to uÅ¼ytkownika";
+$lang['msg_loggedoff']       = "ZostaÅ‚eÅ› wylogowany";
+$lang['msg_invalidchar']     = "Niedozwolone znaki w nazwie uÅ¼ytkownika";
+$lang['msg_loginfailed']     = "Logowanie nie powiodÅ‚o siÄ™";
+$lang['msg_borrowasksubject']= "[VideoDB] ProÅ›ba o poÅ¼yczenie %title%";
+$lang['msg_borrowaskmail']   = "UÅ¼ytkownik %user% (%usermail%) poprosiÅ‚ o poÅ¼yczenie filmu \"%title%\" (DiskID %diskid%) od Ciebie.\n\nVideo-URL: %url%\n\n\n\n-- \nWysÅ‚ane przez VideoDB";
+$lang['msg_borrowaskok']     = "Twoja proÅ›ba zostaÅ‚a wysÅ‚ana do wÅ‚aÅ›ciciela filmu. WkrÃ³tce powinien wysÅ‚aÄ‡ odpowiedÅº.";
+$lang['msg_borrowaskfail']   = "WysÅ‚anie twojej proÅ›by nie udaÅ‚o siÄ™. Skontaktuj siÄ™ z wÅ‚aÅ›cicielem filmu w inny sposÃ³b.";
+$lang['msg_cachecleared']    = "Cache oprÃ³Å¼niono.";
 
 #
 # Phrases
 #
-$lang['available']           = "jest dostêpny.";
-$lang['deleted']             = "Video zosta³o usuniête.";
-$lang['genre_desc']          = "Szukaj tylko filmów tych gatunków (wspólnie)";
-$lang['keywords_desc']       = "S³owa kluczowe s± wyszukiwane w polach wybranych obok. Nie wolno u¿ywaæ s³ów kluczowych AND, OR, NOT.";
-$lang['lentto']              = "jest wypo¿yczone do";
-$lang['listallfiles']        = "poka¿ wszystkie pliki";
-$lang['look_imdb']           = "spróbuj uzupe³niæ brakuj±ce dane z IMDB";
-$lang['really_del']          = "Naprawdê usun±æ";
-$lang['returned']            = "Zosta³ zwrócony";
-$lang['notavail']            = "<span class=\"notavail\">NIE DOSTÊPNE</span><br />wypo¿yczone do";
-$lang['curlent']             = "Aktualnie wypo¿yczone:";
+
+$lang['delete_movie']		 = "Za chwilÄ™ usuniesz film. JesteÅ› pewny, Å¼e chcesz kontynuowaÄ‡?";
+$lang['delete_user']		 = "Za chwilÄ™ usuniesz uÅ¼ytkownika. JesteÅ› pewny, Å¼e chcesz kontynuowaÄ‡?";
+$lang['deleted']             = "Film zostaÅ‚ usuniÄ™ty.";
+
+$lang['available']           = "jest dostÄ™pny.";
+$lang['genre_desc']          = "Szukaj tylko filmÃ³w tych gatunkÃ³w (wspÃ³lnie)";
+$lang['keywords_desc']       = "SÅ‚owa kluczowe sÄ… wyszukiwane w polach wybranych obok. Nie wolno uÅ¼ywaÄ‡ sÅ‚Ã³w kluczowych AND, OR, NOT.";
+$lang['lentto']              = "jest wypoÅ¼yczone do";
+$lang['listallfiles']        = "pokaÅ¼ wszystkie pliki";
+$lang['look_imdb']           = "sprÃ³buj uzupeÅ‚niÄ‡ brakujÄ…ce dane z IMDB";
+$lang['really_del']          = "NaprawdÄ™ usunÄ…Ä‡";
+$lang['returned']            = "ZostaÅ‚ zwrÃ³cony";
+$lang['notavail']            = "<span class=\"notavail\">NIE DOSTÄ˜PNE</span><br />wypoÅ¼yczone do";
+$lang['curlent']             = "Aktualnie wypoÅ¼yczone:";
+$lang['curlentfrom']         = "Aktualnie wypoÅ¼yczone od uÅ¼ytkownika:";
 $lang['fieldselect']         = "Szukaj tylko w tych polach";
 $lang['selectall']           = "Zaznacz wszystko";
+$lang['selectnone']          = "Odznacz wszystko";
 
 #
-# Menue
+# Menu
 #
-$lang['browse']              = "przegl±daj";
-$lang['borrow']              = "wypo¿ycz";
-$lang['delete']              = "usuñ";
-$lang['edit']                = "edytuj";
-$lang['copy']                = "kopiuj";
+
+$lang['menu']                = "Menu";
+$lang['browse']              = "PrzeglÄ…daj";
+$lang['export']				 = "Eksport";
+$lang['manage']				 = "ZarzÄ…dzaj";
+$lang['options']			 = "Opcje";
+$lang['borrow']              = "WypoÅ¼ycz";
+$lang['delete']              = "UsuÅ„";
+$lang['edit']                = "Edytuj";
+$lang['perm']                = "Uprawnienia";
+$lang['copy']                = "Kopiuj";
 $lang['n_e_w']               = "nowy";
 $lang['random']              = "losowo";
 $lang['search']              = "szukaj";
-$lang['statistics']          = "statystyka";
+$lang['statistics']          = "Statystyka";
 $lang['view']                = "zobacz";
-$lang['setup']               = "ustawienia";
+$lang['setup']               = "Ustawienia";
+$lang['tools']               = "NarzÄ™dzia";
+$lang['contrib']             = "NarzÄ™dzia";
 $lang['imdbbrowser']         = "strona IMDB";
 $lang['help']                = "pomoc";
-$lang['searchimdb']          = "Szukaj w IMDB";
-$lang['profile']             = "profil";
+$lang['profile']             = "Profil";
+$lang['users']             	 = "UÅ¼ytkownicy";
+$lang['filter']              = "Filtr";
+
+#
+# Media player (boxee) controls
+#
+
+$lang['play']               = "OdtwÃ³rz";
 
 #
 # Radio-Buttons
 #
+
 $lang['radio_all']           = "wszystkie";
 $lang['radio_new']           = "nowe";
-$lang['radio_showtv']        = "poka¿ odcinki TV";
+$lang['radio_showtv']        = "pokaÅ¼ odcinki TV";
 $lang['radio_unseen']        = "nie obejrzane";
-$lang['radio_wanted']        = "lista ¿yczeñ";
+$lang['radio_wanted']        = "lista Å¼yczeÅ„";
 
 $lang['radio_look_ignore']   = "ignoruj";
-$lang['radio_look_lookup']   = "dodaj brakuj±ce";
+$lang['radio_look_lookup']   = "dodaj brakujÄ…ce";
 $lang['radio_look_overwrite']= "nadpisz";
 $lang['radio_look_caption']  = "Pobranie danych";
+
+$lang['quicksearch']         = "Szybkie szukanie";
+$lang['working']             = "PracujÄ™...";
+
+$lang['filter_any']          = '<wszystkie>';
+$lang['filter_available']    = '<dostÄ™pne>';
+
+#
+# Trailers
+#
+
+$lang['trailer_search']  	   = "Szukam zwiastuna...";
+$lang['trailer_show']  	   = "PokaÅ¼ zwiastuny";
 
 #
 # Statistics
 #
-$lang['averagefilesize']     = "¶redni rozmiar pliku";
-$lang['averageruntime']      = "¶redni czas";
-$lang['languages']           = "Jêzyki";
-$lang['multiple']            = "<small>(mo¿liwe wiele<br />gatunków na video)</small>";
-$lang['numberdisks']         = "liczba dysków";
-$lang['totalfiles']          = "w sumie plików";
-$lang['totalruntime']        = "w sumie czas";
-$lang['totalseen']           = "w sumie obejrzano";
-$lang['totalsize']           = "w sumie rozmiar";
+
+$lang['averagefilesize']     = "Åšredni rozmiar pliku";
+$lang['averageruntime']      = "Åšredni czas";
+$lang['languages']           = "JÄ™zyki";
+$lang['multiple']            = "<small>(moÅ¼liwe wiele<br />gatunkÃ³w na video)</small>";
+$lang['numberdisks']         = "Liczba dyskÃ³w";
+$lang['totalfiles']          = "W sumie plikÃ³w";
+$lang['totalruntime']        = "W sumie czas";
+$lang['totalseen']           = "W sumie obejrzano";
+$lang['totalsize']           = "W sumie rozmiar";
 $lang['tv_episodes']         = "Odcinki TV";
 $lang['videobygen']          = "Gatunkami";
 $lang['videobyvcodec']       = "Kodekami video";
-$lang['videobymedia']        = "Rodzajem no¶nika";
+$lang['videobyacodec']       = "Kodekami audio";
+$lang['videobymedia']        = "Rodzajem noÅ›nika";
+$lang['statistics_for']      = "Statystyki dla";
 
 #
 # Lookup Popup
 #
 
 $lang['l_search']            = "Szukaj";
-$lang['l_select']            = "Wybierz pasuj±cy tytu³:";
+$lang['l_select']            = "Wybierz pasujÄ…cy tytuÅ‚:";
 $lang['l_nothing']           = "Niczego nie znaleziono.";
 $lang['l_selfsearch']        = "Szukaj samodzielnie";
+$lang['aka']                 = "Aka";
 
 #
-#Config Help
+# Config Help
 #
 
-$lang['enable']              = "w³±cz";
+$lang['opt_general']          = 'OgÃ³lne';
+$lang['opt_custom']           = 'WÅ‚asne pola';
+$lang['opt_engines']          = 'Dostawcy treÅ›ci';
+$lang['opt_security']         = 'SieÄ‡ i bezpieczeÅ„stwo';
+$lang['opt_caching']          = 'Caching';
+$lang['opt_apikeys']       	= 'API Keys';
 
-$lang['help_langn']          = "Jêzyk";
-$lang['help_lang']           = "Wybierz kod twojego kraju. Je¿eli twój jêzyk nie jest dostêpny przet³umacz angielski plik w katalogu <span class=\"examples\">language</span> i wy¶lij do mnie.";
+$lang['enable']              = "wÅ‚Ä…cz";
+
+$lang['help_langn']          = "JÄ™zyk";
+$lang['help_lang']           = "Wybierz kod twojego kraju. JeÅ¼eli twÃ³j jÄ™zyk nie jest dostÄ™pny przetÅ‚umacz angielski plik w katalogu <span class=\"examples\">language</span> i wyÅ›lij do mnie.";
 $lang['help_autoidn']        = "Automatyczny DiskID";
-$lang['help_autoid']         = "VideoDB u¿ywa DiskID do identyfikacji dysków. Jest on ró¿ny od VideoID przypisywanego ka¿demu video automagicznie. To pozwala mieæ wiele plików video na jednym dysku i gdy dysk zostanie wypo¿yczony wszystkie one stan± siê niedostêpne.<br/> Je¶li nie masz wymy¶lnego sposobu nazywania dysków i chcesz je tylko ponumerowaæ, VideoDB mo¿e zasugerowaæ ID przy dodawaniu nowego video, wówczas w³±cz tê opcjê."; 
+$lang['help_autoid']         = "VideoDB uÅ¼ywa DiskID do identyfikacji dyskÃ³w. Jest on rÃ³Å¼ny od VideoID przypisywanego kaÅ¼demu video automagicznie. To pozwala mieÄ‡ wiele plikÃ³w video na jednym dysku i gdy dysk zostanie wypoÅ¼yczony wszystkie one stanÄ… siÄ™ niedostÄ™pne.<br/> JeÅ›li nie masz wymyÅ›lnego sposobu nazywania dyskÃ³w i chcesz je tylko ponumerowaÄ‡, VideoDB moÅ¼e zasugerowaÄ‡ ID przy dodawaniu nowego video, wÃ³wczas wÅ‚Ä…cz tÄ™ opcjÄ™."; 
 $lang['help_templaten']      = "Szablon";
-$lang['help_template']       = "Tu wybierasz skórê. Ka¿dy szablon mo¿e mieæ wiele styli (schematów kolorów). Po prostu wypróbuj je i wybierz ten, który najbardziej ci siê podoba :-)."; 
-$lang['help_mediadefaultn']  = "Domy¶lny no¶nik";
-$lang['help_mediadefault']   = "Wybierz no¶nik, który bêdzie zasugerowany przy dodawaniu nowego video.";
-$lang['help_langdefaultn']   = "Domy¶lny jêzyk";
-$lang['help_langdefault']    = "To ustawienie dotyczy domy¶lnego jêzyka jaki zostanie przypisany przy dodawaniu nowego video. Zostaw to pole puste aby tego unikn±æ."; 
-$lang['help_languageflagsn'] = "Flagi jêzykowe";
-$lang['help_languageflags']  = "Tutaj mo¿esz wybraæ flagi, które bêd± dostêpne jako przyciski JavaScript podczas edycji do szybkiego wyboru jêzyka.<br />Ogranicz ich liczbê do nie wiêcej ni¿ piêciu.";
-$lang['help_filterdefaultn'] = "Domy¶lny filtr";
-$lang['help_filterdefault']  = "To strona która zostanie pokazana gdy w³±czysz VideoDB.";
-$lang['help_showtvn']        = "Poka¿ odcinki TV";
-$lang['help_showtv']         = "W³±cz tê opcjê je¶li chcesz aby odcinki TV by³y domy¶lnie pokazywane przy przegl±daniu bazy.";
+$lang['help_template']       = "Tu wybierasz skÃ³rÄ™. KaÅ¼dy szablon moÅ¼e mieÄ‡ wiele styli (schematÃ³w kolorÃ³w). Po prostu wyprÃ³buj je i wybierz ten, ktÃ³ry najbardziej ci siÄ™ podoba :-)."; 
+$lang['help_mediadefaultn']  = "DomyÅ›lny noÅ›nik";
+$lang['help_mediadefault']   = "Wybierz noÅ›nik, ktÃ³ry bÄ™dzie zasugerowany przy dodawaniu nowego video.";
+$lang['help_langdefaultn']   = "DomyÅ›lny jÄ™zyk";
+$lang['help_langdefault']    = "To ustawienie dotyczy domyÅ›lnego jÄ™zyka jaki zostanie przypisany przy dodawaniu nowego video. Zostaw to pole puste aby tego uniknÄ…Ä‡."; 
+$lang['help_languageflagsn'] = "Flagi jÄ™zykowe";
+$lang['help_languageflags']  = "Tutaj moÅ¼esz wybraÄ‡ flagi, ktÃ³re bÄ™dÄ… dostÄ™pne jako przyciski JavaScript podczas edycji do szybkiego wyboru jÄ™zyka.<br />Ogranicz ich liczbÄ™ do nie wiÄ™cej niÅ¼ piÄ™ciu.";
+$lang['help_filterdefaultn'] = "DomyÅ›lny filtr";
+$lang['help_filterdefault']  = "To strona ktÃ³ra zostanie pokazana gdy wÅ‚Ä…czysz VideoDB.";
+$lang['help_showtvn']        = "PokaÅ¼ odcinki TV";
+$lang['help_showtv']         = "WÅ‚Ä…cz tÄ™ opcjÄ™ jeÅ›li chcesz aby odcinki TV byÅ‚y domyÅ›lnie pokazywane przy przeglÄ…daniu bazy.";
 $lang['help_orderallbydiskn']= "Listuj wg DiskID";
-$lang['help_orderallbydisk'] = "Je¶li to jest w³±czone, to lista \"wszystkie\" bêdzie posortowana wed³ug DiskID, a nie tytu³ów.";
-$lang['help_customn']        = "W³asne pola";
-$lang['help_custom']         = "Mo¿esz zdefiniowaæ do czterech w³asnych dodatkowych pól. Ka¿de z nich o pojemno¶ci 255 znaków. Tutaj mo¿esz nadaæ im nazwy i wybraæ wtyczki które zostan± u¿yte do pokazania pól. Aby wy³±czyæ pole zostaw nazwê pust±";
-$lang['help_localnetn']      = "Sieæ lokalna";
-$lang['help_localnet']       = "Tutaj mo¿esz opisaæ swoj± lokaln± sieæ. U¿ytkownicy ³±czacy siê z VideoDB spoza niej nie mog± edytowaæ danych. To jest <a href=\"http://www.php.net/manual/en/pcre.pattern.syntax.php\" target=\"_blank\">wyra¿enie regularne</a> wiêc opis mo¿e byæ nawet ca³kiem skomplikowany.<p>Przyk³ady:<br /><span class=\"example\">^192\.168\.1\.</span> pozwala 192.168.1.1 - 192.168.1.254<br /><span class=\"example\">^(192\.168\.1\.|127\.0\.0\.1$)</span> jak wy¿ej oraz localhost<br /><span class=\"example\">^192\.168\.1\.22$</span> pozwala tylko IP 192.168.1.22<br /><span class=\"example\">^(192\.168\.1\.22|127\.0\.0\.1)$</span> jak wy¿ej plus localhost<br /> puste pole pozwala na dostêp wszystkim<br /></p> Uwaga: je¶li tutaj pope³nisz b³±d to mo¿esz sam siê odci±æ od strony konfiguracyjnej!";
+$lang['help_orderallbydisk'] = "JeÅ›li to jest wÅ‚Ä…czone, to lista \"wszystkie\" bÄ™dzie posortowana wedÅ‚ug DiskID, a nie tytuÅ‚Ã³w.";
+$lang['help_removearticlesn']= "UsuÅ„ rodzajniki (articles)";
+$lang['help_removearticles'] = "JeÅ›li zaznaczone rodzajniki sÄ… usuwane z dodawanych filmÃ³w np. The Angel zostanie zachowane jako Angel, The.";
+$lang['help_customn']        = "WÅ‚asne pola";
+$lang['help_custom']         = "MoÅ¼esz zdefiniowaÄ‡ do czterech wÅ‚asnych dodatkowych pÃ³l. KaÅ¼de z nich o pojemnoÅ›ci 255 znakÃ³w. Tutaj moÅ¼esz nadaÄ‡ im nazwy i wybraÄ‡ wtyczki ktÃ³re zostanÄ… uÅ¼yte do pokazania pÃ³l. Aby wyÅ‚Ä…czyÄ‡ pole zostaw nazwÄ™ pustÄ…";
+$lang['help_localnetn']      = "SieÄ‡ lokalna";
+$lang['help_localnet']       = "Tutaj moÅ¼esz opisaÄ‡ swojÄ… lokalnÄ… sieÄ‡. UÅ¼ytkownicy Å‚Ä…czacy siÄ™ z VideoDB spoza niej nie mogÄ… edytowaÄ‡ danych. To jest <a href=\"http://www.php.net/manual/en/pcre.pattern.syntax.php\" target=\"_blank\">wyraÅ¼enie regularne</a> wiÄ™c opis moÅ¼e byÄ‡ nawet caÅ‚kiem skomplikowany.<p>PrzykÅ‚ady:<br /><span class=\"example\">^192\.168\.1\.</span> pozwala 192.168.1.1 - 192.168.1.254<br /><span class=\"example\">^(192\.168\.1\.|127\.0\.0\.1$)</span> jak wyÅ¼ej oraz localhost<br /><span class=\"example\">^192\.168\.1\.22$</span> pozwala tylko IP 192.168.1.22<br /><span class=\"example\">^(192\.168\.1\.22|127\.0\.0\.1)$</span> jak wyÅ¼ej plus localhost<br /> puste pole pozwala na dostÄ™p wszystkim<br /></p> Uwaga: jeÅ›li tutaj popeÅ‚nisz bÅ‚Ä…d to moÅ¼esz sam siÄ™ odciÄ…Ä‡ od strony konfiguracyjnej!";
 $lang['help_imdbOverwriten'] = "IMDB nadpisuje";
-$lang['help_imdbOverwrite']  = "Wyniki z IMDB domy¶lnie nie nadpisuj± danych. Je¶li w³±czysz t± opcjê - wyniki wyszukiwania zast±pi± poprzednie dane.";
+$lang['help_imdbOverwrite']  = "Wyniki z IMDB domyÅ›lnie nie nadpisujÄ… danych. JeÅ›li wÅ‚Ä…czysz tÄ… opcjÄ™ - wyniki wyszukiwania zastÄ…piÄ… poprzednie dane.";
 $lang['help_IMDBagen']       = "Wiek cache IMDB";
-$lang['help_IMDBage']        = "VideoDB mo¿e trzymaæ wyniki zapytañ IMDB w cache aby unikn±æ niepotrzebnych czasoch³onnych po³±czeñ. Tutaj mo¿esz zdefiniowaæ maksymalny czas (w sekundach) po jakim lokalne dokumenty bêd± usuwane. Domy¶lnie jest to 5 dni.";
+$lang['help_IMDBage']        = "VideoDB moÅ¼e trzymaÄ‡ wyniki zapytaÅ„ IMDB w cache aby uniknÄ…Ä‡ niepotrzebnych czasochÅ‚onnych poÅ‚Ä…czeÅ„. Tutaj moÅ¼esz zdefiniowaÄ‡ maksymalny czas (w sekundach) po jakim lokalne dokumenty bÄ™dÄ… usuwane. DomyÅ›lnie jest to 5 dni.";
 $lang['help_thumbnailn']     = "Miniaturki";
-$lang['help_thumbnail']      = "W³±czenie pozwoli na pokazywanie miniaturki ok³adki na li¶cie przegl±dania. Mo¿esz to wy³±czyæ je¶li dzia³a za wolno lub przeszkadza ci.";
+$lang['help_thumbnail']      = "WÅ‚Ä…czenie pozwoli na pokazywanie miniaturki okÅ‚adki na liÅ›cie przeglÄ…dania. MoÅ¼esz to wyÅ‚Ä…czyÄ‡ jeÅ›li dziaÅ‚a za wolno lub przeszkadza ci.";
 $lang['help_castcolumnsn']   = "Obsada w kolumnach";
-$lang['help_castcolumns']    = "Tutaj wybierasz w ilu kolumnach bêdzie wypisana obsada w szczegó³owym podgl±dzie video. Jest to uzale¿nione od rozdzielczo¶ci ekranu.<br />2 jest w porz±dku dla 1152x864, dla ni¿szych rozdzielczo¶ci ustaw to na jeden. Je¶li masz du¿y monitor - ustaw na wiêcej.";
+$lang['help_castcolumns']    = "Tutaj wybierasz w ilu kolumnach bÄ™dzie wypisana obsada w szczegÃ³Å‚owym podglÄ…dzie video. Jest to uzaleÅ¼nione od rozdzielczoÅ›ci ekranu.<br />2 jest w porzÄ…dku dla 1152x864, dla niÅ¼szych rozdzielczoÅ›ci ustaw to na jeden. JeÅ›li masz duÅ¼y monitor - ustaw na wiÄ™cej.";
 $lang['help_listcolumnsn']   = "Lista w kolumnach";
-$lang['help_listcolumns']    = "Aktualnie u¿ywane tylko w szablonie 'modern'. Ustala w ilu kolumnach ma byæ wy¶wietlana lista przy przegl±daniu tytu³ów. Je¶li ustawisz na 1 to bêdzie wygl±daæ tak samo jak w domy¶lnym szablonie.";
+$lang['help_listcolumns']    = "Aktualnie uÅ¼ywane tylko w szablonie 'modern'. Ustala w ilu kolumnach ma byÄ‡ wyÅ›wietlana lista przy przeglÄ…daniu tytuÅ‚Ã³w. JeÅ›li ustawisz na 1 to bÄ™dzie wyglÄ…daÄ‡ tak samo jak w domyÅ›lnym szablonie.";
 $lang['help_proxy_hostn']    = "Adres serwera proxy";
-$lang['help_proxy_host']     = "Je¶li komputer na którym dzia³a VidoDB jest ukryty za proxy mo¿esz tutaj podaæ adres serwera z którego ma korzystaæ. Zostaw pole puste je¶il tego nie potrzebujesz.";
+$lang['help_proxy_host']     = "JeÅ›li komputer na ktÃ³rym dziaÅ‚a VidoDB jest ukryty za proxy moÅ¼esz tutaj podaÄ‡ adres serwera z ktÃ³rego ma korzystaÄ‡. Zostaw pole puste jeÅ›il tego nie potrzebujesz.";
 $lang['help_proxy_portn']    = "Port serwera proxy";
 $lang['help_proxy_port']     = "Tutaj podaj numer portu serwera proxy. Np. <span class=\"example\">8080</span>.";
-$lang['help_actorpicsn']     = "Zdjêcia aktorów";
-$lang['help_actorpics']      = "To powoduje próbê znalezienia miniaturowego zdjêcia ka¿dego aktora z obsady aby pokazaæ je obok jego nazwiska.";
-$lang['help_thumbAgen']      = "Zdjêcia aktorów - powtórka";
-$lang['help_thumbAge']       = "Tutaj okre¶lasz kiedy ponownie spróbowaæ za³adowaæ zdjêcia które nie zosta³y poprzednio znalezione (czas w sekundach). Domy¶lnie trzy tygodnie.";
-$lang['help_shownewn']       = "Liczba nowych filmów";
-$lang['help_shownew']        = "Tutaj okre¶lasz ile pozycji ma byæ wy¶wietlanych z filtrem \"nowe\".";
-$lang['help_imdbBrowsern']   = "Przegl±darka IMDB";
-$lang['help_imdbBrowser']    = "Pozwala przegl±daæ IMDB z VideoDB i bezpo¶rednio z niej dodawaæ filmy do bazy.";
+$lang['help_actorpicsn']     = "ZdjÄ™cia aktorÃ³w";
+$lang['help_actorpics']      = "To powoduje prÃ³bÄ™ znalezienia miniaturowego zdjÄ™cia kaÅ¼dego aktora z obsady aby pokazaÄ‡ je obok jego nazwiska.";
+$lang['help_thumbAgen']      = "ZdjÄ™cia aktorÃ³w - powtÃ³rka";
+$lang['help_thumbAge']       = "Tutaj okreÅ›lasz kiedy ponownie sprÃ³bowaÄ‡ zaÅ‚adowaÄ‡ zdjÄ™cia ktÃ³re nie zostaÅ‚y poprzednio znalezione (czas w sekundach). DomyÅ›lnie trzy tygodnie.";
+$lang['help_youtubekeyn']    = "Klucz YouTube API";
+$lang['help_youtubekey']     = "Uzyskaj klucz developera YouTube z <a href='http://www.youtube.com/my_profile_dev'>http://www.youtube.com/my_profile_dev</a> aby wÅ‚Ä…czyÄ‡ wsparcie dla YouTuba.";
+$lang['help_shownewn']       = "Liczba nowych filmÃ³w";
+$lang['help_shownew']        = "Tutaj okreÅ›lasz ile pozycji ma byÄ‡ wyÅ›wietlanych z filtrem \"nowe\".";
+$lang['help_imdbBrowsern']   = "PrzeglÄ…darka IMDB";
+$lang['help_imdbBrowser']    = "Pozwala przeglÄ…daÄ‡ IMDB z VideoDB i bezpoÅ›rednio z niej dodawaÄ‡ filmy do bazy.";
 
-$lang['help_multiuser']      = "Ta opcja w³±cza obs³ugê wielu u¿ytkowników przez VideoDB. Ka¿dy z nich uwierzytelnia siê w³asn± nazw± i has³em.";
-$lang['help_multiusern']     = "Obs³uga wielu u¿ytkowników";
-$lang['help_usermanager']    = "Ten link pozwoli ci dodawaæ, zmieniaæ i usuwaæ uprawnienia i u¿ytkowników.";
-$lang['help_usermanagern']   = "Zarz±dzanie u¿ytkownikami";
-$lang['help_denyguest']      = "W trybie wielu u¿ytkowników, w³±czenie tej opcji zablokuje dostêp wszystkim poza uwierzytelnionymi u¿ytkownikami.";
-$lang['help_denyguestn']     = "Bez dostêpu publicznego";
-$lang['help_adultgenres']    = "Filmy wybranych tutaj gatunków bêd± widoczne tylko dla u¿ytkowników którzy s± do tego uprawnieni. Przytrzymaj CTRL aby zaznaczyæ wiêcej gatunków. Ta opcja ma znaczenie tylko w trybie wielu u¿ytkowników.";
-$lang['help_adultgenresn']   = "Gatunki dla doros³ych";
-$lang['help_pageno']   	   = "Liczba elementów do wy¶wietlenia na ka¿dej stronie. Zostaw puste lub wpisz 0 aby wy³±czyæ dzielenie na strony.";
-$lang['help_pagenon']        = "Liczba elementów na stronie";
+$lang['help_multiuser']      = "Ta opcja wÅ‚Ä…cza obsÅ‚ugÄ™ wielu uÅ¼ytkownikÃ³w przez VideoDB. KaÅ¼dy z nich uwierzytelnia siÄ™ wÅ‚asnÄ… nazwÄ… i hasÅ‚em.";
+$lang['help_multiusern']     = "ObsÅ‚uga wielu uÅ¼ytkownikÃ³w";
+$lang['help_usermanager']    = "Ten link pozwoli ci dodawaÄ‡, zmieniaÄ‡ i usuwaÄ‡ uprawnienia i uÅ¼ytkownikÃ³w.";
+$lang['help_usermanagern']   = "ZarzÄ…dzanie uÅ¼ytkownikami";
+$lang['help_permmanager']    = "Ten link pozwoli ci zarzÄ…dzaÄ‡ uprawnieniami.";
+$lang['help_permmanagern']   = "ZarzÄ…dzanie uprawnieniami";
+$lang['help_denyguest']      = "W trybie wielu uÅ¼ytkownikÃ³w, wÅ‚Ä…czenie tej opcji zablokuje dostÄ™p wszystkim poza uwierzytelnionymi uÅ¼ytkownikami.";
+$lang['help_denyguestn']     = "Bez dostÄ™pu publicznego";
+$lang['help_adultgenres']    = "Filmy wybranych tutaj gatunkÃ³w bÄ™dÄ… widoczne tylko dla uÅ¼ytkownikÃ³w ktÃ³rzy sÄ… do tego uprawnieni. Przytrzymaj CTRL aby zaznaczyÄ‡ wiÄ™cej gatunkÃ³w. Ta opcja ma znaczenie tylko w trybie wielu uÅ¼ytkownikÃ³w.";
+$lang['help_adultgenresn']   = "Gatunki dla dorosÅ‚ych";
+$lang['help_pageno']   	   = "Liczba elementÃ³w do wyÅ›wietlenia na kaÅ¼dej stronie. Zostaw puste lub wpisz 0 aby wyÅ‚Ä…czyÄ‡ dzielenie na strony.";
+$lang['help_pagenon']        = "Liczba elementÃ³w na stronie";
+
+$lang['help_engine']         = "Aktywacja tej opcji pozwoli videoDB pobieraÄ‡ dane z %s.";
+$lang['help_defaultenginen'] = "DomyÅ›lny Dostawca TreÅ›ci";
+$lang['help_defaultengine']  = "Wybierz skÄ…d videoDB ma domyÅ›lnie pobieraÄ‡ treÅ›ci.";
+$lang['help_enginegoogle']   = "Google wspiera tylko wyszukiwanie obrazÃ³w.";
+$lang['help_engexperimental']= "<br/>Ten dostawca treÅ›ci jest ciÄ…gle na etapie eksperymentÃ³w i moÅ¼e nie dziaÅ‚aÄ‡ prawidÅ‚owo.";
+
+$lang['help_showtoolsn']     = "PokaÅ¼ narzÄ™dzia";
+$lang['help_showtools']      = "Menu NarzÄ™dzia pokaÅ¼e zawartoÅ›Ä‡ katalogu <code>contrib</code>. ZawartoÅ›Ä‡ tego katalogu to wartoÅ›ciowa narzÄ™dzia do videoDB, ale nie w peÅ‚ni przetestowane ich uÅ¼ywanie moÅ¼e byÄ‡ niebezpieczne.";
+
 $lang['page']                = "Strona";
 $lang['of']                  = "";
-$lang['records']             = "elementów";
+$lang['records']             = "elementÃ³w";
+
+$lang['warn_noOwner']        = "Dane nie zachowane - najpierw wybierz wÅ‚aÅ›ciciela!";
+
+$lang['order']				 = "Sortuj";
 
 ?>
