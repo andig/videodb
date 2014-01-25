@@ -120,7 +120,7 @@
 
 			{if $pdf || $xls || $xml}
 			<li class="has-dropdown">
-				<a href="#">Export</a>
+				<a href="#">{$lang.export}</a>
 
 				<ul class="dropdown">
 					{if $pdf}<li><a href="{$pdf}export=pdf&ext=.pdf">Adobe PDF</a></li>{/if}
@@ -131,7 +131,7 @@
 			{/if}
 
 			<li class="has-dropdown {if $header.active == 'borrow' || $header.active == 'stats'}active{/if}">
-				<a href="#">Manage</a>
+				<a href="#">{$lang.manage}</a>
 
 				<ul class="dropdown">
 					{if $header.borrow}<li{if $header.active == 'borrow'} class="active"{/if}><a href="{$header.borrow}">{$lang.borrow}</a></li>{/if}
@@ -141,7 +141,7 @@
 
 			{if $header.contrib || $header.profile || $header.setup}
 			<li class="has-dropdown {if $header.active == 'setup' || $header.active == 'profile' || $header.active == 'contrib'}active{/if}">
-				<a href="{if $header.setup}{$header.setup}{else}{if $header.profile}{$header.profile}{else}#{/if}{/if}">Options</a>
+				<a href="{if $header.setup}{$header.setup}{else}{if $header.profile}{$header.profile}{else}#{/if}{/if}">{$lang.options}</a>
 
 				<ul class="dropdown">
 					{if $header.setup}<li{if $header.active == 'setup'} class="active"{/if}><a href="{$header.setup}">{$lang.setup}</a></li>{/if}

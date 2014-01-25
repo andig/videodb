@@ -44,6 +44,7 @@ $lang['save']                = "Save";
 $lang['back']                = "Back";
 $lang['coverupload']         = "Cover Upload";
 $lang['visit']               = "Visit";
+$lang['input_browse']        = "Browse";
 $lang['date']                = "Date";
 $lang['fetchtime']           = "Fetch time";
 $lang['cachesize']           = "Cache size";
@@ -56,6 +57,7 @@ $lang['displayed']           = "displayed";
 $lang['add_another']         = "Add another";
 $lang['rating']              = 'Rating';
 $lang['extid']               = 'External Id';
+$lang['bytes']               = 'Bytes';
 
 #
 # Edit
@@ -63,8 +65,11 @@ $lang['extid']               = 'External Id';
 
 $lang['main_details']        = 'Main Details';
 $lang['media_details']       = 'Media Details';
+$lang['description_details'] = 'Description';
 $lang['file_details']        = 'File Details';
+$lang['custom_details']      = 'Custom fields';
 $lang['cancel']        		 = 'Cancel';
+$lang['create_']             = 'Create:';
 
 #
 # Show
@@ -124,6 +129,7 @@ $lang['msg_borrowasksubject']= "[VideoDB] Borrow Request for %title%";
 $lang['msg_borrowaskmail']   = "User %user% (%usermail%) asked to borrow the movie \"%title%\" (DiskID %diskid%) from you.\n\nVideo-URL: %url%\n\n\n\n-- \nSent by VideoDB";
 $lang['msg_borrowaskok']     = "Your request was sent to the movies owner. You should hear from him soon.";
 $lang['msg_borrowaskfail']   = "The sending of your request failed for some reason. You should contact the movies owner your self.";
+$lang['msg_cachecleared']    = "Cache cleared.";
 
 #
 # Phrases
@@ -154,6 +160,9 @@ $lang['selectnone']          = "Select none";
 
 $lang['menu']                = "Menu";
 $lang['browse']              = "Browse";
+$lang['export']              = "Export";
+$lang['manage']              = "Manage";
+$lang['options']             = "Options";
 $lang['borrow']              = "Borrow";
 $lang['delete']              = "Delete";
 $lang['edit']                = "Edit";
@@ -225,6 +234,7 @@ $lang['videobygen']          = "Videos by genres";
 $lang['videobyvcodec']       = "Video codecs";
 $lang['videobyacodec']       = "Audio codecs";
 $lang['videobymedia']        = "Media types";
+$lang['statistics_for']      = "Statistics for";
 
 #
 # Lookup Popup

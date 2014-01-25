@@ -12,7 +12,7 @@
     <h3 class="subheader">{$lang.statistics}</h3>
 
     {if $owners}
-    <h6 class="subheader">Statistics for</h6>
+    <h6 class="subheader">{$lang.statistics_for}</h6>
     <form action="stats.php">
     	{html_options name=owner options=$owners selected=$owner class="autosubmit"}
     </form>
