@@ -121,7 +121,7 @@
     				<ul>
     					{foreach item=row from=$stats.count_vcodec}
     					{if $row.video_codec}
-    					<li>{$row.count} <a href="search.php?q={$row.video_codec|escape:url}&amp;fields=video_codec&amp;nowild=1">{$row.name}</a></li>
+    					<li>{$row.count} <a href="search.php?q={$row.video_codec|escape:url}&amp;fields=video_codec&amp;nowild=1">{$row.video_codec}</a></li>
     					{/if}
     					{/foreach}
     				</ul>
