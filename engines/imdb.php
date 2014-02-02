@@ -425,4 +425,54 @@ function imdbActor($name, $actorid)
     return $ary;
 }
 
+/**
+ * Get IMDB recommendations for a specific movie that meets the requirements
+ * of rating and release year.
+ *
+ * @author  Klaus Christiansen <klaus_edwin@hotmail.com>
+ * @param   int     $id      The external movie id.
+ * @param   float   $rating  The minimum rating for the recommended movies.
+ * @param   int     $year    The minimum year for the recommended movies.
+ * @return  array            Associative array with: id, title, rating, year.
+ *                           If error: $CLIENTERROR contains the http error and blank is returned.
+ */
+function imdbRecommendations($id, $required_rating, $required_year)
+{
+    global $CLIENTERROR;
+
+    $url = imdbContentUrl($id).'recommendations';
+    $resp = httpClient($url, true);
+    if (!$resp['success'])
+    {
+        $CLIENTERROR = $resp['error']."\n";
+        return '';
+    }
+
+    $recommendations = array();
+    preg_match_all('#<a href=\"/title/tt(\d+)/\">(.+?)</a>\W+(\d{4}).+?<b>(\d+\.\d+)<\/b>#i', $resp['data'], $ary, PREG_SET_ORDER);
+
+    foreach ($ary as $recommended)
+    {
+        $imdbId = $recommended[1];
+        $title  = $recommended[2];
+        $year   = $recommended[3];
+        $rating = $recommended[4];
+
+        // matching at least required rating?
+        if (empty($required_rating) || (float) $rating < $required_rating) continue;
+
+        // matching at least required year?
+        if (empty($required_year) || (int) $year < $required_year) continue;
+
+        $data = array();
+        $data['id']     = $imdbId;
+        $data['rating'] = $rating;
+        $data['title']  = $title;
+        $data['year']   = $year;
+
+        $recommendations[] = $data;
+    }
+    return $recommendations;
+}
+
 ?>
