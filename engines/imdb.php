@@ -351,20 +351,13 @@ function imdbFixEncoding($data, $resp)
  *
  * @author  Roland Obermayer <robelix@gmail.com>
  * @param   string  $data    IMDB Page data
- * @return  string        Cover Image URL
+ * @return  string           Cover Image URL
  */
 function imdbGetCoverURL($data) {
-
     global $CLIENTERROR;
     global $cache;
 
-<<<<<<< HEAD
-    # link to big-image-page?
-    if (preg_match('/<td .*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?<\/td>/si', $data, $ary) ) {
-
-=======
     if (preg_match('/<td .*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?<img.*?Poster.*?src="(.*?)"/si', $data, $ary)) {
->>>>>>> a2d143b80fbd2ebfa10efe5ca5c63b7cf7a89487
         // Fetch the image page
         $resp = httpClient($ary[2], $cache);
         if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
