@@ -1,10 +1,10 @@
 <?php
 /**
- * Add recommended movies via IMDB
+ * Add recommended movies.
  *
  * @package Contrib
  * @author  Andreas Goetz   <cpuidle@gmx.de>
- * @version $Id: add_recommended_movies.php,v 1.8 2008/06/29 11:13:12 andig2 Exp $
+ * @version $Id: add_recommended_movies.php,v 1.8 2014/02/02 12:00:00 kec2 Exp $
  */
 
 // move out of contrib for includes
@@ -25,15 +25,17 @@ session_write_close();
     <title>Find Movie Recommendations</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta name="description" content="VideoDB" />
+<<<<<<< HEAD
 <!--
     <link rel="stylesheet" href="../templates/modern/compact.css" type="text/css" />
 -->
+=======
+
+>>>>>>> a2d143b80fbd2ebfa10efe5ca5c63b7cf7a89487
     <style>
         .green { color:green }
     </style>
-
 </head>
-
 <body>
 
 <?
@@ -43,10 +45,10 @@ error_reporting(E_ALL ^ E_NOTICE);
 if ($submit)
 {
     // validate form data
-    $required_rating    = (is_numeric($required_rating)) ? (float) $required_rating : '';
-    $required_year      = (is_numeric($required_year)) ? (int) $required_year : '';
+    $required_rating = (is_numeric($required_rating)) ? (float) $required_rating : '';
+    $required_year = (is_numeric($required_year)) ? (int) $required_year : '';
 
-    // get list of all used images
+    // get list of all videos
     $SQL = 'SELECT * FROM '.TBL_DATA;
     if (empty($wishlist)) $SQL .= ' WHERE mediatype != '.MEDIA_WISHLIST;
     $result = runSQL($SQL);
@@ -54,13 +56,17 @@ if ($submit)
     foreach ($result as $video)
     {
         if (empty($video['imdbID'])) continue;
+        $engine = strtoupper(engineGetEngine($video['imdbID']));
+        echo "Fetching recommendations for <b>{$video['title']}</b> ($engine Id {$video['imdbID']})<br/>";
 
-        $engine = engineGetEngine($video['imdbID']);
-        if ($engine == 'imdb')
+        $data = engineGetRecommendations($video['imdbID'], $required_rating, $required_year, 'imdb');
+        if (!empty($CLIENTERROR))
         {
-            echo "Fetching recommendations for {$video['title']} (IMDB Id {$video['imdbID']})<br/>\n";
-            flush();
+            echo $CLIENTERROR."<br/>";
+            continue;
+        }
 
+<<<<<<< HEAD
             $url = engineGetRecommendationsUrl($video['imdbID'], 'imdb');
 
             $resp = httpClient($url, true);
@@ -69,10 +75,27 @@ if ($submit)
                 echo($resp['error']."<br/>");
                 continue;
             }
+=======
+        if (empty($data))
+        {
+            // sometimes there are no recommendations for a movie. This is true for Underworld: imdbId 0320691
+            echo "No recommendations for {$video['title']}.<br/><br/>";
+            continue;
+        }
 
-            preg_match_all('#<a href="/title/tt(\d+)/">(.+?)</a>#i', $resp['data'], $ary, PREG_SET_ORDER);
-            foreach ($ary as $recommend)
+        echo '<table border="1">';
+        echo "    <tr>";
+        echo "        <th>Title</th> <th>Year</th> <th>Rating</th> <th>Id</th>";
+        echo "    </tr>";
+
+        foreach ($data as $recommended)
+        {
+            $available = (count(runSQL("SELECT * FROM ".TBL_DATA." WHERE imdbID like '%".$recommended['id']."'")) > 0);
+>>>>>>> a2d143b80fbd2ebfa10efe5ca5c63b7cf7a89487
+
+            if (!$available)
             {
+<<<<<<< HEAD
                 $title  = $recommend[2];
                 $id     = $recommend[1];
 
@@ -113,9 +136,23 @@ if ($submit)
 
                     if ($download && !$available) engineGetData($id);
                 }
+=======
+                $recommended['title'] = '<a class="green" href="../edit.php?save=1&mediatype='.MEDIA_WISHLIST.'&lookup=1&imdbID='.$recommended['id'].
+                             '&title='.urlencode($recommended['title']).'" target="_blank">'.$recommended['title'].' <img src="../images/add.gif" border="0"/></a>';
+>>>>>>> a2d143b80fbd2ebfa10efe5ca5c63b7cf7a89487
             }
+
+            echo "<tr>";
+            echo "<td align=left  width=\"65%\">{$recommended['title']}</td>";
+            echo "<td align=right width=\"10%\">{$recommended['year']}</td>";
+            echo "<td align=right width=\"10%\">{$recommended['rating']}</td>";
+            echo "<td align=right width=\"15%\">{$recommended['id']}</td>";
+            echo "</tr>";
+
+            if ($download && !$available) engineGetData($recommended['id']);
         }
-        echo "<br/>\n\n";
+        echo "</table>";
+        echo "<br/>";
     }
 }
 else

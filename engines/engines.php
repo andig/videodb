@@ -438,4 +438,29 @@ function engine_deduplicate_result($data)
     return $data;
 }
 
+/**
+ * Get recommendations for a specific movie that meets the requirements
+ * of rating and release year.
+ *
+ * @author  Klaus Christiansen <klaus_edwin@hotmail.com>
+ * @param   int     $id      The external movie id.
+ * @param   float   $rating  The minimum rating for the recommended movies.
+ * @param   int     $year    The minimum year for the recommended movies.
+ * @return  array            Associative array with: id, title, rating, year.
+ */
+function engineGetRecommendations($id, $rating, $year, $engine = 'imdb')
+{
+    if (empty($id)) return '';
+
+    require_once($engine.'.php');
+    $func = $engine.'Recommendations';
+
+    if (function_exists($func))
+    {
+        return $func($id, $rating, $year);
+    }
+
+    return '';
+}
+
 ?>
