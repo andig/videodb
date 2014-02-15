@@ -354,21 +354,18 @@ function imdbFixEncoding($data, $resp)
  * @return  string		Cover Image URL
  */
 function imdbGetCoverURL($data) {
-
-    global $imdbServer;
     global $CLIENTERROR;
     global $cache;
 
-    # link to big-image-page?
-    if (preg_match('/<td .*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?<\/td>/si', $data, $ary) ) {
-    
+    if (preg_match('/<td .*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?<img.*?Poster.*?src="(.*?)"/si', $data, $ary)) {
         // Fetch the image page
-        $resp = httpClient($imdbServer.$ary[1], $cache);
-        if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
-
-        preg_match('/<img id="primary-img".*?src="(http:.+?)"/si', $resp['data'], $ary);
-
-        return trim($ary[1]);
+        $resp = httpClient($ary[2], $cache);
+        if (!$resp['success'])
+        {
+            $CLIENTERROR .= $resp['error']."\n";
+            return '';
+        }
+        return trim($ary[2]);
     } else {
         # no image
         return '';
