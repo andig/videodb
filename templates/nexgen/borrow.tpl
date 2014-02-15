@@ -25,7 +25,6 @@
 			{else}
 			<h5 class="subheader">
 				{$lang.diskid} {$diskid} {$lang.available}
-				{$lang.borrowto}:
 			</h5>
 			<div class="row collapse">
 				<div class="small-10 columns">

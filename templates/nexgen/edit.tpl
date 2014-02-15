@@ -32,7 +32,7 @@
 			<div class="row collapse">
 				<div class="small-6 large-6 columns">
 					<dl class="sub-nav" input-checkbox>
-					<dt>Create:</dt>
+					<dt>{$lang.create_}</dt>
 						<dd {if $add_flag}class="active"{/if}><a href="add_flag" value="1">{$lang.add_another}</a></dd>
 					</dl>
 				</div><!-- col -->
@@ -217,14 +217,14 @@
 							<input type="file" name="coverupload" id="coverupload" />
 						</div><!-- col -->
 						<div class="small-2 columns">
-							<a href='#' class="button postfix input-browse">Browse</a>
+							<a href='#' class="button postfix input-browse">{$lang.input_browse}</a>
 						</div><!-- col -->
 					</div>
 				</div><!-- col -->
 			</div><!-- row -->
 
 
-			<h4 class="subheader">Description</h4>
+			<h4 class="subheader">{$lang.description_details}</h4>
 
 			<div class="row">
 				<div class="small-12 large-6 columns">
@@ -263,7 +263,7 @@
 						<div class="small-8 columns">
 							<input type="text" name="filesize" id="filesize" value="{$video.q_filesize}"/>
 						</div><!-- col -->
-						<div class="small-4 columns"><span class="postfix">Bytes</span></div>
+						<div class="small-4 columns"><span class="postfix">{$lang.bytes}</span></div>
 					</div><!-- row -->
 				</div><!-- col -->
 			</div><!-- row -->
@@ -296,7 +296,7 @@
 
 
 			{if $video.custom1name || $video.custom2name || $video.custom3name || $video.custom4name}
-			<h4 class="subheader">Custom Fields</h4>
+			<h4 class="subheader">{$lang.custom_details}</h4>
 
 			<div class="row">
 				<div class="small-6 columns">

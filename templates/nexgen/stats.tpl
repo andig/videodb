@@ -12,7 +12,7 @@
     <h3 class="subheader">{$lang.statistics}</h3>
 
     {if $owners}
-    <h6 class="subheader">Statistics for</h6>
+    <h6 class="subheader">{$lang.statistics_for}</h6>
     <form action="stats.php">
     	{html_options name=owner options=$owners selected=$owner class="autosubmit"}
     </form>
@@ -121,7 +121,7 @@
     				<ul>
     					{foreach item=row from=$stats.count_vcodec}
     					{if $row.video_codec}
-    					<li>{$row.count} <a href="search.php?q={$row.video_codec|escape:url}&amp;fields=video_codec&amp;nowild=1">{$row.name}</a></li>
+    					<li>{$row.count} <a href="search.php?q={$row.video_codec|escape:url}&amp;fields=video_codec&amp;nowild=1">{$row.video_codec}</a></li>
     					{/if}
     					{/foreach}
     				</ul>

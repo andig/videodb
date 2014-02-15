@@ -20,7 +20,7 @@
 
 	{if $cacheclear}
 	<div class="alert-box sticky">
-		Cache cleared.
+		{$lang.msg_cachecleared}
 		<a href="#" class="close">&times;</a>
 	</div>
 	{/if}

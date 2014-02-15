@@ -262,7 +262,7 @@ function boxeePlay(id) {
 
 
 		{if $video.custom1name || $video.custom2name || $video.custom3name || $video.custom4name}
-		<h4 class="subheader">Custom Details</h4>
+		<h4 class="subheader">{$lang.custom_details}</h4>
 
 		<div class="row">
 			<div class="small-12 columns">
