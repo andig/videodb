@@ -236,4 +236,32 @@ $lang['page']                = "P&aacute;gina";
 $lang['of']                  = "de";
 $lang['records']             = "registros";
 
+#
+# Genres
+#
+$lang['Action']		= 'Acción';
+$lang['Adventure']	= 'Aventura';
+$lang['Animation']	= 'Animación';
+$lang['Comedy']		= 'Comedia';
+$lang['Crime']		= 'Crimen';
+$lang['Documentary']= 'Documental';
+$lang['Drama']		= 'Drama';
+$lang['Family']		= 'Familia';
+$lang['Fantasy']	= 'Fantasía';
+$lang['Film-Noir']	= 'Cine negro';
+$lang['Horror']		= 'Terror';
+$lang['Musical']	= 'Comedia musical';
+$lang['Mystery']	= 'Misterio';
+$lang['Romance']	= 'Romántico';
+$lang['Sci-Fi']		= 'Ciencia ficción';
+$lang['Short']		= 'Cortometraje ';
+$lang['Thriller']	= 'Suspense';
+$lang['War']		= 'Guerra';
+$lang['Western']	= 'Western';
+$lang['Adult']		= 'Adulto';
+$lang['Music']		= 'Musical';
+$lang['Biography']	= 'Biografía';
+$lang['History']	= 'Histórico';
+$lang['Sport']		= 'Deporte';
+
 ?>

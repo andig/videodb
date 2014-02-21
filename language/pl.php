@@ -338,4 +338,32 @@ $lang['warn_noOwner']        = "Dane nie zachowane - najpierw wybierz właścici
 
 $lang['order']				 = "Sortuj";
 
+#
+# Genres
+#
+$lang['Action']		= 'Akcja';
+$lang['Adventure']	= 'Przygoda';
+$lang['Animation']	= 'Animowany';
+$lang['Comedy']		= 'Komedia';
+$lang['Crime']		= 'Kryminał';
+$lang['Documentary']= 'Dokument';
+$lang['Drama']		= 'Dramat';
+$lang['Family']		= 'Familijny';
+$lang['Fantasy']	= 'Fantasy';
+$lang['Film-Noir']	= 'Film-Noir';
+$lang['Horror']		= 'Horror';
+$lang['Musical']	= 'Musical';
+$lang['Mystery']	= 'Tajemnica';
+$lang['Romance']	= 'Romans';
+$lang['Sci-Fi']		= 'Sci-Fi';
+$lang['Short']		= 'Krótkometrażowy';
+$lang['Thriller']	= 'Thriller';
+$lang['War']		= 'Wojenny';
+$lang['Western']	= 'Western';
+$lang['Adult']		= 'Dla dorosłych';
+$lang['Music']		= 'Muzyczny';
+$lang['Biography']	= 'Biografia';
+$lang['History']	= 'Historia';
+$lang['Sport']		= 'Sport';
+
 ?>

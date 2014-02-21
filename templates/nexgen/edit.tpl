@@ -151,7 +151,7 @@
 				<div class="small-10 large-11 columns">
 					<dl class="sub-nav" input-checkbox>
 						{foreach $genres as $genre}
-						<dd {if $genre.checked}class="active"{/if}><a href="genres[]" value="{$genre.id}">{$genre.name}</a></dd>
+						<dd {if $genre.checked}class="active"{/if}><a href="genres[]" value="{$genre.id}">{$lang.{$genre.name}}</a></dd>
 						{/foreach}
 					</dl>
 				</div><!-- col -->

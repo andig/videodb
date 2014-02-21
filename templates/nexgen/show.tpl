@@ -127,7 +127,7 @@ function boxeePlay(id) {
 					<div class="small-6 columns">
 						<p>{$lang.genres}:
 							{foreach $genres as $genre name=loop}
-							<a href="search.php?q=&amp;genres[]={$genre.id}">{$genre.name}</a>{if $smarty.foreach.loop.index < $smarty.foreach.loop.total-1}, {/if}
+							<a href="search.php?q=&amp;genres[]={$genre.id}">{$lang.{$genre.name}}</a>{if $smarty.foreach.loop.index < $smarty.foreach.loop.total-1}, {/if}
 							{/foreach}
 						</p>
 					</div><!-- col -->
