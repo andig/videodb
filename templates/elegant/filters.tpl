@@ -31,7 +31,9 @@
 			{if $owners}{html_options name=owner id=owner options=$owners selected=$owner}{/if}
 
 			{html_options name="mediafilter" id="mediafilter" options=$mediafilter selected=$mediatype}
-			<span style="font-weight:bold">{$lang.order}:</span>{html_options name="order" id="order" options=$order_options selected=$current_order}
+			{if $order_options}
+				<span style="font-weight:bold">{$lang.order}:</span>{html_options name="order" id="order" options=$order_options selected=$order}
+			{/if}
             <input type="image" name="submit" src="{$template}images/search.gif" alt="{$lang.search}" align="absmiddle" />
         </div>
     </form>
