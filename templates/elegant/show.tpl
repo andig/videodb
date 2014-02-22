@@ -224,7 +224,7 @@ Event.observe(document, 'dom:loaded', function() {
         {if $genres}
         <h3>{$lang.genres}:</h3>
         {foreach $genres as $genre}
-            <a href="search.php?q=&amp;genres[]={$genre.id}">{$lang.{$genre.name}}</a><br/>
+            <a href="search.php?q=&amp;genres[]={$genre.id}">{if $lang.{$genre.name}} {$lang.{$genre.name}} {else} {$genre.name} {/if}</a><br/>
         {/foreach}
         {/if}
     </td>

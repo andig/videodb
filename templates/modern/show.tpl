@@ -179,7 +179,7 @@
       {if $genres}
           <b>{$lang.genres}:</b><br/>
             {foreach item=genre from=$genres}
-                  <a href="search.php?q=&genres[]={$genre.id}">{$lang.{$genre.name}}</a><br/>
+                  <a href="search.php?q=&genres[]={$genre.id}">{if $lang.{$genre.name}} {$lang.{$genre.name}} {else} {$genre.name} {/if} </a><br/>
             {/foreach}
       {/if}
     </td>

@@ -338,32 +338,4 @@ $lang['warn_noOwner']        = "Data not saved - you have to select an owner fir
 
 $lang['order']				 = "Sort by";
 
-#
-# Genres
-#
-$lang['Action']		= 'Action';
-$lang['Adventure']	= 'Adventure';
-$lang['Animation']	= 'Animation';
-$lang['Comedy']		= 'Comedy';
-$lang['Crime']		= 'Crime';
-$lang['Documentary']= 'Documentary';
-$lang['Drama']		= 'Drama';
-$lang['Family']		= 'Familiy';
-$lang['Fantasy']	= 'Fantasy';
-$lang['Film-Noir']	= 'Film-Noir';
-$lang['Horror']		= 'Horror';
-$lang['Musical']	= 'Musical';
-$lang['Mystery']	= 'Mystery';
-$lang['Romance']	= 'Romance';
-$lang['Sci-Fi']		= 'Sci-Fi';
-$lang['Short']		= 'Short';
-$lang['Thriller']	= 'Thriller';
-$lang['War']		= 'War';
-$lang['Western']	= 'Western';
-$lang['Adult']		= 'Adult';
-$lang['Music']		= 'Music';
-$lang['Biography']	= 'Biography';
-$lang['History']	= 'History';
-$lang['Sport']		= 'Sport';
-
 ?>

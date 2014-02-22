@@ -32,7 +32,7 @@
           <td>
             <table cellspacing="0">
             {foreach item=row from=$stats.count_genre}
-              <tr><td><a href="search.php?q=&genres[]={$row.id}">{$lang.{$row.name}}</a>:</td><td>{$row.count}</td></tr>
+              <tr><td><a href="search.php?q=&genres[]={$row.id}"> {if $lang.{$row.name}} {$lang.{$row.name}} {else} {$row.name} {/if}</a>:</td><td>{$row.count}</td></tr>
             {/foreach}
             </table>
           </td>

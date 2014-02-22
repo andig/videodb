@@ -30,7 +30,7 @@
           <td><b>{$lang.videobygen}:</b><br />{$lang.multiple}</td>
           <td>
             {foreach item=row from=$stats.count_genre}
-              <a href="search.php?q=&genres[]={$row.id}">{$lang.{$row.name}}</a> : {$row.count}<br />
+              <a href="search.php?q=&genres[]={$row.id}">{if $lang.{$row.name}} {$lang.{$row.name}} {else} {$row.name} {/if}</a> : {$row.count}<br />
             {/foreach}
           </td>
         </tr>
