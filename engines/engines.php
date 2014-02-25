@@ -178,27 +178,28 @@ function engineGetContentUrl($id, $engine = 'imdb')
 }
 
 /**
- * Get item details URL in external site
+ * Get recommendations for a specific movie that meets the requirements
+ * of rating and release year.
  *
  * @author  Klaus Christiansen <klaus_edwin@hotmail.com>
- * @param   string    item id
- * @param   string    engine name
- * @return  string    item details url
+ * @param   int     $id      The external movie id.
+ * @param   float   $rating  The minimum rating for the recommended movies.
+ * @param   int     $year    The minimum year for the recommended movies.
+ * @return  array            Associative array with: id, title, rating, year.
  */
-function engineGetRecommendationsUrl($id, $engine = 'imdb')
+function engineGetRecommendations($id, $rating, $year, $engine = 'imdb')
 {
     if (empty($id)) return '';
 
     require_once($engine.'.php');
-    $func = $engine.'RecommendationsUrl';
+    $func = $engine.'Recommendations';
 
-    $result = '';
     if (function_exists($func))
     {
-        $result = $func($id);
+        return $func($id, $rating, $year);
     }
 
-    return $result;
+    return '';
 }
 
 /**
