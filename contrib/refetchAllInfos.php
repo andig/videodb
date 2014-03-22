@@ -75,7 +75,7 @@ else
 
 	    // get list movies in DB
 	    $SQL    = 'SELECT * FROM '.TBL_DATA;
-        if ($user != '0') $SQL .= ' AND owner_id = '.$user;
+        if ($user != '0') $SQL .= ' WHERE owner_id = '.$user;
 	    $result = runSQL($SQL);
 	
 		$CLIENTERRORS   = array();
