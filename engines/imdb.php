@@ -131,7 +131,7 @@ function imdbSearch($title, $aka=null)
 
     // add encoding
     $data['encoding'] = get_response_encoding($resp);
-    
+
     // direct match (redirecting to individual title)?
     if (preg_match('/^'.preg_quote($imdbServer,'/').'\/[Tt]itle(\?|\/tt)([0-9?]+)\/?/', $resp['url'], $single))
     {
@@ -160,7 +160,7 @@ function imdbSearch($title, $aka=null)
                 $info['year']   = $ary[3];
                 $data[]         = $info;
             }
-            
+
 #           dump($info);
         }
     }
@@ -211,7 +211,7 @@ function imdbData($imdbID)
         preg_match('/<meta name="title" content="&quot;(.*?)&quot;\s+(.*?)(.TV episode .*?)?( - IMDB)?"/si', $resp['data'], $ary);
         $data['title'] = trim($ary[1]);
         $data['subtitle'] = trim($ary[2]);
-#dlog($ary);        
+#dlog($ary);
         if (preg_match('/<h1 class="header".*?>.*?<span class="nobr">\(.*?(\d\d\d\d)\)</si', $resp['data'], $ary)) {
             $data['year'] = $ary[1];
         }
@@ -388,22 +388,28 @@ function imdbFixEncoding($data, $resp)
  * Get Url of Cover Image
  *
  * @author  Roland Obermayer <robelix@gmail.com>
- * @param   string  $data	IMDB Page data
- * @return  string		Cover Image URL
+ * @param   string  $data   IMDB Page data
+ * @return  string          Cover Image URL
  */
 function imdbGetCoverURL($data) {
+	global $imdbServer;
     global $CLIENTERROR;
     global $cache;
 
-    if (preg_match('/<td .*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?<img.*?Poster.*?src="(.*?)"/si', $data, $ary)) {
+	// find cover image url
+    if (preg_match('/<td.*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
+    {
         // Fetch the image page
-        $resp = httpClient($ary[2], $cache);
-        if (!$resp['success'])
+        $resp = httpClient($imdbServer.$ary[1], $cache);
+
+        if ($resp['success'])
         {
-            $CLIENTERROR .= $resp['error']."\n";
-            return '';
+        	// get big cover image.
+			preg_match('/<img.+?id="primary-img".*?src="(.*?)"/si', $resp['data'], $ary);
+	        return trim($ary[1]);
         }
-        return trim($ary[2]);
+    	$CLIENTERROR .= $resp['error']."\n";
+    	return '';
     } else {
         # no image
         return '';
