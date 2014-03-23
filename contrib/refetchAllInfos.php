@@ -29,7 +29,7 @@ permission_or_die(PERM_WRITE);
  */
 function getFields()
 {
-	$edit_file = file_get_contents('edit.php');
+	$edit_file = file_get_contents('./core/edit.core.php');
 	$edit_file = preg_replace("/\n/",'',$edit_file);
 
 
