@@ -84,10 +84,10 @@ class TestIMDB extends UnitTestCase
 
     function testMovie3()
     {
-    	// Omicron (1963)
-    	// http://www.imdb.com/title/tt0191326/
+    	// Gelbe Kirschen
+    	// http://www.imdb.com/title/tt1099925/
 
-    	$id = '0191326';
+    	$id = '0261706';
     	$data = engineGetData($id, 'imdb');
 
     	// There is no cover image in imdb
