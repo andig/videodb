@@ -90,7 +90,7 @@ function engineGetData($id, $engine = 'imdb')
     }
 
     // make sure all engines properly return the encoding type
-    if (empty($result['encoding'])) errorpage('Engine Error', 'Engine does not properly return encoding');
+    if (empty($result['encoding'])) errorpage('Engine Error', 'Engine '.$engine.' does not properly return encoding');
 
 	// set default encoding iso-8859-1
 	$source_encoding = ($result['encoding']) ? $result['encoding'] : $lang['encoding'];
