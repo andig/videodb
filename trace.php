@@ -152,11 +152,12 @@ function _replace_enclosed_tag_traced($matches)
 			return implode('', array_slice($matches,1));
 		}
 
-		// title link?
+        // title link?
 		// either /Title?0328828	(old-style or tiger-redirect)
 		// or /title/tt0306734/	(new-style)
-        if (preg_match("#/[Tt]itle(\?|/tt)(\d+)/?$#", $url, $m) && $title)
+        if (preg_match("#/[Tt]itle(\?|/tt)(\d+)/?(\?|$)#", $url, $m) && $title)
         {
+        
             // don't link images to avoid matching the imdb page flicker
             if (!preg_match("/<img\s+/i", $matches[4]))
             {
