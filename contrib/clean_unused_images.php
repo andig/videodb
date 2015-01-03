@@ -16,32 +16,6 @@ require_once './core/setup.core.php';
 
 error_reporting(E_ALL ^ E_NOTICE);
 
-/**
- * Get a list of files looking recursively from $path. Linux dot and dotdot are excluded from the result.
- * @param string $path The path to start from.
- * @return multitype:string An array of strings.
- */
-function getFilesIn($path) {
-    $path = rtrim($path, '\\/');
-    $result = array();
-
-    foreach (scandir($path) as $f)
-    {
-        if ($f !== '.' and $f !== '..')
-        {
-            if (is_dir("$path/$f"))
-            {
-                $result = array_merge($result, getFilesIn("$path/$f"));
-            }
-            else
-            {
-                $result[] = "$path/$f";
-            }
-        }
-    }
-    return $result;
-}
-
 $coverSQL = "SELECT imgurl FROM ".TBL_DATA;
 $actorSQL = "SELECT imgurl FROM ".TBL_ACTORS;
 $coverResult = runSQL($coverSQL);
@@ -96,8 +70,10 @@ $unused = 0;
 $coverNum = 0;
 $actorNum = 0;
 
-// get list of all images currently in cache
-$files = getFilesIn('cache/img');
+set_time_limit(300);
+$files = array();
+// get list of all images currently in cache/img and cache/thumbs.
+$files = array_merge($files, cache_prune_folders(CACHE.'/'.CACHE_IMG.'/', 0, true, true, '*', (int) $config['hierarchical']));
 ?>
 
 <html>
@@ -138,22 +114,25 @@ foreach ($files as $file)
 }
 if ($submit) echo "<br/>";
 
+$megaByte = 1048576;
 echo sprintf("
     $coverNum out of %d files with a size of %.2fMB are used for covers<br/>
     $actorNum out of %d files with a size of %.2fMB are used for headshots<br/>
-    $unused out of %d files with a size of %.2fMB are currently unused<br/>", count($files), $coverSize / (1024 * 1024), count($files), $actorSize / (1024 * 1024), count($files), $size / (1024 * 1024));
+    $unused out of %d files with a size of %.2fMB are currently unused<br/>", count($files), $coverSize / $megaByte, count($files), $actorSize / $megaByte, count($files), $size / $megaByte);
 
 if ($unused)
 {
     if ($submit)
     {
-        echo "<br/>$unused files with a size of ".round($size / (1024 * 1024), 2)."Mb have been deleted<br/>";
+        echo "<br/>$unused files with a size of ".round($size / $megaByte, 2)."MB have been deleted<br/>";
     }
+    else {
 ?>
     <form action=<?php echo $PHP_SELF?>>
         <input type="submit" name="submit" value="Delete" />
     </form>
 <?php
+    }
 }
 ?>
 
