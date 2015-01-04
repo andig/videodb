@@ -94,8 +94,8 @@ function tpl_header($help = '', $title = '')
         $header['browse'] = 'index.php';
         if (check_permission(PERM_READ, PERM_ANY))
         {
-            $header['random'] = 'show.php';
-            $header['search'] = 'search.php';
+        	$header['random'] = 'show.php';
+        	$header['search'] = 'search.php';
         }
         $header['stats']  = 'stats.php';
         if ($config['imdbBrowser']) $header['trace'] = 'trace.php';
@@ -150,21 +150,21 @@ function tpl_header($help = '', $title = '')
         if (check_permission(PERM_ADMIN)) $header['users'] = 'users.php';
     }
 
-    // determine active tab
-    if (preg_match('/(\w+)\.php/', $_SERVER['PHP_SELF'], $m))
+	// determine active tab
+	if (preg_match('/(\w+)\.php/', $_SERVER['PHP_SELF'], $m))
     {
-        $tab = strtolower($m[1]);
-        switch ($tab)
+		$tab = strtolower($m[1]);
+		switch ($tab)
         {
-            case 'show':
-            case 'edit':
-                if (!empty($id)) $header['active'] = $tab;
-                // uncomment this if you want the 'Browse' tab to remember last visited movie
-                // { ... $smarty->assign('browseid', $_REQUEST['id']); }
-                else $header['active'] = ($tab == 'show') ? 'random' : 'new';
-                break;
+			case 'show':
+			case 'edit':
+				if (!empty($id)) $header['active'] = $tab;
+				// uncomment this if you want the 'Browse' tab to remember last visited movie
+				// { ... $smarty->assign('browseid', $_REQUEST['id']); }
+				else $header['active'] = ($tab == 'show') ? 'random' : 'new';
+				break;
             default:
-                /* legacy version
+				/* legacy version 
                 $translate = array('index' => 'browse', 'users' => 'setup', 'permissions' => 'setup', 'delete' => 'show');
                 */
                 $translate = array('index' => 'browse', 'permissions' => 'users', 'delete' => 'show');
@@ -172,13 +172,13 @@ function tpl_header($help = '', $title = '')
                 {
                     $tab = $translate[$tab];
                 }
-                $header['active'] = $tab;
-        }
-    }
+				$header['active'] = $tab;
+		}
+	}
 
-    // breadcrumbs
+	// breadcrumbs
     $breadcrumbs = session_get('breadcrumbs', array());
-    $smarty->assign('breadcrumbs', $breadcrumbs);
+	$smarty->assign('breadcrumbs', $breadcrumbs);
 
     $smarty->assign('title',	htmlspecialchars($title));
     $smarty->assign('header',	$header);
@@ -194,8 +194,8 @@ function tpl_filters($filter, $showtv)
     global $smarty, $lang;
     global $filter_expr;
     global $owner, $mediatype;
-    global $config;
-
+	global $config;
+	
     // build filter array
     foreach ($filter_expr as $flt => $regex)
     {
@@ -221,14 +221,14 @@ function tpl_filters($filter, $showtv)
     $smarty->assign('mediafilter', out_mediatypes(array(-2 => $lang['filter_any'], -1 => $lang['filter_available'])));
     if (!$mediatype) $mediatype = session_get('mediafilter'); //!! default media type hack
     $smarty->assign('mediatype', $mediatype);
-
-    // create sorting selectbox
-    // Sorting is disabled when ordering by diskid is enabled
-    if(!$config['orderallbydisk']) {
-        $smarty->assign('order_options', array(-1 => $lang['title'], 1 => $lang['rating'], 2 => $lang['date']));
-        if(!$order) $order = session_get('order');
-        $smarty->assign('order',  $order);
-    }
+	
+	// create sorting selectbox
+	// Sorting is disabled when ordering by diskid is enabled
+	if(!$config['orderallbydisk']) {
+		$smarty->assign('order_options', array(-1 => $lang['title'], 1 => $lang['rating'], 2 => $lang['date']));
+		if(!$order) $order = session_get('order');
+		$smarty->assign('order',  $order);
+	} 
 
 
     // enable dynamic columns in list view
@@ -293,11 +293,11 @@ function tpl_list($list)
 */
     }
 
-    // do adultcheck
-    if (is_array($list))
-    {
-        $list = array_filter($list, create_function('$video', 'return adultcheck($video["id"]);'));
-    }
+	// do adultcheck
+	if (is_array($list))
+	{
+		$list = array_filter($list, create_function('$video', 'return adultcheck($video["id"]);'));
+	}
 
     // enable dynamic columns in list view
     $smarty->assign('listcolumns', session_get('listcolumns'));
@@ -319,8 +319,8 @@ function tpl_footer()
         $out                = $config;
         $out['db_password'] = '***';
         $session            = $_SESSION['vdb'];
-        $session['config']['db_password'] = '***';
-
+        $session['db_password'] = '***';
+        
         ob_start();
         print '<pre>';
         dump($SQLtrace);
@@ -330,7 +330,7 @@ function tpl_footer()
 #        phpinfo();
         $debug = ob_get_contents();
         ob_end_clean();
-
+        
         $smarty->assign('DEBUG', $debug);
     }
     $smarty->assign('version', VERSION);
@@ -342,7 +342,7 @@ function tpl_footer()
 function get_actor_thumbnails_batched(&$actors)
 {
     if (!count($actors)) return;
-
+    
     $ids    = "'".join("','", array_map('addslashes', array_extract($actors, 'id')))."'";
 
     $SQL    = 'SELECT actorid, name, imgurl, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(checked) AS cacheage
@@ -356,7 +356,7 @@ function get_actor_thumbnails_batched(&$actors)
     {
         // check for actor thumbnail
         $batch_result = $result[$actor['id']];
-
+        
         if ($batch_result)
             $actors[$idx]['imgurl'] = get_actor_image_from_cache($batch_result, $actor['name'], $actor['id']);
         else
@@ -370,8 +370,8 @@ function get_actor_thumbnails_batched(&$actors)
 function split_cast_array(&$actor, $key)
 {
     $ary            = explode('::', $actor);
-
-    $actor          = array();
+    
+    $actor          = array();   
     $actor['name']  = $ary[0];
     $actor['id']    = $ary[2];
     $actor['roles'] = preg_split('[^</]', $ary[1]);
@@ -384,7 +384,7 @@ function split_cast_array(&$actor, $key)
  */
 function prepare_cast($cast)
 {
-    global $config;
+	global $config;
 
     // convert text represenatation into array
     $actors = array_filter(preg_split("/\r?\n/", trim($cast)));
@@ -437,8 +437,8 @@ function tpl_show($video)
     $video['plot']     = nl2br($video['plot']);
     $video['comment']  = nl2br($video['comment']);
 
-    // cast
-    $video['cast']     = prepare_cast($video['actors']);
+	// cast
+	$video['cast']     = prepare_cast($video['actors']);
 
     // prepare the custom fields
     customfields($video, 'out');
@@ -483,58 +483,58 @@ function tpl_show($video)
  */
 function tpl_edit($video)
 {
-    global $smarty, $config, $lang;
+	global $smarty, $config, $lang;
 
-    // create a form ready quoted version for each value
-    foreach (array_keys($video) as $key)
+	// create a form ready quoted version for each value
+	foreach (array_keys($video) as $key)
     {
-        $video['q_'.$key] = formvar($video[$key]);
-    }
+		$video['q_'.$key] = formvar($video[$key]);
+	}
 
-    // use custom function for language
-    $video['f_language']  = custom_language_input('language', $video['language']);
+	// use custom function for language
+	$video['f_language']  = custom_language_input('language', $video['language']);
 
-    // create mediatype selectbox
+	// create mediatype selectbox
     $smarty->assign('mediatypes', out_mediatypes());
     if (!isset($video['mediatype'])) $video['mediatype'] = $config['mediadefault'];
 
-    // prepare the custom fields
-    customfields($video, 'in');
+	// prepare the custom fields
+	customfields($video, 'in');
 
     if ($config['multiuser'])
     {
         $smarty->assign('owners', out_owners(array('0' => ''), (check_permission(PERM_ADMIN)) ? false : PERM_WRITE, true));
     }
 
-    // item genres
-    $item_genres = getItemGenres($video['id']);
-    // new-style
+	// item genres
+	$item_genres = getItemGenres($video['id']);
+	// new-style
     $smarty->assign('genres', out_genres2($item_genres));
 #dlog(out_genres2($item_genres));
 #dlog($item_genres);
     // classic
     $smarty->assign('genreselect', out_genres($item_genres));
 
-    // assign data
-    $smarty->assign('video', $video);
+	// assign data
+	$smarty->assign('video', $video);
 
-    // get drilldown url for visit link
-    if ($video['imdbID'])
+	// get drilldown url for visit link
+	if ($video['imdbID'])
     {
         require_once './engines/engines.php';
-        $engine = engineGetEngine($video['imdbID']);
+        $engine = engineGetEngine($video['imdbID']);	
         $smarty->assign('link', engineGetContentUrl($video['imdbID'], $engine));
         $smarty->assign('engine', $engine);
-    }
+	}
 
 /*
     // populate autocomplete boxes
     $smarty->assign('audio_codecs', array_extract(runSQL('SELECT DISTINCT audio_codec FROM '.TBL_DATA.' WHERE audio_codec IS NOT NULL'), 'audio_codec'));
     $smarty->assign('video_codecs', array_extract(runSQL('SELECT DISTINCT video_codec FROM '.TBL_DATA.' WHERE video_codec IS NOT NULL'), 'video_codec'));
-*/
-    $smarty->assign('lookup', array('0' => $lang['radio_look_ignore'],
-                                    '1' => $lang['radio_look_lookup'],
-                                    '2' => $lang['radio_look_overwrite']));
+*/        
+	$smarty->assign('lookup', array('0' => $lang['radio_look_ignore'],
+							        '1' => $lang['radio_look_lookup'],
+							        '2' => $lang['radio_look_overwrite']));
 
     // needed for ajax image lookup
     $smarty->assign('engines', $config['engines']);
