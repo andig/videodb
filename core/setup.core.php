@@ -63,7 +63,7 @@ function setup_mkOptions($isprofile = false)
     $setup[] = setup_addOption($isprofile, 'pageno', 'text');
     $setup[] = setup_addOption($isprofile, 'languageflags', 'special', out_languageflags($config['languages']));
     $setup[] = setup_addOption($isprofile, 'removearticles', 'boolean');
-    $setup[] = setup_addOption($isprofile, 'adultgenres', 'multi', setup_getGenres(), @split('::', $config['adultgenres']));
+    $setup[] = setup_addOption($isprofile, 'adultgenres', 'multi', setup_getGenres(), @explode('::', $config['adultgenres']));
     $setup[] = setup_addOption($isprofile, 'showtools', 'boolean');
 
     if (!$isprofile) $setup[] = setup_addSection('opt_custom');
