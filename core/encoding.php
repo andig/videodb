@@ -115,11 +115,11 @@ function utf8_smart_decode($str)
 function html_entity_decode_all($string) 
 {
     // replace numeric entities
-    $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
-    $string = preg_replace('~&#([0-9]+);~e', 'chr(\\1)', $string);
+    $string = preg_replace_callback('~&#x([0-9a-f]+);~i', '_callback_chr_hexdec', $string);
+    $string = preg_replace_callback('~&#([0-9]+);~', '_callback_chr', $string);
 #   utf8 version commented out
-#    $string = preg_replace('~&#x([0-9a-f]+);~ei', 'code2utf(hexdec("\\1"))', $string);
-#    $string = preg_replace('~&#([0-9]+);~e', 'code2utf(\\1)', $string);
+#    $string = preg_replace_callback('~&#x([0-9a-f]+);~i', '_callback_code2utf_hexdec', $string);
+#    $string = preg_replace_callback('~&#([0-9]+);~', '_callback_code2utf', $string);
     
     // replace literal entities
     $trans_tbl = get_html_translation_table(HTML_ENTITIES);    
@@ -142,10 +142,10 @@ function html_entity_decode_all_utf8($string)
 {
     // replace numeric entities
 #   non-utf8 version commented out
-#    $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
-#    $string = preg_replace('~&#([0-9]+);~e', 'chr(\\1)', $string);
-    $string = preg_replace('~&#x([0-9a-f]+);~ei', 'code2utf(hexdec("\\1"))', $string);
-    $string = preg_replace('~&#([0-9]+);~e', 'code2utf(\\1)', $string);
+#    $string = preg_replace_callback('~&#x([0-9a-f]+);~i', '_callback_chr_hexdec', $string);
+#    $string = preg_replace_callback('~&#([0-9]+);~', '_callback_chr', $string);
+    $string = preg_replace_callback('~&#x([0-9a-f]+);~i', '_callback_code2utf_hexdec', $string);
+    $string = preg_replace_callback('~&#([0-9]+);~', '_callback_code2utf', $string);
     
     // replace literal entities
 #   non-utf8 version commented out
@@ -240,4 +240,39 @@ function html_to_text($str)
     return $str;
 }
 
+/**
+ * Ensure that there is only one match from a preg_replace_callback and return it
+ */
+function _get_only_match_from_callback($matches) {
+    assert(sizeof($matches) === 2);
+    return $matches[1];
+}
+
+/**
+ * apply chr on the only match of a preg_replace_callback
+ */
+function _callback_chr($matches) {
+    return chr(_get_only_match_from_callback($matches));
+}
+
+/**
+ * apply hexdec and chr on the only match of a preg_replace_callback
+ */
+function _callback_chr_hexdec($matches) {
+    return chr(hexdec(_get_only_match_from_callback($matches)));
+}
+
+/**
+ * apply code2utf on the only match of a preg_replace_callback
+ */
+function _callback_code2utf($matches) {
+    return code2utf(_get_only_match_from_callback($matches));
+}
+
+/**
+ * apply hexdec and code2utf on the only match of a preg_replace_callback
+ */
+function _callback_code2utf_hexdec($matches) {
+    return code2utf(hexdec(_get_only_match_from_callback($matches)));
+}
 ?>
