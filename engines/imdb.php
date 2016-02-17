@@ -397,7 +397,7 @@ function imdbGetCoverURL($data) {
     global $cache;
 
 	// find cover image url
-    if (preg_match('/<td.*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
+    if (preg_match('/<div.*?class="poster".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
     {
         // Fetch the image page
         $resp = httpClient($imdbServer.$ary[1], $cache);
