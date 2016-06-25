@@ -410,7 +410,17 @@ function imdbGetCoverURL($data) {
         }
     	$CLIENTERROR .= $resp['error']."\n";
     	return '';
-    } else {
+    } 
+    else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary))
+    {
+        if ($ary[1]) 
+        {
+            return $ary[1]."jpg";
+        }
+        return '';
+    }
+    else 
+    {
         # no image
         return '';
     }
