@@ -43,16 +43,21 @@ function cache_get_folder($cache_folder, $cache_filename = '')
 
     if ($cache_filename)
         $cache_folder .= substr($cache_filename, 0, @(int)$config['hierarchical']).'/';
-    
+
     return $cache_folder;
 }
 
 /**
  * Cleanup a single cache folder
  *
- * @param string $cache_folder  path to cache folder
- * @param int    $cache_max_age maximum age of cached items in seconds
- * @param bool   $force_prune   force cache pruning even if not due according to schedule
+ * @param string $cache_folder    path to cache folder.
+ * @param int    $cache_max_age   maximum age of cached items in seconds.
+ * @param string $force_prune     force cache pruning even if not due according to schedule.
+ * @param string $simulate        if true then a list of files are returned and not deleted.
+ *                                    Also cache_last_pruge will not be updated.
+ * @param string $pattern         Only delete files that matches this pattern. fx '*.jpg'.
+ * @return array|boolean          true if the cache folder was succesfully purged. Otherwise false. If $simulate is true then the.
+ *                                list of files in question is returned.
  */
 function cache_prune_folder($cache_folder, $cache_max_age, $force_prune = false, $simulate = false, $pattern = '*')
 {
@@ -76,34 +81,49 @@ function cache_prune_folder($cache_folder, $cache_max_age, $force_prune = false,
         }
 
         if ($simulate) return $files;
-        
+
         @touch($stamp);  // mark purge as having occurred
         return true;
     }
-    
+
     return false;
 }
 
 /**
+ *
  * Cleanup a cache folder hierarchy
  *
- * @TODO  decouple from global config options
- *
- * @param string $cache_folder  path to cache folder
- * @param int    $cache_max_age maximum age of cached items in seconds
- * @param bool   $force_prune   force cache pruning even if not due according to schedule
+ * @param string $cache_folder    path to cache folder.
+ * @param number $cache_max_age   maximum age of cached items in seconds.
+ * @param bool   $force_prune     force cache pruning even if not due according to schedule.
+ * @param string $simulate        if true then a list of files are returned and not deleted.
+ *                                    Also the file 'cache_last_pruge' will not be updated.
+ * @param string $pattern         Only delete files that matches this pattern. fx '*.jpg'.
+ * @param int    $levels          The number of levels to descent hierarchy into. 0 if no descenting.
+ * @return array                  If $simulate is true the a list of file names is returned. Otherwise nothing.
  */
 function cache_prune_folders($cache_folder, $cache_max_age, $force_prune = false, $simulate = false, $pattern = '*', $levels = 0)
 {
-    global $config;
-
+    $files = array();
     // root folder
-    cache_prune_folder($cache_folder, $cache_max_age, $force_prune, $simulate, $pattern, $levels);
+    $result = cache_prune_folder($cache_folder, $cache_max_age, $force_prune, $simulate, $pattern);
+
+    if ($simulate && is_array($result))
+        $files = array_merge($files, $result);
 
     // descent hierarchy
     if ($levels > 0)
-        for ($i=0; $i<16; $i++)
-            $error .= cache_prune_folders($cache_folder.dechex($i).'/', $cache_max_age, $force_prune, $simulate, $pattern, $levels-1);
+    {
+        for ($i = 0; $i < 16; $i++)
+        {
+            $result = cache_prune_folders($cache_folder.dechex($i).'/', $cache_max_age, $force_prune, $simulate, $pattern, $levels - 1);
+            if ($simulate && is_array($result))
+                $files = array_merge($files, $result);
+        }
+    }
+
+    if ($simulate)
+        return $files;
 }
 
 /**
@@ -147,14 +167,14 @@ function cache_file_exists($url, &$cache_file, $cache_folder, $ext = '')
 //  Small performance fix
     $result     = file_exists($cache_file) && filesize($cache_file);
 #   $result     = filesize($cache_file) > 0;
-    
+
     return($result);
 }
 
 function cache_get($url, $cache_folder, $cache_max_age, $serialize = false)
 {
     $data = false;
-    
+
     if ($cache_max_age > 0)
     {
         if (cache_file_exists($url, $cache_file, $cache_folder))
@@ -166,9 +186,9 @@ function cache_get($url, $cache_folder, $cache_max_age, $serialize = false)
             }
             // TODO Check if outdated cache files should really be auto-deleted
             else @unlink($cache_file);
-        }    
+        }
     }
-    
+
     return $data;
 }
 
