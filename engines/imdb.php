@@ -260,7 +260,7 @@ function imdbData($imdbID)
 
     // Countries
     preg_match('/Country:\s*<\/h4>(.+?)<\/div>/si', $resp['data'], $ary);
-    preg_match_all('/<a.*?href="\/country\/.+?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/<a href=".*?countries.*?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
     $data['country'] = trim(join(', ', $ary[1]));
 
     // Languages
@@ -293,7 +293,7 @@ function imdbData($imdbID)
         # country
         if (!$data['country']) {
             preg_match('/Country:\s*<\/h4>(.+?)<\/div>/si', $sresp['data'], $ary);
-            preg_match_all('/<a.*?href="\/country\/.+?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
+            preg_match_all('/<a href=".*?countries.*?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
             $data['country'] = trim(join(', ', $ary[1]));
         }
 
