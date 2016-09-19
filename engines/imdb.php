@@ -260,12 +260,12 @@ function imdbData($imdbID)
 
     // Countries
     preg_match('/Country:\s*<\/h4>(.+?)<\/div>/si', $resp['data'], $ary);
-    preg_match_all('/<a.*?href="\/country\/.+?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/<a.*?href=".*?countries.*?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
     $data['country'] = trim(join(', ', $ary[1]));
 
     // Languages
     preg_match('/Languages?:\s*<\/h4>(.+?)<\/div>/si', $resp['data'], $ary);
-    preg_match_all('/<a.*?href="\/language\/.+?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/<a.*?href=".*?language.*?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
     $data['language'] = trim(strtolower(join(', ', $ary[1])));
 
     // Genres (as Array)
@@ -293,14 +293,14 @@ function imdbData($imdbID)
         # country
         if (!$data['country']) {
             preg_match('/Country:\s*<\/h4>(.+?)<\/div>/si', $sresp['data'], $ary);
-            preg_match_all('/<a.*?href="\/country\/.+?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
+            preg_match_all('/<a.*?href=".*?countries.*?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
             $data['country'] = trim(join(', ', $ary[1]));
         }
 
         # language
         if (!$data['language']) {
             preg_match('/Languages?:\s*<\/h4>(.+?)<\/div>/si', $sresp['data'], $ary);
-            preg_match_all('/<a.*?href="\/language\/.+?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
+            preg_match_all('/<a.*?href=".*?language.*?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
             $data['language'] = trim(strtolower(join(', ', $ary[1])));
         }
 
@@ -411,11 +411,24 @@ function imdbGetCoverURL($data) {
     	$CLIENTERROR .= $resp['error']."\n";
     	return '';
     } 
+    // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
+	// The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that because we want the full size.
     else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary))
     {
         if ($ary[1]) 
         {
-            return $ary[1]."jpg";
+			$img_url = $ary[1]."jpg";
+			// Replace the https wtih http.
+			$img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
+			
+			// Fetch the image page
+			$resp = httpClient($img_url, $cache);
+			if ($resp['success'])
+			{
+				dlog("success");
+				return $img_url;
+			}
+			$CLIENTERROR .= $resp['error']."\n";
         }
         return '';
     }
@@ -479,10 +492,16 @@ function imdbActor($name, $actorid)
     // only search in img_primary <td> - or we get far to many useless images
     preg_match('/<td.*?id="img_primary".*?>(.*?)<\/td>/si',$resp['data'], $match);
 
-    if (preg_match('/.*?<a.*?href="(.+?)"\s*?>\s*<img\s+.*?src="(.*?)"/si', $match[1], $m))
+    // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
+	// The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that because we want the full size.
+    if (preg_match('/.*?<a.*?href="(.+?)"\s*?>\s*<img\s+.*?src="(.*?\.)_v.*?"/si', $match[1], $m))
     {
         $ary[0][0] = $m[1];
-        $ary[0][1] = $m[2];
+		
+		$img_url = $m[2]."jpg";
+		// Replace the https wtih http.
+		$img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
+        $ary[0][1] = $img_url;
     }
 
     return $ary;
