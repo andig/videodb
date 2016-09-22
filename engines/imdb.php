@@ -410,6 +410,15 @@ function imdbGetCoverURL($data) {
         }
     	$CLIENTERROR .= $resp['error']."\n";
     	return '';
+    }
+    // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
+    // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that we want the full size.
+    else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary))
+    {
+        $img_url = $ary[1]."jpg";
+        // Replace the https wtih http.
+        $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
+        return $img_url;
     } else {
         # no image
         return '';
