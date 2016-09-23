@@ -25,14 +25,17 @@ $md4sum = '';    #/usr/local/bin/md4sum';
 # 'url' as type
 #$urlfield = 'custom1';
 
-# path to the eject tool
-$eject = '/usr/bin/eject';
+# path to the eject tool,
+#found this not real useful when you can rub the script to process a directory, 
+#but if you going to us a cdrom you un comment it it.
+#$eject = '/usr/bin/eject';
 
 # path to mplayer (only version 0.90 was tested, 1.0rc1 works too)
 $mplayer = '/usr/bin/mplayer';
 
 # cdrom to use (reads it from commandline)
 $device = $ARGV[ 0 ];
+# alter "/writer" to the directory you have videos in to process.
 $device = "/writer" unless (defined($device));
 
 # do the mount ?
@@ -47,7 +50,7 @@ $remove_article = 1;
 $owner_id = 1;
 
 # allowed suffixes
-$suffix_re = 'avi|ogm|ogg|bin|mpe?g|ra?m|mov|asf|wmv';
+$suffix_re = 'avi|ogm|ogg|bin|mpe?g|ra?m|mov|asf|wmv|mp4|mkv';
 
 # Database stuff
 $driver   = "mysql";
@@ -160,6 +163,10 @@ sub add($$)
          $video_codec = 'DivX5' if ($video_codec eq 'DX50');
          $video_codec = 'XviD' if ($video_codec eq 'XVID');
          #FIXME aliases of other codecs?
+         #Add more 20/1/2015 by LinuxHam couple extra codecs to help get data needed
+         $video_codec = 'H264' if ($video_codec eq 'ffh264');
+         $video_codec = 'avc1' if ($video_codec eq 'ffh264');
+         $video_codec = 'MP4V' if ($video_codec eq 'ffodivx');
       }
       elsif ($line =~ m/^ID_VIDEO_WIDTH=(.*)/)
       {
@@ -179,6 +186,10 @@ sub add($$)
          $audio_codec = 'PCM' if ($audio_codec eq 'pcm');
          $audio_codec = 'WMA2' if ($audio_codec eq 'ffwmav2');
          $audio_codec = 'WMA1' if ($audio_codec eq 'ffwmav1');	# just a guess, needs confirmation
+         #Add more 20/1/2015 by LinuxHam, couple extra codecs to help get data needed
+         $audio_codec = '8192' if ($audio_codec eq 'ffac3');
+         $audio_codec = 'MP4A' if ($audio_codec eq 'ffaac');
+         $audio_codec = '85' if ($audio_codec eq 'ffmp3float');
       }
       elsif ($line =~ m/^ID_LENGTH=(.*)/)
       {
