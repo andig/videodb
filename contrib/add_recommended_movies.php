@@ -20,19 +20,17 @@ session_write_close();
 ?>
 
 <html>
-
 <head>
     <title>Find Movie Recommendations</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta name="description" content="VideoDB" />
-
     <style>
         .green { color:green }
     </style>
 </head>
 <body>
 
-<?
+<?php
 
 error_reporting(E_ALL ^ E_NOTICE);
 
@@ -123,17 +121,17 @@ else
             <input type="checkbox" name="wishlist" id="wishlist" value="1" />
             Include wishlist
         </label>
-        <br />
+        <br/>
 
         <label for="download">
             <input type="checkbox" name="download" id="download" value="1" />
             Download recommendations if movie is not in videoDB
         </label>
-        <br />
+        <br/>
 
         <input type="submit" name="submit" value="Search" />
     </form>
-<?
+<?php
 }
 ?>
 
