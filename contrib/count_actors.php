@@ -16,16 +16,14 @@ require_once './core/functions.php';
 ?>
 
 <html>
-
 <head>
 	<title>List actor counts</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta name="description" content="VideoDB" />
 </head>
-
 <body>
 
-<?
+<?php
 
 if ($submit)
 {	
@@ -52,15 +50,14 @@ if ($submit)
 		$displayDirectorCount = false;
 	}
 	
-	
-	foreach ($result as $row) 
+    foreach ($result as $row) 
     {
-		$cast = split("\r?\n", $row['actors']);
+        $cast = split("\r?\n", $row['actors']);
 		
-		// Counting actors
-		foreach ($cast as $actor) {
-			$actorary = split('::', $actor);
-			if (!isset($actors[$actorary[0]])) {
+        // Counting actors
+        foreach ($cast as $actor) {
+            $actorary = split('::', $actor);
+            if (!isset($actors[$actorary[0]])) {
 				// Use actor name as array index so all counts are attributed to the same name
 				$actors[$actorary[0]] = 0;
 			}
@@ -80,7 +77,7 @@ if ($submit)
 	arsort($actors);	
 
 	$i = 1;
-	foreach ($actors as $key=>$val) 
+    foreach ($actors as $key=>$val) 
     {
 		if ($val > $maxcount) 
         {			
@@ -100,34 +97,33 @@ if ($submit)
 } else {
 ?>
 	<form action="<?php echo $_SERVER['PHP_SELF']?>">
-		
 		<label for="maxcount">
 			Only show names with more than
 			<input type="text" name="maxcount" id="maxcount" value="3" size="2" maxlength="2" />
 			actor entries
 		</label>
-		<br />
+		<br/>
 		<label for="director">
 			<input type="checkbox" name="director" id="director" value="1" checked />
 			Count director entries (will appear next to the actor entries, will not be sorted)
 		</label>
-		<br />
+		<br/>
 		<label for="notseparate">
-			<input type="checkbox" name="notseparate" id="notseparate" value="1" />
+            <input type="checkbox" name="notseparate" id="notseparate" value="1" />
 			Count director entries as "actor" (i.e. don't separate them)
 		</label>
-		<br />
+		<br/>
 		<label for="wishlist">
 			<input type="checkbox" name="wishlist" id="wishlist" value="1" />
 			Include wishlist
 		</label>
-		<br />
-		<br />
+		<br/>
+		<br/>
 		<input type="submit" name="submit" value="List" />
 	</form>
-	<br />
+	<br/>
 	<small>Note: Duplicate movie entries (determined by imdbID) will not be counted.</small>
-<?
+<?php
 }
 ?>
 
