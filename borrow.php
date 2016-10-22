@@ -77,7 +77,7 @@ $SQL    = "SELECT who, DATE_FORMAT(dt,'%d.%m.%Y') as dt, ".TBL_LENT.".diskid,
            $JOINS
             WHERE ".TBL_LENT.".diskid = ".TBL_DATA.".diskid 
           $WHERES
-         GROUP BY ".TBL_LENT.".diskid
+         GROUP BY ".TBL_LENT.".diskid, ".TBL_DATA.".id
          ORDER BY who, ".TBL_LENT.".diskid";
 $result = runSQL($SQL);
 
