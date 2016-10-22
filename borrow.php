@@ -69,20 +69,20 @@ if ($config['multiuser'])
 }
 
 // overview on lent disks
-$SQL    = "SELECT who, DATE_FORMAT(dt,'%d.%m.%Y') as dt, ".TBL_LENT.".diskid,
-                  CASE WHEN subtitle = '' THEN title ELSE CONCAT(title,' - ',subtitle) END AS title,
-                  ".TBL_DATA.".id, COUNT(".TBL_LENT.".diskid) AS count, ".TBL_USERS.".name AS owner
-             FROM ".TBL_LENT.", ".TBL_DATA."
+$SQL = "SELECT who, DATE_FORMAT(dt,'%d.%m.%Y') as dt, ".TBL_LENT.".diskid,
+            CASE WHEN subtitle = '' THEN title ELSE CONCAT(title,' - ',subtitle) END AS title,
+            ".TBL_DATA.".id, COUNT(".TBL_LENT.".diskid) AS count, ".TBL_USERS.".name AS owner
+            FROM ".TBL_LENT.", ".TBL_DATA."
         LEFT JOIN ".TBL_USERS." ON owner_id = ".TBL_USERS.".id
-           $JOINS
+            $JOINS
             WHERE ".TBL_LENT.".diskid = ".TBL_DATA.".diskid 
-          $WHERES
-         GROUP BY ".TBL_LENT.".diskid
-         ORDER BY who, ".TBL_LENT.".diskid";
+            $WHERES
+        GROUP BY ".TBL_LENT.".diskid, ".TBL_DATA.".id
+        ORDER BY who, ".TBL_LENT.".diskid";
 $result = runSQL($SQL);
 
 // check permissions
-for($i=0; $i < count($result); $i++)
+for($i = 0; $i < count($result); $i++)
 {
     $result[$i]['editable'] = check_permission(PERM_WRITE, get_userid($result[$i]['owner']));
 }
