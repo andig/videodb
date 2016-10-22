@@ -97,14 +97,14 @@ $result = runSQL('SELECT A.name, COUNT(*) AS count, A.id
                     FROM '.TBL_GENRES.' A, '.TBL_VIDEOGENRE.' B, '.TBL_DATA.' C 
                    WHERE B.genre_id = A.id
                    	 AND B.video_id = C.id'.$WHERES.'
-                GROUP BY A.name
+                GROUP BY A.name, A.id
                 ORDER BY count DESC');
 $stats['count_genre'] = $result;
 
 $result = runSQL('SELECT A.name, COUNT(*) AS count, A.id
                     FROM '.TBL_MEDIATYPES.' A, '.TBL_DATA.' B
                    WHERE B.mediatype = A.id'.$WHERES.' 
-                GROUP BY A.name
+                GROUP BY A.name, A.id
                 ORDER BY count DESC');
 $stats['count_media'] = $result;
 
