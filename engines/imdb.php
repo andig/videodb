@@ -195,32 +195,28 @@ function imdbData($imdbID)
     // add encoding
     $data['encoding'] = get_response_encoding($resp);
 
-
-    // Check if it is a TV series episode
-    if (preg_match('/<div id="titleTVEpisodes"/i', $resp['data'])) {
-    #if (preg_match('/<div id="titleTVSeries"/i', $resp['data'])) {
-        $data['istv'] = 1;
-
-        # find id of Series
-        preg_match('/<a href="\/title\/tt(\d+)\/episodes.*?" title="Full Episode List.*"/i', $resp['data'], $ary);
-        $data['tvseries_id'] = trim($ary[1]);
-    }
-
-   // Titles and Year
+    // Titles and Year
+    // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
     if ($data['istv']) {
-        preg_match('/<meta name="title" content="&quot;(.*?)&quot;\s+(.*?)(.TV episode .*?)?( - IMDB)?"/si', $resp['data'], $ary);
-        $data['title'] = trim($ary[1]);
-        $data['subtitle'] = trim($ary[2]);
-#dlog($ary);
-        if (preg_match('/<h1 class="header".*?>.*?<span class="nobr">\(.*?(\d\d\d\d)\)</si', $resp['data'], $ary)) {
-            $data['year'] = $ary[1];
-        }
-    } else {
-        preg_match('/<meta name="title" content="(IMDb - )?(.*?) \(.*?(\d\d\d\d).*?\)( - IMDb)?" \/>/si', $resp['data'], $ary);
-#dlog($ary);
-        $data['year'] = trim($ary[3]);
+        preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary);
+        $data['year'] = $ary[2];
         # split title - subtitle
-        list($t, $s)	= explode(' - ', trim($ary[2]), 2);
+        list($t, $s) = explode(' - ', $ary[1], 2);
+        # no dash, lets try colon
+        if ($s == false) {
+            list($t, $s) = explode(': ', $ary[1], 2);	
+        }
+        $data['title'] = trim($t);
+        $data['subtitle'] = trim($s);
+    } else {
+        preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
+        $data['year'] = trim($ary[2]);
+        # split title - subtitle
+        list($t, $s) = explode(' - ', $ary[1], 2);
+        # no dash, lets try colon
+        if ($s == false) {
+            list($t, $s) = explode(': ', $ary[1], 2);	
+        }
         $data['title'] = trim($t);
         $data['subtitle'] = trim($s);
     }
