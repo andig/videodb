@@ -196,27 +196,34 @@ function imdbData($imdbID)
     $data['encoding'] = get_response_encoding($resp);
 
     // Check if it is a TV series episode
-    if (preg_match('/<div id="title-episode-widget" class="table full-width">/i', $resp['data'])) {
+    if (preg_match('/<title>.+?\(TV (Episode|Series).*?<\/title>/si', $resp['data'])) {
         $data['istv'] = 1;
-
+        
         # find id of Series
-        preg_match('/<a href="\/title\/tt(\d+)\/episodes\?ref_=tt_ov_epl"/si', $resp['data'], $ary);
+        preg_match('/<meta property="pageId" content="tt(\d+)" \/>/si', $resp['data'], $ary);
         $data['tvseries_id'] = trim($ary[1]);
     }
 
     // Titles and Year
     // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
     if ($data['istv']) {
-        preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary);
-        $data['year'] = $ary[2];
-        # split title - subtitle
-        list($t, $s) = explode(' - ', $ary[1], 2);
-        # no dash, lets try colon
-        if ($s == false) {
-            list($t, $s) = explode(': ', $ary[1], 2);	
-        }
-        $data['title'] = trim($t);
-        $data['subtitle'] = trim($s);
+        if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDb<\/title>/si', $resp['data'], $ary)) {
+            # handles one episode of a TV serie
+            $data['title'] = trim($ary[1]);
+            $data['subtitle'] = trim($ary[2]);
+            $data['year'] = $ary[3];
+        } else if (preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary)){
+            # handles a TV series.
+            # split title - subtitle
+            list($t, $s) = explode(' - ', $ary[1], 2);
+            # no dash, lets try colon
+            if ($s == false) {
+                list($t, $s) = explode(': ', $ary[1], 2);	
+            }
+            $data['title'] = trim($t);
+            $data['subtitle'] = trim($s);
+            $data['year'] = trim($ary[2]);
+        } 
     } else {
         preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
         $data['year'] = trim($ary[2]);
