@@ -397,7 +397,7 @@ function ofdbData($id)
 	if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
 	// add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // add engine ID -> important for non edit.php refetch
     $data['imdbID'] = $ofdbIdPrefix.$id;

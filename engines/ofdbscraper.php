@@ -141,7 +141,7 @@ function ofdbscraperSearch($title, $searchType = 'title')
 #    dump($resp);
 
 	// add encoding
-    $ary['encoding'] = get_response_encoding($resp);
+    $ary['encoding'] = $resp['encoding'];
 
 	if (preg_match_all('/<br>[0-9]+\.\s*<a href="film\/([0-9]+),[^"]*" onmouseover="[^"]*"[^>]*>([^<]*)<font.*?\/font> \(([\/\-0-9]+)\)<\/a>/', $resp['data'], $data, PREG_SET_ORDER))
 	{
@@ -192,7 +192,7 @@ function ofdbscraperData($id)
 	if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
 	// add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // add engine ID -> important for non edit.php refetch
     $data['imdbID'] = $ofdbscraperIdPrefix.$id;

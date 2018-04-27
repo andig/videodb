@@ -130,7 +130,7 @@ function imdbSearch($title, $aka=null)
     $data = array();
 
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // direct match (redirecting to individual title)?
     if (preg_match('/^'.preg_quote($imdbServer,'/').'\/[Tt]itle(\?|\/tt)([0-9?]+)\/?/', $resp['url'], $single))
@@ -193,7 +193,7 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // Check if it is a TV series episode
     if (preg_match('/<title>.+?\(TV (Episode|Series).*?<\/title>/si', $resp['data'])) {
@@ -386,7 +386,7 @@ function imdbData($imdbID)
 function imdbFixEncoding($data, $resp)
 {
     $result = $resp;
-    $pageEncoding = get_response_encoding($resp);
+    $pageEncoding = $resp['encoding'];
 
     if ($pageEncoding != $data['encoding'])
     {
