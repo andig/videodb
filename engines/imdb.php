@@ -10,7 +10,7 @@
  * @version $Id: imdb.php,v 1.76 2013/04/10 18:11:43 andig2 Exp $
  */
 
-$GLOBALS['imdbServer']   = 'http://www.imdb.com';
+$GLOBALS['imdbServer']   = 'https://www.imdb.com';
 $GLOBALS['imdbIdPrefix'] = 'imdb:';
 
 /**
@@ -198,7 +198,7 @@ function imdbData($imdbID)
     // Check if it is a TV series episode
     if (preg_match('/<title>.+?\(TV (Episode|Series).*?<\/title>/si', $resp['data'])) {
         $data['istv'] = 1;
-        
+
         # find id of Series
         preg_match('/<meta property="pageId" content="tt(\d+)" \/>/si', $resp['data'], $ary);
         $data['tvseries_id'] = trim($ary[1]);
@@ -231,13 +231,13 @@ function imdbData($imdbID)
         list($t, $s) = explode(' - ', $ary[1], 2);
         # no dash, lets try colon
         if ($s == false) {
-            list($t, $s) = explode(': ', $ary[1], 2);	
+            list($t, $s) = explode(': ', $ary[1], 2);
         }
         $data['title'] = trim($t);
         $data['subtitle'] = trim($s);
     }
     # orig. title
-    preg_match('/<span class="title-extra".+?>\s*"?(.*?)"?\s*<i>\(original title\)<\/i>\s*</si', $resp['data'], $ary);
+    preg_match('<div class="originalTitle">(.+?)<span class="description"> \(original title\)<\/span><\/div>/si', $resp['data'], $ary);
     $data['origtitle'] = trim($ary[1]);
 
     // Cover URL
@@ -246,11 +246,6 @@ function imdbData($imdbID)
     // MPAA Rating
     preg_match('/<span\s?itemprop="contentRating">(.*?)</is', $resp['data'], $ary);
     $data['mpaa']     = trim($ary[1]);
-
-    // UK BBFC Rating
-    # no longer appears on main page
-    #preg_match('/>\s*UK:(.*?)<\/a>\s+/s', $resp['data'], $ary);
-    #$data['bbfc'] = trim($ary[1]);
 
     // Runtime
     // many but not all yet have new <time itemprop="duration"> tag
@@ -360,20 +355,26 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // Plot
-    preg_match('/<P CLASS="plotSummary">(.+?)<\/P>/is', $resp['data'], $ary);
+    //<li class="ipl-zebra-list__item" id="summary-ps0695557">
+    //  <p>A nameless first person narrator (<a href="/name/nm0001570/">Edward Norton</a>) attends support groups in attempt to subdue his emotional state and relieve his insomniac state. When he meets Marla (<a href="/name/nm0000307/">Helena Bonham Carter</a>), another fake attendee of support groups, his life seems to become a little more bearable. However when he associates himself with Tyler (<a href="/name/nm0000093/">Brad Pitt</a>) he is dragged into an underground fight club and soap making scheme. Together the two men spiral out of control and engage in competitive rivalry for love and power. When the narrator is exposed to the hidden agenda of Tyler&#39;s fight club, he must accept the awful truth that Tyler may not be who he says he is.</p>
+    //  <div class="author-container">
+    //      <em>&mdash;<a href="/search/title?plot_author=Rhiannon&view=simple&sort=alpha&ref_=ttpl_pl_0">Rhiannon</a></em>
+    //  </div>
+    //</li>
+    preg_match('/<li class="ipl-zebra-list__item" id="summary-ps\d+">\s+<p>(.+?)<\/p>/is', $resp['data'], $ary);
     if ($ary[1])
     {
         $data['plot'] = trim($ary[1]);
-        $data['plot'] = preg_replace('/&#34;/', '"', $data['plot']);     //Replace HTML " with "
-        //Begin removal of 'Written by' section
-        $data['plot'] = preg_replace('/<a href="\/SearchPlotWriters.*?<\/a>/', '', $data['plot']);
-        $data['plot'] = preg_replace('/Written by/', '', $data['plot']);
-        $data['plot'] = preg_replace('/<i>\s+<\/i>/', ' ', $data['plot']);
-        //End of removal of 'Written by' section
+        $data['plot'] = preg_replace('/&#34;/', '"', $data['plot']); //Replace HTML " with "
+
+        // removed linked actors like: <a href="/name/nm0001570?ref_=tt_stry_pl">Edward Norton</a>
+        $data['plot'] = preg_replace('/<a href="\/name\/nm\d+.+?">/', '', $data['plot']);
+        $data['plot'] = preg_replace('/<\/a>/', '', $data['plot']);
+
         $data['plot'] = preg_replace('/\s+/s', ' ', $data['plot']);
     }
-    $data['plot'] = html_clean($data['plot']);
-    #dump($data['plot']);
+
+    $data['plot'] = html_clean_utf8($data['plot']);
 
     return $data;
 }
@@ -404,11 +405,11 @@ function imdbFixEncoding($data, $resp)
  * @return  string          Cover Image URL
  */
 function imdbGetCoverURL($data) {
-	global $imdbServer;
+    global $imdbServer;
     global $CLIENTERROR;
     global $cache;
 
-	// find cover image url
+    // find cover image url
     if (preg_match('/<td.*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
     {
         // Fetch the image page
@@ -416,12 +417,12 @@ function imdbGetCoverURL($data) {
 
         if ($resp['success'])
         {
-        	// get big cover image.
-			preg_match('/<img.+?id="primary-img".*?src="(.*?)"/si', $resp['data'], $ary);
-	        return trim($ary[1]);
+            // get big cover image.
+            preg_match('/<img.+?id="primary-img".*?src="(.*?)"/si', $resp['data'], $ary);
+            return trim($ary[1]);
         }
-    	$CLIENTERROR .= $resp['error']."\n";
-    	return '';
+        $CLIENTERROR .= $resp['error']."\n";
+        return '';
     }
     // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
     // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that we want the full size.
@@ -431,7 +432,9 @@ function imdbGetCoverURL($data) {
         // Replace the https wtih http.
         $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
         return $img_url;
-    } else {
+    }
+    else
+    {
         # no image
         return '';
     }
@@ -473,6 +476,7 @@ function imdbActor($name, $actorid)
 
     // search directly by id or via name?
     $resp   = httpClient(imdbActorUrl($name, $actorid), $cache);
+
     $ary    = array();
 
     // if not direct match load best match
@@ -494,6 +498,7 @@ function imdbActor($name, $actorid)
     if (preg_match('/.*?<a.*?href="(.+?)"\s*?>\s*<img\s+.*?src="(.*?\.)_v.*?"/si', $match[1], $m))
     {
         $ary[0][0] = $m[1];
+
         $img_url = $m[2]."jpg";
         // Replace the https wtih http.
         $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
