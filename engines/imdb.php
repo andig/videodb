@@ -361,7 +361,7 @@ function imdbData($imdbID)
     //      <em>&mdash;<a href="/search/title?plot_author=Rhiannon&view=simple&sort=alpha&ref_=ttpl_pl_0">Rhiannon</a></em>
     //  </div>
     //</li>
-    preg_match('/<li class="ipl-zebra-list__item" id="summary-ps\d+">\s+<p>(.+?)<\/p>/is', $resp['data'], $ary);
+    preg_match('/<li class="ipl-zebra-list__item" id="summary-p.\d+">\s+<p>(.+?)<\/p>/is', $resp['data'], $ary);
     if ($ary[1])
     {
         $data['plot'] = trim($ary[1]);
