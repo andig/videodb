@@ -67,23 +67,19 @@ function imdbRecommendations($id, $required_rating, $required_year)
 {
     global $CLIENTERROR;
 
-    $url = imdbContentUrl($id).'recommendations';
-    $resp = httpClient($url, true);
-    if (!$resp['success'])
-    {
-        $CLIENTERROR = $resp['error']."\n";
-        return '';
-    }
+	$url = imdbContentUrl($id);
+	$resp = httpClient($url, true);
 
     $recommendations = array();
-    preg_match_all('#<a href=\"/title/tt(\d+)/\">(.+?)</a>\W+(\d{4}).+?<b>(\d+\.\d+)<\/b>#i', $resp['data'], $ary, PREG_SET_ORDER);
+    preg_match_all('/<div class="rec_item" data-info=".*?" data-spec=".*?" data-tconst="tt(\d+)">/si', $resp['data'], $ary, PREG_SET_ORDER);
 
-    foreach ($ary as $recommended)
+    foreach ($ary as $recommended_id)
     {
-        $imdbId = $recommended[1];
-        $title  = $recommended[2];
-        $year   = $recommended[3];
-        $rating = $recommended[4];
+		$rec_resp = getRecommendationData($recommended_id[1]);
+        $imdbId = $recommended_id[1];
+        $title  = $rec_resp['title'];
+        $year   = $rec_resp['year'];
+        $rating = $rec_resp['rating'];
 
         // matching at least required rating?
         if (empty($required_rating) || (float) $rating < $required_rating) continue;
@@ -100,6 +96,54 @@ function imdbRecommendations($id, $required_rating, $required_year)
         $recommendations[] = $data;
     }
     return $recommendations;
+}
+
+function getRecommendationData($imdbID) {
+	global $imdbServer;
+    global $imdbIdPrefix;
+    global $CLIENTERROR;
+	
+	$imdbID = preg_replace('/^'.$imdbIdPrefix.'/', '', $imdbID);
+	
+	// fetch mainpage
+    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', true);     // added trailing / to avoid redirect
+    if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
+	
+	// Titles and Year
+    // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
+    if ($data['istv']) {
+        if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDb<\/title>/si', $resp['data'], $ary)) {
+            # handles one episode of a TV serie
+            $data['title'] = trim($ary[1]);
+            $data['year'] = $ary[3];
+        } else if (preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary)){
+            # handles a TV series.
+            # split title - subtitle
+            list($t, $s) = explode(' - ', $ary[1], 2);
+            # no dash, lets try colon
+            if ($s == false) {
+                list($t, $s) = explode(': ', $ary[1], 2);
+            }
+            $data['title'] = trim($t);
+            $data['year'] = trim($ary[2]);
+        }
+    } else {
+        preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
+        $data['year'] = trim($ary[2]);
+        # split title - subtitle
+        list($t, $s) = explode(' - ', $ary[1], 2);
+        # no dash, lets try colon
+        if ($s == false) {
+            list($t, $s) = explode(': ', $ary[1], 2);
+        }
+        $data['title'] = trim($t);
+    }
+	
+	// Rating
+    preg_match('/<span .*? itemprop="ratingValue">([\d\.]+)<\/span>/si', $resp['data'], $ary);
+    $data['rating'] = trim($ary[1]);
+	
+	return $data;
 }
 
 /**

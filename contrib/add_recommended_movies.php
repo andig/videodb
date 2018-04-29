@@ -16,19 +16,33 @@ require_once './engines/engines.php';
 // since we don't need session functionality, use this as workaround
 // for php bug #22526 session_start/popen hang
 session_write_close();
-
 ?>
 
 <html>
+
 <head>
     <title>Find Movie Recommendations</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="description" content="VideoDB" />
+
     <style>
         .green { color:green }
     </style>
 </head>
 <body>
+    <div id="process">
+        Process: <label id="count">0</label> of <label id="total">0</label>
+    </div>
+<script>
+function updateCount(value) {
+    document.getElementById("count").innerHTML = value;
+}
+
+function updateTotal(value) {
+    document.getElementById("total").innerHTML = value;
+}
+</script>
+
 
 <?php
 
@@ -45,8 +59,17 @@ if ($submit)
     if (empty($wishlist)) $SQL .= ' WHERE mediatype != '.MEDIA_WISHLIST;
     $result = runSQL($SQL);
 
+    echo '<script>updateTotal('.sizeof($result).');</script>';
+    ob_flush();
+    flush();
+
+    $count = 1;
     foreach ($result as $video)
     {
+        echo '<script>updateCount('.$count++.');</script>';
+        ob_flush();
+        flush();
+        
         if (empty($video['imdbID'])) continue;
         $engine = strtoupper(engineGetEngine($video['imdbID']));
         echo "Fetching recommendations for <b>{$video['title']}</b> ($engine Id {$video['imdbID']})<br/>";
@@ -77,7 +100,8 @@ if ($submit)
             if (!$available)
             {
                 $recommended['title'] = '<a class="green" href="../edit.php?save=1&mediatype='.MEDIA_WISHLIST.'&lookup=1&imdbID='.$recommended['id'].
-                             '&title='.urlencode($recommended['title']).'" target="_blank">'.$recommended['title'].' <img src="../images/add.gif" border="0"/></a>';
+                             '&title='.urlencode($recommended['title']).'" target="_blank">'.$recommended['title'].
+                             ' <img src="../images/add.gif" border="0"/></a>';
             }
 
             echo "<tr>";
@@ -121,13 +145,13 @@ else
             <input type="checkbox" name="wishlist" id="wishlist" value="1" />
             Include wishlist
         </label>
-        <br/>
+        <br />
 
         <label for="download">
             <input type="checkbox" name="download" id="download" value="1" />
             Download recommendations if movie is not in videoDB
         </label>
-        <br/>
+        <br />
 
         <input type="submit" name="submit" value="Search" />
     </form>
