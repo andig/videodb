@@ -32,7 +32,7 @@ extract($_REQUEST, EXTR_OVERWRITE);
 // create default config file if not existing
 if (!file_exists(CONFIG_FILE))
 {
-    copy('./config.sample.php', CONFIG_FILE);
+    @copy('./config.sample.php', CONFIG_FILE);
 }
 
 // set default
@@ -50,7 +50,7 @@ elseif (isset($action) && stristr($action, 'upgrade'))
     $upgrading = true;
 
     // load configuration
-	include_once(CONFIG_FILE);
+	@include_once(CONFIG_FILE);
 
     // begin of upgrade?
 	if (empty($step))
@@ -369,11 +369,11 @@ switch ($step)
                                 'db_database'   => $db_database,
                                 'db_prefix'     => $db_prefix), true);
 
-                            if (!file_put_contents(CONFIG_FILE, $config_file))
+                            if (!@file_put_contents(CONFIG_FILE, $config_file))
                             {
                                 error('<br/>Could not write config file '.CONFIG_FILE.'!
                                        <br/>Please make sure your config file contains the following lines:<br/><br/>'.
-                                       highlight_string($config_file, 1));
+                                       highlight_string($config_file, 1), true);
                             }
 /*
                             warn('Your username/ password chosen for this upgrade do not match your config file. Please make sure
