@@ -102,28 +102,32 @@ function delete_files($dir, $recursive = false)
 }
 
 /**
- * Parse config file and replace settings according 
+ * Parse config file and replace settings according
  * to associate array parameter
  *
  * @param   array   new parameter values
  */
 function parse_config($vars)
 {
-    $raw = explode("\n", file_get_contents(CONFIG_FILE));
+    $raw = null;
 
-	for ($i = 0; $i < count($raw); $i++) 
-	{
-		foreach ($vars as $name => $val)
-		{
-			if (preg_match("/^(.*?'$name'.*?=\s*)(.*?)(\s*;.*?)$/", $raw[$i], $matches))
-            {
-				# quoted?
-				if (preg_match("/^[\"'].*[\"']$/", $matches[2])) $val = "'$val'";
-				$matches[2] = $val;
-				$raw[$i]    = join('', array_slice($matches,1));
-			}
-		}
-	}
+    if ($file = @file_get_contents(CONFIG_FILE)) {
+        $raw = explode("\n", $file);
+
+    	for ($i = 0; $i < count($raw); $i++)
+    	{
+    		foreach ($vars as $name => $val)
+    		{
+    			if (preg_match("/^(.*?'$name'.*?=\s*)(.*?)(\s*;.*?)$/", $raw[$i], $matches))
+                {
+    				# quoted?
+    				if (preg_match("/^[\"'].*[\"']$/", $matches[2])) $val = "'$val'";
+    				$matches[2] = $val;
+    				$raw[$i]    = join('', array_slice($matches,1));
+    			}
+    		}
+    	}
+    }
 
     // fallback if config file is empty or invalid
     if (count($raw) < 4)
@@ -133,7 +137,7 @@ function parse_config($vars)
         {
             $line   = "\$config['$name'] = ";
             $line  .= (is_numeric($val)) ? "$val;" : "'$val';";
-            $raw[]  = $line;    
+            $raw[]  = $line;
         }
         $raw[] = '?>';
     }
