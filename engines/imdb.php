@@ -130,7 +130,7 @@ function imdbSearch($title, $aka=null)
     $data = array();
 
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // direct match (redirecting to individual title)?
     if (preg_match('/^'.preg_quote($imdbServer,'/').'\/[Tt]itle(\?|\/tt)([0-9?]+)\/?/', $resp['url'], $single))
@@ -193,7 +193,7 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // Check if it is a TV series episode
     if (preg_match('/<title>.+?\(TV (Episode|Series).*?<\/title>/si', $resp['data'])) {
@@ -218,12 +218,12 @@ function imdbData($imdbID)
             list($t, $s) = explode(' - ', $ary[1], 2);
             # no dash, lets try colon
             if ($s == false) {
-                list($t, $s) = explode(': ', $ary[1], 2);	
+                list($t, $s) = explode(': ', $ary[1], 2);
             }
             $data['title'] = trim($t);
             $data['subtitle'] = trim($s);
             $data['year'] = trim($ary[2]);
-        } 
+        }
     } else {
         preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
         $data['year'] = trim($ary[2]);
@@ -231,7 +231,7 @@ function imdbData($imdbID)
         list($t, $s) = explode(' - ', $ary[1], 2);
         # no dash, lets try colon
         if ($s == false) {
-            list($t, $s) = explode(': ', $ary[1], 2);	
+            list($t, $s) = explode(': ', $ary[1], 2);   
         }
         $data['title'] = trim($t);
         $data['subtitle'] = trim($s);
@@ -386,7 +386,7 @@ function imdbData($imdbID)
 function imdbFixEncoding($data, $resp)
 {
     $result = $resp;
-    $pageEncoding = get_response_encoding($resp);
+    $pageEncoding = $resp['encoding'];
 
     if ($pageEncoding != $data['encoding'])
     {
@@ -404,48 +404,34 @@ function imdbFixEncoding($data, $resp)
  * @return  string          Cover Image URL
  */
 function imdbGetCoverURL($data) {
-	global $imdbServer;
+    global $imdbServer;
     global $CLIENTERROR;
     global $cache;
 
-	// find cover image url
-    if (preg_match('/<div.*?class="poster".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
+    // find cover image url
+    if (preg_match('/<td.*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
     {
         // Fetch the image page
         $resp = httpClient($imdbServer.$ary[1], $cache);
 
         if ($resp['success'])
         {
-        	// get big cover image.
-			preg_match('/<img.+?id="primary-img".*?src="(.*?)"/si', $resp['data'], $ary);
-	        return trim($ary[1]);
+            // get big cover image.
+            preg_match('/<img.+?id="primary-img".*?src="(.*?)"/si', $resp['data'], $ary);
+            return trim($ary[1]);
         }
-    	$CLIENTERROR .= $resp['error']."\n";
-    	return '';
-    } 
-    // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
-	// The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that because we want the full size.
-    else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary))
-    {
-        if ($ary[1]) 
-        {
-			$img_url = $ary[1]."jpg";
-			// Replace the https wtih http.
-			$img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
-			
-			// Fetch the image page
-			$resp = httpClient($img_url, $cache);
-			if ($resp['success'])
-			{
-				dlog("success");
-				return $img_url;
-			}
-			$CLIENTERROR .= $resp['error']."\n";
-        }
+        $CLIENTERROR .= $resp['error']."\n";
         return '';
     }
-    else 
+    // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
+    // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that we want the full size.
+    else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary))
     {
+        $img_url = $ary[1]."jpg";
+        // Replace the https wtih http.
+        $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
+        return $img_url;
+    } else {
         # no image
         return '';
     }
@@ -487,7 +473,6 @@ function imdbActor($name, $actorid)
 
     // search directly by id or via name?
     $resp   = httpClient(imdbActorUrl($name, $actorid), $cache);
-
     $ary    = array();
 
     // if not direct match load best match
@@ -505,14 +490,13 @@ function imdbActor($name, $actorid)
     preg_match('/<td.*?id="img_primary".*?>(.*?)<\/td>/si',$resp['data'], $match);
 
     // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
-	// The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that because we want the full size.
+    // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that we want the full size.
     if (preg_match('/.*?<a.*?href="(.+?)"\s*?>\s*<img\s+.*?src="(.*?\.)_v.*?"/si', $match[1], $m))
     {
         $ary[0][0] = $m[1];
-		
-		$img_url = $m[2]."jpg";
-		// Replace the https wtih http.
-		$img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
+        $img_url = $m[2]."jpg";
+        // Replace the https wtih http.
+        $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
         $ary[0][1] = $img_url;
     }
 

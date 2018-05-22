@@ -109,7 +109,7 @@ function allocineSearch($title)
     #echo '</pre>';
 
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // direct match (redirecting to individual title)?
     // no longer needed??
@@ -202,7 +202,7 @@ function allocineData($imdbID)
     $ary    = array(); // temp
 
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // Allocine ID
     $data['id'] = "allocine:".$allocineID;

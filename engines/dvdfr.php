@@ -92,7 +92,7 @@ function dvdfrSearch($title)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // Encoding
-    $ary['encoding'] = get_response_encoding($resp);
+    $ary['encoding'] = $resp['encoding'];
 
 /* No more direct match with XLM API
 
@@ -175,7 +175,7 @@ function dvdfrData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     // See http://www.dvdfr.com/api/dvd.php?id=2869 for output
 
