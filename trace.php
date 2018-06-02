@@ -53,7 +53,7 @@ function get_full_url($url)
     global $uri, $config;
 
     // fully qualified?
-    if (preg_match("/^http:\/\//", $url)) return $url;
+    if (preg_match("/^https?:\/\//", $url)) return $url;
 
     // local absolute path?
     if (preg_match("/^\//", $url)) {
