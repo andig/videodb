@@ -1,3 +1,4 @@
 # Files to be ignored by git
 config.inc.php
 
+cache

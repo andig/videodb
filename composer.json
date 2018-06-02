@@ -1,0 +1,13 @@
+{
+    "name": "andig/videodb",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "authors": [
+        {
+            "name": "andig",
+            "email": "cpuidle@gmx.de"
+        }
+    ]
+}
