@@ -29,7 +29,7 @@ function get_base($url)
 	global $uri;
 
 	$uri = parse_url($url);
-	if (!$uri['scheme']) $uri['scheme'] = 'http';
+	if (!$uri['scheme']) $uri['scheme'] = 'https';
 	if (!$uri['host']) $uri['host'] = 'localhost';
 	if (!$uri['path']) $uri['path'] = '/';
 	$uri['server'] = $uri['scheme'].'://'.$uri['host'];
@@ -53,7 +53,7 @@ function get_full_url($url)
     global $uri, $config;
 
     // fully qualified?
-    if (preg_match("/^http:\/\//", $url)) return $url;
+    if (preg_match("/^https?:\/\//", $url)) return $url;
 
     // local absolute path?
     if (preg_match("/^\//", $url)) {
@@ -327,7 +327,7 @@ function request($urlonly=false)
 	}
 
 	// going directly to trace.php without options?
-	if (!$url) $url = 'http://www.imdb.com';
+	if (!$url) $url = 'https://www.imdb.com';
 
 	// remove session identifier before request is sent or caching will not work
 	$url = preg_replace("/&".SID."$/", "", $url);

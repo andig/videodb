@@ -60,7 +60,7 @@ function isohuntSearch($title)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
     
     // add encoding
-    $data['encoding'] = get_response_encoding($resp);
+    $data['encoding'] = $resp['encoding'];
 
     $xml    = @simplexml_load_string($resp['data']);
 
