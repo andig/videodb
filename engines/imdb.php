@@ -237,12 +237,12 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
-    $data['encoding'] = $resp['encoding'];
+    $data['encoding'] = get_response_encoding($resp);
 
     // Check if it is a TV series episode
     if (preg_match('/<title>.+?\(TV (Episode|Series).*?<\/title>/si', $resp['data'])) {
         $data['istv'] = 1;
-
+        
         # find id of Series
         preg_match('/<meta property="pageId" content="tt(\d+)" \/>/si', $resp['data'], $ary);
         $data['tvseries_id'] = trim($ary[1]);
@@ -262,12 +262,12 @@ function imdbData($imdbID)
             list($t, $s) = explode(' - ', $ary[1], 2);
             # no dash, lets try colon
             if ($s == false) {
-                list($t, $s) = explode(': ', $ary[1], 2);
+                list($t, $s) = explode(': ', $ary[1], 2);	
             }
             $data['title'] = trim($t);
             $data['subtitle'] = trim($s);
             $data['year'] = trim($ary[2]);
-        }
+        } 
     } else {
         preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
         $data['year'] = trim($ary[2]);
@@ -275,7 +275,7 @@ function imdbData($imdbID)
         list($t, $s) = explode(' - ', $ary[1], 2);
         # no dash, lets try colon
         if ($s == false) {
-            list($t, $s) = explode(': ', $ary[1], 2);
+            list($t, $s) = explode(': ', $ary[1], 2);	
         }
         $data['title'] = trim($t);
         $data['subtitle'] = trim($s);
@@ -454,7 +454,7 @@ function imdbGetCoverURL($data) {
     global $cache;
 
     // find cover image url
-    if (preg_match('/<td.*?id="img_primary".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
+    if (preg_match('/<div.*?class="poster".*?<a.*?href="(\/media\/rm.*?)".*?>/si', $data, $ary))
     {
         // Fetch the image page
         $resp = httpClient($imdbServer.$ary[1], $cache);
@@ -467,17 +467,29 @@ function imdbGetCoverURL($data) {
         }
         $CLIENTERROR .= $resp['error']."\n";
         return '';
-    }
+    } 
     // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
-    // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that we want the full size.
+	  // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that because we want the full size.
     else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary))
     {
-        $img_url = $ary[1]."jpg";
-        // Replace the https wtih http.
-        $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
-        return $img_url;
+        if ($ary[1]) 
+        {
+		        $img_url = $ary[1]."jpg";
+			      // Replace the https wtih http.
+			      $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
+			
+			      // Fetch the image page
+			      $resp = httpClient($img_url, $cache);
+			      if ($resp['success'])
+			      {
+				        dlog("success");
+				        return $img_url;
+		        }
+			  $CLIENTERROR .= $resp['error']."\n";
+        }
+        return '';
     }
-    else
+    else 
     {
         # no image
         return '';
@@ -546,7 +558,8 @@ function imdbActor($name, $actorid)
         $img_url = $m[2]."jpg";
         // Replace the https wtih http.
         $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
-        $ary[0][1] = $img_url;
+
+      $ary[0][1] = $img_url;
     }
 
     return $ary;

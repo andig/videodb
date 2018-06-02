@@ -211,7 +211,7 @@ class phpthumb {
 	//////////////////////////////////////////////////////////////////////
 
 	// public: constructor
-	function phpThumb() {
+	function __construct() {
 		$this->DebugTimingMessage('phpThumb() constructor', __FILE__, __LINE__);
 		$this->DebugMessage('phpThumb() v'.$this->phpthumb_version, __FILE__, __LINE__);
 		$this->config_max_source_pixels = round(max(intval(ini_get('memory_limit')), intval(get_cfg_var('memory_limit'))) * 1048576 * 0.20); // 20% of memory_limit
@@ -3999,7 +3999,6 @@ exit;
 							$this->DebugMessage('deleting "'.$tempfilename.'"', __FILE__, __LINE__);
 							unlink($tempfilename);
 							return $gdimg_source;
-							break;
 						} else {
 							$ErrorMessage = 'Failed to open tempfile in '.__FILE__.' on line '.__LINE__;
 							$this->DebugMessage($ErrorMessage, __FILE__, __LINE__);

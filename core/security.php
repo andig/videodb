@@ -33,13 +33,23 @@ function removeEvilAttributes($tagSource)
 /**
  * @return string
  * @param string
+ * @desc Strip forbidden attributes from an array of matches for an expression like (<)(.*?)(>)
+ */
+function _callbackRemoveEvilAttributes($matches)
+{
+    return $matches[1] . removeEvilAttributes($matches[2]) . $matches[3];
+}
+
+/**
+ * @return string
+ * @param string
  * @desc Strip forbidden tags and delegate tag-source check to removeEvilAttributes()
  */
 function removeEvilTags($source)
 {
     global $allowedTags;
     $source = strip_tags($source, $allowedTags);
-    return preg_replace('/<(.*?)>/ie', "'<'.removeEvilAttributes('\\1').'>'", $source);
+    return preg_replace_callback('/(<)(.*?)(>)/i', "_callbackRemoveEvilAttributes", $source);
 }
 
 ?>
