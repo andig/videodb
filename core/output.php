@@ -35,7 +35,7 @@ function getGenres()
  */
 function out_genres($selected)
 {
-    global $config;
+    global $config,$lang;
 
     $result = getGenres();
 	$out = '<table class="genreselect"><tr>';
@@ -60,7 +60,7 @@ function out_genres($selected)
 			$out .= ' checked="checked"';
 		}
 		$out .= '/>';
-		$out .= '<label for="genreid'.$res['id'].'">'.$res['name'].'</label>';
+		$out .= '<label for="genreid'.$res['id'].'">'.(isset($lang[$res['name']]) ? $lang[$res['name']] : $res['name']).'</label>';
 		$out .= '</td>';
         if ((++$row % 5) == 0)
         {

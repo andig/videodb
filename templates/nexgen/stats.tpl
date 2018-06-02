@@ -41,7 +41,7 @@
               	<div class="small-cols-1 large-cols-2">
           				<ul>
           					{foreach item=row from=$stats.count_genre}
-          					<li>{$row.count} <a href="search.php?q=&genres[]={$row.id}">{$row.name}</a></li>
+          					<li>{$row.count} <a href="search.php?q=&genres[]={$row.id}">{if $lang.{$row.name}} {$lang.{$row.name}} {else} {$row.name} {/if}</a></li>
           					{/foreach}
           				</ul>
                 </div>

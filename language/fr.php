@@ -260,4 +260,33 @@ $lang['help_showtools']      = "Le menu utilitaires affichera le contenu du rép
 
 $lang['warn_noOwner']        = "Données non sauvées - vous devez préalablement sélectionner un propriétaire !";
 
+#
+# Genres
+#
+$lang['Action']		= 'Action';
+$lang['Adventure']	= 'Aventure';
+$lang['Animation']	= 'Animation';
+$lang['Comedy']		= 'Comédie';
+$lang['Crime']		= 'Policier';
+$lang['Documentary']= 'Documentaire';
+$lang['Drama']		= 'Drame';
+$lang['Family']		= 'Famille';
+$lang['Fantasy']	= 'Fantastique';
+$lang['Film-Noir']	= 'Film noir';
+$lang['Horror']		= 'Epouvante-horreur';
+$lang['Musical']	= 'Comédie musicale';
+$lang['Mystery']	= 'Mistère';
+$lang['Romance']	= 'Romance';
+$lang['Sci-Fi']		= 'Science fiction';
+$lang['Short']		= 'Court métrage';
+$lang['Thriller']	= 'Thriller';
+$lang['War']		= 'Guerre';
+$lang['Western']	= 'Western';
+$lang['Adult']		= 'Adulte';
+$lang['Music']		= 'Musical';
+$lang['Biography']	= 'Biopic';
+$lang['History']	= 'Historique';
+$lang['Sport']		= 'Sport';
+
+
 ?>
