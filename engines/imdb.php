@@ -358,9 +358,15 @@ function imdbData($imdbID)
     // Fetch plot
     $resp = $resp = imdbFixEncoding($data, httpClient($imdbServer.'/title/tt'.$imdbID.'/plotsummary', $cache));
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
-
+    
     // Plot
-    preg_match('/<P CLASS="plotSummary">(.+?)<\/P>/is', $resp['data'], $ary);
+    //<li class="ipl-zebra-list__item" id="summary-ps0695557">
+    //  <p>A nameless first person narrator (<a href="/name/nm0001570/">Edward Norton</a>) attends support groups in attempt to subdue his emotional state and relieve his insomniac state. When he meets Marla (<a href="/name/nm0000307/">Helena Bonham Carter</a>), another fake attendee of support groups, his life seems to become a little more bearable. However when he associates himself with Tyler (<a href="/name/nm0000093/">Brad Pitt</a>) he is dragged into an underground fight club and soap making scheme. Together the two men spiral out of control and engage in competitive rivalry for love and power. When the narrator is exposed to the hidden agenda of Tyler&#39;s fight club, he must accept the awful truth that Tyler may not be who he says he is.</p>
+    //  <div class="author-container">
+    //      <em>&mdash;<a href="/search/title?plot_author=Rhiannon&view=simple&sort=alpha&ref_=ttpl_pl_0">Rhiannon</a></em>
+    //  </div>
+    //</li>
+    preg_match('/<li class="ipl-zebra-list__item" id="summary-p.\d+">\s+<p>(.+?)<\/p>/is', $resp['data'], $ary);
     if ($ary[1])
     {
         $data['plot'] = trim($ary[1]);
@@ -373,7 +379,6 @@ function imdbData($imdbID)
         $data['plot'] = preg_replace('/\s+/s', ' ', $data['plot']);
     }
     $data['plot'] = html_clean($data['plot']);
-    #dump($data['plot']);
 
     return $data;
 }
