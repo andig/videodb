@@ -211,8 +211,9 @@ function prefix_query($query)
     $query = preg_replace('/((INSERT(\s+IGNORE)?|REPLACE)\s+INTO\s+)`?(\w+)`?/', "$1`$db_prefix$4`", $query);
 
     $query = preg_replace('/(DROP\s+TABLE\s+(IF\s+EXISTS\s+)?)`?(\w+)`?(;?)/', "$1`$db_prefix$3`$4", $query);
-    $query = preg_replace('/(UPDATE\s+)`?(\w+)`?/', "$1`$db_prefix$2`", $query);
-
+    // changed to allow only replace if sql update to row
+    $query = preg_replace('/(UPDATE\s+)`?(\w+)`?(\s+SET\s+)`?/', "$1`$db_prefix$2`$3", $query);
+   
     // FROM matches at beginning of string or subquery opened by left bracket
     $query = preg_replace_callback( "/(\s+FROM\s+)(.*?)((\s+WHERE|ORDER|LEFT|RIGHT|OUTER|JOIN)|\)|$)/msi", 'sql_add_prefix', $query);
 
