@@ -288,17 +288,20 @@ function fixup_HTML($html)
 	// href
 	$html = preg_replace_callback("/(<a\s+[^>]*?href\s*=\s*(\"|'))([^>]*?)(\\2[^>]*?>)(.*?)(<\/a\s*>)/is", '_replace_enclosed_tag_traced', $html);
 	$html = preg_replace_callback("/(<a\s+[^>]*?href\s*=\s*())([\d\w\.\/\+\%-:=&_]+)(\s*[^>]*?>)(.*?)(<\/a\s*>)/is", '_replace_enclosed_tag_traced', $html);
-
+                     
 	// title
     if (stristr($uri['host'], 'imdb'))
     {
-		$html = preg_replace_callback("/(<h1>)(.*?)(<span>)/si", 'imdb_replace_title_callback', $html);
+	$html = preg_replace_callback("/(<h1>)(.*?)(<span>)/si", 'imdb_replace_title_callback', $html);
 
         // imdb form does not accept utf8
         $html = preg_replace("/(form\s+.*?)(>)/i", '\\1 accept-charset="ISO-8859-1" \\2', $html );
-	} 
-
-	return $html;
+    
+        // javascript replacement to allow selection on search dropdown screens to work
+        $html = replace_javascript ($html);        
+    }  
+ 
+    return $html;
 }
 
 function request($urlonly=false)
@@ -363,6 +366,141 @@ function request($urlonly=false)
 		$page = $response['data'];
 	}
 	return $page;
+}
+
+function replace_javascript($html)
+{
+    $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/(.*?)-(.*?)js#'; 
+    preg_match_all($pattern,$html, $matches_all);
+    echo "<br> test for switch - ";
+    var_dump($matches_all);  
+    var_dump($matches_all[1]);
+    $x = 0;
+    foreach ($matches_all[1] as $value)
+    {
+       echo "<br> in for each loop - ".$value;
+         switch ($value)
+        {
+            case "pagelayout":
+                $js_file = file_get_contents($matches_all[0][$x]);
+                // var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
+                $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - ";
+                    var_dump($matches);
+                $replacement = $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2];
+                $js_file = preg_replace($pattern,$replacement,$js_file);
+                // <a class="moreResults" href="
+                $pattern = '#<a class=\"moreResults\" href=\"#';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - 2nd find - ";
+                    var_dump($matches);
+                $replacement = $matches[0].'trace.php?videodburl=http://www.imdb.com';
+                $js_file = preg_replace($pattern,$replacement,$js_file);
+                // save file to cache    
+                $tempfolder = cache_get_folder('');
+                $file_path = './'.$tempfolder.'imdb-clone-pagelayout.js';
+                file_put_contents($file_path, $js_file);
+                // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
+                $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/pagelayout-(.*?)js#';
+                if (preg_match($pattern, $html, $matches))
+                {        
+                    $replacement = $file_path;
+                    $html = preg_replace($pattern,$replacement,$html);
+                }
+                break;
+
+            case "title":
+                $js_file = file_get_contents($matches_all[0][$x]);
+                // var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
+                $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - ";
+                    var_dump($matches);
+                $replacement = $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2];
+                $js_file = preg_replace($pattern,$replacement,$js_file);
+                // <a class="moreResults" href="
+                $pattern = '#<a class=\"moreResults\" href=\"#';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - 2nd find - ";
+                    var_dump($matches);
+                $replacement = $matches[0].'trace.php?videodburl=http://www.imdb.com';
+                $js_file = preg_replace($pattern,$replacement,$js_file);                
+                // save file to cache    
+                $tempfolder = cache_get_folder('');
+                $file_path = './'.$tempfolder.'imdb-clone-title.js';
+                file_put_contents($file_path, $js_file);
+                // https://m.media-amazon.com/images/G/01/imdb/js/collections/title-3922816103._CB476927104_.js
+                $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/title-(.*?)js#';
+                if (preg_match($pattern, $html, $matches))
+                {        
+                    $replacement = $file_path;
+                    $html = preg_replace($pattern,$replacement,$html);
+                }                   
+                break;
+
+            case "name":
+                $js_file = file_get_contents($matches_all[0][$x]);
+                // var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
+                $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - ";
+                    var_dump($matches);
+                $replacement = $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2];
+                $js_file = preg_replace($pattern,$replacement,$js_file);
+                // <a class="moreResults" href="
+                $pattern = '#<a class=\"moreResults\" href=\"#';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - 2nd find - ";
+                    var_dump($matches);
+                $replacement = $matches[0].'trace.php?videodburl=http://www.imdb.com';
+                $js_file = preg_replace($pattern,$replacement,$js_file);                
+                // save file to cache    
+                $tempfolder = cache_get_folder('');
+                $file_path = './'.$tempfolder.'imdb-clone-name.js';
+                file_put_contents($file_path, $js_file);
+                // https://m.media-amazon.com/images/G/01/imdb/js/collections/name-3353207162._CB476927128_.js
+                $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/name-(.*?)js#';
+                if (preg_match($pattern, $html, $matches))
+                {        
+                    $replacement = $file_path;
+                    $html = preg_replace($pattern,$replacement,$html);
+                }
+                break;
+                
+            case "consumersite";
+                // yet te build
+               $js_file = file_get_contents($matches_all[0][$x]);
+                // var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
+                $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - ";
+                    var_dump($matches);
+                $replacement = $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2];
+                $js_file = preg_replace($pattern,$replacement,$js_file);
+                // <a class="moreResults" href="
+                $pattern = '#<a class=\"moreResults\" href=\"#';
+                preg_match($pattern, $js_file, $matches);
+                echo "<br> js file - 2nd find - ";
+                    var_dump($matches);
+                $replacement = $matches[0].'trace.php?videodburl=http://www.imdb.com';
+                $js_file = preg_replace($pattern,$replacement,$js_file);                
+                // save file to cache    
+                $tempfolder = cache_get_folder('');
+                $file_path = './'.$tempfolder.'imdb-clone-consumersite.js';
+                file_put_contents($file_path, $js_file);
+                // https://m.media-amazon.com/images/G/01/imdb/js/collections/consumersite-1849299544._CB476612758_.js
+                $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/consumersite-(.*?)js#';
+                if (preg_match($pattern, $html, $matches))
+                {        
+                    $replacement = $file_path;
+                    $html = preg_replace($pattern,$replacement,$html);
+                }                
+                break;
+        }
+        $x++ ;
+    }
+    return ($html);
 }
 
 // make sure this is a local access
