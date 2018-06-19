@@ -14,7 +14,7 @@
 
 <div id="logo">
     <div id="logotitle">
-        <a href="http://www.videodb.net">videoDB</a>
+        <a href="https://github.com/andig/videodb.git">videoDB</a>
     </div>
     <ul id="headernav2">
         {if $header.login}<li><div id="logologin"><a href="{$header.login}">{if $loggedin}{$lang.logout}{else}{$lang.login}{/if}</a>
@@ -22,7 +22,7 @@
 
         {if $header.profile}<li><div id="logoprofile"><a href="{$header.profile}">{$lang.profile}</a></div></li>{/if}
         {if $header.help}<li><div id="logohelp"><a href="{$header.help}">{$lang.help}</a></div></li>{/if}
-        <li><div id="logoversion"><a href="http://www.videodb.net">v{$version|strip|replace:"_":"."|replace:" ":""}</a></div></li>
+        <li><div id="logoversion"><a href="https://github.com/andig/videodb.git">v{$version|strip|replace:"_":"."|replace:" ":""}</a></div></li>
     </ul>
 </div>
 <!-- /logo -->

@@ -12,7 +12,7 @@
 
 // Config file
 define('CONFIG_FILE', './config.inc.php');
-define('VERSION', '4.0.0');
+define('VERSION', '4.1.0');
 
 define('LOG_FILE', 'log.txt');
 

@@ -15,7 +15,7 @@
           {/if}
         </td>
         <td align="right" style="text-align:right">
-          <a href="http://www.videodb.net" class="splitbrain">v.{$version}</a>
+          <a href="https://github.com/andig/videodb.git" class="splitbrain">v.{$version}</a>
         </td>
       </tr>
     </table>
