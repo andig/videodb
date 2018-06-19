@@ -33,7 +33,7 @@
 		{if $rss}
 			<a href="{$rss}export=rss" target="_blank"><img src="images/rssexport.png" style="float:right;margin-left:3px;"/></a>
 		{/if}
-		<a href="http://www.videodb.net" class="splitbrain">v.{$version|strip}</a>{if $loggedin}<span class="version">, {$lang.loggedinas} {$loggedin}</span>{/if}
+		<a href="https://github.com/andig/videodb.git" class="splitbrain">v.{$version|strip}</a>{if $loggedin}<span class="version">, {$lang.loggedinas} {$loggedin}</span>{/if}
 	</td>
 </tr>
 </table>

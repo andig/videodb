@@ -23,7 +23,7 @@
     </div>
 
     <div id="footerversion">
-        <a href="http://www.videodb.net">v{$version|strip|replace:"_":"."}</a>
+        <a href="https://github.com/andig/videodb.git">v{$version|strip|replace:"_":"."}</a>
     </div>
 
     <div id="footerpages">

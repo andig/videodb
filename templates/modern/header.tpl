@@ -9,7 +9,7 @@
 
 <div class="tablemenu">
 
-	<a href="http://www.videodb.net" class="logo">videoDB</a>
+	<a href="https://github.com/andig/videodb.git" class="logo">videoDB</a>
 	<div style="height:7px; font-size:1px;"></div>
 
 	{if $header.browse}<span class="{if $header.active == 'browse'}tabActive{else}tabInactive{/if}"><a href="{$header.browse}{if $browseid}#{$browseid}{/if}" accesskey="i">{$lang.browse}</a></span>{/if}
