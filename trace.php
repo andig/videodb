@@ -394,6 +394,7 @@ function fixup_javascript($html)
             case "title":
             case "name":
             case "consumersite";
+            case "common";
                 $html = replace_javascript ($html,$js_page_type,$matches_all[0][$x]);
                 break;
         }
@@ -427,14 +428,22 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
     $tempfolder = cache_get_folder('');
     $file_path = './'.$tempfolder.'imdb-clone-'.$js_page_type.'.js';
     file_put_contents($file_path, $js_file_data);
-    // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
-    $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
-//    echo "<BR> - pattern-".$pattern;
-    if (preg_match($pattern, $html, $matches))
-    {        
+
+    if ($js_page_type == 'common')
+    {    
+        // <script type="text/javascript" src="https://m.media-amazon.com/images/G/01/imdb/js/collections/common-1818413004._CB499603761_.js"></script>
+        $pattern  = '#<script type="text\/javascript" src="https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections/common-(.*?)js"><\/script>#'; 
+        $replacement = ' ';  // this does yet rmove script labels
+    }
+    else
+    {
+        // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
+        $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
+//          echo "<BR> - pattern-".$pattern;
         $replacement = $file_path;
-        $html = preg_replace($pattern,$replacement,$html);
-    }    
+    }
+    $html = preg_replace($pattern,$replacement,$html);
+   
     return $html;
 }
 
