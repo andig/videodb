@@ -11,7 +11,6 @@
     {/if}<link rel="shortcut icon" href="images/icons/1-favicon.ico" type="image/ico" />
     <script src="./javascript/prototype/prototype.js" type="text/javascript"></script>
     <script src="./javascript/scriptaculous/scriptaculous.js?load=effects,controls" type="text/javascript"></script>
-    <script src="./cache/imdb-clone-common.js" type="text/javascript"></script>
 {*
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script type="text/javascript">if (typeof jQuery == 'undefined') { document.write(unescape("%3Cscript src='./javascript/jquery/jquery-1.9.0.min.js' type='text/javascript'%3E%3C/script%3E"));}</script>

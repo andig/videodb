@@ -389,13 +389,12 @@ function fixup_javascript($html)
     foreach ($matches_all[1] as $js_page_type)
     {
 //    echo "<br> in for each loop - ".$js_page_type;
-         switch ($js_page_type)
+        switch ($js_page_type)
         {
             case "pagelayout":
             case "title":
             case "name":
             case "consumersite";
-            case "common";
                 $html = replace_javascript ($html,$js_page_type,$matches_all[0][$x]);
                 break;
         }
@@ -432,28 +431,14 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
     $error = cache_create_folders($cachefolder.'javascript', $levels = 0); // ensure folder exists
     $file_path = './'.$cachefolder.'javascript/'.'imdb-clone-'.$js_page_type.'.js';
     file_put_contents($file_path, $js_file_data);
-//    // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
-//    $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
+    // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
+    $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
 //    echo "<BR> - pattern-".$pattern;
-//    if (preg_match($pattern, $html, $matches))
-//    {        
-//        $html = preg_replace($pattern,$file_path,$html);
-//    }    
-    if ($js_page_type == 'common')
-    {    
-        // <script type="text/javascript" src="https://m.media-amazon.com/images/G/01/imdb/js/collections/common-1818413004._CB499603761_.js"></script>
-        $pattern  = '#<script type="text\/javascript" src="https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections/common-(.*?)js"><\/script>#'; 
-        $replacement = ' ';  // removed and needs to be added into head tags
-    }
-    else
-    {
-        // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
-        $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
-//    echo "<BR> - pattern-".$pattern;
-        $replacement = $file_path;
-    }
-    $html = preg_replace($pattern,$replacement,$html);
-   
+    if (preg_match($pattern, $html, $matches))
+    {        
+        $html = preg_replace($pattern,$file_path,$html);
+    }    
+
     return $html;
 }
 
