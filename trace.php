@@ -288,17 +288,17 @@ function fixup_HTML($html)
 	// href
 	$html = preg_replace_callback("/(<a\s+[^>]*?href\s*=\s*(\"|'))([^>]*?)(\\2[^>]*?>)(.*?)(<\/a\s*>)/is", '_replace_enclosed_tag_traced', $html);
 	$html = preg_replace_callback("/(<a\s+[^>]*?href\s*=\s*())([\d\w\.\/\+\%-:=&_]+)(\s*[^>]*?>)(.*?)(<\/a\s*>)/is", '_replace_enclosed_tag_traced', $html);
-
+                     
 	// title
     if (stristr($uri['host'], 'imdb'))
     {
-		$html = preg_replace_callback("/(<h1>)(.*?)(<span>)/si", 'imdb_replace_title_callback', $html);
+	$html = preg_replace_callback("/(<h1>)(.*?)(<span>)/si", 'imdb_replace_title_callback', $html);
 
         // imdb form does not accept utf8
         $html = preg_replace("/(form\s+.*?)(>)/i", '\\1 accept-charset="ISO-8859-1" \\2', $html );
-	} 
-
-	return $html;
+    }  
+ 
+    return $html;
 }
 
 function request($urlonly=false)
@@ -341,12 +341,17 @@ function request($urlonly=false)
 	if ($_POST) {
 		$post = $request;
 	} elseif ($request) {
-		$url .= "?".$request;
+            if (preg_match('/\?/',$url)) {
+                $url .= "&".$request;
+            }
+            else {
+                $url .= "?".$request;   
+            }
 	}
 
     // encode possible spaces, use %20 instead of +
 	$url = preg_replace('/ /','%20', $url);
-
+        
     $response = httpClient($url, $_GET['videodbreload'] != 'Y', array('post' => $post));
 
 	// url after redirect
@@ -363,6 +368,77 @@ function request($urlonly=false)
 		$page = $response['data'];
 	}
 	return $page;
+}
+
+function fixup_javascript($html)
+{
+    global $uri;
+    
+    if (stristr($uri['host'], 'imdb') === false)
+    {
+        return $html;
+    }
+    // find all imdb javascript files
+    preg_match_all('#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/(.*?)-(.*?)js#',
+                   $html,
+                   $matches_all);
+//    echo "<br> test for switch - ";
+//    var_dump($matches_all);  
+//    var_dump($matches_all[1]);
+    $x = 0;
+    foreach ($matches_all[1] as $js_page_type)
+    {
+//    echo "<br> in for each loop - ".$js_page_type;
+         switch ($js_page_type)
+        {
+            case "pagelayout":
+            case "title":
+            case "name":
+            case "consumersite";
+                $html = replace_javascript ($html,$js_page_type,$matches_all[0][$x]);
+                break;
+        }
+        $x++ ;
+    }
+    return ($html);
+}
+
+function replace_javascript ($html, $js_page_type, $js_file_name)
+{
+    // get contents of javascript file
+    $js_file_data = file_get_contents($js_file_name);
+
+    // process string - var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
+    $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
+    preg_match($pattern, $js_file_data, $matches);
+//    echo "<br> list of imdb js files - ";
+//    var_dump($matches);
+    $js_file_data = preg_replace($pattern,
+                                 $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2],
+                                 $js_file_data);
+    
+    // process string - class="moreResults" href="
+    $pattern = '#class=\"moreResults\" href=\"#';
+    preg_match($pattern, $js_file_data, $matches);
+//    echo "<br> js file - find moreresults";
+//    var_dump($matches);
+    $js_file_data = preg_replace($pattern,
+                                 $matches[0].'trace.php?videodburl=http://www.imdb.com',
+                                 $js_file_data);
+    
+    // save file to cache (overwritten if present) 
+    $cachefolder = cache_get_folder('');  //get cache root folder
+    $error = cache_create_folders($cachefolder.'javascript', $levels = 0); // ensure folder exists
+    $file_path = './'.$cachefolder.'javascript/'.'imdb-clone-'.$js_page_type.'.js';
+    file_put_contents($file_path, $js_file_data);
+    // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
+    $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
+//    echo "<BR> - pattern-".$pattern;
+    if (preg_match($pattern, $html, $matches))
+    {        
+        $html = preg_replace($pattern,$file_path,$html);
+    }    
+    return $html;
 }
 
 // make sure this is a local access
@@ -396,6 +472,7 @@ else
 
 	// convert HTML for output
 	$page = fixup_HTML($page);
+    $page = fixup_javascript($page);
 }
 
 if ($iframe == 2) 

@@ -122,7 +122,7 @@ function verify_installation($return = false)
     $error = '';
 
     // check cache
-    foreach (array(CACHE => 0,CACHE.'/smarty' => 0, CACHE.'/imdb' => 1, CACHE.'/img' => 1, CACHE.'/thumbs' => 1) as $dir => $hierarchical)
+    foreach (array(CACHE => 0,CACHE.'/smarty' => 0, CACHE.'/imdb' => 1, CACHE.'/img' => 1, CACHE.'/thumbs' => 1, CACHE.'/javascript' => 0) as $dir => $hierarchical)
 	{
         // check top-level folders
         $error .= cache_create_folders($dir, $hierarchical ? (int) $config['hierarchical'] : 0);
