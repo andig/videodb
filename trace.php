@@ -389,7 +389,7 @@ function fixup_javascript($html)
     foreach ($matches_all[1] as $js_page_type)
     {
 //    echo "<br> in for each loop - ".$js_page_type;
-         switch ($js_page_type)
+        switch ($js_page_type)
         {
             case "pagelayout":
             case "title":
@@ -407,7 +407,7 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
 {
     // get contents of javascript file
     $js_file_data = file_get_contents($js_file_name);
-
+    
     // process string - var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
     $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
     preg_match($pattern, $js_file_data, $matches);
@@ -438,6 +438,7 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
     {        
         $html = preg_replace($pattern,$file_path,$html);
     }    
+
     return $html;
 }
 
