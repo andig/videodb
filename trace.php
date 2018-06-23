@@ -379,15 +379,16 @@ function fixup_javascript($html)
         return $html;
     }
     // find all imdb javascript files
-    $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/(.*?)-(.*?)js#'; 
-    preg_match_all($pattern,$html, $matches_all);
+    preg_match_all('#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/(.*?)-(.*?)js#',
+                   $html,
+                   $matches_all);
 //    echo "<br> test for switch - ";
 //    var_dump($matches_all);  
 //    var_dump($matches_all[1]);
     $x = 0;
     foreach ($matches_all[1] as $js_page_type)
     {
-//         echo "<br> in for each loop - ".$js_page_type;
+//    echo "<br> in for each loop - ".$js_page_type;
          switch ($js_page_type)
         {
             case "pagelayout":
@@ -407,33 +408,35 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
     // get contents of javascript file
     $js_file_data = file_get_contents($js_file_name);
 
-    // var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
+    // process string - var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
     $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
     preg_match($pattern, $js_file_data, $matches);
-//    echo "<br> js file - ";
+//    echo "<br> list of imdb js files - ";
 //    var_dump($matches);
-    $replacement = $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2];
-    $js_file_data = preg_replace($pattern,$replacement,$js_file_data);
+    $js_file_data = preg_replace($pattern,
+                                 $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2],
+                                 $js_file_data);
     
-    // <a class="moreResults" href="
-    $pattern = '#<a class=\"moreResults\" href=\"#';
+    // process string - class="moreResults" href="
+    $pattern = '#class=\"moreResults\" href=\"#';
     preg_match($pattern, $js_file_data, $matches);
 //    echo "<br> js file - find moreresults";
 //    var_dump($matches);
-    $replacement = $matches[0].'trace.php?videodburl=http://www.imdb.com';
-    $js_file_data = preg_replace($pattern,$replacement,$js_file_data);
+    $js_file_data = preg_replace($pattern,
+                                 $matches[0].'trace.php?videodburl=http://www.imdb.com',
+                                 $js_file_data);
     
-    // save file to cache    
-    $tempfolder = cache_get_folder('');
-    $file_path = './'.$tempfolder.'imdb-clone-'.$js_page_type.'.js';
+    // save file to cache (overwritten if present) 
+    $cachefolder = cache_get_folder('');  //get cache root folder
+    $error = cache_create_folders($cachefolder.'javascript', $levels = 0); // ensure folder exists
+    $file_path = './'.$cachefolder.'javascript/'.'imdb-clone-'.$js_page_type.'.js';
     file_put_contents($file_path, $js_file_data);
     // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
     $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
 //    echo "<BR> - pattern-".$pattern;
     if (preg_match($pattern, $html, $matches))
     {        
-        $replacement = $file_path;
-        $html = preg_replace($pattern,$replacement,$html);
+        $html = preg_replace($pattern,$file_path,$html);
     }    
     return $html;
 }
