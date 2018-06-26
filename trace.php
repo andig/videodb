@@ -338,15 +338,10 @@ function request($urlonly=false)
 	if ($urlonly) return($url);
 
 	// append request parameters
-	if ($_POST) {
+        if ($_POST) {
 		$post = $request;
 	} elseif ($request) {
-            if (preg_match('/\?/',$url)) {
-                $url .= "&".$request;
-            }
-            else {
-                $url .= "?".$request;   
-            }
+		$url .= "?".$request;
 	}
 
     // encode possible spaces, use %20 instead of +
@@ -417,15 +412,15 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
                                  $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2],
                                  $js_file_data);
     
-    // process string - class="moreResults" href="
-    $pattern = '#class=\"moreResults\" href=\"#';
+    // process string - class="moreResults" href="',g += h + "/find?s=all&q="
+    $pattern = '#(class=\"moreResults\" href=\")(.*?)(\/find\?s)(=all\&q=\")#';
     preg_match($pattern, $js_file_data, $matches);
 //    echo "<br> js file - find moreresults";
 //    var_dump($matches);
     $js_file_data = preg_replace($pattern,
-                                 $matches[0].'trace.php?videodburl=http://www.imdb.com',
+                                 $matches[1].'trace.php?videodburl=http://www.imdb.com'.$matches[2].'/find&s'.$matches[4],
                                  $js_file_data);
-    
+
     // save file to cache (overwritten if present) 
     $cachefolder = cache_get_folder('');  //get cache root folder
     $error = cache_create_folders($cachefolder.'javascript', $levels = 0); // ensure folder exists
