@@ -341,7 +341,14 @@ function request($urlonly=false)
         if ($_POST) {
 		$post = $request;
 	} elseif ($request) {
+            if (preg_match("#\?#",$url,$matches))
+            {
+                $url .= "&".$request;
+            }
+            else
+            {
 		$url .= "?".$request;
+	}
 	}
 
     // encode possible spaces, use %20 instead of +
@@ -412,13 +419,13 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
                                  $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2],
                                  $js_file_data);
     
-    // process string - class="moreResults" href="',g += h + "/find?s=all&q="
-    $pattern = '#(class=\"moreResults\" href=\")(.*?)(\/find\?s)(=all\&q=\")#';
+    // process string - class="moreResults" href="
+    $pattern = '#class=\"moreResults\" href=\"#';
     preg_match($pattern, $js_file_data, $matches);
 //    echo "<br> js file - find moreresults";
 //    var_dump($matches);
     $js_file_data = preg_replace($pattern,
-                                 $matches[1].'trace.php?videodburl=http://www.imdb.com'.$matches[2].'/find&s'.$matches[4],
+                                 $matches[0].'trace.php?videodburl=http://www.imdb.com',
                                  $js_file_data);
 
     // save file to cache (overwritten if present) 
