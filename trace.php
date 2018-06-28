@@ -348,7 +348,7 @@ function request($urlonly=false)
             else
             {
 		$url .= "?".$request;
-	}
+            }
 	}
 
     // encode possible spaces, use %20 instead of +
@@ -407,25 +407,31 @@ function fixup_javascript($html)
 
 function replace_javascript ($html, $js_page_type, $js_file_name)
 {
+    global $iframe;
+    
+    // allow for iframe templates
+    $is_iframe = '';
+    if ($iframe) $is_iframe = '&iframe=2';
+    
     // get contents of javascript file
     $js_file_data = file_get_contents($js_file_name);
     
     // process string - var c='<a href="'+a.url+"?ref_="+b+'" class="poster"';
-    $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+\'\" class=\"poster"\')/';
+    $pattern = '/(var c=\'<a href=\"\'\+)(a\.url\+\"\?ref_=\"\+b\+)(\'\" class=\"poster"\')/';
     preg_match($pattern, $js_file_data, $matches);
 //    echo "<br> list of imdb js files - ";
 //    var_dump($matches);
     $js_file_data = preg_replace($pattern,
-                                 $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2],
+                                 $matches[1].'"trace.php?videodburl=http://www.imdb.com"+'.$matches[2].'"'.$is_iframe.'"+'.$matches[3],
                                  $js_file_data);
-    
-    // process string - class="moreResults" href="
-    $pattern = '#class=\"moreResults\" href=\"#';
+
+    // process string - class="moreResults" href="',g+=h+"/find?s=all&q="+A+"&ref_="+k+'sr_sm">',  
+    $pattern = '#(class=\"moreResults\" href=\")(\',g\+=h\+\"/find\?s=all&q=\"\+A\+\"&ref_=\"\+k\+\'sr_sm)(\">\',)#';
     preg_match($pattern, $js_file_data, $matches);
 //    echo "<br> js file - find moreresults";
 //    var_dump($matches);
     $js_file_data = preg_replace($pattern,
-                                 $matches[0].'trace.php?videodburl=http://www.imdb.com',
+                                 $matches[1].'trace.php?videodburl=http://www.imdb.com'.$matches[2].$is_iframe.$matches[3],
                                  $js_file_data);
 
     // save file to cache (overwritten if present) 
