@@ -196,7 +196,7 @@ function imdbData($imdbID)
     $data['encoding'] = $resp['encoding'];
 
     // Check if it is a TV series episode
-    if (preg_match('/<title>.+?\(TV (Episode|Series).*?<\/title>/si', $resp['data'])) {
+    if (preg_match('/<title>.+?\(TV (Episode|Series|Mini-Series).*?<\/title>/si', $resp['data'])) {
         $data['istv'] = 1;
         
         # find id of Series
@@ -212,7 +212,7 @@ function imdbData($imdbID)
             $data['title'] = trim($ary[1]);
             $data['subtitle'] = trim($ary[2]);
             $data['year'] = $ary[3];
-        } else if (preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary)){
+        } else if (preg_match('/<title>(.+?)\(TV (Series|Mini-Series) (\d+).+?<\/title>/si', $resp['data'], $ary)){
             # handles a TV series.
             # split title - subtitle
             list($t, $s) = explode(' - ', $ary[1], 2);
@@ -222,7 +222,7 @@ function imdbData($imdbID)
             }
             $data['title'] = trim($t);
             $data['subtitle'] = trim($s);
-            $data['year'] = trim($ary[2]);
+            $data['year'] = trim($ary[3]);
         }
     } else {
         preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
