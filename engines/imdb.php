@@ -10,7 +10,7 @@
  * @version $Id: imdb.php,v 1.76 2013/04/10 18:11:43 andig2 Exp $
  */
 
-$GLOBALS['imdbServer']   = 'http://www.imdb.com';
+$GLOBALS['imdbServer']   = 'https://www.imdb.com';
 $GLOBALS['imdbIdPrefix'] = 'imdb:';
 
 /**
@@ -67,23 +67,18 @@ function imdbRecommendations($id, $required_rating, $required_year)
 {
     global $CLIENTERROR;
 
-    $url = imdbContentUrl($id).'recommendations';
+    $url = imdbContentUrl($id);
     $resp = httpClient($url, true);
-    if (!$resp['success'])
-    {
-        $CLIENTERROR = $resp['error']."\n";
-        return '';
-    }
 
     $recommendations = array();
-    preg_match_all('#<a href=\"/title/tt(\d+)/\">(.+?)</a>\W+(\d{4}).+?<b>(\d+\.\d+)<\/b>#i', $resp['data'], $ary, PREG_SET_ORDER);
+    preg_match_all('/<div class="rec_item" data-info=".*?" data-spec=".*?" data-tconst="tt(\d+)">/si', $resp['data'], $ary, PREG_SET_ORDER);
 
-    foreach ($ary as $recommended)
-    {
-        $imdbId = $recommended[1];
-        $title  = $recommended[2];
-        $year   = $recommended[3];
-        $rating = $recommended[4];
+    foreach ($ary as $recommended_id) {
+        $rec_resp = getRecommendationData($recommended_id[1]);
+        $imdbId = $recommended_id[1];
+        $title  = $rec_resp['title'];
+        $year   = $rec_resp['year'];
+        $rating = $rec_resp['rating'];
 
         // matching at least required rating?
         if (empty($required_rating) || (float) $rating < $required_rating) continue;
@@ -100,6 +95,41 @@ function imdbRecommendations($id, $required_rating, $required_year)
         $recommendations[] = $data;
     }
     return $recommendations;
+}
+
+function getRecommendationData($imdbID) {
+    global $imdbServer;
+    global $imdbIdPrefix;
+    global $CLIENTERROR;
+
+    $imdbID = preg_replace('/^'.$imdbIdPrefix.'/', '', $imdbID);
+
+    // fetch mainpage
+    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', true);     // added trailing / to avoid redirect
+    if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
+
+    // Titles and Year
+    // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
+    if ($data['istv']) {
+        if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDb<\/title>/si', $resp['data'], $ary)) {
+            # handles one episode of a TV serie
+            $data['title'] = trim($ary[1]);
+            $data['year'] = $ary[3];
+        } else if (preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary)){
+            $data['title'] = trim($ary[1]);
+            $data['year'] = trim($ary[2]);
+        }
+    } else {
+        preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
+        $data['title'] = trim($ary[1]);
+        $data['year'] = trim($ary[2]);
+    }
+
+    // Rating
+    preg_match('/<strong title="([\d\.]+)+ based on.+?ratings"/si', $resp['data'], $ary);
+    $data['rating'] = trim($ary[1]);
+
+    return $data;
 }
 
 /**
@@ -196,7 +226,7 @@ function imdbData($imdbID)
     $data['encoding'] = $resp['encoding'];
 
     // Check if it is a TV series episode
-    if (preg_match('/<title>.+?\(TV (Episode|Series).*?<\/title>/si', $resp['data'])) {
+    if (preg_match('/<title>.+?\(TV (Episode|Series|Mini-Series).*?<\/title>/si', $resp['data'])) {
         $data['istv'] = 1;
         
         # find id of Series
@@ -207,12 +237,12 @@ function imdbData($imdbID)
     // Titles and Year
     // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
     if ($data['istv']) {
-        if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDb<\/title>/si', $resp['data'], $ary)) {
+        if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDB<\/title>/si', $resp['data'], $ary)) {
             # handles one episode of a TV serie
             $data['title'] = trim($ary[1]);
             $data['subtitle'] = trim($ary[2]);
             $data['year'] = $ary[3];
-        } else if (preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary)){
+        } else if (preg_match('/<title>(.+?)\(TV (?:Series|Mini-Series) (\d+)\) - IMDB<\/title>/si', $resp['data'], $ary)){
             # handles a TV series.
             # split title - subtitle
             list($t, $s) = explode(' - ', $ary[1], 2);
@@ -225,41 +255,32 @@ function imdbData($imdbID)
             $data['year'] = trim($ary[2]);
         }
     } else {
-        preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
+        preg_match('/<title>(.+?)\(.*?(\d+)\).+?<\/title>/si', $resp['data'], $ary);
         $data['year'] = trim($ary[2]);
         # split title - subtitle
         list($t, $s) = explode(' - ', $ary[1], 2);
         # no dash, lets try colon
         if ($s == false) {
-            list($t, $s) = explode(': ', $ary[1], 2);   
+            list($t, $s) = explode(': ', $ary[1], 2);
         }
         $data['title'] = trim($t);
         $data['subtitle'] = trim($s);
     }
     # orig. title
-    preg_match('/<span class="title-extra".+?>\s*"?(.*?)"?\s*<i>\(original title\)<\/i>\s*</si', $resp['data'], $ary);
+    preg_match('<div class="originalTitle">(.+?)<span class="description"> \(original title\)<\/span><\/div>/si', $resp['data'], $ary);
     $data['origtitle'] = trim($ary[1]);
 
     // Cover URL
     $data['coverurl'] = imdbGetCoverURL($resp['data']);
 
     // MPAA Rating
-    preg_match('/<span\s?itemprop="contentRating">(.*?)</is', $resp['data'], $ary);
-    $data['mpaa']     = trim($ary[1]);
-
-    // UK BBFC Rating
-    # no longer appears on main page
-    #preg_match('/>\s*UK:(.*?)<\/a>\s+/s', $resp['data'], $ary);
-    #$data['bbfc'] = trim($ary[1]);
+    preg_match('/<div class="subtext">(.+?)</is', $resp['data'], $ary);
+    $data['mpaa'] = trim($ary[1]);
 
     // Runtime
-    // many but not all yet have new <time itemprop="duration"> tag
-    preg_match('/itemprop="duration".*?>(\d+)\s+min<\//si', $sresp['data'], $ary);
-    if (!$ary) {
-        preg_match('/Runtime:?<\/h4>.*?>(\d+)\s+min/si', $resp['data'], $ary);
-    }
-    $data['runtime']  = preg_replace('/,/', '', trim($ary[1]));
-
+    preg_match('/<time datetime="PT(\d+)M">/si', $resp['data'], $ary);
+    $data['runtime'] = trim($ary[1]);
+	
     // Director
     preg_match('/Directors?:\s*<\/h4>(.+?)<\/div>/si', $resp['data'], $ary);
     preg_match_all('/<a.*?href="\/name\/nm.+?".*?>(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
@@ -267,7 +288,7 @@ function imdbData($imdbID)
     $data['director']  = trim(join(', ', $ary[1]));
 
     // Rating
-    preg_match('/<span .*? itemprop="ratingValue">([\d\.]+)<\/span>/si', $resp['data'], $ary);
+    preg_match('/<strong title="([\d\.]+)+ based on.+?ratings"/si', $resp['data'], $ary);
     $data['rating'] = trim($ary[1]);
 
     // Countries
@@ -295,11 +316,8 @@ function imdbData($imdbID)
 
         # runtime
         if (!$data['runtime']) {
-            preg_match('/itemprop="duration".*?>(\d+)\s+min<\//si', $sresp['data'], $ary);
-            if (!$ary) {
-                preg_match('/Runtime:?<\/h4>.*?>(\d+)\s+min/si', $resp['data'], $ary);
-            }
-            $data['runtime']  = preg_replace('/,/', '', trim($ary[1]));
+            preg_match('/<time datetime="PT(\d+)M">/si', $sresp['data'], $ary);
+            $data['runtime'] = trim($ary[1]);
         }
 
         # country
@@ -323,7 +341,7 @@ function imdbData($imdbID)
     }
 
     // Plot
-    preg_match('#<h2>Storyline<\/h2>.*?<p>(.*?)</sp#si', $resp['data'], $ary);
+    preg_match('/<h2>Storyline<\/h2>.*?<p>(.*?)</si', $resp['data'], $ary);
     $data['plot'] = $ary[1];
 
     // Fetch credits
@@ -337,7 +355,7 @@ function imdbData($imdbID)
         // could be some maximum length of .*?
         // anyways, I'm cutting it here
         $casthtml = substr($match[1],0,strpos( $match[1],'</table'));
-        if (preg_match_all('#<td .*? itemprop="actor".*?>\s+<a href="/name/(nm\d+)/?.*?".*?>(.*?)</a>.*?<td class="character">(.*?)</td>#si', $casthtml, $ary, PREG_PATTERN_ORDER))
+        if (preg_match_all('#<td class=\"primary_photo\">\s+<a href=\"\/name\/(nm\d+)\/?.*?".+?<a .+?>(.+?)<\/a>.+?<td class="character">(.*?)<\/td>#si', $casthtml, $ary, PREG_PATTERN_ORDER))
         {
             for ($i=0; $i < sizeof($ary[0]); $i++)
             {
@@ -370,15 +388,15 @@ function imdbData($imdbID)
     if ($ary[1])
     {
         $data['plot'] = trim($ary[1]);
-        $data['plot'] = preg_replace('/&#34;/', '"', $data['plot']);     //Replace HTML " with "
-        //Begin removal of 'Written by' section
-        $data['plot'] = preg_replace('/<a href="\/SearchPlotWriters.*?<\/a>/', '', $data['plot']);
-        $data['plot'] = preg_replace('/Written by/', '', $data['plot']);
-        $data['plot'] = preg_replace('/<i>\s+<\/i>/', ' ', $data['plot']);
-        //End of removal of 'Written by' section
+        $data['plot'] = preg_replace('/&#34;/', '"', $data['plot']); //Replace HTML " with "
+
+        // removed linked actors like: <a href="/name/nm0001570?ref_=tt_stry_pl">Edward Norton</a>
+        $data['plot'] = preg_replace('/<a href="\/name\/nm\d+.+?">/', '', $data['plot']);
+        $data['plot'] = preg_replace('/<\/a>/', '', $data['plot']);
         $data['plot'] = preg_replace('/\s+/s', ' ', $data['plot']);
     }
-    $data['plot'] = html_clean($data['plot']);
+
+    $data['plot'] = html_clean_utf8($data['plot']);
 
     return $data;
 }
