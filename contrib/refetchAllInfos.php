@@ -183,7 +183,7 @@ else
 
             <div>
                 <div style="float:right">
-                    <a href="javascript:parent.location.href='../index.php';"><img src="./images/close.gif" width="14" height="14" alt="" border="0" /></a>
+                    <a href="javascript:parent.location.href='../index.php';"><img src="../images/close.gif" width="14" height="14" alt="" border="0" /></a>
                 </div>
                 
                 Refetch and overwrite selected fields of movies for this User:
