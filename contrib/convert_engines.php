@@ -136,7 +136,7 @@ if (!check_permission(PERM_ADMIN)) {
 								?>
 							</select>
 						</TD>
-						<TD align="right" valign="top" width="14"><a href="javascript:parent.location.href='../index.php';"><img src="./images/close.gif" width="14" height="14" alt="" border="0" /></a></TD>
+						<TD align="right" valign="top" width="14"><a href="javascript:parent.location.href='../index.php';"><img src="../images/close.gif" width="14" height="14" alt="" border="0" /></a></TD>
 					</TR>
 					<TR>
 						<TD width="30" nowrap="nowrap">&nbsp;</td>
