@@ -84,6 +84,59 @@ $unused 	= 0;
 $coverNum 	= 0;
 $actorNum 	= 0;
 
+/**
+ * Check cache folder for expired entries
+ *
+ * @author Andreas Goetz
+ * @param   string  $dir  cache folder
+ * @param   boolean $all  return list of all files (or outdated files)
+ * @return  array   $total, $expired, $files    sum and list of total and expired files
+ */
+function analyzeCacheFolder($dir, $all = false)
+{
+    global $config;
+
+    $files = array();
+
+    if ($handle = opendir($dir))
+    {
+        // read cache directory (note syntax, according to docs!)
+        while (false !== ($file = readdir($handle)))
+        {
+            // prevent deletion of hidden files (*nix) or directory references (Windows)
+            if (preg_match("/^\./", $file)) continue;
+            $cfile = "$dir/$file";
+
+            // file found?
+            if (!is_dir($cfile))
+            {
+                $total += filesize($cfile);
+                if ($all || !(time()-filemtime($cfile) < $config['IMDBage']))
+                {
+                    $expired += filesize($cfile);
+                    $files[] = $cfile;
+                }
+            }
+
+            // or hierarchical cache directories?
+            elseif ($config['hierarchical'])
+            {
+                // one-char directory name?
+                if (preg_match("/^\w$/", $file))
+                {
+                    list($atotal, $aexpired, $afiles) = analyzeCacheFolder($cfile, $all);
+                    $total += $atotal;
+                    $expired += $aexpired;
+                    $files = array_merge($files, $afiles);
+                }
+            }
+        }
+        closedir($handle);
+    }
+
+    return array($total, $expired, $files);
+}
+
 // get list of all images currently in cache
 list($total, $foo, $files) = analyzeCacheFolder('cache/img', true);
 
