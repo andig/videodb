@@ -23,15 +23,13 @@ function multidimsort($array_in, $column)
 {
     $multiarray = array_column($array_in, $column);
     $array_out  = array();
-    $loopvalue  = 0;
 
     asort($multiarray);
 
     // traverse new array of index values and add the corresponding element of the input array to the correct position in the output array
     foreach ($multiarray as $key => $val)
     {
-        $array_out[$loopvalue] = $array_in[$key];
-        $loopvalue++;
+        $array_out[] = $array_in[$key];
     }
 
     // return the output array which is all nicely sorted by the index you wanted!
