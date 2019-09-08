@@ -165,7 +165,7 @@ function runSQL($sql_string, $verify = true)
 	if ($config['debug'])
     {
         dlog("\n".$_SERVER['REQUEST_URI']);
-        if (function_exists('xdebug_get_function_stack')) dlog(join(' -> ', array_extract(xdebug_get_function_stack(), 'function')));
+        if (function_exists('xdebug_get_function_stack')) dlog(join(' -> ', array_column(xdebug_get_function_stack(), 'function')));
         dlog($sql_string);
 		$timestamp = getmicrotime();
 	}
@@ -261,27 +261,6 @@ function redirect($dest)
 {
     header('Location: '.$dest);
     exit();
-}
-
-/**
- * Convert an array of associative arrays (e.g. a database query result)
- * and extract the desired column as simple array
- *
- * Sample: array_extract( 0=>(a=>1a, b=1b) 1=>(a=>2a, b=>2b), "a" ) gives 0=>1a, 1=>2a
- *
- * TODO     Check if this can be replaced by PHP5.5 array_column() function
- *
- * @author  Andreas Goetz   <cpuidle@gmx.de>
- * @param   $ary    SQL result array
- * @param   $key    key index name
- */
-function array_extract($ary, $columnKey)
-{
-    $new_array = array();
-    foreach ($ary as &$row) {
-        array_push($new_array, $row["'.$columnKey.'"]);
-    }
-    return $new_array;
 }
 
 /**
