@@ -260,7 +260,7 @@ if (isset($q) &! (isset($default) && empty($q)))
     }
 
     // store query result in session for prev/next navigation
-    session_set('query_result', array_extract($result, 'id'));
+    session_set('query_result', array_column($result, 'id'));
 }
 
 // process asynchronous refresh

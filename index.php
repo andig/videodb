@@ -6,7 +6,7 @@
  *
  * @package videoDB
  * @author  Andreas Gohr <a.gohr@web.de>
- * @author  Andreas Götz <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz <cpuidle@gmx.de>
  * @author  Chinamann <chinamann@users.sourceforge.net>
  * @link	http://videodb.sf.net
  * @version $Id: index.php,v 2.102 2013/03/21 16:27:57 andig2 Exp $
@@ -86,14 +86,14 @@ session_set('listview', 'index.php');
 
 // standard filters
 $filter_expr = array(
-  'NUM'  => '^["\\\' ]*[^A-Za-zÄäÖöÜüß]',
-  'ABC'  => '^["\\\' ]*[ABCabcÄä]',
+  'NUM'  => '^["\\\' ]*[^A-Za-zÃ„Ã¤Ã–Ã¶ÃœÃ¼ÃŸ]',
+  'ABC'  => '^["\\\' ]*[ABCabcÃ„Ã¤]',
   'DEF'  => '^["\\\' ]*[DEFdef]',
   'GHI'  => '^["\\\' ]*[GHIghi]',
   'JKL'  => '^["\\\' ]*[JKLjkl]',
-  'MNO'  => '^["\\\' ]*[MNOmnoÖö]',
-  'PQRS' => '^["\\\' ]*[PQRSpqrsß]',
-  'TUV'  => '^["\\\' ]*[TUVtuvÜü]',
+  'MNO'  => '^["\\\' ]*[MNOmnoÃ–Ã¶]',
+  'PQRS' => '^["\\\' ]*[PQRSpqrsÃŸ]',
+  'TUV'  => '^["\\\' ]*[TUVtuvÃœÃ¼]',
   'WXYZ' => '^["\\\' ]*[WXZwxy]'
 );
 
@@ -272,7 +272,7 @@ $SQL    = 'SELECT '.TBL_DATA.'.id, '.TBL_DATA.'.diskid,
 $result = runSQL($SQL);
 
 // store query result in session for prev/next navigation
-session_set('query_result', array_extract($result, 'id'));
+session_set('query_result', array_column($result, 'id'));
 
 // process asynchronous refresh
 if ($ajax_render)

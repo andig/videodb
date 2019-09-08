@@ -235,6 +235,11 @@ function tpl_filters($filter, $showtv)
     $smarty->assign('listcolumns', session_get('listcolumns'));
 }
 
+function adultcheck_for_video($video)
+{
+    return adultcheck($video["id"]);
+}
+
 /**
  * Assigns the searchresults/browselist to the smarty engine
  *
@@ -244,7 +249,11 @@ function tpl_list($list)
 {
     global $smarty, $config;
     global $listcolumns;
-
+    if(!$list)
+    {
+        $smarty->assign('totalresults', 0);
+        return;
+    }
     for ($i=0; $i < count($list); $i++)
     {
         // setup imgurls
@@ -293,11 +302,11 @@ function tpl_list($list)
 */
     }
 
-	// do adultcheck
-	if (is_array($list))
-	{
-		$list = array_filter($list, create_function('$video', 'return adultcheck($video["id"]);'));
-	}
+    // do adultcheck
+    if (is_array($list))
+    {
+        $list = array_filter($list, "adultcheck_for_video");
+    }
 
     // enable dynamic columns in list view
     $smarty->assign('listcolumns', session_get('listcolumns'));
@@ -343,7 +352,7 @@ function get_actor_thumbnails_batched(&$actors)
 {
     if (!count($actors)) return;
     
-    $ids    = "'".join("','", array_map('addslashes', array_extract($actors, 'id')))."'";
+    $ids    = "'".join("','", array_map('addslashes', array_column($actors, 'id')))."'";
 
     $SQL    = 'SELECT actorid, name, imgurl, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(checked) AS cacheage
                  FROM '.TBL_ACTORS.' WHERE actorid IN ('.$ids.')';
@@ -529,8 +538,8 @@ function tpl_edit($video)
 
 /*
     // populate autocomplete boxes
-    $smarty->assign('audio_codecs', array_extract(runSQL('SELECT DISTINCT audio_codec FROM '.TBL_DATA.' WHERE audio_codec IS NOT NULL'), 'audio_codec'));
-    $smarty->assign('video_codecs', array_extract(runSQL('SELECT DISTINCT video_codec FROM '.TBL_DATA.' WHERE video_codec IS NOT NULL'), 'video_codec'));
+    $smarty->assign('audio_codecs', array_column(runSQL('SELECT DISTINCT audio_codec FROM '.TBL_DATA.' WHERE audio_codec IS NOT NULL'), 'audio_codec'));
+    $smarty->assign('video_codecs', array_column(runSQL('SELECT DISTINCT video_codec FROM '.TBL_DATA.' WHERE video_codec IS NOT NULL'), 'video_codec'));
 */        
 	$smarty->assign('lookup', array('0' => $lang['radio_look_ignore'],
 							        '1' => $lang['radio_look_lookup'],
