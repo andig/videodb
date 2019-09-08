@@ -357,7 +357,7 @@ function get_actor_thumbnails_batched(&$actors)
 {
     if (!count($actors)) return;
     
-    $ids    = "'".join("','", array_map('addslashes', array_extract($actors, 'id')))."'";
+    $ids    = "'".join("','", array_map('addslashes', array_column($actors, 'id')))."'";
 
     $SQL    = 'SELECT actorid, name, imgurl, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(checked) AS cacheage
                  FROM '.TBL_ACTORS.' WHERE actorid IN ('.$ids.')';
@@ -543,8 +543,8 @@ function tpl_edit($video)
 
 /*
     // populate autocomplete boxes
-    $smarty->assign('audio_codecs', array_extract(runSQL('SELECT DISTINCT audio_codec FROM '.TBL_DATA.' WHERE audio_codec IS NOT NULL'), 'audio_codec'));
-    $smarty->assign('video_codecs', array_extract(runSQL('SELECT DISTINCT video_codec FROM '.TBL_DATA.' WHERE video_codec IS NOT NULL'), 'video_codec'));
+    $smarty->assign('audio_codecs', array_column(runSQL('SELECT DISTINCT audio_codec FROM '.TBL_DATA.' WHERE audio_codec IS NOT NULL'), 'audio_codec'));
+    $smarty->assign('video_codecs', array_column(runSQL('SELECT DISTINCT video_codec FROM '.TBL_DATA.' WHERE video_codec IS NOT NULL'), 'video_codec'));
 */        
 	$smarty->assign('lookup', array('0' => $lang['radio_look_ignore'],
 							        '1' => $lang['radio_look_lookup'],
