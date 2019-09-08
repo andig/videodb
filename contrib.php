@@ -42,7 +42,7 @@ function multidimsort($array_in, $column)
     {
         $array_out[$loopvalue] =  $array_in[key($multiarray)];
         $loopvalue++;
-		next($multiarray);
+        next($multiarray);
     }
 
     // return the output array which is all nicely sorted by the index you wanted!
