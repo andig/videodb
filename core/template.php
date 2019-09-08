@@ -235,6 +235,11 @@ function tpl_filters($filter, $showtv)
     $smarty->assign('listcolumns', session_get('listcolumns'));
 }
 
+function adultcheck_for_video($video)
+{
+	return adultcheck($video["id"]);
+}
+
 /**
  * Assigns the searchresults/browselist to the smarty engine
  *
@@ -296,7 +301,7 @@ function tpl_list($list)
 	// do adultcheck
 	if (is_array($list))
 	{
-		$list = array_filter($list, create_function('$video', 'return adultcheck($video["id"]);'));
+		$list = array_filter($list, "adultcheck_for_video");
 	}
 
     // enable dynamic columns in list view
