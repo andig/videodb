@@ -249,9 +249,9 @@ function tpl_list($list)
 {
     global $smarty, $config;
     global $listcolumns;
-    $smarty->assign('totalresults', 0);
     if(!$list)
     {
+        $smarty->assign('totalresults', 0);
         return;
     }
     for ($i=0; $i < count($list); $i++)
