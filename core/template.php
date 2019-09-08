@@ -237,7 +237,7 @@ function tpl_filters($filter, $showtv)
 
 function adultcheck_for_video($video)
 {
-	return adultcheck($video["id"]);
+    return adultcheck($video["id"]);
 }
 
 /**
@@ -249,53 +249,55 @@ function tpl_list($list)
 {
     global $smarty, $config;
     global $listcolumns;
-
-    for ($i=0; $i < count($list); $i++)
+    if ($list)
     {
-        // setup imgurls
-        $list[$i]['imgurl'] = ($config['thumbnail']) ? getThumbnail($list[$i]['imgurl']) : '';
-
-        // check for flagfile
-        $languages = $list[$i]['language'];
-        $flagfile = img('flags/'.$languages.'.gif');
-        if (file_exists($flagfile))
+        for ($i=0; $i < count($list); $i++)
         {
-            // one langage
-            $list[$i]['flagfile'][$languages] = $flagfile;
-            $list[$i]['language'] = array($list[$i]['language']);
-        }
-        else
-        {
-            // multiple languages
-            $langary  = preg_split('/,\s*/', $languages);
-            $list[$i]['language'] = $langary;
+            // setup imgurls
+            $list[$i]['imgurl'] = ($config['thumbnail']) ? getThumbnail($list[$i]['imgurl']) : '';
 
-            // assign them all
-            foreach ($langary as $languagepart)
+            // check for flagfile
+            $languages = $list[$i]['language'];
+            $flagfile = img('flags/'.$languages.'.gif');
+            if (file_exists($flagfile))
             {
-                $flagfile = img('flags/'.$languagepart.'.gif');
-                if (file_exists($flagfile))
+                // one langage
+                $list[$i]['flagfile'][$languages] = $flagfile;
+                $list[$i]['language'] = array($list[$i]['language']);
+            }
+            else
+            {
+                // multiple languages
+                $langary  = preg_split('/,\s*/', $languages);
+                $list[$i]['language'] = $langary;
+
+                // assign them all
+                foreach ($langary as $languagepart)
                 {
-                    $list[$i]['flagfile'][$languagepart] = $flagfile;
+                    $flagfile = img('flags/'.$languagepart.'.gif');
+                    if (file_exists($flagfile))
+                    {
+                        $list[$i]['flagfile'][$languagepart] = $flagfile;
+                    }
                 }
             }
-        }
 
-        // is this file editable?
-        if (localnet())
-        {
-            $list[$i]['editable'] = ($config['multiuser']) ?
-                check_permission(PERM_WRITE, $list[$i]['owner_id']) : true;
-        }
-        else
-        {
-            $list[$i]['editable'] = false;
-        }
+            // is this file editable?
+            if (localnet())
+            {
+                $list[$i]['editable'] = ($config['multiuser']) ?
+                    check_permission(PERM_WRITE, $list[$i]['owner_id']) : true;
+            }
+            else
+            {
+                $list[$i]['editable'] = false;
+            }
 /*
     uncomment this to allow display of rating in the 'Browse' tab
     require_once 'custom.php';
     customfields($list[$i], 'out');
 */
+        }
     }
 
 	// do adultcheck
@@ -309,7 +311,14 @@ function tpl_list($list)
     $smarty->assign('list', $list);
 
     // show total number of movies in footer
-    $smarty->assign('totalresults', count($list));
+    if ($list)
+    {
+        $smarty->assign('totalresults', count($list));
+    }
+    else
+    {
+        $smarty->assign('totalresults', 0);
+    }
 }
 
 /**
