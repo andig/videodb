@@ -34,9 +34,6 @@ function multidimsort($array_in, $column)
     }
     asort($multiarray);
 
-    // reset internal pointer to beginning of array after above sort
-    reset($multiarray);
-
     // traverse new array of index values and add the corresponding element of the input array to the correct position in the output array
     foreach($multiarray as $key => $val)
     {
