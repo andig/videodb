@@ -249,76 +249,71 @@ function tpl_list($list)
 {
     global $smarty, $config;
     global $listcolumns;
-    if ($list)
+	$smarty->assign('totalresults', 0);
+	if(!$list)
+	{
+		return;
+	}
+    for ($i=0; $i < count($list); $i++)
     {
-        for ($i=0; $i < count($list); $i++)
+        // setup imgurls
+        $list[$i]['imgurl'] = ($config['thumbnail']) ? getThumbnail($list[$i]['imgurl']) : '';
+
+        // check for flagfile
+        $languages = $list[$i]['language'];
+        $flagfile = img('flags/'.$languages.'.gif');
+        if (file_exists($flagfile))
         {
-            // setup imgurls
-            $list[$i]['imgurl'] = ($config['thumbnail']) ? getThumbnail($list[$i]['imgurl']) : '';
+            // one langage
+            $list[$i]['flagfile'][$languages] = $flagfile;
+            $list[$i]['language'] = array($list[$i]['language']);
+        }
+        else
+        {
+            // multiple languages
+            $langary  = preg_split('/,\s*/', $languages);
+            $list[$i]['language'] = $langary;
 
-            // check for flagfile
-            $languages = $list[$i]['language'];
-            $flagfile = img('flags/'.$languages.'.gif');
-            if (file_exists($flagfile))
+            // assign them all
+            foreach ($langary as $languagepart)
             {
-                // one langage
-                $list[$i]['flagfile'][$languages] = $flagfile;
-                $list[$i]['language'] = array($list[$i]['language']);
-            }
-            else
-            {
-                // multiple languages
-                $langary  = preg_split('/,\s*/', $languages);
-                $list[$i]['language'] = $langary;
-
-                // assign them all
-                foreach ($langary as $languagepart)
+                $flagfile = img('flags/'.$languagepart.'.gif');
+                if (file_exists($flagfile))
                 {
-                    $flagfile = img('flags/'.$languagepart.'.gif');
-                    if (file_exists($flagfile))
-                    {
-                        $list[$i]['flagfile'][$languagepart] = $flagfile;
-                    }
+                    $list[$i]['flagfile'][$languagepart] = $flagfile;
                 }
             }
+        }
 
-            // is this file editable?
-            if (localnet())
-            {
-                $list[$i]['editable'] = ($config['multiuser']) ?
-                    check_permission(PERM_WRITE, $list[$i]['owner_id']) : true;
-            }
-            else
-            {
-                $list[$i]['editable'] = false;
-            }
-/*
+        // is this file editable?
+        if (localnet())
+        {
+            $list[$i]['editable'] = ($config['multiuser']) ?
+                check_permission(PERM_WRITE, $list[$i]['owner_id']) : true;
+        }
+        else
+        {
+            $list[$i]['editable'] = false;
+        }
+    /*
     uncomment this to allow display of rating in the 'Browse' tab
     require_once 'custom.php';
     customfields($list[$i], 'out');
-*/
-        }
+    */
     }
 
-	// do adultcheck
-	if (is_array($list))
-	{
-		$list = array_filter($list, "adultcheck_for_video");
-	}
+    // do adultcheck
+    if (is_array($list))
+    {
+        $list = array_filter($list, "adultcheck_for_video");
+    }
 
     // enable dynamic columns in list view
     $smarty->assign('listcolumns', session_get('listcolumns'));
     $smarty->assign('list', $list);
 
     // show total number of movies in footer
-    if ($list)
-    {
-        $smarty->assign('totalresults', count($list));
-    }
-    else
-    {
-        $smarty->assign('totalresults', 0);
-    }
+    $smarty->assign('totalresults', count($list));
 }
 
 /**
