@@ -277,7 +277,11 @@ function redirect($dest)
  */
 function array_extract($ary, $columnKey)
 {
-    return array_map(create_function('&$row', 'return $row["'.$columnKey.'"];'), $ary);
+    $new_array = array();
+    foreach ($ary as &$row) {
+        array_push($new_array, $row["'.$columnKey.'"]);
+    }
+    return $new_array;
 }
 
 /**
