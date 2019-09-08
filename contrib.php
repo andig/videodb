@@ -15,13 +15,6 @@ localnet_or_die();
 // multiuser permission check
 permission_or_die(PERM_WRITE);
 
-function arrayEach(&$arr) {
-    $key = key($arr);
-    $result = ($key === null) ? false : [$key, current($arr), 'key' => $key, 'value' => current($arr)];
-    next($arr);
-    return $result;
-}
-
 /**
  * Sort multi-dimensional arrays 
  * (thanks to phpdotnet)
@@ -45,10 +38,11 @@ function multidimsort($array_in, $column)
     reset($multiarray);
 
     // traverse new array of index values and add the corresponding element of the input array to the correct position in the output array
-    while (list ($key, $val) = arrayEach ($multiarray))
+    while(current($multiarray))
     {
-        $array_out[$loopvalue] = $array_in[$key];
+        $array_out[$loopvalue] =  $array_in[key($multiarray)];
         $loopvalue++;
+		next($multiarray);
     }
 
     // return the output array which is all nicely sorted by the index you wanted!
