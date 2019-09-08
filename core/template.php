@@ -249,11 +249,11 @@ function tpl_list($list)
 {
     global $smarty, $config;
     global $listcolumns;
-	$smarty->assign('totalresults', 0);
-	if(!$list)
-	{
-		return;
-	}
+    $smarty->assign('totalresults', 0);
+    if(!$list)
+    {
+        return;
+    }
     for ($i=0; $i < count($list); $i++)
     {
         // setup imgurls
@@ -295,11 +295,11 @@ function tpl_list($list)
         {
             $list[$i]['editable'] = false;
         }
-    /*
+/*
     uncomment this to allow display of rating in the 'Browse' tab
     require_once 'custom.php';
     customfields($list[$i], 'out');
-    */
+*/
     }
 
     // do adultcheck
