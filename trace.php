@@ -341,7 +341,9 @@ function request($urlonly=false)
 			case session_name():
 			case 'videodbreload':
 			case 'iframe':
-				break;				
+				break;
+                        case 'q':
+                                $url = 'https://www.imdb.com/find';
 			default:
 				if ($request) $request .= "&";
 				$request .= "$key=$value";
