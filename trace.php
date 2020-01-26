@@ -222,6 +222,17 @@ function _replace_enclosed_tag_traced($matches)
 	return $matches[1].$url.$matches[3].$matches[4].$note.$matches[5].$append;
 }
 
+function _hidden_fields($matches)
+{
+    global $urlid, $iframe;
+
+    $url = get_full_url("/find"); // hard coded as form data not available
+    if ($iframe) 
+        return $matches[0].',{"name":"'.iframe.'","val":"'.$iframe.'"}'.',{"name":"'.$urlid.'","val":"'.$url.'"}'; // iframe must precede urlid
+    else
+        return $matches[0].',{"name":"'.$urlid.'","val":"'.$url.'"}';
+}    
+
 function _replace_tag($matches)
 {
 	global $urlid, $striptags, $iframe;
@@ -305,6 +316,7 @@ function fixup_HTML($html)
 	$html = preg_replace_callback("/(<(ima?ge?|frame|iframe|script)\s+[^>]*?src\s*=\s*(\"|'))([^>]*?)(\\3.*?>)/is", '_replace_tag', $html);
 	$html = preg_replace_callback("/(<(ima?ge?|frame|iframe|script)\s+[^>]*?src\s*=\s*([^\"']))([\d\w\.\/\+\%-:=&_]+?)(\s*[^>]*?>)/is", '_replace_tag', $html);
 	// form  
+        $html = preg_replace_callback('#"hiddenFields":\[\{"name":"ref_","val":"nv_sr_sm"\}#', '_hidden_fields', $html);
 	$html = preg_replace_callback("/(<(form)\s+[^>]*?action\s*=\s*(\"|'))([^>]*?)(\\3[^>]*?>)/is", '_replace_tag', $html);
 	$html = preg_replace_callback("/(<(form)\s+[^>]*?action\s*=\s*([^\"']))([\d\w\.\/\+\%-:=&_]+?)(\s*[^>]*?>)/is", '_replace_tag', $html);
 	// href
@@ -342,8 +354,6 @@ function request($urlonly=false)
 			case 'videodbreload':
 			case 'iframe':
 				break;
-                        case 'q':
-                                $url = 'https://www.imdb.com/find';
 			default:
 				if ($request) $request .= "&";
 				$request .= "$key=$value";
@@ -520,13 +530,18 @@ if ($iframe == 2 || preg_match('#\/_ajax#', $videodburl, $matches))
 {
 	// mode 2: display data into iframe
         // ajax call: dissplay data from imdb (no head)
+        //testing code save page before send to browser
+        //$file_path = './cache/pagedataframe.txt';
+        // file_put_contents($file_path, $page);
 	echo($page);
 	exit();
 }
 
 // mode 0 or 1: prepare templates
 tpl_page('imdbbrowser');
-
+        //testing code save page before send to browser
+        //$file_path = './cache/pagedata.txt';
+        //file_put_contents($file_path, $page);
 $smarty->assign('url', $url);
 $smarty->assign('page', $page);
 $smarty->assign('fetchtime', $fetchtime);
