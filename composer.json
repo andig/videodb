@@ -2,7 +2,8 @@
     "name": "andig/videodb",
     "type": "project",
     "require": {
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "smarty/smarty": "^3.1"
     },
     "authors": [
         {
