@@ -354,6 +354,8 @@ function request($urlonly=false)
 			case 'videodbreload':
 			case 'iframe':
 				break;
+                        case 'q':	
+                                $url = 'http://www.imdb.com/find';  // quick fix for search 
 			default:
 				if ($request) $request .= "&";
 				$request .= "$key=$value";
@@ -519,6 +521,9 @@ else
     // fetch URL
     $fetchtime = time();
     $page = request();
+    //testing code page from call to imdb
+    $file_path = './cache/pagedata-from imdb.html';
+    file_put_contents($file_path, $page);
     $fetchtime = time() - $fetchtime;
 
 	// convert HTML for output
@@ -540,8 +545,8 @@ if ($iframe == 2 || preg_match('#\/_ajax#', $videodburl, $matches))
 // mode 0 or 1: prepare templates
 tpl_page('imdbbrowser');
         //testing code save page before send to browser
-        //$file_path = './cache/pagedata.txt';
-        //file_put_contents($file_path, $page);
+        $file_path = './cache/pagedata.html';
+        file_put_contents($file_path, $page);
 $smarty->assign('url', $url);
 $smarty->assign('page', $page);
 $smarty->assign('fetchtime', $fetchtime);

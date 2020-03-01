@@ -41,7 +41,7 @@ require_once './core/encoding.php';
 require_once './core/template.php';
 require_once './core/cache.php';
 require_once './core/compatibility.php';
-require_once './lib/smarty/SmartyBC.class.php';
+require_once './vendor/smarty/smarty/libs/SmartyBC.class.php';
 
 /* --------------------------------------------------------------------*/
 // exception handling beyond this point
@@ -72,7 +72,7 @@ if ($ajax_update) validate_input($ajax_update);
 $smarty = new SmartyBC();
 $smarty->compile_dir     = './cache/smarty';            // path to compiled templates
 $smarty->cache_dir       = './cache/smarty';            // path to cached html
-$smarty->plugins_dir     = array('./lib/smarty/custom', './lib/smarty/plugins');
+$smarty->plugins_dir     = array('./lib/smarty/custom', './vendor/smarty/smarty/libs/plugins');
 $smarty->use_sub_dirs    = 0;                           // restrict caching to one folder
 $smarty->loadFilter('output', 'trimwhitespace');        // remove whitespace from output
 #$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
