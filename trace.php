@@ -407,25 +407,27 @@ function fixup_javascript($html)
         return $html;
     }
     // find imdb javascript files
-    preg_match_all('#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/(.*?)-(.*?)js#',
+                //  https://m.media-amazon.com/images/S/sash/CuDG6GJyHNsYYMC.js
+    preg_match_all('#https:\/\/m.media-amazon.com\/images\/S\/sash\/(.*?).js#',
                    $html,
                    $matches_all);
-//    echo "<br> test for switch - "; var_dump($matches_all); var_dump($matches_all[1]);
+//    echo "<br> test for switch code - "; var_dump($matches_all_new); var_dump($matches_all_new[1]);
     $x = 0;
-    foreach ($matches_all[1] as $js_page_type)
+    foreach ($matches_all[0] as $js_file)
     {
-//    echo "<br> in for each loop - ".$js_page_type;
-        switch ($js_page_type)
+        $js_file_data = file_get_contents($js_file);
+        // for season, year change drop down list on episode list
+        // string - if(d!==c){var e="/title/"
+        $pattern = '#(if\(d!==c\){var e=)(\"\/title\/\")#';
+        if (preg_match($pattern, $js_file_data, $matches)  )
         {
-            case "title":
-            case "common";
-                $html = replace_javascript ($html,$js_page_type,$matches_all[0][$x]);
-                break;
+        //          replace_javascript ($html, $js_page_type, $js_file_name)
+            $html = replace_javascript ($html,$matches_all[1][$x],$matches_all[0][$x]);
         }
         $x++ ;
     }
-    //new code for search button and interactive search list
-    // find all js filesnamed  
+    // for search bar and interactive search list
+    // find all js file named  
     //               https://m.media-amazon.com/images/I/?file-name?.js
     preg_match_all('#https:\/\/m.media-amazon.com\/images\/I\/(.*?).js#',
                    $html,
@@ -495,6 +497,7 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
 {
     global $iframe;
     
+//    echo "<br> in replace_javascript";
     // allow for iframe templates
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
@@ -506,23 +509,26 @@ function replace_javascript ($html, $js_page_type, $js_file_name)
     // get contents of javascript file
     $js_file_data = file_get_contents($js_file_name);
     
-    if ($js_page_type != 'common')  // common needs no changes only saved to cache as required on server root
-    {
-        // for season, year change drop down list on episode list
-        // process - if(d!==c){var e="/title/"
-        $pattern = '#(if\(d!==c\){var e=)(\"\/title\/\")#';
-        preg_match($pattern, $js_file_data, $matches);
+    // for season, year change drop down list on episode list
+    //  process - if(d!==c){var e="/title/"
+    $pattern = '#(if\(d!==c\){var e=)(\"\/title\/\")#';
+    preg_match($pattern, $js_file_data, $matches);
 //    echo "<br> js file - find for season"; var_dump($matches);
-        $js_file_data = preg_replace($pattern,
-                                     $matches[1].'"trace.php?'.$iframe_val.'&videodburl=https://www.imdb.com"+'.$matches[2],
+    $js_file_data = preg_replace($pattern,
+                                 $matches[1].'"trace.php?'.$iframe_val.'&videodburl=https://www.imdb.com"+'.$matches[2],
                                  $js_file_data);
-    }
+
     $comment = '/* this file original name - '.$js_file_name.' */';
     file_put_contents($file_path, $comment);
     // save js data file to cache (overwritten if present) 
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
-    // https://m.media-amazon.com/images/G/01/imdb/js/collections/pagelayout-217123936._CB476660927_.js 
-    $pattern  = '#https:\/\/m.media-amazon.com\/images\/G\/01\/imdb\/js\/collections\/'.$js_page_type.'-(.*?)js#';
+    
+    //           https://m.media-amazon.com/images/S/sash/CuDG6GJyHNsYYMC.js
+    $pattern = '#'.$js_file_name.'#';
+//    $pattern = '#https:\/\/m.media-amazon.com\/images\/S\/sash\/'.$js_page_type.'.js#';
+    $html = preg_replace($pattern,$file_path,$html);
+    
+
 //  echo "<BR> - pattern-".$pattern;
     $html = preg_replace($pattern,$file_path,$html);
 
