@@ -411,7 +411,7 @@ function fixup_javascript($html)
     preg_match_all('#https:\/\/m.media-amazon.com\/images\/S\/sash\/(.*?).js#',
                    $html,
                    $matches_all);
-//    echo "<br> test for switch code - "; var_dump($matches_all_new); var_dump($matches_all_new[1]);
+//    echo "<br> test for switch code - "; var_dump($matches_all); var_dump($matches_all[1]);
     $x = 0;
     foreach ($matches_all[0] as $js_file)
     {
