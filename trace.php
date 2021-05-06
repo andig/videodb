@@ -406,60 +406,57 @@ function fixup_javascript($html)
     {
         return $html;
     }
-    // find imdb javascript files
-                //  https://m.media-amazon.com/images/S/sash/CuDG6GJyHNsYYMC.js
-    preg_match_all('#https:\/\/m.media-amazon.com\/images\/S\/sash\/(.*?).js#',
-                   $html,
-                   $matches_all);
-//    echo "<br> test for switch code - "; var_dump($matches_all); var_dump($matches_all[1]);
+
+    // get cache folder
+    $cachefolder = cache_get_folder('javascript');  //get cache root folder
+    $error = cache_create_folders($cachefolder, 0); // ensure folder exists
+    // empty javascript cache as imdb keep changing things
+    array_map('unlink', glob($cachefolder."/*.*"));
+
+    // find all imdb javascript files
+    preg_match_all('#[\"\']\s*\Khttps?:[^\"\']+?\.js#',
+               $html,
+               $matches_all);
+//echo "<br> list all js files - "; var_dump($matches_all);
+    //  for performance reduce matches by excluding all duplicate files
+    $unique_matches = array_unique($matches_all[0]);
+//echo "<br> list all js files - "; var_dump($unique_matches);
+    // loop thru files
     $x = 0;
-    foreach ($matches_all[0] as $js_file)
+    foreach ($unique_matches as $js_file)
     {
+//echo "<br>x is ".$x."  file name - ".$js_file;
         $js_file_data = file_get_contents($js_file);
+        
         // for season, year change drop down list on episode list
-        // string - if(d!==c){var e="/title/"
-        $pattern = '#(if\(d!==c\){var e=)(\"\/title\/\")#';
+        $find_string = 'if(d!==c){var e="/title/"';
+        $pattern = preg_quote('#'.$find_string.'#');  // add escape delimiters
+        if (preg_match($pattern, $js_file_data, $matches) )
+        {
+            $html = replace_javascript_seasonyear ($html,$js_file,$js_file_data,$cachefolder);
+        }
+        
+        // for search bar and interactive search list
+        $find_string = 'hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]';
+        $pattern = preg_quote('#'.$find_string.'#');  // add escape delimiters
         if (preg_match($pattern, $js_file_data, $matches)  )
         {
-        //          replace_javascript ($html, $js_page_type, $js_file_name)
-            $html = replace_javascript ($html,$matches_all[1][$x],$matches_all[0][$x]);
+            $html = replace_javascript_search ($html,$js_file,$js_file_data,$cachefolder); 
         }
-        $x++ ;
-    }
-    // for search bar and interactive search list
-    // find all js file named  
-    //               https://m.media-amazon.com/images/I/?file-name?.js
-    preg_match_all('#https:\/\/m.media-amazon.com\/images\/I\/(.*?).js#',
-                   $html,
-                   $matches_all);
-//echo "<br> test for switch - "; var_dump($matches_all);
-    $x = 0;
-    foreach ($matches_all[0] as $js_file_name)
-    {
-        $js_file_data = file_get_contents($js_file_name);
-                //   hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]
-        $pattern = '#hiddenFields:\[\{name:"ref_",val:"nv_sr_sm"\}\]#';
-        if (preg_match($pattern, $js_file_data, $matches)  )
-        {
-//echo 'in if statement'; var_dump($js_file_name);var_dump($matches); var_dump($matches_all[1][$x]);
-            $js_full_file_path = $matches_all[0][$x];
-            $js_file_name = $matches_all[1][$x];
-            $html = replace_javascript_search ($html,$js_full_file_path,$js_file_name,$js_file_data); 
-            break;
-        }
-//echo "<br> test for search code - "; var_dump($js_file_name);var_dump($matches);
+        
+        // release file data from memory to avoid memory exceeeded error 
+        $js_file_data = '';     
+        unset($js_file_data);
+
         $x++ ;
     }
     return ($html);
 }
 
-function replace_javascript_search ($html,$js_full_file_path,$js_file_name,$js_file_data)
+function replace_javascript_search ($html,$js_file_name,$js_file_data,$cachefolder)
 {
      global $iframe;
     $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-    // get cache folder
-    $cachefolder = cache_get_folder('javascript');  //get cache root folder
-    $error = cache_create_folders($cachefolder, 0); // ensure folder exists
     $file_path = './'.$cachefolder.'imdb-clone-'.'search-override'.'.js';
     
     // look for   search:{searchEndpoint:"https://v2.sg.media-imdb.com/suggestion",queryTemplate:"%s%s/%s.json",formAction:"/find",formMethod:"get",inputName:"q",hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]},
@@ -481,57 +478,43 @@ function replace_javascript_search ($html,$js_full_file_path,$js_file_name,$js_f
 //echo var_dump($replace_val);
     $js_file_data = preg_replace($pattern,$replace_val, $js_file_data);            
     // save file to cache (overwritten if present)
-    //add comment line to file
-    $comment = '/* this file original name - '.$js_full_file_path.' */';
-    file_put_contents($file_path, $comment);
-    // save js data file to cache (overwritten if present) 
+    //add comment line to file and save to cache (overwritten if present) 
+    file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
+    // save js data file to cache
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
     
-                // https://m.media-amazon.com/images/I/????.js - using generic file name
-    $pattern  = '#https:\/\/m.media-amazon.com\/images\/I\/'.$js_file_name.'.js#';
+    $pattern = preg_quote('#'.$js_file_name.'#');  // escape all delimitters in file name
+//echo $pattern;
     $html = preg_replace($pattern,$file_path,$html);
 
     return $html;
 }
-function replace_javascript ($html, $js_page_type, $js_file_name)
+function replace_javascript_seasonyear ($html,$js_file_name,$js_file_data,$cachefolder)
 {
     global $iframe;
     
-//    echo "<br> in replace_javascript";
+//echo "<br> in replace_javascript";
+//echo "<br>".$js_file_name; echo "   ".$cachefolder;
     // allow for iframe templates
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
-    // get cache folder
-    $cachefolder = cache_get_folder('javascript');  //get cache root folder
-    $error = cache_create_folders($cachefolder, 0); // ensure folder exists
-    $file_path = './'.$cachefolder.'imdb-clone-'.$js_page_type.'.js';
-    
-    // get contents of javascript file
-    $js_file_data = file_get_contents($js_file_name);
-    
-    // for season, year change drop down list on episode list
-    //  process - if(d!==c){var e="/title/"
-    $pattern = '#(if\(d!==c\){var e=)(\"\/title\/\")#';
+    $file_path = './'.$cachefolder.'imdb-clone-seasonyear-change.js';
+    //string -    if(d!==c){var e="/title/"
+    $pattern = '#(if\(d!==c\){var e=)(\"/title/\")#';
+//echo "<br>".$pattern;
     preg_match($pattern, $js_file_data, $matches);
-//    echo "<br> js file - find for season"; var_dump($matches);
+//echo "<br> js file - find for season"; var_dump($matches);
     $js_file_data = preg_replace($pattern,
                                  $matches[1].'"trace.php?'.$iframe_val.'&videodburl=https://www.imdb.com"+'.$matches[2],
                                  $js_file_data);
-
-    $comment = '/* this file original name - '.$js_file_name.' */';
-    file_put_contents($file_path, $comment);
-    // save js data file to cache (overwritten if present) 
+    //add comment line to file and save to cache (overwritten if present) 
+    file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
+    // save js data file to cache
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
     
-    //           https://m.media-amazon.com/images/S/sash/CuDG6GJyHNsYYMC.js
-    $pattern = '#'.$js_file_name.'#';
-//    $pattern = '#https:\/\/m.media-amazon.com\/images\/S\/sash\/'.$js_page_type.'.js#';
+    $pattern = preg_quote('#'.$js_file_name.'#');  // escape all delimitters in file name
     $html = preg_replace($pattern,$file_path,$html);
-    
-
-//  echo "<BR> - pattern-".$pattern;
-    $html = preg_replace($pattern,$file_path,$html);
-
+//echo "<BR> - pattern-".$pattern;
     return $html;
 }
 
