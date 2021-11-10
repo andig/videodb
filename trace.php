@@ -461,8 +461,8 @@ function fixup_javascript($html)
 
         if (!$add_movie_done)
         { 
-            // add add/show movie links       
-            $find_string = 'HOURS_MINUTES_EXPLICIT)))}';
+            // add add/show movie links    
+            $find_string = 'titleData.productionStatus';
             $pattern = preg_quote('#'.$find_string.'#');  // add escape delimiters
             if (preg_match($pattern, $js_file_data, $matches) )
             {
@@ -651,8 +651,8 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
             }
             $append.= ','.$matches[1].'"Show Movie'.$diskid.'",href:"show.php?id='.$sp_id.'"}))';
         }
-        //  string to look for in replace - HOURS_MINUTES_EXPLICIT)))} 
-        $pattern = '#(HOURS_MINUTES_EXPLICIT\)\))(\)\})#';
+        //  string to find for in replace  - format:"{hours} {minutes}",unitDisplay:"narrow"})))}
+        $pattern = '#(format:"{hours} {minutes}",unitDisplay:"narrow"}\)\))(\)\})#';
         preg_match($pattern, $js_file_data, $matches);
 //echo "<br> js file - addmovie"; var_dump($matches);
         $js_file_data = preg_replace($pattern,
