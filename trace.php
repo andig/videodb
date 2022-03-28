@@ -637,11 +637,12 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
 //echo "<br> title - addmovie"; var_dump($m); 
     if (preg_match("#/title/tt(\d+)#", $uri['path'], $m)) 
     {
-        // look for  rating)&&ba(l.InlineListItem,null,ba(va,{text: - char ba & va change randomly
-        $pattern = "#rating\)&&(.*?.\(l\.InlineListItem,null,.*?.,\{text:)#";
+        //   look for     rating)&&(0,r.jsxs)(f.InlineListItem,{children:[(0,r.jsx)(Mp,{text:  - var tokens can change randomly
+        //                         111111111111111111111111111111111111111111111111111111111       
+        $pattern = "#rating\)&&(.*?.InlineListItem.*?.,\{text:)#";
         preg_match($pattern, $js_file_data, $matches);
 //echo "<br> js data - function names"; var_dump($matches);
-        $append = ','.$matches[1].'"Add Movie",href:"edit.php?save=1&lookup=2&imdbID=imdb:'.$m[1].'"}))';
+        $append = ','.$matches[1].'"Add Movie",href:"edit.php?save=1&lookup=2&imdbID=imdb:'.$m[1].'"})]}),';
         if (is_known_item('imdb:'.$m[1], $sp_id, $sp_diskid))
         {
             $diskid = "";
@@ -649,10 +650,11 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
             {
                 $diskid = " (Diskid:".$sp_diskid.")";
             }
-            $append.= ','.$matches[1].'"Show Movie'.$diskid.'",href:"show.php?id='.$sp_id.'"}))';
+            $append.= $matches[1].'"Show Movie'.$diskid.'",href:"show.php?id='.$sp_id.'"})]}),';
         }
-        //  string to find for in replace  - format:"{hours} {minutes}",unitDisplay:"narrow"})))}
-        $pattern = '#(format:"{hours} {minutes}",unitDisplay:"narrow"}\)\))(\)\})#';
+        //  string to find for in replace  - format:"{hours} {minutes}",unitDisplay:"narrow"})})]})}
+        //                                   1111111111111111111111111111111111111111111111111112222
+        $pattern = '#(format:"{hours} {minutes}",unitDisplay:"narrow"}\)}\))(]}\)})#';        
         preg_match($pattern, $js_file_data, $matches);
 //echo "<br> js file - addmovie"; var_dump($matches);
         $js_file_data = preg_replace($pattern,
@@ -691,7 +693,7 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
     file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
     // save js data file to cache
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
-    
+
     $pattern = preg_quote('#'.$js_file_name.'#');  // escape all delimitters in file name
 //echo "<BR> - pattern-".$pattern;
     $html = preg_replace($pattern,$file_path,$html);
