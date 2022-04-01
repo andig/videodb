@@ -164,8 +164,9 @@ function engineSearch($find, $engine = 'imdb', $para1 = null, $para2 = null)
 function engineGetContentUrl($id, $engine = 'imdb')
 {
     if (empty($id)) return '';
-    
-    require_once($engine.'.php');
+    if (!file_exists($engine.'.php')) return '';
+
+    include_once($engine.'.php');
     $func = $engine.'ContentUrl';
     
     $result = '';
