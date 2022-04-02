@@ -278,7 +278,7 @@ function imdbData($imdbID)
     $data['mpaa'] = trim($ary[1]);
 
     // Runtime
-	preg_match('/<div data-testid="title-techspecs-header" .+? data-testid="title-techspec_runtime">.+?>(?:(\d+)h )?(\d+)min<\/span><\/li>/si', $resp['data'], $ary);
+	preg_match('/<li role="presentation" class="ipc-inline-list__item">(?:(\d+)<!-- -->h.*?)?(?:(\d+)<!-- -->m)?<\/li>/si', $resp['data'], $ary);
 	$minutes = intval(trim($ary[2]));
 	if (is_numeric($ary[1])) {
 		$minutes += intval(trim($ary[1])) * 60;
@@ -444,27 +444,21 @@ function imdbGetCoverURL($data) {
         if ($resp['success'])
         {
             // get big cover image.
-            preg_match('/<div style=".+?" class="MediaViewerImagestyles__PortraitContainer-.+?"><img src="(.+?)"/si', $resp['data'], $ary);
+			preg_match('/<div style=".+?" class=".+?"><img src="(.+?)"/si', $resp['data'], $ary);
             // If you want the image to scaled to a certain size you can do this.
             // UX800 sets the width of the image to 800 with correct aspect ratio with regard to height.
 			// UY800 set the height to 800 with correct aspect ratio with regard to width.
-            // return str_replace('.jpg', 'UY800_.jpg', $ary[1]);
-            return trim($ary[1]);
+            return str_replace('.jpg', 'UY800_.jpg', $ary[1]);
+            //return trim($ary[1]);
         }
         $CLIENTERROR .= $resp['error']."\n";
         return '';
     }
     // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
     // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that we want the full size.
-    else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary))
-    {
-        $img_url = $ary[1]."jpg";
-        // Replace the https wtih http.
-        $img_url = str_replace("https://images-na.ssl-images-amazon.com", "http://ecx.images-amazon.com", $img_url);
-        return $img_url;
-    }
-    else
-    {
+    else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary)) {
+        return $ary[1]."_V1_SY600_CR0,0,600_AL_.jpg";
+    } else {
         # no image
         return '';
     }
