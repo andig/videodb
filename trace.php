@@ -516,6 +516,7 @@ function fixup_javascript($html)
 
 function fixup_json($json)
 {
+/*  section commented out as not needed as of june 2022 - code left incase needed in future
     // insert / after title no - fixes issue with title no being deleted in $uri in function get_base
     // "id":"tt5996792" allow for different digits in page
     $pattern = '#(\"id\":\"tt)(\d+)(\")#';
@@ -529,6 +530,7 @@ function fixup_json($json)
                              '"id":"tt'.$tt_no.'/"',            
                              $json);
     }
+ */
 // testing code
 //$pattern = '#\"id\":\"tt.*?.\"#';
 //preg_match_all($pattern,$page, $mm_after);
