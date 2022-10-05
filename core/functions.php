@@ -55,16 +55,13 @@ foreach (array_keys($_ENV) as $key) unset($GLOBALS[$key]);
 
 // force magic quotes off
 ini_set('magic_quotes_runtime', 0);
-if (get_magic_quotes_gpc())
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) // @todo remove
 {
     if (!empty($_REQUEST)) remove_magic_quotes($_REQUEST);
     ini_set('magic_quotes_gpc', 0);
 }
 
-// register_globals off? Well I like it...
-extract($_REQUEST);
-
-// security check
+// security check // @todo move to parent files
 if ($id) validate_input($id);
 if ($ajax_update) validate_input($ajax_update);
 
@@ -683,6 +680,8 @@ function check_videopermission($perm, $id)
 function check_permission($permission, $destUserId = null)
 {
     global $config;
+    // initialize
+    $permissions = 0;
 
     // everything's allowed in single user mode
     if (!$config['multiuser']) return true;
@@ -957,5 +956,35 @@ function get_username($userId)
     return $result[0]['name'];
 }
 
+/**
+ * A few functions for input filtering
+ */
 
-?>
+function req_email ($name) {
+    return req_raw($name, FILTER_SANITIZE_EMAIL);
+}
+
+function req_string ($name) {
+    return req_raw($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+}
+
+function req_float ($name) {
+    return req_raw($name, FILTER_SANITIZE_NUMBER_FLOAT);
+}
+
+function req_int ($name) {
+    return req_raw($name, FILTER_SANITIZE_NUMBER_INT);
+}
+
+function req_url ($name) {
+    return req_raw($name, FILTER_SANITIZE_URL);
+}
+
+function req_raw ($name, $filter = FILTER_UNSAFE_RAW) {
+    $value = filter_input(INPUT_POST, $name, $filter);
+    if (is_null($value)) {
+        $value = filter_input(INPUT_GET, $name, $filter);
+    }
+    return $value;
+}
+

@@ -17,13 +17,20 @@ require_once './core/functions.php';
 require_once './core/output.php';
 
 /**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
+
+/**
  * Update item list asynchronously
  *
  * @author  Andreas Goetz   <cpuidle@gmx.de>
  */ 
 function ajax_render()
 {
-    global $smarty, $result, $filter;
+    global $smarty, $result, $filter, $config;
     global $pageno, $totalpages, $totalresults;
 
     // TODO Smarty caching would require further efforts $smarty->caching = 1;
@@ -318,4 +325,3 @@ if ($config['httpcaching'])
     httpCacheOutput('index', httpCacheCaptureEnd());
 }
 
-?>

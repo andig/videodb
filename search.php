@@ -18,11 +18,16 @@ require_once './core/output.php';
 // multiuser permission check
 permission_or_die(PERM_READ, PERM_ANY);
 
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
+
 // set defaults and update session
 session_default('listcolumns', $config['listcolumns']);
-
 session_set('genres', $genres = isset($genres) ? $genres : array());
-
 // enable redirects to last list view for delete.php
 session_set('listview', 'search.php');
 
@@ -33,7 +38,7 @@ session_set('listview', 'search.php');
  */
 function ajax_render()
 {
-    global $smarty, $result;
+    global $smarty, $result, $config;
 
     // add some delay for debugging
     if ($config['debug'] && $_SERVER['SERVER_ADDR'] == '127.0.0.1')  usleep(rand(200,1000)*1000);
@@ -313,4 +318,3 @@ smarty_display('search.tpl');
 smarty_display('list.tpl');
 smarty_display('footer.tpl');
 
-?>

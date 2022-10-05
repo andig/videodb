@@ -16,15 +16,20 @@ require_once './core/functions.php';
 require_once './core/genres.php';
 require_once './core/custom.php';
 require_once './core/edit.core.php';
-
 require_once './engines/engines.php';
-
 
 // check for localnet
 localnet_or_die();
 
 // multiuser permission check
 permission_or_die(PERM_WRITE, ($id) ? get_owner_id($id) : PERM_ANY);
+
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
 
 // clean input data
 $genres = (is_array($genres)) ? array_filter($genres) : array();
@@ -357,4 +362,3 @@ if ($config['xml'] && empty($id)) $smarty->assign('xmlimport', true);
 // display templates
 tpl_display('edit.tpl');	
 
-?>

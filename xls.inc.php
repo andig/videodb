@@ -66,4 +66,3 @@ $config['xls_mark_lent']       = 1;
 */
 $config['xls_extra_fields']    = 'title (plot), diskid, genres, language, mediatype, runtime, year, custom1, custom2, custom3, custom4, insertdate, owner, lent';
 
-?>

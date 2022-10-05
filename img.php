@@ -12,6 +12,13 @@
 require_once './core/functions.php';
 require_once './core/httpclient.php';
 
+/**
+ * input
+ */
+$name = req_string('name');
+$actorid = req_int('actorid');
+$url = req_url('url');
+
 /* 
  * Note:
  *
@@ -103,4 +110,3 @@ $file = preg_replace('/img\.php$/', $file, $_SERVER['PHP_SELF']);
 
 header('Location: '.$file);
 
-?>

@@ -21,6 +21,13 @@ if (empty($user))
 				page try to <a href="login.php">login</a> first. (This feature is not
 				available in Single User Mode)');
 }
+
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+
 if (empty($id) || empty($diskid)) 
 {
 	errorpage('Error', 'No Ids given');
@@ -70,4 +77,4 @@ $smarty->assign('success', @mail($owner_email, $subject, $mail, "From: $user <$u
 // display templates
 smarty_display('borrowask.tpl');
 
-?>
+
