@@ -52,6 +52,13 @@ function create_user($user, $pass, $perm, $email)
     return $res;
 }
 
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
+
 // calculate permissions
 $perm = 0;
 
@@ -147,4 +154,3 @@ $smarty->assign('message', $message);
 // display templates
 tpl_display('users.tpl');
 
-?>

@@ -6,7 +6,7 @@
  *
  * @package Setup
  * @author  Andreas Gohr <a.gohr@web.de>
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas Gï¿½tz    <cpuidle@gmx.de>
  * @version $Id: setup.php,v 2.50 2013/03/10 16:22:22 andig2 Exp $
  */
  
@@ -16,6 +16,13 @@ require_once './core/setup.core.php';
 
 localnet_or_die();
 permission_or_die(PERM_ADMIN);
+
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
 
 /*
  * Note:
@@ -137,4 +144,3 @@ $smarty->assign('cacheclear', $cacheempty);
 // display templates
 tpl_display('setup.tpl');
 
-?>

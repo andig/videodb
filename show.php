@@ -15,6 +15,13 @@ require_once './core/custom.php';
 require_once './core/output.php';
 
 /**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
+
+/**
  * Play movie on configured Boxee box
  */
 function boxeePlay($filename) {
@@ -306,4 +313,3 @@ if ($config['http_caching'])
     httpCacheOutput('show'.$id, httpCacheCaptureEnd());
 }
 
-?>

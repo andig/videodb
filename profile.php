@@ -13,6 +13,12 @@ require_once './core/session.php';
 require_once './core/functions.php';
 require_once './core/setup.core.php';
 
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
 $user_id    = get_current_user_id();
 
 // really shouldn't happen
@@ -61,4 +67,3 @@ $smarty->assign('setup', $setup);
 // display templates
 tpl_display('profile.tpl');
 
-?>

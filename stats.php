@@ -48,6 +48,13 @@ function collapse_multiple_languages($langs)
     return $templangs;
 }
 
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
+
 if ($config['multiuser']) 
 {
     // get owner from session- or use current user
@@ -163,4 +170,3 @@ $smarty->assign('stats', $stats);
 // display templates
 tpl_display('stats.tpl');
 
-?>

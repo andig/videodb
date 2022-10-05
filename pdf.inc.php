@@ -56,4 +56,3 @@ $config['pdf_right_margin']     = 5;
 $config['pdf_image_height']     = 24;
 $config['pdf_image_width']      = (int) $config['pdf_image_max_width'] / $config['pdf_image_max_height'] * $config['pdf_image_height'];
 
-?>

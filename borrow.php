@@ -18,6 +18,13 @@ localnet_or_die();
 // permission check
 permission_or_die(PERM_WRITE, PERM_ANY); 
 
+/**
+ * input
+ */
+$diskid = req_int('diskid');
+$return = req_string('return');
+$who = req_string('who');
+
 // borrowmanagement for single disk
 $editable = false;
 if (!empty($diskid))
@@ -99,4 +106,4 @@ $smarty->assign('borrowlist', $result);
 // display templates
 tpl_display('borrow.tpl');
 
-?>
+

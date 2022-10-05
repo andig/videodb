@@ -35,6 +35,12 @@ function ajax_render()
     exit($content);
 }
 
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$$;
 
 // determine default engine (first in list)
 if (empty($engine)) $engine = engineGetDefault();
@@ -103,4 +109,3 @@ $smarty->assign('http_error', $CLIENTERROR);
 // display templates
 smarty_display('lookup.tpl');
 
-?>
