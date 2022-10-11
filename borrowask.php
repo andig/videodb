@@ -34,11 +34,11 @@ if (empty($id) || empty($diskid))
 }
 
 $owner       = get_owner($diskid, true);
-$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE name = '".addslashes($owner)."'");
+$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE name = '".escapeSQL($owner)."'");
 $owner_email = $result[0]['email'];
-$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE id = '".addslashes($user_id)."'");
+$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE id = '".escapeSQL($user_id)."'");
 $user_email  = $result[0]['email'];
-$result      = runSQL('SELECT title FROM '.TBL_DATA." WHERE id = '".addslashes($id)."'");
+$result      = runSQL('SELECT title FROM '.TBL_DATA." WHERE id = '".escapeSQL($id)."'");
 $title       = $result[0]['title'];
 
 $mail        = $lang['msg_borrowaskmail'];

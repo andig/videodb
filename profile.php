@@ -16,10 +16,9 @@ require_once './core/setup.core.php';
 /**
  * input
  */
-$id = req_int('id');
-$diskid = req_int('diskid');
-$$;
-$user_id    = get_current_user_id();
+$user_id = get_current_user_id();
+$save = req_int('save');
+// all other input are within `if (save) foreach {}`
 
 // really shouldn't happen
 if (empty($user_id))
@@ -32,14 +31,16 @@ if (empty($user_id))
 // save data
 if ($save)
 {
-    // convert languages array back into string
-	$languageflags = @join('::', $languages);
-    
 	// insert data
 	foreach ($SETUP_USER as $opt) 
     {
+        $val = req_string($opt);
+        if ($opt == 'languageflags') {
+            // convert languages array back into string
+            $val = @join('::', req_array('languages'));
+        }
         $SQL = "REPLACE INTO ".TBL_USERCONFIG." (user_id, opt, value) 
-                      VALUES ('".addslashes($user_id)."', '$opt', '".addslashes($$opt)."')";
+                      VALUES ('" . escapeSQL($user_id) . "', '$opt', '" . escapeSQL($val) . "')";
 		runSQL($SQL);
 	}
 

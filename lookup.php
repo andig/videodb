@@ -21,7 +21,7 @@ require_once './engines/imdb.php';
  */ 
 function ajax_render()
 {
-    global $smarty, $result;
+    global $smarty, $result, $config;
 
     // add some delay for debugging
     if ($config['debug'] && $_SERVER['SERVER_ADDR'] == '127.0.0.1') usleep(rand(200,1000)*1000);
@@ -38,9 +38,13 @@ function ajax_render()
 /**
  * input
  */
-$id = req_int('id');
-$diskid = req_int('diskid');
-$$;
+$engine = req_string('engine');
+$find = req_string('find');
+$catalog = req_string('catalog');
+$searchaka = req_int('searchaka');
+$searchtype = req_string('searchtype');
+$ajax_render = req_int('ajax_render');
+$CLIENTERROR = null;
 
 // determine default engine (first in list)
 if (empty($engine)) $engine = engineGetDefault();

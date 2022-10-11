@@ -21,7 +21,20 @@ require_once './core/output.php';
  */
 $id = req_int('id');
 $diskid = req_int('diskid');
-$$;
+// start session'd settings
+$filter = req_string('filter');
+$showtv = req_int('showtv');
+$listcolumns = req_int('listcolumns');
+$mediafilter = req_int('mediafilter');
+$order = req_int('order');
+// end session'd settings
+$owner = req_string('owner');
+$ajax_quicksearch = req_string('ajax_quicksearch'); // elegant template only
+$quicksearch = req_string('quicksearch'); // elegant template only
+$export = req_string('export');
+$pageno = (req_string('pageno') == 'all' ? 'all' : req_int('pageno'));
+$ajax_render = req_int('ajax_render'); // elegant template only
+$deleteid = req_int('deleteid');
 
 /**
  * Update item list asynchronously
@@ -170,7 +183,7 @@ if ($config['multiuser'])
     }
         
     // further limit to single owner
-    if ($owner != $lang['filter_any']) $WHERES .= " AND ".TBL_USERS.".name = '".addslashes($owner)."'";
+    if ($owner != $lang['filter_any']) $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";
 }
 
 // searching?
@@ -206,9 +219,9 @@ if ($ajax_quicksearch)
 }
 
 // XML / RSS / PDF export
-if ($export && $config[$export])
+if ($export && array_key_exists($export, $config) && $config[$export])
 {
-	// either (xml|rss|pdf)export
+	// either (xml|rss|pdf|xls)export
     $func = $export.'export';
     if ($export == 'rss') $export = 'xml';
     require_once './core/'.$export.'.php';
@@ -304,7 +317,7 @@ $smarty->assign('moreless', true);           // show more/less control in list v
 // allow data export
 foreach (array('xls','pdf','xml','rss') as $export)
 {
-    if ($config[$export]) $smarty->assign($export, 'index.php?');
+    if (array_key_exists($export, $config) && $config[$export]) $smarty->assign($export, 'index.php?');
 }
 
 // display templates

@@ -18,8 +18,12 @@ require_once './core/output.php';
  * input
  */
 $id = req_int('id');
-$diskid = req_int('diskid');
-$$;
+$ajax_update = req_int('ajax_update');
+$seen = req_int('seen');
+$rating = req_int('rating');
+$export = req_string('export');
+$save = req_int('save');
+$method = req_string('method'); // only boxeePlay
 
 /**
  * Play movie on configured Boxee box
@@ -237,7 +241,7 @@ if (!empty($id))
 	{
         $SELECT = 'SELECT who
                      FROM '.TBL_LENT."
-                    WHERE diskid = '".addslashes($diskid)."'";
+                    WHERE diskid = '".escapeSQL($diskid)."'";
         $result = runSQL($SELECT);
 
         if (isset($result[0]['who']))
@@ -247,7 +251,7 @@ if (!empty($id))
     }
 /*    
     // append child episodes
-    $SELECT = 'SELECT *
+    $SELECT = 'SELECT id, title, season, episode, plot
                  FROM '.TBL_DATA.'                       
                 WHERE '.TBL_DATA.'.parent_id = '.$id.'                      
              ORDER BY season, episode, title, subtitle';                      

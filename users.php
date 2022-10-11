@@ -35,10 +35,10 @@ function create_user($user, $pass, $perm, $email)
     
     $SQL = "INSERT INTO ".TBL_USERS."
                SET id = ".$nextid.",
-               	   name = '".addslashes($user)."',
+               	   name = '".escapeSQL($user)."',
                    passwd = '".md5($pass)."',
                    permissions = $perm,
-                   email = '".addslashes($email)."'";
+                   email = '".escapeSQL($email)."'";
     $res = runSQL($SQL, false);
 
     // set default read/write permissions for own data
@@ -56,8 +56,17 @@ function create_user($user, $pass, $perm, $email)
  * input
  */
 $id = req_int('id');
-$diskid = req_int('diskid');
-$$;
+$newuser = req_int('newuser');
+$name = req_string('name');
+$email = req_string('email');
+$password = req_string('password');
+$del = req_int('del');
+$del_correct = ($del && isset($_POST['del']) && ($_POST['del'] == $del));
+
+$readflag = req_int('readflag');
+$writeflag = req_int('writeflag');
+$adultflag = req_int('adultflag');
+$adminflag = req_int('adminflag');
 
 // calculate permissions
 $perm = 0;
@@ -90,7 +99,7 @@ if ($newuser)
 elseif ($id && $name)
 {
     runSQL("UPDATE ".TBL_USERS."
-               SET name = '".addslashes($name)."', permissions = $perm, email = '".addslashes($email)."'
+               SET name = '".escapeSQL($name)."', permissions = $perm, email = '".escapeSQL($email)."'
 			 WHERE id = $id");
 	// new password?
 	if (!empty($password))
@@ -104,7 +113,7 @@ elseif ($id && $name)
 }
 
 // delete user? - POST only!
-elseif ($del && $_POST['del'])
+elseif ($del && $del_correct)
 {
     validate_input($del);
     

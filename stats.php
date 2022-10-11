@@ -51,9 +51,8 @@ function collapse_multiple_languages($langs)
 /**
  * input
  */
-$id = req_int('id');
-$diskid = req_int('diskid');
-$$;
+$owner = req_string('owner');
+$WHERES = null; // init
 
 if ($config['multiuser']) 
 {
