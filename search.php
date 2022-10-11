@@ -21,9 +21,17 @@ permission_or_die(PERM_READ, PERM_ANY);
 /**
  * input
  */
-$id = req_int('id');
-$diskid = req_int('diskid');
-$$;
+$listcolumns = req_int('listcolumns');
+$genres = req_array('genres');
+$owner = req_string('owner');
+$fields = req_array('fields');
+$isname = req_string('isname'); // isname=Y|1
+$nowild = req_int('nowild');
+$q = req_string('q');
+$ajax_quicksearch = req_int('ajax_quicksearch');
+$ajax_render = req_int('ajax_render');
+$default = req_string('default');
+$export = req_string('export');
 
 // set defaults and update session
 session_default('listcolumns', $config['listcolumns']);
@@ -145,7 +153,7 @@ if (isset($q) &! (isset($default) && empty($q)))
 		foreach ($tokens as $token)
 		{
             // escape search token
-			$token['token'] = addslashes($token['token']);
+			$token['token'] = escapeSQL($token['token']);
 
             // concatenate tokens with token operator
 			$WHERES .= $token['ops'].' (';
@@ -195,7 +203,7 @@ if (isset($q) &! (isset($default) && empty($q)))
         }
 
         // further limit to single owner
-        if ($owner && $owner != $all) $WHERES .= " AND ".TBL_USERS.".name = '".addslashes($owner)."'";
+        if ($owner && $owner != $all) $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";
     }
 
     // XML / PDF export
@@ -228,11 +236,11 @@ if (isset($q) &! (isset($default) && empty($q)))
 
     $result = runSQL($select);
 
+    $actors = '';
 /*
 	// prepare actors table if searching for them
 	if (in_array('actors', $fields))
 	{
-		$actors = '';
 		foreach ($result as $row)
 		{
 			$actors .= $row['actors']."\n";

@@ -32,9 +32,9 @@ function clear_session()
 /**
  * input
  */
-$id = req_int('id');
-$diskid = req_int('diskid');
-$$;
+$username = req_string('username');
+$password = req_string('password');
+$refer = req_string('refer');
 
 // make sure caches are clean
 clear_permission_cache();

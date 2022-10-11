@@ -20,9 +20,11 @@ permission_or_die(PERM_ADMIN);
 /**
  * input
  */
-$id = req_int('id');
-$diskid = req_int('diskid');
-$$;
+$quicksave = req_int('quicksave');
+$save = req_int('save');
+$cacheempty = req_int('cacheempty');
+$enginedefault = req_string('enginedefault');
+// all other input are within `if ((quick)save) foreach {}`
 
 /*
  * Note:
@@ -34,7 +36,8 @@ if ($quicksave)
     // insert data
     foreach ($SETUP_QUICK as $opt)
     {
-        $SQL = 'REPLACE INTO '.TBL_CONFIG." (opt,value) VALUES ('$opt','".addslashes($$opt)."')";
+        $val = req_string($opt);
+        $SQL = 'REPLACE INTO '.TBL_CONFIG." (opt, value) VALUES ('$opt', '" . escapeSQL($val) . "')";
         runSQL($SQL);
     }
 
@@ -50,35 +53,39 @@ elseif ($save)
     // add dynamic config options for saving
     setup_additionalSettings();
 
-    $languageflags  = @join('::', $languages);
-	$adultgenres    = @join('::', $adultgenres);
-
 	// insert data
 	foreach ($SETUP_GLOBAL as $opt)
 	{
-		$SQL = 'REPLACE INTO '.TBL_CONFIG." (opt,value) VALUES ('$opt','".addslashes($$opt)."')";
+        $val = req_string($opt);
+        if ($opt == 'languageflags') {
+            // convert languages array back into string
+            $val = @join('::', req_array('languages'));
+        }
+        if ($opt == 'adultgenres') {
+            // convert languages array back into string
+            $val = @join('::', req_array('adultgenres'));
+        }
+
+		$SQL = 'REPLACE INTO '.TBL_CONFIG." (opt, value) VALUES ('$opt', '" . escapeSQL($val) . "')";
         runSQL($SQL);
     }
     
-	// make sure default engine ist active
-	if (!empty($enginedefault)) 
-	{
-		$opt	= 'engine'.$enginedefault;
-		$$opt 	= 1;
-	}
-
     $config['engine'] = array();
     foreach ($config['engines'] as $engine => $meta)
     {
-        $opt    = 'engine'.$engine;
-        $SQL    = 'REPLACE INTO '.TBL_CONFIG." (opt,value) VALUES ('$opt','".addslashes($$opt)."')";
+        $opt = 'engine'.$engine;
+        $val = req_int($opt);
+    	// make sure default engine ist active
+        if (!empty($enginedefault) && $engine == $enginedefault) $val = 1;
+
+        $SQL = 'REPLACE INTO '.TBL_CONFIG." (opt, value) VALUES ('$opt', '" . escapeSQL($val) . "')";
         runSQL($SQL);
 
         // mark engine as available
-        $config['engine'][$engine] = $$opt;
+        $config['engine'][$engine] = $val;
         
         // add meta-engine if enabled
-        if ($$opt) engine_setup_meta($engine, $meta);
+        if ($val) engine_setup_meta($engine, $meta);
     }
 
     // update session variables
@@ -88,7 +95,7 @@ elseif ($save)
     $user_id = get_current_user_id();
 	if (!empty($user_id))
 	{  
-        $SQL = "DELETE FROM ".TBL_USERCONFIG." WHERE user_id = '".addslashes($user_id)."'";
+        $SQL = "DELETE FROM ".TBL_USERCONFIG." WHERE user_id = '".escapeSQL($user_id)."'";
         runSQL($SQL);
 	}
 

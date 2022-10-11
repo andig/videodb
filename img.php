@@ -75,7 +75,7 @@ if ($name)
     {
         // write only if HTTP lookup physically successful
         $SQL = 'REPLACE '.TBL_ACTORS." (name, imgurl, actorid, checked)
-                 VALUES ('".addslashes($name)."', '".addslashes($url)."', '".addslashes($actorid)."', NOW())";
+                 VALUES ('".escapeSQL($name)."', '".escapeSQL($url)."', '".escapeSQL($actorid)."', NOW())";
         runSQL($SQL);
     }
 }
