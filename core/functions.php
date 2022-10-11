@@ -51,7 +51,6 @@ set_exception_handler('exception_handler');
 
 // Set up some defaults
 error_reporting(isset($config['debug']) ? E_ALL ^ E_NOTICE : E_ERROR + E_PARSE);
-error_reporting(E_ERROR);
 
 // Remove environment variables from global scope- ensures clean namespace
 foreach (array_keys($_ENV) as $key) unset($GLOBALS[$key]);
