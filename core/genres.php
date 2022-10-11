@@ -7,7 +7,7 @@
  *
  * @package Core
  * @author  Andreas Gohr    <a.gohr@web.de>
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas Gï¿½tz    <cpuidle@gmx.de>
  * @version $Id: genres.php,v 1.14 2008/01/29 10:59:52 veal Exp $
  */
 
@@ -77,7 +77,7 @@ function mapGenres($genres)
  */
 function getGenreId($name)
 {
-	$name   = addslashes($name);
+	$name   = escapeSQL($name);
     $result = runSQL("SELECT id FROM ".TBL_GENRES." WHERE LCASE(name) = LCASE('".$name."')");
 	return $result[0]['id'];
 }

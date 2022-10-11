@@ -159,7 +159,6 @@ foreach($data as $key => $movie)
 	//ini_set("zlib.output_compression", "Off");
 	session_write_close();
 	
-	set_magic_quotes_runtime(0);
 	header("Content-type: application/octet-stream");
 	header("Content-Disposition: attachment;filename=$saveas");
 	header("Content-Length: " . (string)$size);
@@ -170,7 +169,6 @@ foreach($data as $key => $movie)
 	$fd = fopen($tempfn, "rb");
 	rewind($tempfn);
 	fpassthru($fd); // output temp file content
-	set_magic_quotes_runtime(get_magic_quotes_gpc());
 
 	unlink($tempfn); // remove temp file
 	

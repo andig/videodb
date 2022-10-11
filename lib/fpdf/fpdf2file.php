@@ -95,9 +95,6 @@ function _out($s)
 
 function _putimages()
 {
-/*  !! cpuidle
-	$mqr=get_magic_quotes_runtime();
-	set_magic_quotes_runtime(0); */
 	$filter=($this->compress) ? '/Filter /FlateDecode ' : '';
 	reset($this->images);
 	while(list($file,$info)=each($this->images))
@@ -152,8 +149,6 @@ function _putimages()
 			$this->_out('endobj');
 		}
 	}
-/*  !! cpuidle
-    set_magic_quotes_runtime($mqr); */
 }
 
 function _putpages()
