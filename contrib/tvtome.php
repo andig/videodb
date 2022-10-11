@@ -374,16 +374,16 @@ function save()
   foreach($form_eps as $ep){
     $id    = $form_id[$ep];    
     if (empty($id)) continue;
-    $tvcomid = addslashes($form_tvcomid[$ep]);
-    $subtitle = addslashes($form_subtitle[$ep]);
-    $plot  = addslashes($form_plot[$ep]);
-    $year  = addslashes($form_year[$ep]);
-    $director = addslashes($form_director[$ep]);
-    $cast = addslashes($form_cast[$ep]);
-    $rating = addslashes($form_rating[$ep]);
-    $coverurl = addslashes($form_coverurl[$ep]);
+    $tvcomid = escapeSQL($form_tvcomid[$ep]);
+    $subtitle = escapeSQL($form_subtitle[$ep]);
+    $plot  = escapeSQL($form_plot[$ep]);
+    $year  = escapeSQL($form_year[$ep]);
+    $director = escapeSQL($form_director[$ep]);
+    $cast = escapeSQL($form_cast[$ep]);
+    $rating = escapeSQL($form_rating[$ep]);
+    $coverurl = escapeSQL($form_coverurl[$ep]);
     if (!$fastmode)
-      $genres = mapGenres(explode(", ", addslashes($form_genres[$ep])));
+      $genres = mapGenres(explode(", ", escapeSQL($form_genres[$ep])));
 
     print $form_subtitle[$ep].'... ';
     $SQL = "UPDATE " . TBL_DATA . "
@@ -423,13 +423,13 @@ function save()
 
 function getVideoIDs($title, $subtitle, $language)
 {
-  $title = addslashes($title);
+  $title = escapeSQL($title);
   $title = preg_replace('/\*/','%',$title);
   $title = preg_replace('/\?/','_',$title);
-  $subtitle = addslashes($subtitle);
+  $subtitle = escapeSQL($subtitle);
   $subtitle = preg_replace('/\*/','%',$subtitle);
   $subtitle = preg_replace('/\?/','_',$subtitle);
-  $language = addslashes($language);
+  $language = escapeSQL($language);
   $language = preg_replace('/\*/','%',$language);
   $language = preg_replace('/\?/','_',$language);
   $SQL = "SELECT id, title, subtitle, filename

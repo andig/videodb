@@ -288,9 +288,9 @@ function save()
                 {
 					if(trim($ep['title']) == $ctitle)
                     {
-						$cast   = addslashes($ep['cast']);
-						$plot   = addslashes($ep['plot']);
-						$year   = addslashes($ep['year']);
+						$cast   = escapeSQL($ep['cast']);
+						$plot   = escapeSQL($ep['plot']);
+						$year   = escapeSQL($ep['year']);
 					}
 				}		
 

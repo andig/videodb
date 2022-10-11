@@ -332,7 +332,7 @@ foreach ($rows as $row) {
         } else {
             echo "<b>MOVED</b> -  <a href='../show.php?id={$id}'>{$fileName}</a><br>";
             if ($update_moved) {
-                $UPDATE = "UPDATE " . TBL_DATA . " SET filename='" . addslashes($moviesFS[$fileName]) . "' WHERE id='{$id}'";
+                $UPDATE = "UPDATE " . TBL_DATA . " SET filename='" . escapeSQL($moviesFS[$fileName]) . "' WHERE id='{$id}'";
                 runSQL($UPDATE);
             }
         }
@@ -393,7 +393,7 @@ foreach ($moviesFS as $movie) {
               <td>$fileDate</td>
           </tr>";
 
-    $UPDATE = "INSERT " . TBL_DATA . " SET filename='" . addslashes($filePath) . "',
+    $UPDATE = "INSERT " . TBL_DATA . " SET filename='" . escapeSQL($filePath) . "',
         mediatype = 51,
         title = '$title',
         filesize = $fileSize,
