@@ -12,8 +12,8 @@
 
 require_once './core/xml.core.php';
 
-$GLOBALS['ofdbServer']   = 'http://www.ofdb.de';
-$GLOBALS['ofdbGW']       = 'http://www.ofdbgw.org';
+$GLOBALS['ofdbServer']   = 'https://www.ofdb.de';
+$GLOBALS['ofdbGW']       = 'http://www.ofdbgw.org'; // defunct
 $GLOBALS['ofdbIdPrefix'] = 'ofdb:';
 
 /**
@@ -213,14 +213,14 @@ function ofdbData($id)
         'bulgarisch' => 'bulgarian',
         'chinesisch' => 'chinese',
         'tschechisch' => 'czech',
-        'dänisch' => 'danish',
-        'holländisch' => 'dutch',
+        'dï¿½nisch' => 'danish',
+        'hollï¿½ndisch' => 'dutch',
         'englisch' => 'english',
-        'französisch' => 'french',
+        'franzï¿½sisch' => 'french',
         'deutsch' => 'german',
         'griechisch' => 'greek',
         'ungarisch' => 'hungarian',
-        'isländisch' => 'icelandic',
+        'islï¿½ndisch' => 'icelandic',
         'indisch' => 'indian',
         'israelisch' => 'israeli',
         'italienisch' => 'italian',
@@ -229,23 +229,23 @@ function ofdbData($id)
         'norwegisch' => 'norwegian',
         'polnisch' => 'polish',
         'portugisisch' => 'portuguese',
-        'rumänisch' => 'romanian',
+        'rumï¿½nisch' => 'romanian',
         'russisch' => 'russian',
         'serbisch' => 'serbian',
         'spanisch' => 'spanish',
         'schwedisch' => 'swedish',
-        'thailändisch' => 'thai',
-        'türkisch' => 'turkish',
+        'thailï¿½ndisch' => 'thai',
+        'tï¿½rkisch' => 'turkish',
         'vietnamesisch' => 'vietnamese',
         'kantonesisch' => 'cantonese',
         'katalanisch' => 'catalan',
         'zypriotisch' => 'cypriot',
         'zyprisch' => 'cypriot',
         'esperanto' => 'esperanto',
-        'gälisch' => 'gaelic',
-        'hebräisch' => 'hebrew',
+        'gï¿½lisch' => 'gaelic',
+        'hebrï¿½isch' => 'hebrew',
         'hindi' => 'hindi',
-        'jüdisch' => 'jewish',
+        'jï¿½disch' => 'jewish',
         'lateinisch' => 'latin',
         'mandarin' => 'mandarin',
         'serbokroatisch' => 'serbo-croatian',
@@ -281,7 +281,7 @@ function ofdbData($id)
         'Animation' => 'Animation',
         'Fantasy' => 'Fantasy',
         'Trash' => 'Horror',
-        'Komödie' => 'Comedy',
+        'Komï¿½die' => 'Comedy',
         'Krieg' => 'War',
         'Mystery' => 'Mystery',
         'Thriller' => 'Thriller',
@@ -484,7 +484,7 @@ function ofdbData($id)
             $ary[1] = preg_replace('/\s{2,}/s', ' ', $ary[1]);
             $ary[1] = preg_replace('#<(br|p)[ /]*>#i', "\n", $ary[1]);
             $data['plot'] = trim($ary[1]);
-            //$data['plot'] = "aeääääaaaä";
+            //$data['plot'] = "aeï¿½ï¿½ï¿½ï¿½aaaï¿½";
         }
     }
 
@@ -510,7 +510,7 @@ function ofdbData($id)
     if (preg_match('/<b><i>Darsteller<\/i><\/b>.*?<table.*?>(.*)<\/table>/', $resp['data'], $ary))
     {
         // dirty workaround for (.*?) failed on very long match groups issue (tested at PHP 5.2.5.5)
-        // e.g.: ofdb:7749-111320 (Angel - Jäger der Finsternis)
+        // e.g.: ofdb:7749-111320 (Angel - Jï¿½ger der Finsternis)
         $ary[1] = preg_replace('#</table.*#','',$ary[1]);
 
         if (preg_match_all('/class="Daten"><a(.*?)">(.*?)<\/a>.*?<\/td>  <td.*?<\/td>  <td[^>]*>(.*?)<\/td>/i',$ary[1],$ary2, PREG_SET_ORDER))
@@ -568,8 +568,8 @@ function ofdbData($id)
         'FSK 18' => '18',
         'Keine Jugendfreigabe' => '18',
         'SPIO/JK' => '18',
-        'juristisch geprüft' => '',
-        'ungeprüft' => ''
+        'juristisch geprï¿½ft' => '',
+        'ungeprï¿½ft' => ''
     );
     if (preg_match('/>Freigabe:<.*?<b>(.*?)<\/tr>/i', $resp['data'], $ary))
     {

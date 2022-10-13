@@ -9,11 +9,11 @@
  * @author  Victor La <cyridian@users.sourceforge.net>
  * @desc    Original filmweb.php by Marek Domaniuk, rewritten by Victor La
  * @desc    using Andreas Goetz's imdb.php as a template
- * @link    http://www.filmweb.com  Internet Movie Database
+ * @link    https://www.filmweb.com  Internet Movie Database
  * @version $Id: filmweb.php,v 1.4 2007/08/08 18:28:15 andig2 Exp $
  */
 
-$GLOBALS['filmwebServer']	= 'http://www.filmweb.pl';
+$GLOBALS['filmwebServer']	= 'https://www.filmweb.pl';
 $GLOBALS['filmwebIdPrefix'] = 'filmweb:';
 
 /**
@@ -111,7 +111,7 @@ function filmwebSearch($title)
         {			    
             $subResp = httpClient($info['id'],1);
             if (!$subResp['success']) $CLIENTERROR .= $subResp['error']."\n";
-            //<a class="n" href="http://www.filmweb.pl/AddFilmFavourite?film.id=108130">dodaj do ulubionych</a>
+            //<a class="n" href="https://www.filmweb.pl/AddFilmFavourite?film.id=108130">dodaj do ulubionych</a>
             preg_match('/,id=(\d+)">/i', $subResp['data'], $single);
             $info['id'] = $single[1];
         }
@@ -162,8 +162,8 @@ function filmwebData($filmwebID)
     $data['year']     = trim($ary[1]);
 
     // Cover-URL - Fixed
-    //<img  src="http://gfx.filmweb.pl/f/94745/po.6954459.jpg"
-    //http://gfx.filmweb.pl/f/520/520.jpg
+    //<img  src="https://gfx.filmweb.pl/f/94745/po.6954459.jpg"
+    //https://gfx.filmweb.pl/f/520/520.jpg
     preg_match('/<div id="filmPhoto">.+?<img border="0" src="(.+?)"/si', $resp['data'], $ary);
     $data['coverurl'] = trim($ary[1]);
 
@@ -178,7 +178,7 @@ function filmwebData($filmwebID)
     $data['runtime']  = preg_replace('/,/', '', trim($ary[1]));
 
     // Director - Fixed
-    //re¿yseria				<a class="n" title="Kerry Conran: filmografia [Filmweb.pl]" //href="http://www.filmweb.pl/Kerry,Conran,filmografia,Person,id=138676">Kerry Conran</a>
+    //reÂ¿yseria				<a class="n" title="Kerry Conran: filmografia [Filmweb.pl]" //href="https://www.filmweb.pl/Kerry,Conran,filmografia,Person,id=138676">Kerry Conran</a>
     preg_match('/re.yseria.+?title="(.+?)- filmografia.+?"/i', $resp['data'], $ary);
     $data['director'] = trim($ary[1]);
 
@@ -187,7 +187,7 @@ function filmwebData($filmwebID)
     $data['rating']   = trim($ary[1]);
 
     // Countries - Fixed
-    preg_match_all('/<a href="http:\/\/www.filmweb.pl\/szukaj\/film\?countryids=\d.+?">(.+?)<\/A>/i', $resp['data'], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/<a href="https:\/\/www.filmweb.pl\/szukaj\/film\?countryids=\d.+?">(.+?)<\/A>/i', $resp['data'], $ary, PREG_PATTERN_ORDER);
     $data['country']  = trim(join(', ', $ary[1]));
 
     // Languages - DOES THIS NEED TO BE FIXED?
@@ -198,48 +198,48 @@ function filmwebData($filmwebID)
 
     // Genres (as Array) - Fixed
     $genres = array(
-	'Przygodowy' => 'Adventure',
-	'Akcja' => 'Action',
-	'Komedia' => 'Comedy',
-	'Familijny' => 'Family',
-	'Muzyka' => 'Music',
-	'Western' => 'Western',
-	'Dla doros³ych' => 'Adult',
-	'Krymina³' => 'Crime',
-	'Fantasy' => 'Fantasy',
-	'Musical' => 'Musical',
-	'Muzyczny' => 'Musical',
-	'Krótkometra¿owy' => 'Short',
-	'Dokumentalny' => 'Documentary',
-	'Film-Noir' => 'Film-Noir',
-	'Mystery' => 'Mystery',
-	'Thriller' => 'Thriller',
-	'Dreszczowiec' => 'Thriller',
-	'Animacja' => 'Animation',
-	'Dramat' => 'Drama',
-	'Melodramat' => 'Drama',
-	'Dramat historyczny' => 'History',
-	'Historyczny' => 'History',
-	'Dramat obyczajowy' => 'Drama',
-	'Dramat s±dowy' => 'Drama',
-	'Dramat spo³eczny' => 'Drama',
-	'Horror' => 'Horror',
-	'Romans' => 'Romance',
-	'Wojenny' => 'War',
-	'Biograficzny' => 'Biographic',
-	'Erotyczny' => 'Adult',
-	'Komedia kryminalna' => 'Comedy',
-	'Komedia obycz.' => 'Comedy',
-	'Komedia rom.' => 'Comedy',
-	'Komedia' => 'Comedy',
-	'Czarna komedia' => 'Comedy',
-	'Dla dzieci' => '',
-	'Obyczajowy' => '',
-	'Bibilijny' => '',
-	'Sensacja' => 'Action',
-	'Sensacyjny' => 'Action',
-	'Fabularyzowany dok.' => 'Documentary',
-	'Psychologiczny' => ''
+        'Przygodowy' => 'Adventure',
+        'Akcja' => 'Action',
+        'Komedia' => 'Comedy',
+        'Familijny' => 'Family',
+        'Muzyka' => 'Music',
+        'Western' => 'Western',
+        'Dla dorosÂ³ych' => 'Adult',
+        'KryminaÂ³' => 'Crime',
+        'Fantasy' => 'Fantasy',
+        'Musical' => 'Musical',
+        'Muzyczny' => 'Musical',
+        'KrÃ³tkometraÂ¿owy' => 'Short',
+        'Dokumentalny' => 'Documentary',
+        'Film-Noir' => 'Film-Noir',
+        'Mystery' => 'Mystery',
+        'Thriller' => 'Thriller',
+        'Dreszczowiec' => 'Thriller',
+        'Animacja' => 'Animation',
+        'Dramat' => 'Drama',
+        'Melodramat' => 'Drama',
+        'Dramat historyczny' => 'History',
+        'Historyczny' => 'History',
+        'Dramat obyczajowy' => 'Drama',
+        'Dramat sÂ±dowy' => 'Drama',
+        'Dramat spoÂ³eczny' => 'Drama',
+        'Horror' => 'Horror',
+        'Romans' => 'Romance',
+        'Wojenny' => 'War',
+        'Biograficzny' => 'Biographic',
+        'Erotyczny' => 'Adult',
+        'Komedia kryminalna' => 'Comedy',
+        'Komedia obycz.' => 'Comedy',
+        'Komedia rom.' => 'Comedy',
+        'Komedia' => 'Comedy',
+        'Czarna komedia' => 'Comedy',
+        'Dla dzieci' => '',
+        'Obyczajowy' => '',
+        'Bibilijny' => '',
+        'Sensacja' => 'Action',
+        'Sensacyjny' => 'Action',
+        'Fabularyzowany dok.' => 'Documentary',
+        'Psychologiczny' => ''
     );
     preg_match_all('/genreIds=\d.+?">(.+?)</i', $resp['data'], $ary, PREG_PATTERN_ORDER);
     foreach($ary[1] as $genre)
@@ -254,6 +254,7 @@ function filmwebData($filmwebID)
     // Cast - Fixed
     preg_match_all('/<a class="filmActor" HREF="(.+?)".+?>(.+?)<\/a>.+?((<br\/>).|(<div class="filmRoleSeparator">:<\/div>.+?<div class="filmRole">(.+?)<\/div>))/si', $resp['data'], $ary,PREG_PATTERN_ORDER);
     $count = 0;
+    $cast = '';
     while (isset($ary[1][$count])) 
     {
         $actor  = trim(strip_tags($ary[2][$count]));
@@ -321,13 +322,12 @@ function filmwebActor($name, $actorid)
     }
 
 	// now we should have loaded the best match    
-    if (preg_match('/<img src="http:\/\/gfx.filmweb.pl\/p\/(.+?)"/i', $resp['data'], $m))
+    if (preg_match('/<img src="https:\/\/gfx.filmweb.pl\/p\/(.+?)"/i', $resp['data'], $m))
     {
-        $ary[0][0] = 'http://gfx.filmweb.pl/p/'.$m[1];
-        $ary[0][1] = 'http://gfx.filmweb.pl/p/'.$m[1];
+        $ary[0][0] = 'https://gfx.filmweb.pl/p/'.$m[1];
+        $ary[0][1] = 'https://gfx.filmweb.pl/p/'.$m[1];
         return $ary;
     } 
     else return null;
 }
 
-?>

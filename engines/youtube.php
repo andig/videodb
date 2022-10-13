@@ -1,4 +1,6 @@
 <?php
+// DEFUNCT, maybe implement new api since current code doesn't work anymore: https://developers.google.com/youtube/v3/docs/search
+ 
 /**
  * youtube.com trailer search
  *
@@ -34,7 +36,7 @@ function youtubeHasTrailer($title)
 
 function normalize($str)
 {
-	return preg_replace('/[^a-zäöüA-ZÄÖÜ0-9\s]/', '', $str);
+	return preg_replace('/[^a-zÃ¤Ã¶Ã¼A-ZÃ„Ã–Ãœ0-9\s]/', '', $str);
 }
 
 function youtubeSearch($title)
@@ -70,4 +72,3 @@ function youtubeSearch($title)
 	return $trailers;
 }
 
-?>

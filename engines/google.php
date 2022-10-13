@@ -1,11 +1,12 @@
 <?php
+// DEFUNCT, no clue if this is alternative: https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list
 /**
  * Google Image Parser
  *
  * Lookup cover images from Google
  *
  * @package Engines
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas Gï¿½tz    <cpuidle@gmx.de>
  *
  * @link    http://images.google.com  Google image search
  * @link    http://code.google.com/apis/ajaxsearch/documentation/   API doc
