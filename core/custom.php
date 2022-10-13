@@ -45,7 +45,8 @@ $allcustomtypes=array('',
                       'mpaa',
                       'bbfc',
                       'fsk',
-                      'barcode'
+                      'barcode',
+                      'kijkwijzer'
                       );
 
 /**
@@ -267,7 +268,7 @@ function custom_orgtitle_input($cn,$cv)
     if (empty($cv) || ($config['lookupdefault'] > 0)) 
     {
         $cv = $imdbdata['title'];
-        if (!empty($imdbdata['subtitle'])) $orgtitle .= ' - '.$imdbdata['subtitle'];
+        if (!empty($imdbdata['subtitle'])) $cv .= ' - '.$imdbdata['subtitle'];
 
         // we need to save our self here!
         if (!empty($id) && $cv != '')
@@ -307,7 +308,7 @@ function custom_movix_input($cn,$cv)
                 <option selected value=""></option>
                 <option value=eMovix>eMovix</option>
                 <option value=Movix>Movix</option>
-                <option value=Movix²>Movix²</option>
+                <option value=MovixÂ²>MovixÂ²</option>
               </select>';
     return $output;
 }
@@ -333,7 +334,7 @@ function custom_mpaa_input($cn,$cv)
     if (empty($cv) || ($config['lookupdefault'] > 0))
     {
         $cv = $imdbdata['mpaa'];
-        if (!empty($imdbdata['mpaa'])) $mpaa .= $imdbdata['mpaa'];
+        if (!empty($imdbdata['mpaa'])) $cv .= $imdbdata['mpaa'];
 
         //we need to save our self here!
         if(!empty($id) && $cv != '')
@@ -394,7 +395,7 @@ function custom_bbfc_input($cn,$cv)
     if (empty($cv) || ($config['lookupdefault'] > 0))
     {
         $cv = $imdbdata['bbfc'];
-        if (!empty($imdbdata['bbfc'])) $bbfc .= $imdbdata['bbfc'];
+        if (!empty($imdbdata['bbfc'])) $cv .= $imdbdata['bbfc'];
 
         //we need to save our self here!
         if(!empty($id) && $cv != '')
@@ -446,4 +447,42 @@ function custom_bbfc_output($cn,$cv)
     return $output;
 }
 
-?>
+function custom_kijkwijzer_kijkwijzerdata () {
+    return [
+        'AL' => [1, 'Alle leeftijden',           'kijkwijzer/al.png',               ''],
+        '06' => [2, '6 jaar',                    'kijkwijzer/6.png',                ''],
+        '09' => [4, '9 jaar',                    'kijkwijzer/9.png',                ''],
+        '12' => [8, '12 jaar',                   'kijkwijzer/12.png',               ''],
+        '14' => [16, '14 jaar',                  'kijkwijzer/14.png',               ''],
+        '16' => [32, '16 jaar',                  'kijkwijzer/16.png',               ''],
+        '18' => [64, '18 jaar',                  'kijkwijzer/18.png',               ''],
+        'AN' => [128, 'Angst',                   'kijkwijzer/angst.png',            ''],
+        'DI' => [256, 'Discriminatie',           'kijkwijzer/discriminatie.png',    ''],
+        'DA' => [512, 'Roken, alcohol en drugs', 'kijkwijzer/drugs-en-alcohol.png', ''],
+        'GE' => [1024, 'Geweld',                 'kijkwijzer/geweld.png',           ''],
+        'SE' => [2048, 'Seks',                   'kijkwijzer/seks.png',             ''],
+        'TA' => [4096, 'Grof taalgebruik',       'kijkwijzer/taal.png',             '']
+    ];
+}
+
+function custom_kijkwijzer_input ($cn, $cv) {
+    $kijkwijzer = custom_kijkwijzer_kijkwijzerdata();
+    $output = '<input type="text" size="10" maxlength="4" name="'.$cn.'" id="'.$cn.'" value="'.formvar($cv).'" />';
+    foreach ($kijkwijzer as $val => $cfg) {
+        $output .= " <a href='#' onclick='document.edi.".$cn.".value+=\"".$val." \"' title='".$cfg[1]."'><img src=\"".img($cfg[2])."\" alt=\"Kijkwijzer: ".$cfg[1]."\" data-desc=\"".$cfg[3]."\" width=\"32\" /></a>";
+    }
+    return $output;
+}
+
+function custom_kijkwijzer_output ($cn, $cv, $sm = false) {
+    $kijkwijzer = custom_kijkwijzer_kijkwijzerdata();
+    $rv = '';
+    $cv = explode(' ', trim($cv));
+    foreach ($cv as $i) {
+        if (isset($kijkwijzer[$i])) {
+            $rv .= '<img src="' . img($kijkwijzer[$i][2]) . '" alt="Kijkwijzer: ' . $kijkwijzer[$i][1] . '" title="' . $kijkwijzer[$i][1] . '" width="' . ($sm ? 24 : 48) . '" />';
+        }
+    }
+    return $rv;
+}
+
