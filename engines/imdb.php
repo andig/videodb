@@ -151,7 +151,7 @@ function imdbSearch($title, $aka=null)
     global $CLIENTERROR;
     global $cache;
 
-    $url    = $imdbServer.'/find?q='.urlencode($title);
+    $url = $imdbServer.'/search/title/?title='.urlencode($title).'&view=simple&count=10';
     if ($aka) $url .= ';s=tt;site=aka';
 
     $resp = httpClient($url, $cache);
@@ -193,7 +193,15 @@ function imdbSearch($title, $aka=null)
 
 #           dump($info);
         }
-    }
+    } elseif (preg_match_all('/<div class="col-title">.+?<a href="\/title\/tt(\d+)\/\?ref_=adv_li_tt".+?>(.+?)<\/a>.+?<span .+?>\((\d+).*?\)<\/span>/is', $resp['data'], $ary, PREG_SET_ORDER)) {
+             foreach ($ary as $row) {
+                 $info           = array();
+                 $info['id']     = $imdbIdPrefix.$row[1];
+                 $info['title']  = $row[2];
+                 $info['year']   = $row[3];
+                 $data[]         = $info;
+             }
+         }
 
     return $data;
 }
