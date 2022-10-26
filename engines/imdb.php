@@ -63,76 +63,75 @@ function imdbContentUrl($id)
  * @return  array            Associative array with: id, title, rating, year.
  *                           If error: $CLIENTERROR contains the http error and blank is returned.
  */
-// NOT USED ANYWHERE
-// function imdbRecommendations($id, $required_rating, $required_year)
-// {
-//     global $CLIENTERROR;
+// Only used in contrib/add_recommended_movies.php
+function imdbRecommendations($id, $required_rating, $required_year)
+{
+    global $CLIENTERROR;
 
-//     $url = imdbContentUrl($id);
-//     $resp = httpClient($url, true);
+    $url = imdbContentUrl($id);
+    $resp = httpClient($url, true);
 
-//     $recommendations = array();
-//     preg_match_all('/<div class="rec_item" data-info=".*?" data-spec=".*?" data-tconst="tt(\d+)">/si', $resp['data'], $ary, PREG_SET_ORDER);
+    $recommendations = array();
+    preg_match_all('/<div class="rec_item" data-info=".*?" data-spec=".*?" data-tconst="tt(\d+)">/si', $resp['data'], $ary, PREG_SET_ORDER);
 
-//     foreach ($ary as $recommended_id) {
-//         $rec_resp = getRecommendationData($recommended_id[1]);
-//         $imdbId = $recommended_id[1];
-//         $title  = $rec_resp['title'];
-//         $year   = $rec_resp['year'];
-//         $rating = $rec_resp['rating'];
+    foreach ($ary as $recommended_id) {
+        $rec_resp = getRecommendationData($recommended_id[1]);
+        $imdbId = $recommended_id[1];
+        $title  = $rec_resp['title'];
+        $year   = $rec_resp['year'];
+        $rating = $rec_resp['rating'];
 
-//         // matching at least required rating?
-//         if (empty($required_rating) || (float) $rating < $required_rating) continue;
+        // matching at least required rating?
+        if (empty($required_rating) || (float) $rating < $required_rating) continue;
 
-//         // matching at least required year?
-//         if (empty($required_year) || (int) $year < $required_year) continue;
+        // matching at least required year?
+        if (empty($required_year) || (int) $year < $required_year) continue;
 
-//         $data = array();
-//         $data['id']     = $imdbId;
-//         $data['rating'] = $rating;
-//         $data['title']  = $title;
-//         $data['year']   = $year;
+        $data = array();
+        $data['id']     = $imdbId;
+        $data['rating'] = $rating;
+        $data['title']  = $title;
+        $data['year']   = $year;
 
-//         $recommendations[] = $data;
-//     }
-//     return $recommendations;
-// }
+        $recommendations[] = $data;
+    }
+    return $recommendations;
+}
 
-// ONLY USED IN imdbRecommendations
-// function getRecommendationData($imdbID) {
-//     global $imdbServer;
-//     global $imdbIdPrefix;
-//     global $CLIENTERROR;
+function getRecommendationData($imdbID) {
+    global $imdbServer;
+    global $imdbIdPrefix;
+    global $CLIENTERROR;
 
-//     $imdbID = preg_replace('/^'.$imdbIdPrefix.'/', '', $imdbID);
+    $imdbID = preg_replace('/^'.$imdbIdPrefix.'/', '', $imdbID);
 
-//     // fetch mainpage
-//     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', true);     // added trailing / to avoid redirect
-//     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
+    // fetch mainpage
+    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', true);     // added trailing / to avoid redirect
+    if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
-//     // Titles and Year
-//     // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
-//     if ($data['istv']) {
-//         if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDb<\/title>/si', $resp['data'], $ary)) {
-//             # handles one episode of a TV serie
-//             $data['title'] = trim($ary[1]);
-//             $data['year'] = $ary[3];
-//         } else if (preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary)){
-//             $data['title'] = trim($ary[1]);
-//             $data['year'] = trim($ary[2]);
-//         }
-//     } else {
-//         preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
-//         $data['title'] = trim($ary[1]);
-//         $data['year'] = trim($ary[2]);
-//     }
+    // Titles and Year
+    // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
+    if ($data['istv']) { // @todo this is always false
+        if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDb<\/title>/si', $resp['data'], $ary)) {
+            # handles one episode of a TV serie
+            $data['title'] = trim($ary[1]);
+            $data['year'] = $ary[3];
+        } else if (preg_match('/<title>(.+?)\(TV Series (\d+).+?<\/title>/si', $resp['data'], $ary)){
+            $data['title'] = trim($ary[1]);
+            $data['year'] = trim($ary[2]);
+        }
+    } else {
+        preg_match('/<title>(.+?)\((\d+)\).+?<\/title>/si', $resp['data'], $ary);
+        $data['title'] = trim($ary[1]);
+        $data['year'] = trim($ary[2]);
+    }
 
-//     // Rating
-//     preg_match('/<span class="AggregateRatingButton__RatingScore-.+?">(.+?)<\/span>/si', $resp['data'], $ary);
-//     $data['rating'] = trim($ary[1]);
+    // Rating
+    preg_match('/<span class="AggregateRatingButton__RatingScore-.+?">(.+?)<\/span>/si', $resp['data'], $ary);
+    $data['rating'] = trim($ary[1]);
 
-//     return $data;
-// }
+    return $data;
+}
 
 /**
  * Search a Movie

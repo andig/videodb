@@ -213,14 +213,14 @@ function ofdbData($id)
         'bulgarisch' => 'bulgarian',
         'chinesisch' => 'chinese',
         'tschechisch' => 'czech',
-        'd�nisch' => 'danish',
-        'holl�ndisch' => 'dutch',
+        'dänisch' => 'danish',
+        'holländisch' => 'dutch',
         'englisch' => 'english',
-        'franz�sisch' => 'french',
+        'französisch' => 'french',
         'deutsch' => 'german',
         'griechisch' => 'greek',
         'ungarisch' => 'hungarian',
-        'isl�ndisch' => 'icelandic',
+        'isländisch' => 'icelandic',
         'indisch' => 'indian',
         'israelisch' => 'israeli',
         'italienisch' => 'italian',
@@ -229,23 +229,23 @@ function ofdbData($id)
         'norwegisch' => 'norwegian',
         'polnisch' => 'polish',
         'portugisisch' => 'portuguese',
-        'rum�nisch' => 'romanian',
+        'rumänisch' => 'romanian',
         'russisch' => 'russian',
         'serbisch' => 'serbian',
         'spanisch' => 'spanish',
         'schwedisch' => 'swedish',
-        'thail�ndisch' => 'thai',
-        't�rkisch' => 'turkish',
+        'thailändisch' => 'thai',
+        'türkisch' => 'turkish',
         'vietnamesisch' => 'vietnamese',
         'kantonesisch' => 'cantonese',
         'katalanisch' => 'catalan',
         'zypriotisch' => 'cypriot',
         'zyprisch' => 'cypriot',
         'esperanto' => 'esperanto',
-        'g�lisch' => 'gaelic',
-        'hebr�isch' => 'hebrew',
+        'gälisch' => 'gaelic',
+        'hebräisch' => 'hebrew',
         'hindi' => 'hindi',
-        'j�disch' => 'jewish',
+        'jüdisch' => 'jewish',
         'lateinisch' => 'latin',
         'mandarin' => 'mandarin',
         'serbokroatisch' => 'serbo-croatian',
@@ -281,7 +281,7 @@ function ofdbData($id)
         'Animation' => 'Animation',
         'Fantasy' => 'Fantasy',
         'Trash' => 'Horror',
-        'Kom�die' => 'Comedy',
+        'Komödie' => 'Comedy',
         'Krieg' => 'War',
         'Mystery' => 'Mystery',
         'Thriller' => 'Thriller',
@@ -484,7 +484,7 @@ function ofdbData($id)
             $ary[1] = preg_replace('/\s{2,}/s', ' ', $ary[1]);
             $ary[1] = preg_replace('#<(br|p)[ /]*>#i', "\n", $ary[1]);
             $data['plot'] = trim($ary[1]);
-            //$data['plot'] = "ae����aaa�";
+            //$data['plot'] = "aeääääaaaä";
         }
     }
 
@@ -510,7 +510,7 @@ function ofdbData($id)
     if (preg_match('/<b><i>Darsteller<\/i><\/b>.*?<table.*?>(.*)<\/table>/', $resp['data'], $ary))
     {
         // dirty workaround for (.*?) failed on very long match groups issue (tested at PHP 5.2.5.5)
-        // e.g.: ofdb:7749-111320 (Angel - J�ger der Finsternis)
+        // e.g.: ofdb:7749-111320 (Angel - Jäger der Finsternis)
         $ary[1] = preg_replace('#</table.*#','',$ary[1]);
 
         if (preg_match_all('/class="Daten"><a(.*?)">(.*?)<\/a>.*?<\/td>  <td.*?<\/td>  <td[^>]*>(.*?)<\/td>/i',$ary[1],$ary2, PREG_SET_ORDER))
@@ -568,8 +568,8 @@ function ofdbData($id)
         'FSK 18' => '18',
         'Keine Jugendfreigabe' => '18',
         'SPIO/JK' => '18',
-        'juristisch gepr�ft' => '',
-        'ungepr�ft' => ''
+        'juristisch geprüft' => '',
+        'ungeprüft' => ''
     );
     if (preg_match('/>Freigabe:<.*?<b>(.*?)<\/tr>/i', $resp['data'], $ary))
     {
@@ -649,6 +649,7 @@ function ofdbActorUrl($name, $id)
 function ofdbActor($name, $id)
 {
     global $ofdbServer;
+    global $ofdbIdPrefix;
 
     if ($id) {
         $id = preg_replace('/^'.$ofdbIdPrefix.'/', '', $id);
@@ -670,6 +671,7 @@ function ofdbActor($name, $id)
 function ofdbGetActorId($name)
 {
     global $ofdbServer;
+    global $CLIENTERROR;
 
     // try to guess the id -> first actor found with this name
     $url = $ofdbServer.'/view.php?page=liste&Name='.urlencode(html_entity_decode_all($name));
