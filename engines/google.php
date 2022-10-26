@@ -6,7 +6,7 @@
  * Lookup cover images from Google
  *
  * @package Engines
- * @author  Andreas G�tz    <cpuidle@gmx.de>
+ * @author  Andreas Götz    <cpuidle@gmx.de>
  *
  * @link    http://images.google.com  Google image search
  * @link    http://code.google.com/apis/ajaxsearch/documentation/   API doc
