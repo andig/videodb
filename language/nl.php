@@ -37,12 +37,14 @@ $lang['seen']                = "Gezien";
 $lang['videocodec']          = "Video Codec";
 $lang['year']                = "Jaar";
 $lang['yes']                 = "Ja";
+$lang['no']                  = "Nee";
 $lang['comment']             = "Commentaar";
 $lang['mediatype']           = "Mediatype";
 $lang['save']                = "Opslaan";
 $lang['back']                = "Terug";
 $lang['coverupload']         = "Cover Upload";
 $lang['visit']               = "Bezoeken";
+$lang['input_browse']        = "Bladeren";
 $lang['date']                = "Datum";
 $lang['fetchtime']           = "Ophaalduur";
 $lang['cachesize']           = "Cache grootte";
@@ -50,10 +52,40 @@ $lang['cacheexpired']        = "Verlopen";
 $lang['cachecleanup']        = "Opschonen";
 $lang['cacheempty']          = "Cache leegmaken";
 $lang['okay']                = "Ok";
-$lang['asactor']              = "als";
-$lang['displayed']            = "weergegeven";
-$lang['add_another']          = "Nieuwe toevoegen";
-$lang['action']               = "Actie";
+$lang['asactor']             = "als";
+$lang['displayed']           = "weergegeven";
+$lang['add_another']         = "Nieuwe toevoegen";
+$lang['rating']              = 'Waardering';
+$lang['extid']               = 'Extern Id';
+$lang['bytes']               = 'Bytes';
+
+#
+# Edit
+#
+
+$lang['main_details']        = 'Eigenschappen';
+$lang['media_details']       = 'Mediagegevens';
+$lang['description_details'] = 'Omschrijving';
+$lang['file_details']        = 'Bestandsinformatie';
+$lang['custom_details']      = 'Eigen velden';
+$lang['cancel']        		 = 'Annuleren';
+$lang['create_']             = 'Maken:';
+
+#
+# Show
+#
+
+$lang['synopsis']			 = 'Synopsis';
+$lang['purchase']            = 'Kopen';
+$lang['torrents']            = 'Torrents';
+$lang['showcast']            = 'Bekijk acteurs';
+$lang['hidecast']            = 'Verberg acteurs';
+
+#
+# Search
+#
+
+$lang['target']              = 'Doel';
 
 #
 # Multiuser
@@ -74,14 +106,21 @@ $lang['perm_readall']        = "Bekijk alle";
 $lang['perm_writeall']       = "Wijzig video's van anderen";
 $lang['perm_write']          = "Wijzig eigen video's";
 $lang['perm_adult']          = "Laat 18+ films zien";
+$lang['write']               = "Films aanpassen";
+$lang['read']                = "Films bekijken";
 $lang['update']              = "aanpassen";
 $lang['create']              = "aanmaken";
+$lang['action']              = "Actie";
 $lang['existingusers']       = "Bestaande Gebruikers";
+$lang['selecteduser']     	 = "Geselecteerde gebruiker";
+$lang['permforuser']         = "Rechten voor gebruiker";
+$lang['permtouser']          = "Rechten gerelateerd aan gebruiker";
 $lang['createuser']          = "Maak een nieuwe gebruiker";
 $lang['email']               = "E-Mail";
 $lang['borrowask']           = "Vraag te leen";
 
 $lang['msg_usercreated']     = "Gebruiker aangemaakt";
+$lang['msg_usernotcreated']  = "Kon gebruiker niet aanmaken";
 $lang['msg_permpassupd']     = "Rechten en Wachtwoord aangepast";
 $lang['msg_permupd']         = "Rechten aangepast";
 $lang['msg_userdel']         = "Gebruiker verwijderd";
@@ -92,13 +131,17 @@ $lang['msg_borrowasksubject']= "[VideoDB] Verzoek voor het lenen van %title%";
 $lang['msg_borrowaskmail']   = "Gebruiker %user% (%usermail%) wil de film \"%title%\" (DiskID %diskid%) van jou lenen.\n\nVideo-URL: %url%\n\n\n\n-- \nVerzonder door VideoDB";
 $lang['msg_borrowaskok']     = "Je verzoek is verstuurd naar de eigenaar van de film. Hij zal binnenkort contact met je opnemen..";
 $lang['msg_borrowaskfail']   = "Je verzoek kan om wat voor reden dan ook niet verzonden worden. Je zult zelf contact moeten opnemen met de eigenaar van de film.";
+$lang['msg_cachecleared']    = "Cache leeggemaakt.";
 
 #
 # Phrases
 #
 
-$lang['available']           = "is beschikbaar.";
+$lang['delete_movie']		 = "Je gaat deze video verwijderen. Weet je zeker dat je door wilt gaan?";
+$lang['delete_user']		 = "Je gaat deze gebruiker verwijderen. Weet je zeker dat je door wilt gaan?";
 $lang['deleted']             = "Video is verwijderd.";
+
+$lang['available']           = "is beschikbaar.";
 $lang['genre_desc']          = "Zoek films alleen in deze genres";
 $lang['keywords_desc']       = "Trefwoorden worden gezocht in Titels, Subtitels, Regisseur, Plot en Cast. Je kunt AND, NOT en OR gebruiken.";
 $lang['lentto']              = "is uitgeleend aan";
@@ -108,28 +151,44 @@ $lang['really_del']          = "Echt verwijderen";
 $lang['returned']            = "Het is teruggebracht";
 $lang['notavail']            = "<span class=\"notavail\">NIET BESCHIKBAAR</span><br />uitgeleend aan";
 $lang['curlent']             = "Uitgeleend:";
+$lang['curlentfrom']         = "Momenteel geleent van eigenaar";
 $lang['fieldselect']         = "Zoek alleen in deze velden";
 $lang['selectall']           = "Selecteer alles";
+$lang['selectnone']          = "Selecteer niks";
 
 #
 # Menue
 #
 
+$lang['menu']                = "Menu";
 $lang['browse']              = "overzicht";
+$lang['export']              = "exporteren";
+$lang['manage']              = "beheren";
+$lang['options']             = "instellingen";
 $lang['borrow']              = "lenen";
 $lang['delete']              = "verwijder";
 $lang['edit']                = "aanpassen";
-$lang['copy']                = "kopieeren";
+$lang['perm']                = "rechten";
+$lang['copy']                = "kopieëren";
 $lang['n_e_w']               = "nieuw";
 $lang['random']              = "willekeurig";
 $lang['search']              = "zoek";
 $lang['statistics']          = "statistieken";
 $lang['view']                = "toon";
 $lang['setup']               = "configuratie";
+$lang['tools']               = "Tools";
+$lang['contrib']             = "toevoegingen (Contrib)";
 $lang['imdbbrowser']         = "IMDB Online";
 $lang['help']                = "help";
-$lang['searchimdb']          = "Zoeken in de IMDB";
 $lang['profile']             = "profiel";
+$lang['users']             	 = "gebruikers";
+$lang['filter']              = "filter";
+
+#
+# Media player (boxee) controls
+#
+
+$lang['play']               = "Afspelen";
 
 #
 # Radio-Buttons
@@ -145,6 +204,19 @@ $lang['radio_look_ignore']   = "overslaan";
 $lang['radio_look_lookup']   = "toevoegen";
 $lang['radio_look_overwrite']= "overschrijven";
 $lang['radio_look_caption']  = "Data Gegevens";
+
+$lang['quicksearch']         = "Snel zoeken";
+$lang['working']             = "Bezig...";
+
+$lang['filter_any']          = '<alle>';
+$lang['filter_available']    = '<beschikbaar>';
+
+#
+# Trailers
+#
+
+$lang['trailer_search']  	 = "Trailer zoeken...";
+$lang['trailer_show']  	     = "Bekijk trailers";
 
 #
 # Statistics
@@ -164,6 +236,7 @@ $lang['videobygen']          = "Videos per Genre";
 $lang['videobyvcodec']       = "Video codecs";
 $lang['videobyacodec']       = "Audio codecs";
 $lang['videobymedia']        = "Mediatypes";
+$lang['statistics_for']      = "Statistieken voor";
 
 #
 # Lookup Popup
@@ -173,6 +246,7 @@ $lang['l_search']            = "Zoek";
 $lang['l_select']            = "Selecteer de gezochte titel:";
 $lang['l_nothing']           = "Niets gevonden.";
 $lang['l_selfsearch']        = "Zelf zoeken";
+$lang['aka']                 = "Aka";
 
 #
 # Config Help
@@ -180,8 +254,10 @@ $lang['l_selfsearch']        = "Zelf zoeken";
 
 $lang['opt_general']          = 'Algemeen';
 $lang['opt_custom']           = 'Gebruikersvelden';
+$lang['opt_engines']          = 'Gegevensaanbieders';
 $lang['opt_security']         = 'Netwerk en Beveiliging';
 $lang['opt_caching']          = 'Caching';
+$lang['opt_apikeys']       	  = 'API sleutels';
 
 $lang['enable']              = "aanzetten";
 
@@ -227,8 +303,10 @@ $lang['help_actorpicsn']     = "Acteur/Actrice plaatjes";
 $lang['help_actorpics']      = "Wanneer deze optie gebruikt wordt, dan wordt naast elke acteur en actrice een kleine afbeelding getoond (wanneer deze gevonden kan worden).";
 $lang['help_thumbAgen']      = "Acteur/Actrice plaatjes opnieuw ophalen";
 $lang['help_thumbAge']       = "Deze optie geeft aan na hoeveel tijd (in seconden) opnieuw geprobeerd moet worden om een plaatje van een acteur/actrice te vinden als dit nog niet gelukt is. This defines when to retry to load actor thumbnails that weren't found last time (in seconds). Standaard is dit 3 weken.";
+$lang['help_youtubekeyn']    = "YouTube API sleutel";
+$lang['help_youtubekey']     = "Vraag een YouTube developer API sleutel op bij <a href='http://www.youtube.com/my_profile_dev'>http://www.youtube.com/my_profile_dev</a> om YouTube ondersteuning te krijgen.";
 $lang['help_shownewn']       = "Aantal nieuwe films";
-$lang['help_shownew']    = "Hiermee kun je aangeven hoeveel films getoond worden voor de \"nieuw\" selectie.";
+$lang['help_shownew']        = "Hiermee kun je aangeven hoeveel films getoond worden voor de \"nieuw\" selectie.";
 $lang['help_imdbBrowsern']   = "IMDB integratie";
 $lang['help_imdbBrowser']    = "Hiermee kun je via VideoDB films bekijken op de IMDB website en deze direct aan VideoDB toevoegen.";
 
@@ -236,6 +314,8 @@ $lang['help_multiuser']      = "Deze optie maakt het mogelijk om VideoDB te gebr
 $lang['help_multiusern']     = "Support voor meerdere Gebruikers";
 $lang['help_usermanager']    = "Volg deze link om gebruikers en hun rechten toe te voegen, te wijzigen of te verwijderen. Dit is alleen van toepassing wanneer meerdere gebruikers zijn toegestaan.";
 $lang['help_usermanagern']   = "Gebruikers Administratie";
+$lang['help_permmanager']    = "Volg deze link om gebruikersrechten te beheren.";
+$lang['help_permmanagern']   = "Rechten Administratie";
 $lang['help_denyguest']      = "Wanneer deze optie aan staat, kunnen alleen gebruikers met de juiste rechten de gegevens benaderen. Dit is alleen van toepassing wanneer meerdere gebruikers zijn toegestaan.";
 $lang['help_denyguestn']     = "Geen publieke toegang";
 $lang['help_adultgenres']    = "Films in de geselecteerde genres zijn alleen zichtbaar voor gebruikers met 'adult' rechten. Houd de CTRL-toets ingedrukt om meerdere genres te selecteren. (Alleen van toepassing wanneer meerdere gebruikers ondersteund worden)";
@@ -249,8 +329,17 @@ $lang['help_defaultengine']  = "Selecteer van waar videoDB zijn data standaard z
 $lang['help_enginegoogle']   = "Google ondersteunt enkel het zoeken van afbeeldingen.";
 $lang['help_engexperimental']= "<br/>Let op: deze data provider is nog steeds in experimentele fase en zou niet naar verwachting kunnen werken.";
 
+$lang['help_showtoolsn']     = "Bekijk Tools";
+$lang['help_showtools']      = "Het tools menu laat de inhoud van de <code>contrib</code> map zien. Deze map bevat wat handige toevoegingen aan videoDB maar zijn niet getest en kunnen gevaarlijk zijn voor wat betreft de veiligheid.";
+$lang['help_showcasttogglen'] = "Toon de Acteurs knop";
+$lang['help_showcasttoggle'] = "Als je deze aanzet verschijnt er een &lsquo;Bekijk acteurs&rsquo; of &lsquo;Verberg acteurs&rsquo; knop op de details pagina. Het zal die pagina wat sneller maken als je niet altijd geïnteresseerd bent in de volledige acteurs-lijst.";
+
 $lang['page']                = "Pagina";
 $lang['of']                  = "van";
 $lang['records']             = "elementen";
+
+$lang['warn_noOwner']        = "Data not saved - you have to select an owner first!";
+
+$lang['order']				 = "Sorteren op";
 
 ?>

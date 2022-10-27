@@ -78,6 +78,8 @@ $lang['create_']             = 'Create:';
 $lang['synopsis']			 = 'Synopsis';
 $lang['purchase']            = 'Purchase';
 $lang['torrents']            = 'Torrents';
+$lang['showcast']            = 'Show Cast';
+$lang['hidecast']            = 'Hide Cast';
 
 #
 # Search
@@ -329,6 +331,8 @@ $lang['help_engexperimental']= "<br/>Note that this data provider is still in ex
 
 $lang['help_showtoolsn']     = "Show tools";
 $lang['help_showtools']      = "The tools menu will show the contents of the <code>contrib</code> directory. Contents of the contrib directory are useful contributions to videoDB, but not fully tested and might be hazardous to security.";
+$lang['help_showcasttogglen'] = "Show Cast Button";
+$lang['help_showcasttoggle'] = "Checking this will display a &lsquo;Show Cast&rsquo; or &lsquo;Hide Cast&rsquo; button on the details page. Speeds up that page if you aren't always interested in the cast of a movie.";
 
 $lang['page']                = "Page";
 $lang['of']                  = "of";

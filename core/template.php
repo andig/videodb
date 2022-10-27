@@ -447,7 +447,18 @@ function tpl_show($video)
     $video['comment']  = nl2br($video['comment']);
 
 	// cast
-	$video['cast']     = prepare_cast($video['actors']);
+    $smarty->assign('cast_toggle', $config['showcasttoggle']);
+    $show_cast = true;
+    if ($config['showcasttoggle'])
+    {
+        $show_cast = (isset($_GET['show_cast']) && $_GET['show_cast'] == '1');
+    }
+    $smarty->assign('show_cast', $show_cast);
+    $video['cast'] = [];
+    if ($show_cast)
+    {
+    	$video['cast'] = prepare_cast($video['actors']);
+    }
 
     // prepare the custom fields
     customfields($video, 'out');
