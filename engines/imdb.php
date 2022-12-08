@@ -283,13 +283,22 @@ function imdbData($imdbID)
     $data['mpaa'] = trim($ary[1]);
 
     // Runtime
-	preg_match('/<div data-testid="title-techspecs-header" .+? data-testid="title-techspec_runtime">.+?>(?:(\d+)h )?(\d+)min<\/span><\/li>/si', $resp['data'], $ary);
-	$minutes = intval(trim($ary[2]));
-	if (is_numeric($ary[1])) {
-		$minutes += intval(trim($ary[1])) * 60;
-	}
+    if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
+        # handles Hours and maybe minutes. Some movies are exactly 1 hours.
+        $minutes = intval($ary[2]);
+    	if (is_numeric($ary[1])) {
+    		$minutes += intval($ary[1]) * 60;
+    	}
 
-    $data['runtime'] = $minutes;
+    	$data['runtime'] = $minutes;
+    } else if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+m.*?<\/li>/si', $resp['data'], $ary)) {
+        # handle only minutes
+    	$data['runtime'] = $ary[1];
+    } else if (preg_match('/<div class="ipc-metadata-list-item__content-container">(\d+)(?:<!-- --> ?)+m.*?<\/div>/si', $resp['data'], $ary)) {
+        # handle only minutes
+        # Handles the case where runtime is only in the technical spec section.
+        $data['runtime'] = $ary[1];
+    }
 
     // Director
     preg_match('/<li role="presentation" class="ipc-inline-list__item">(<a class="ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link" rel="" href="\/name\/nm.+?\/?ref_=tt_ov_dr">.+?<\/a>.+?)<\/div>/si', $resp['data'], $ary);
@@ -298,7 +307,7 @@ function imdbData($imdbID)
     $data['director']  = trim(join(', ', $ary[1]));
 
     // Rating
-    preg_match('/<span class="AggregateRatingButton__RatingScore-.+?">(.+?)<\/span>/si', $resp['data'], $ary);
+    preg_match('/<div data-testid="hero-rating-bar__aggregate-rating__score" class="sc-.+?"><span class="sc-.+?">(.+?)<\/span><span>\/<!-- -->10<\/span><\/div>/si', $resp['data'], $ary);
     $data['rating'] = trim($ary[1]);
 
     // Countries
@@ -310,7 +319,7 @@ function imdbData($imdbID)
     $data['language'] = trim(strtolower(join(', ', $ary[1])));
 
     // Genres (as Array)
-    preg_match_all('/<a .+? href="\/search\/title\/\?genres=.+?&amp;explore=title_type,genres&amp;ref_=tt_ov_inf">(.+?)<\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/class="ipc-inline-list__item ipc-chip__text">(.+?)<\/li><\/ul><\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
     foreach($ary[1] as $genre) {
         $data['genres'][] = trim($genre);
     }
@@ -321,14 +330,21 @@ function imdbData($imdbID)
         if (!$sresp['success']) $CLIENTERROR .= $resp['error']."\n";
 
         # runtime
-        if (!$data['runtime']) {
-            preg_match('/<div data-testid="title-techspecs-header" .+? data-testid="title-techspec_runtime">.+?>(?:(\d+)h )?(\d+)min<\/span><\/li>/si', $sresp['data'], $ary);
-			$minutes = intval(trim($ary[2]));
-			if (is_numeric($ary[1])) {
-				$minutes += intval(trim($ary[1])) * 60;
-			}
+        if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
+            # handles Hours and maybe minutes. Some movies are exactly 1 hours.
+            $minutes = intval($ary[2]);
+            if (is_numeric($ary[1])) {
+                $minutes += intval($ary[1]) * 60;
+            }
 
             $data['runtime'] = $minutes;
+        } else if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+m.*?<\/li>/si', $resp['data'], $ary)) {
+            # handle only minutes
+            $data['runtime'] = $ary[1];
+        } else if (preg_match('/<div class="ipc-metadata-list-item__content-container">(\d+)(?:<!-- --> ?)+m.*?<\/div>/si', $resp['data'], $ary)) {
+            # handle only minutes
+            # Handles the case where runtime is only in the technical spec section.
+            $data['runtime'] = $ary[1];
         }
 
         # country
@@ -441,7 +457,7 @@ function imdbGetCoverURL($data) {
     global $cache;
 
     // find cover image url
-    if (preg_match('/<a class="ipc-lockup-overlay ipc-focusable" href="(\/title\/tt\d+\/mediaviewer\/rm.+?)" aria-label="View {Title} Poster"><div class="ipc-lockup-overlay__screen"><\/div><\/a>/si', $data, $ary))
+    if (preg_match('/<a class="ipc-lockup-overlay ipc-focusable" href="(\/title\/tt\d+\/mediaviewer\/\??rm.+?)" aria-label=".*?Poster.*?"><div class="ipc-lockup-overlay__screen"><\/div><\/a>/s', $data, $ary))
     {
         // Fetch the image page
         $resp = httpClient($imdbServer.$ary[1], $cache);
@@ -449,7 +465,7 @@ function imdbGetCoverURL($data) {
         if ($resp['success'])
         {
             // get big cover image.
-            preg_match('/<div style=".+?" class="MediaViewerImagestyles__PortraitContainer-.+?"><img src="(.+?)"/si', $resp['data'], $ary);
+            preg_match('/<div style=".+?" class=".+?"><img src="(.+?)"/si', $resp['data'], $ary);
             // If you want the image to scaled to a certain size you can do this.
             // UX800 sets the width of the image to 800 with correct aspect ratio with regard to height.
 			// UY800 set the height to 800 with correct aspect ratio with regard to width.
