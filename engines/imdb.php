@@ -151,7 +151,7 @@ function imdbSearch($title, $aka=null)
     global $CLIENTERROR;
     global $cache;
 
-    $url    = $imdbServer.'/find?q='.urlencode($title);
+    $url = $imdbServer.'/find?q='.urlencode($title);
     if ($aka) $url .= ';s=tt;site=aka';
 
     $resp = httpClient($url, $cache);
@@ -163,6 +163,7 @@ function imdbSearch($title, $aka=null)
     $data['encoding'] = $resp['encoding'];
 
     // direct match (redirecting to individual title)?
+    // @todo i don't think this gets called anymore, investigate
     if (preg_match('/^'.preg_quote($imdbServer,'/').'\/[Tt]itle(\?|\/tt)([0-9?]+)\/?/', $resp['url'], $single))
     {
         $info       = array();
@@ -178,20 +179,24 @@ function imdbSearch($title, $aka=null)
     }
 
     // multiple matches
-    else if (preg_match_all('/<tr class="findResult.*?">(.*?)<\/tr>/i', $resp['data'], $multi, PREG_SET_ORDER))
+    else if (preg_match_all('#div class="ipc-metadata-list-summary-item__tc".*href="/title/tt(\d+)/.*>([^\<]+)</a>.*<ul.*>(.*)</ul>.*</div>#Uism', $resp['data'], $multi, PREG_SET_ORDER))
     {
         foreach ($multi as $row)
         {
-            preg_match('/<td class="result_text">\s*<a href="\/title\/tt(\d+).*?" >(.*?)<\/a>\s?\(?(\d+)?\)?/i', $row[1], $ary);
-            if ($ary[1] and $ary[2]) {
-                $info           = array();
-                $info['id']     = $imdbIdPrefix.$ary[1];
-                $info['title']  = $ary[2];
-                $info['year']   = $ary[3];
-                $data[]         = $info;
+            $info = [
+                'id' => $imdbIdPrefix.$row[1],
+                'title' => $row[2],
+                'year' => null
+            ];
+            if (preg_match_all('#<label.*>([^\<]+)</label>#Uism', $row[3], $labels, PREG_PATTERN_ORDER))
+            {
+                foreach ($labels[1] as $label)
+                {
+                    if (preg_match('#^(\d{4})$#i', $label)) $info['year'] = $label;
+                    if (preg_match('#^.*(episode|series)$#i', $label)) $info['title'] .= ' ('.$label.')';
+                }
             }
-
-#           dump($info);
+            $data[] = $info;
         }
     }
 
@@ -220,6 +225,9 @@ function imdbData($imdbID)
 
     // fetch mainpage
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
+    //testing code save resp data from imdb
+    //$file_path = './cache/httpclient-php_imdbData.html';
+    //file_put_contents($file_path, $resp['data']);
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
@@ -278,13 +286,22 @@ function imdbData($imdbID)
     $data['mpaa'] = trim($ary[1]);
 
     // Runtime
-	preg_match('/<div data-testid="title-techspecs-header" .+? data-testid="title-techspec_runtime">.+?>(?:(\d+)h )?(\d+)min<\/span><\/li>/si', $resp['data'], $ary);
-	$minutes = intval(trim($ary[2]));
-	if (is_numeric($ary[1])) {
-		$minutes += intval(trim($ary[1])) * 60;
-	}
+    if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
+        # handles Hours and maybe minutes. Some movies are exactly 1 hours.
+        $minutes = intval($ary[2]);
+    	if (is_numeric($ary[1])) {
+    		$minutes += intval($ary[1]) * 60;
+    	}
 
-    $data['runtime'] = $minutes;
+    	$data['runtime'] = $minutes;
+    } else if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+m.*?<\/li>/si', $resp['data'], $ary)) {
+        # handle only minutes
+    	$data['runtime'] = $ary[1];
+    } else if (preg_match('/<div class="ipc-metadata-list-item__content-container">(\d+)(?:<!-- --> ?)+m.*?<\/div>/si', $resp['data'], $ary)) {
+        # handle only minutes
+        # Handles the case where runtime is only in the technical spec section.
+        $data['runtime'] = $ary[1];
+    }
 
     // Director
     preg_match('/<li role="presentation" class="ipc-inline-list__item">(<a class="ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link" rel="" href="\/name\/nm.+?\/?ref_=tt_ov_dr">.+?<\/a>.+?)<\/div>/si', $resp['data'], $ary);
@@ -293,7 +310,7 @@ function imdbData($imdbID)
     $data['director']  = trim(join(', ', $ary[1]));
 
     // Rating
-    preg_match('/<span class="AggregateRatingButton__RatingScore-.+?">(.+?)<\/span>/si', $resp['data'], $ary);
+    preg_match('/<div data-testid="hero-rating-bar__aggregate-rating__score" class="sc-.+?"><span class="sc-.+?">(.+?)<\/span><span>\/<!-- -->10<\/span><\/div>/si', $resp['data'], $ary);
     $data['rating'] = trim($ary[1]);
 
     // Countries
@@ -305,7 +322,7 @@ function imdbData($imdbID)
     $data['language'] = trim(strtolower(join(', ', $ary[1])));
 
     // Genres (as Array)
-    preg_match_all('/<a .+? href="\/search\/title\/\?genres=.+?&amp;explore=title_type,genres&amp;ref_=tt_ov_inf">(.+?)<\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/class="ipc-chip__text">(.+?)<\/span><\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
     foreach($ary[1] as $genre) {
         $data['genres'][] = trim($genre);
     }
@@ -316,14 +333,21 @@ function imdbData($imdbID)
         if (!$sresp['success']) $CLIENTERROR .= $resp['error']."\n";
 
         # runtime
-        if (!$data['runtime']) {
-            preg_match('/<div data-testid="title-techspecs-header" .+? data-testid="title-techspec_runtime">.+?>(?:(\d+)h )?(\d+)min<\/span><\/li>/si', $sresp['data'], $ary);
-			$minutes = intval(trim($ary[2]));
-			if (is_numeric($ary[1])) {
-				$minutes += intval(trim($ary[1])) * 60;
-			}
+        if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
+            # handles Hours and maybe minutes. Some movies are exactly 1 hours.
+            $minutes = intval($ary[2]);
+            if (is_numeric($ary[1])) {
+                $minutes += intval($ary[1]) * 60;
+            }
 
             $data['runtime'] = $minutes;
+        } else if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+m.*?<\/li>/si', $resp['data'], $ary)) {
+            # handle only minutes
+            $data['runtime'] = $ary[1];
+        } else if (preg_match('/<div class="ipc-metadata-list-item__content-container">(\d+)(?:<!-- --> ?)+m.*?<\/div>/si', $resp['data'], $ary)) {
+            # handle only minutes
+            # Handles the case where runtime is only in the technical spec section.
+            $data['runtime'] = $ary[1];
         }
 
         # country
@@ -436,7 +460,7 @@ function imdbGetCoverURL($data) {
     global $cache;
 
     // find cover image url
-    if (preg_match('/<a class="ipc-lockup-overlay ipc-focusable" href="(\/title\/tt\d+\/mediaviewer\/rm.+?)" aria-label="View {Title} Poster"><div class="ipc-lockup-overlay__screen"><\/div><\/a>/si', $data, $ary))
+    if (preg_match('/<a class="ipc-lockup-overlay ipc-focusable" href="(\/title\/tt\d+\/mediaviewer\/\??rm.+?)" aria-label=".*?Poster.*?"><div class="ipc-lockup-overlay__screen"><\/div><\/a>/s', $data, $ary))
     {
         // Fetch the image page
         $resp = httpClient($imdbServer.$ary[1], $cache);
@@ -444,7 +468,7 @@ function imdbGetCoverURL($data) {
         if ($resp['success'])
         {
             // get big cover image.
-            preg_match('/<div style=".+?" class="MediaViewerImagestyles__PortraitContainer-.+?"><img src="(.+?)"/si', $resp['data'], $ary);
+            preg_match('/<div style=".+?" class=".+?"><img src="(.+?)"/si', $resp['data'], $ary);
             // If you want the image to scaled to a certain size you can do this.
             // UX800 sets the width of the image to 800 with correct aspect ratio with regard to height.
 			// UY800 set the height to 800 with correct aspect ratio with regard to width.
@@ -505,6 +529,9 @@ function imdbActor($name, $actorid)
 
     // search directly by id or via name?
     $resp = httpClient(imdbActorUrl($name, $actorid), $cache);
+    //testing code save resp data from imdb
+    //$file_path = './cache/httpclient-php_imdbActor_call_1.html';
+    //file_put_contents($file_path, $resp['data']);
 
     // if not direct match load best match
     if (preg_match('#<b>Popular Names</b>.+?<a\s+href="(.*?)">#i', $resp['data'], $m) ||
@@ -516,18 +543,21 @@ function imdbActor($name, $actorid)
             $m[1] = $imdbServer.$m[1];
         }
         $resp = httpClient($m[1], true);
+        //testing code save resp data from imdb
+        //$file_path = './cache/httpclient-php_/_imdbActor_call_2.html';
+        //file_put_contents($file_path, $resp['data']);
     }
 
     // now we should have loaded the best match
 
     // only search in img_primary <td> - or we get far to many useless images
-    preg_match('/<td.+?id="img_primary">(.*?)<\/td>/si', $resp['data'], $match);
+    preg_match('/<div class="ipc-poster.*?>(.*?)<\/a><\/div>/si', $resp['data'], $match);
 
     $ary = array();
-    if (preg_match('/.+?<a.*?href="(\/name\/nm\d+\/).+?src="(.+?)"/si', $match[1], $m))
+    if (preg_match('/.+?src="(.+?)".+?<a.*?href="(\/name\/nm\d+\/).+?/si', $match[1], $m))
     {
-        $ary[0][0] = $m[1];
-        $ary[0][1] = $m[2];
+        $ary[0][0] = $m[2];
+        $ary[0][1] = $m[1];
     }
 
     return $ary;
