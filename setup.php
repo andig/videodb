@@ -6,7 +6,7 @@
  *
  * @package Setup
  * @author  Andreas Gohr <a.gohr@web.de>
- * @author  Andreas G�tz    <cpuidle@gmx.de>
+ * @author  Andreas Götz    <cpuidle@gmx.de>
  * @version $Id: setup.php,v 2.50 2013/03/10 16:22:22 andig2 Exp $
  */
  

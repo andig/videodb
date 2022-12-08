@@ -7,7 +7,7 @@
  *
  * @package Core
  * @author  Andreas Gohr    <a.gohr@web.de>
- * @author  Andreas G�tz    <cpuidle@gmx.de>
+ * @author  Andreas Götz    <cpuidle@gmx.de>
  * @version $Id: genres.php,v 1.14 2008/01/29 10:59:52 veal Exp $
  */
 

@@ -8,7 +8,7 @@
  * @package Core
  * @link    http://pear.php.net/package/Spreadsheet_Excel_Writer
  * @author  Chinamann <chinamann@users.sourceforge.net>
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  * @version $Id: xls.php,v 1.8 2008/01/05 13:50:29 andig2 Exp $
  */
 

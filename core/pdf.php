@@ -7,7 +7,7 @@
  *
  * @package Core
  * @link    http://www.fpdf.org
- * @author  Andreas G�tz    <cpuidle@gmx.de>
+ * @author  Andreas Götz    <cpuidle@gmx.de>
  * @version $Id: pdf.php,v 1.36 2013/03/15 16:42:46 andig2 Exp $
  */
 

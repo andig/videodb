@@ -305,9 +305,9 @@ function custom_movix_input($cn,$cv)
 {
     $output ='<select name="'.$cn.'">
                 <option selected value=""></option>
-                <option value=eMovix>eMovix</option>
-                <option value=Movix>Movix</option>
-                <option value=Movix�>Movix�</option>
+                <option value="eMovix">eMovix</option>
+                <option value="Movix">Movix</option>
+                <option value="Movix²">Movix²</option>
               </select>';
     return $output;
 }
