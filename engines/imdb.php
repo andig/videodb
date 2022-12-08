@@ -225,6 +225,9 @@ function imdbData($imdbID)
 
     // fetch mainpage
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
+    //testing code save resp data from imdb
+    //$file_path = './cache/httpclient-php_imdbData.html';
+    //file_put_contents($file_path, $resp['data']);
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
@@ -319,7 +322,7 @@ function imdbData($imdbID)
     $data['language'] = trim(strtolower(join(', ', $ary[1])));
 
     // Genres (as Array)
-    preg_match_all('/class="ipc-inline-list__item ipc-chip__text">(.+?)<\/li><\/ul><\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/class="ipc-chip__text">(.+?)<\/span><\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
     foreach($ary[1] as $genre) {
         $data['genres'][] = trim($genre);
     }
@@ -526,6 +529,9 @@ function imdbActor($name, $actorid)
 
     // search directly by id or via name?
     $resp = httpClient(imdbActorUrl($name, $actorid), $cache);
+    //testing code save resp data from imdb
+    //$file_path = './cache/httpclient-php_imdbActor_call_1.html';
+    //file_put_contents($file_path, $resp['data']);
 
     // if not direct match load best match
     if (preg_match('#<b>Popular Names</b>.+?<a\s+href="(.*?)">#i', $resp['data'], $m) ||
@@ -537,18 +543,21 @@ function imdbActor($name, $actorid)
             $m[1] = $imdbServer.$m[1];
         }
         $resp = httpClient($m[1], true);
+        //testing code save resp data from imdb
+        //$file_path = './cache/httpclient-php_/_imdbActor_call_2.html';
+        //file_put_contents($file_path, $resp['data']);
     }
 
     // now we should have loaded the best match
 
     // only search in img_primary <td> - or we get far to many useless images
-    preg_match('/<td.+?id="img_primary">(.*?)<\/td>/si', $resp['data'], $match);
+    preg_match('/<div class="ipc-poster.*?>(.*?)<\/a><\/div>/si', $resp['data'], $match);
 
     $ary = array();
-    if (preg_match('/.+?<a.*?href="(\/name\/nm\d+\/).+?src="(.+?)"/si', $match[1], $m))
+    if (preg_match('/.+?src="(.+?)".+?<a.*?href="(\/name\/nm\d+\/).+?/si', $match[1], $m))
     {
-        $ary[0][0] = $m[1];
-        $ary[0][1] = $m[2];
+        $ary[0][0] = $m[2];
+        $ary[0][1] = $m[1];
     }
 
     return $ary;
