@@ -151,7 +151,7 @@ function imdbSearch($title, $aka=null)
     global $CLIENTERROR;
     global $cache;
 
-    $url    = $imdbServer.'/find?q='.urlencode($title);
+    $url = $imdbServer.'/find?q='.urlencode($title);
     if ($aka) $url .= ';s=tt;site=aka';
 
     $resp = httpClient($url, $cache);
@@ -163,6 +163,7 @@ function imdbSearch($title, $aka=null)
     $data['encoding'] = $resp['encoding'];
 
     // direct match (redirecting to individual title)?
+    // @todo i don't think this gets called anymore, investigate
     if (preg_match('/^'.preg_quote($imdbServer,'/').'\/[Tt]itle(\?|\/tt)([0-9?]+)\/?/', $resp['url'], $single))
     {
         $info       = array();
@@ -178,20 +179,24 @@ function imdbSearch($title, $aka=null)
     }
 
     // multiple matches
-    else if (preg_match_all('/<tr class="findResult.*?">(.*?)<\/tr>/i', $resp['data'], $multi, PREG_SET_ORDER))
+    else if (preg_match_all('#div class="ipc-metadata-list-summary-item__tc".*href="/title/tt(\d+)/.*>([^\<]+)</a>.*<ul.*>(.*)</ul>.*</div>#Uism', $resp['data'], $multi, PREG_SET_ORDER))
     {
         foreach ($multi as $row)
         {
-            preg_match('/<td class="result_text">\s*<a href="\/title\/tt(\d+).*?" >(.*?)<\/a>\s?\(?(\d+)?\)?/i', $row[1], $ary);
-            if ($ary[1] and $ary[2]) {
-                $info           = array();
-                $info['id']     = $imdbIdPrefix.$ary[1];
-                $info['title']  = $ary[2];
-                $info['year']   = $ary[3];
-                $data[]         = $info;
+            $info = [
+                'id' => $imdbIdPrefix.$row[1],
+                'title' => $row[2],
+                'year' => null
+            ];
+            if (preg_match_all('#<label.*>([^\<]+)</label>#Uism', $row[3], $labels, PREG_PATTERN_ORDER))
+            {
+                foreach ($labels[1] as $label)
+                {
+                    if (preg_match('#^(\d{4})$#i', $label)) $info['year'] = $label;
+                    if (preg_match('#^.*(episode|series)$#i', $label)) $info['title'] .= ' ('.$label.')';
+                }
             }
-
-#           dump($info);
+            $data[] = $info;
         }
     }
 

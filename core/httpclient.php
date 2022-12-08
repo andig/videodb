@@ -99,6 +99,7 @@ function get_response_encoding($response)
  */
 function httpClient($url, $cache = false, $para = null, $reload = false)
 {
+    static $referer = 'https://www.imdb.com/search/';
     global $config;
     $client = new GuzzleHttp\Client();
 
@@ -149,6 +150,12 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
         $requestConfig += ['headers' => $para['header']];
     }
 
+    if (empty($requestConfig['headers']['Accept'])) $requestConfig['headers']['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+    if (empty($requestConfig['headers']['Accept-Language'])) $requestConfig['headers']['Accept-Language'] = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE'); // @todo make this configurable
+    if (empty($requestConfig['headers']['DNT'])) $requestConfig['headers']['DNT'] = '1';
+    if (empty($requestConfig['headers']['User-Agent'])) $requestConfig['headers']['User-Agent'] = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT');
+    if (empty($requestConfig['headers']['Referer'])) $requestConfig['headers']['Referer'] = $referer;
+
     $resp = $client->request($method, $url, $requestConfig);
 
     $response['error'] = '';
@@ -173,11 +180,14 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     if ($resp->getStatusCode() != 200)
     {
         $response['error'] = 'Server returned wrong status: ' . $resp->getStatusCode();
-        $response['error'] .= " Reason: " . $resp.getReasonPhrase();
+        $response['error'] .= " Reason: " . $resp->getReasonPhrase();
         return $response;
     }
 
     $response['success'] = true;
+    // @todo i'm not sure on the side-effects of setting the previous requested URL as referer
+    //        for the next, so disabled for now. might be something to investigate...
+    //$referer = $url;
 
     // commit successful request to cache
     if ($cache)
