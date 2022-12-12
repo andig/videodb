@@ -1,4 +1,5 @@
 <?php
+// DEFUNCT, no clue if this is alternative: https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list
 /**
  * Google Image Parser
  *

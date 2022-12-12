@@ -12,7 +12,7 @@
  * @version $Id: allocine.php,v 1.17 2011/06/24 23:08:06 robelix Exp $
  */
 
-$GLOBALS['allocineServer']	    = 'http://www.allocine.fr';
+$GLOBALS['allocineServer']	    = 'https://www.allocine.fr';
 $GLOBALS['allocineIdPrefix']    = 'allocine:';
 
 /**
@@ -460,6 +460,7 @@ function allocineData($imdbID)
         preg_match_all('#<div class="titlebar">\s*?<h3>\s*?<a href="/personne/fichepersonne_gen_cpersonne=(\d+?).html">(.*?)</a>\s*?</h3>\s*?</div>\s*?<p>\s*Rôle : (.*?)\s*</p>#is', $Section[1], $ary, PREG_PATTERN_ORDER);
 
         $count = 0;
+        $cast = '';
         while (isset($ary[1][$count]))
         {
             $cast .= $ary[2][$count]."::".$ary[3][$count]."::allocine:".$ary[1][$count]."\n";
@@ -586,7 +587,7 @@ function allocineActor($name, $actorid)
         return;
     }
 
-    $url = 'http://www.allocine.fr/personne/fichepersonne_gen_cpersonne='.urlencode($actorid).'.html';
+    $url = 'https://www.allocine.fr/personne/fichepersonne_gen_cpersonne='.urlencode($actorid).'.html';
     $resp = httpClient($url, 1);
 
     $single = array();
@@ -599,4 +600,3 @@ function allocineActor($name, $actorid)
     }
 }
 
-?>

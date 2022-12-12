@@ -63,6 +63,7 @@ function imdbContentUrl($id)
  * @return  array            Associative array with: id, title, rating, year.
  *                           If error: $CLIENTERROR contains the http error and blank is returned.
  */
+// Only used in contrib/add_recommended_movies.php
 function imdbRecommendations($id, $required_rating, $required_year)
 {
     global $CLIENTERROR;
@@ -110,7 +111,7 @@ function getRecommendationData($imdbID) {
 
     // Titles and Year
     // See for different formats. https://contribute.imdb.com/updates/guide/title_formats
-    if ($data['istv']) {
+    if ($data['istv']) { // @todo this is always false
         if (preg_match('/<title>&quot;(.+?)&quot;(.+?)\(TV Episode (\d+)\) - IMDb<\/title>/si', $resp['data'], $ary)) {
             # handles one episode of a TV serie
             $data['title'] = trim($ary[1]);
@@ -391,6 +392,7 @@ function imdbData($imdbID)
         // could be some maximum length of .*?
         // anyways, I'm cutting it here
         $casthtml = substr($match[1], 0, strpos($match[1], '</table'));
+        $cast = '';
         if (preg_match_all('#<td class=\"primary_photo\">\s+<a href=\"\/name\/(nm\d+)\/?.*?".+?<a .+?>(.+?)<\/a>.+?<td class="character">(.*?)<\/td>#si', $casthtml, $ary, PREG_PATTERN_ORDER))
         {
             for ($i=0; $i < sizeof($ary[0]); $i++)
@@ -571,4 +573,3 @@ function imdbActor($name, $actorid)
     return $ary;
 }
 
-?>

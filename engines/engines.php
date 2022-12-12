@@ -27,7 +27,7 @@ function engineGetDefault()
     {
         $engine = $config['enginedefault'];
     }
-    elseif (count($engine_list = array_keys($engines)))
+    elseif (count($engine_list = array_keys($config['engines'])))
     {
         // first valid engine from list
         $engine = $engine_list[0];
@@ -56,12 +56,7 @@ function engineGetEngine($id)
         // engine prefixed (imdb:081547)
         // currently working for imdb, amazon, amazoncom and tvcom
         if (preg_match('/^(\w+):/', $id, $match)) $engine = $match[1];
-#       elseif (preg_match('/^\d+-\d+$/', $id)) $engine = 'tvcom';
-        elseif (preg_match('/^DP[0-9]/', $id)) $engine = 'dvdpalace'; // German Movie Database
         elseif (preg_match('/^[0-9A-Z]{10,}$/', $id)) $engine = 'amazonaws'; // Amazon
-        elseif (preg_match('/^GR[0-9]/', $id)) $engine = 'gamerankings';
-        elseif (preg_match('/^DI[0-9]/', $id)) $engine = 'dvdinside';
-#		elseif (preg_match('/^[0-9a-z]{6,}$/', $id)) $engine = 'freedb';
 	}
 	if (empty($engine)) $engine = 'imdb';
 	return $engine;

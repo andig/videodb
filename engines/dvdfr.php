@@ -13,7 +13,7 @@
 
 require_once './core/compatibility.php';
 
-$GLOBALS['dvdfrServer']	  = 'http://www.dvdfr.com';
+$GLOBALS['dvdfrServer']	  = 'https://www.dvdfr.com';
 $GLOBALS['dvdfrIdPrefix'] = 'dvdfr:';
 
 /**
@@ -215,69 +215,69 @@ function dvdfrData($imdbID)
     // maps dvdfr category ids to videodb category names
     $category_map = array
     (
-        "1" => "Action",
-        "2" => "Animation",
-        "61" => "", //  "Autres séries"
-        "3" => "Adventure",
-        "72" => "", //"Beaux-Arts"
-        "81" => "Musical", //"Bollywood"
-        "4" => "Comedy",
-        "5" => "Drama", // "Comédie dramatique"
-        "6" => "Musical", //"Comédie musicale"
-        "74" => "Romance", // "Comédie romantique"
-        "7" => "Music", //"Concert"
-        "8" => "" , //"Conte"
-        "9" => "Short", //"Court-Métrage"
-        "10" => "Documentary", //"Culture"
-        "78" => "Documentary", //"Culture Gay"
-        "11" => "Music", //"Danse"
-        "12" => "", //"Divers"
-        "13" => "Documentary", //"Documentaire"
-        "14" => "Drama", //"Drame"
-        "73" => "Drama", //"Emotion"
-        "15" => "Adult", //"Erotique"
-        "16" => "Action", //"Espionnage"
-        "17" => "Sci-Fi", //"Fantastique"
-        "30" => "Musical", //"Film musical"
-        "83" => "Sport", //"Freefight"
-        "18" => "War", //"Guerre"
-        "19" => "Musical", //"Hard-rock"
-        "20" => "History", //"Historique"
-        "21" => "Horror", //"Horreur"
-        "22" => "Comedy", //"Humour"
-        "23" => "Animation", //"Japanimation"
-        "24" => "Adult", //"Japanimation érotique"
-        "25" => "Music", //"Jazz &amp; Blues"
-        "79" => "", //"Jeux"
-        "26" => "Music", //"Karaoke"
-        "27" => "Action", //"Kung Fu"
-        "28" => "", //"Méthode"
-        "57" => "", //"Mini-series / Feuilletons"
-        "29" => "Documentary", //"Muet"
-        "32" => "Music", //"Musique Classique"
-        "71" => "Music", //"Musiques du monde"
-        "31" => "Music", //"Opéra"
-        "33" => "War", //"Péplum"
-        "34" => "Crime", //"Policier"
-        "54" => "", //"Pour enfants"
-        "76" => "Music", //"R&amp;B &amp; Soul"
-        "55" => "Music", //"Rap"
-        "56" => "Sci-Fi", //"Science Fiction"
-        "60" => "", //"Série Anime / OAV"
-        "75" => "", //"Série d'animation enfants"
-        "58" => "", //"Série TV"
-        "59" => "", //"Sitcom"
-        "62" => "", //"Spectacle"
-        "63" => "Sport",
-        "82" => "Sport", //"Sports mécaniques"
-        "64" => "Music", //"Techno / Electro"
-        "65" => "", //"Theatre"
-        "66" => "Thriller",
-        "67" => "Music", //"Variété française"
-        "68" => "Music", //"Variété internationale"
-        "69" => "Documentary", //"Voyages"
-        "70" => "Western",
-        "Science Fiction" => "Sci-Fi",
+      "1" => "Action",
+      "2" => "Animation",
+      "61" => "", //  "Autres sÃ©ries"
+      "3" => "Adventure",
+      "72" => "", //"Beaux-Arts"
+      "81" => "Musical", //"Bollywood"
+      "4" => "Comedy",
+      "5" => "Drama", // "ComÃ©die dramatique"
+      "6" => "Musical", //"ComÃ©die musicale"
+      "74" => "Romance", // "ComÃ©die romantique"
+      "7" => "Music", //"Concert"
+      "8" => "" , //"Conte"
+      "9" => "Short", //"Court-MÃ©trage"
+      "10" => "Documentary", //"Culture"
+      "78" => "Documentary", //"Culture Gay"
+      "11" => "Music", //"Danse"
+      "12" => "", //"Divers"
+      "13" => "Documentary", //"Documentaire"
+      "14" => "Drama", //"Drame"
+      "73" => "Drama", //"Emotion"
+      "15" => "Adult", //"Erotique"
+      "16" => "Action", //"Espionnage"
+      "17" => "Sci-Fi", //"Fantastique"
+      "30" => "Musical", //"Film musical"
+      "83" => "Sport", //"Freefight"
+      "18" => "War", //"Guerre"
+      "19" => "Musical", //"Hard-rock"
+      "20" => "History", //"Historique"
+      "21" => "Horror", //"Horreur"
+      "22" => "Comedy", //"Humour"
+      "23" => "Animation", //"Japanimation"
+      "24" => "Adult", //"Japanimation Ã©rotique"
+      "25" => "Music", //"Jazz &amp; Blues"
+      "79" => "", //"Jeux"
+      "26" => "Music", //"Karaoke"
+      "27" => "Action", //"Kung Fu"
+      "28" => "", //"MÃ©thode"
+      "57" => "", //"Mini-series / Feuilletons"
+      "29" => "Documentary", //"Muet"
+      "32" => "Music", //"Musique Classique"
+      "71" => "Music", //"Musiques du monde"
+      "31" => "Music", //"OpÃ©ra"
+      "33" => "War", //"PÃ©plum"
+      "34" => "Crime", //"Policier"
+      "54" => "", //"Pour enfants"
+      "76" => "Music", //"R&amp;B &amp; Soul"
+      "55" => "Music", //"Rap"
+      "56" => "Sci-Fi", //"Science Fiction"
+      "60" => "", //"SÃ©rie Anime / OAV"
+      "75" => "", //"SÃ©rie d'animation enfants"
+      "58" => "", //"SÃ©rie TV"
+      "59" => "", //"Sitcom"
+      "62" => "", //"Spectacle"
+      "63" => "Sport",
+      "82" => "Sport", //"Sports mÃ©caniques"
+      "64" => "Music", //"Techno / Electro"
+      "65" => "", //"Theatre"
+      "66" => "Thriller",
+      "67" => "Music", //"VariÃ©tÃ© franÃ§aise"
+      "68" => "Music", //"VariÃ©tÃ© internationale"
+      "69" => "Documentary", //"Voyages"
+      "70" => "Western",
+      "Science Fiction" => "Sci-Fi",
     );
 
     // Genres (as Array)
@@ -293,8 +293,8 @@ function dvdfrData($imdbID)
 
     // Cast
     if( preg_match('#<stars>(.*)</stars>#is', $resp['data'], $Section) ) {
-      preg_match_all('#<star type="Acteur" id="(\d+)">(.*?)</star>#i', $Section[1], $ary,PREG_PATTERN_ORDER);
-
+        preg_match_all('#<star type="Acteur" id="(\d+)">(.*?)</star>#i', $Section[1], $ary,PREG_PATTERN_ORDER);
+        $cast = '';
         for ($i=0; $i < sizeof($ary[0]); $i++)
         {
           $cast .= dvdfrCleanStr($ary[2][$i]) . '::::dvdfr' . dvdfrCleanStr($ary[1][$i]) . "\n";
@@ -329,4 +329,3 @@ function dvdfrActor($name, $actorengineid)
     return;
 }
 
-?>
