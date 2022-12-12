@@ -20,13 +20,13 @@ $SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault',
                       'custom2type', 'custom3type', 'custom4type', 'enginedefault', 
                       'proxy_host', 'proxy_port', 'actorpics', 'thumbAge', 'listcolumns', 
                       'shownew', 'imdbBrowser', 'multiuser', 'denyguest', 'adultgenres',
-                      'pageno', 'showtools');
+                      'pageno', 'showtools', 'showcasttoggle');
 
 $SETUP_QUICK  = array('template');
 
 $SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'filterdefault', 
                       'showtv', 'orderallbydisk', 'template', 'languageflags', 
-                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles');
+                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles', 'showcasttoggle');
 
 /**
  * Build config options array
@@ -65,6 +65,7 @@ function setup_mkOptions($isprofile = false)
     $setup[] = setup_addOption($isprofile, 'removearticles', 'boolean');
     $setup[] = setup_addOption($isprofile, 'adultgenres', 'multi', setup_getGenres(), @explode('::', $config['adultgenres']));
     $setup[] = setup_addOption($isprofile, 'showtools', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'showcasttoggle', 'boolean');
 
     if (!$isprofile) $setup[] = setup_addSection('opt_custom');
     $setup[] = setup_addOption($isprofile, 'custom', 'special', setup_mkCustoms());
