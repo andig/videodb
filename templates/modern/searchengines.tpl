@@ -3,7 +3,7 @@
   $Id: searchengines.tpl,v 1.7 2011/06/19 11:05:31 andig2 Exp $
 *}
 
-{assign var="link" value="http://former.imdb.com/find"}
+{assign var="link" value="http://www.imdb.com/find"}
 <form action="trace.php" id="searchIMDB" name="searchIMDB" method="get" {if !$config.imdbBrowser}target="_blank"{/if}>
     {if $config.imdbBrowser}<input type="hidden" name="videodburl" value="{$link}"/>{/if}
     <input type="hidden" name="q" id="forIMDB" value=""/>
