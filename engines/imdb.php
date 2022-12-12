@@ -198,7 +198,15 @@ function imdbSearch($title, $aka=null)
             }
             $data[] = $info;
         }
-    }
+    } elseif (preg_match_all('/<div class="col-title">.+?<a href="\/title\/tt(\d+)\/\?ref_=adv_li_tt".+?>(.+?)<\/a>.+?<span .+?>\((\d+).*?\)<\/span>/is', $resp['data'], $ary, PREG_SET_ORDER)) {
+             foreach ($ary as $row) {
+                 $info           = array();
+                 $info['id']     = $imdbIdPrefix.$row[1];
+                 $info['title']  = $row[2];
+                 $info['year']   = $row[3];
+                 $data[]         = $info;
+             }
+         }
 
     return $data;
 }
