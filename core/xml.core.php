@@ -3,7 +3,7 @@
  * XML support functions
  *
  * @package Core
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  * @version $Id: xml.core.php,v 1.8 2013/04/26 15:09:35 andig2 Exp $
  */
  

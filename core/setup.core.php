@@ -4,7 +4,7 @@
  *
  * @package Core
  * @author  Andreas Gohr    <a.gohr@web.de>
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  * @version $Id: setup.core.php,v 1.12 2013/03/16 10:10:07 andig2 Exp $
  */
 
@@ -215,7 +215,7 @@ function setup_getLanguages()
  * Find available templates/styles
  * Extended to search for template screenshots
  *
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  */
 function setup_getTemplates(&$screenshots)
 {
@@ -350,4 +350,3 @@ function update_session()
     if ($showtv) $_SESSION['vdb']['showtv'] = $showtv;
 }
 
-?>

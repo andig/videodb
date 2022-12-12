@@ -3,7 +3,7 @@
  * Edit functions. Split into separate file for reuse.
  *
  * @package videoDB
- * @author  Andreas Gˆtz <cpuidle@gmx.de>
+ * @author  Andreas G√∂tz <cpuidle@gmx.de>
  * @author  Andreas Gohr <a.gohr@web.de>
  * @author  Chinamann <chinamann@users.sourceforge.net>
  * @version $Id: edit.core.php,v 1.9 2009/12/05 13:56:04 andig2 Exp $
@@ -86,7 +86,7 @@ function removeArticles($field)
                       'ein ', 'eine ', 'eines ', 'le ', 'el ', "l'", 'il ', 'les ', 'i ',
                       'o ', 'un ', 'los ', 'de ', 'an ', 'una ', 'las ', 'gli ', 'het ',
                       'lo ', 'os ', 'az ', 'ha-', 'een ', 'det ', 'oi ', 'ang ', 'ta ',
-                      'al-', 'uno ', "un'", 'ett ', 'mga ', 'œ ', '« ', 'els ', '‘Ô ', 'œÈ ');
+                      'al-', 'uno ', "un'", 'ett ', 'mga ', '√è ', '√á ', 'els ', '√î√Ø ', '√è√© ');
 
     foreach ($articles as $article)
     {
@@ -170,7 +170,7 @@ function prepareSQL($data, $setonly = false)
             }
         }
 
-        $SET = "$name = '".addslashes($$name)."'";
+        $SET = "$name = '".escapeSQL($$name)."'";
 
         // special null/zero handling
         if (empty($$name))

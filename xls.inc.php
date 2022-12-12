@@ -39,8 +39,8 @@ $config['xls_mark_lent']       = 1;
  * as not sure how to enforce.
  * 
 */
-    if (!isset($config['xls_extra_fields']))
-    {
-        $config['xls_extra_fields']    = 'title (plot), diskid, genres, language, mediatype, runtime, year, custom1, custom2, custom3, custom4, insertdate, owner, lent';
-    }
-?>
+if (!isset($config['xls_extra_fields']))
+{
+    $config['xls_extra_fields']    = 'title (plot), diskid, genres, language, mediatype, runtime, year, custom1, custom2, custom3, custom4, insertdate, owner, lent';
+}
+

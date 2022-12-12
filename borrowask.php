@@ -21,17 +21,24 @@ if (empty($user))
 				page try to <a href="login.php">login</a> first. (This feature is not
 				available in Single User Mode)');
 }
+
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+
 if (empty($id) || empty($diskid)) 
 {
 	errorpage('Error', 'No Ids given');
 }
 
 $owner       = get_owner($diskid, true);
-$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE name = '".addslashes($owner)."'");
+$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE name = '".escapeSQL($owner)."'");
 $owner_email = $result[0]['email'];
-$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE id = '".addslashes($user_id)."'");
+$result      = runSQL('SELECT email FROM '.TBL_USERS." WHERE id = '".escapeSQL($user_id)."'");
 $user_email  = $result[0]['email'];
-$result      = runSQL('SELECT title FROM '.TBL_DATA." WHERE id = '".addslashes($id)."'");
+$result      = runSQL('SELECT title FROM '.TBL_DATA." WHERE id = '".escapeSQL($id)."'");
 $title       = $result[0]['title'];
 
 $mail        = $lang['msg_borrowaskmail'];
@@ -70,4 +77,4 @@ $smarty->assign('success', @mail($owner_email, $subject, $mail, "From: $user <$u
 // display templates
 smarty_display('borrowask.tpl');
 
-?>
+

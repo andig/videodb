@@ -41,7 +41,7 @@ if (count($result) == 0) {
 	
 	if ($_GET['process'] == "BORROW") {
 
-		$who = addslashes(trim($_GET['borrowText']));
+		$who = escapeSQL(trim($_GET['borrowText']));
 		$barcode = trim($_GET['barcode']);
 		
 		if ($who == '') {
@@ -53,7 +53,7 @@ if (count($result) == 0) {
                       FROM '.TBL_DATA.'
                  LEFT JOIN '.TBL_USERS.'
                         ON '.TBL_DATA.'.owner_id = '.TBL_USERS.'.id
-                     WHERE '.TBL_USERS.".name = '".addslashes($_COOKIE['VDBusername'])."'".'
+                     WHERE '.TBL_USERS.".name = '".escapeSQL($_COOKIE['VDBusername'])."'".'
                              AND '.TBL_DATA.'.'.$customFieldName." LIKE '%".$barcode."'");
 				
 		    foreach($result as $row)
@@ -66,8 +66,8 @@ if (count($result) == 0) {
 		    		}
 		    	}
 		    	
-		    	$DELETE = 'DELETE FROM '.TBL_LENT.' WHERE diskid = '.addslashes($row['diskid']);
-				$INSERT = 'INSERT '.TBL_LENT." SET who = '".addslashes($who)."', diskid = '".addslashes($row['diskid'])."'";
+		    	$DELETE = 'DELETE FROM '.TBL_LENT.' WHERE diskid = '.escapeSQL($row['diskid']);
+				$INSERT = 'INSERT '.TBL_LENT." SET who = '".escapeSQL($who)."', diskid = '".escapeSQL($row['diskid'])."'";
 				runSQL($DELETE,false);
 				runSQL($INSERT);
 				$specialJsCode = "parent.mainFrame.location.href='../borrow.php';";
@@ -86,7 +86,7 @@ if (count($result) == 0) {
                       FROM '.TBL_DATA.'
                  LEFT JOIN '.TBL_USERS.'
                         ON '.TBL_DATA.'.owner_id = '.TBL_USERS.'.id
-                     WHERE '.TBL_USERS.".name = '".addslashes($_COOKIE['VDBusername'])."'".'
+                     WHERE '.TBL_USERS.".name = '".escapeSQL($_COOKIE['VDBusername'])."'".'
                              AND '.TBL_DATA.'.'.$customFieldName." LIKE '%".$barcode."'");
 
 			foreach($result as $row)
@@ -99,7 +99,7 @@ if (count($result) == 0) {
 		    		}
 		    	}
 		    	
-		    	$DELETE = 'DELETE FROM '.TBL_LENT.' WHERE diskid = '.addslashes($row['diskid']);
+		    	$DELETE = 'DELETE FROM '.TBL_LENT.' WHERE diskid = '.escapeSQL($row['diskid']);
 				runSQL($DELETE);
 				$specialJsCode = "parent.mainFrame.location.href='../borrow.php';";
 				$notFound=0;

@@ -17,6 +17,8 @@
 // add pwd to include_path
 ini_set('include_path', '.' . PATH_SEPARATOR . ini_get('include_path'));
 
+$config = [];
+
 // global const CONFIG_FILE is not yet defined at this point
 if (!@include_once './config.inc.php')
 {
@@ -57,18 +59,7 @@ if (isset($config['debug']) && $config['debug']) ini_set('error_log', 'error.log
 // Remove environment variables from global scope- ensures clean namespace
 foreach (array_keys($_ENV) as $key) unset($GLOBALS[$key]);
 
-// force magic quotes off
-ini_set('magic_quotes_runtime', 0);
-if (get_magic_quotes_gpc())
-{
-    if (!empty($_REQUEST)) remove_magic_quotes($_REQUEST);
-    ini_set('magic_quotes_gpc', 0);
-}
-
-// register_globals off? Well I like it...
-extract($_REQUEST);
-
-// security check
+// security check // @todo move to parent files
 if ($id) validate_input($id);
 if ($ajax_update) validate_input($ajax_update);
 
@@ -82,7 +73,7 @@ $smarty->loadFilter('output', 'trimwhitespace');        // remove whitespace fro
 #$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 #$smarty->force_compile  = true;
 #$smarty->debugging      = true;
-$smarty->error_reporting = E_ALL & ~E_NOTICE;           // added for Smarty 3
+$smarty->error_reporting = E_ERROR;//E_ALL & ~E_NOTICE;           // added for Smarty 3
 
 // load config
 load_config();
@@ -441,10 +432,10 @@ function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true)
 
 	// identify actor by unique actor id, of by name
     if ($actorid && $idSearchAllowed) {
-        $result = runSQL($SQL." WHERE actorid='".addslashes($actorid)."'");
+        $result = runSQL($SQL." WHERE actorid='".escapeSQL($actorid)."'");
 	}
 	if (!$actorid || (count($result) == 0)) {
-        $result = runSQL($SQL." WHERE name='".addslashes(html_entity_decode($name))."'");
+        $result = runSQL($SQL." WHERE name='".escapeSQL(html_entity_decode($name))."'");
 	}
 
     $imgurl = get_actor_image_from_cache($result[0], $name, $actorid);
@@ -687,6 +678,8 @@ function check_videopermission($perm, $id)
 function check_permission($permission, $destUserId = null)
 {
     global $config;
+    // initialize
+    $permissions = 0;
 
     // everything's allowed in single user mode
     if (!$config['multiuser']) return true;
@@ -940,7 +933,7 @@ function get_userid($userName)
 {
     $SELECT = "SELECT id
                  FROM ".TBL_USERS."
-                WHERE name='".addslashes($userName)."'";
+                WHERE name='".escapeSQL($userName)."'";
     $result = runSQL($SELECT);
     return $result[0]['id'];
 }
@@ -961,5 +954,67 @@ function get_username($userId)
     return $result[0]['name'];
 }
 
+/**
+ * A few functions for input filtering
+ */
 
-?>
+/**
+ * @param string $name
+ * @return string[] array of strings
+ */
+function req_array ($name) {
+    return req_raw($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES | FILTER_REQUIRE_ARRAY);
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function req_email ($name) {
+    return req_raw($name, FILTER_SANITIZE_EMAIL);
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function req_string ($name) {
+    return req_raw($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES | FILTER_REQUIRE_SCALAR);
+}
+
+/**
+ * @param string $name
+ * @return float
+ */
+function req_float ($name) {
+    return req_raw($name, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND | FILTER_REQUIRE_SCALAR);
+}
+
+/**
+ * @param string $name
+ * @return int
+ */
+function req_int ($name) {
+    return req_raw($name, FILTER_SANITIZE_NUMBER_INT);
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function req_url ($name) {
+    return req_raw($name, FILTER_SANITIZE_URL);
+}
+
+/**
+ * @param string $name
+ * @return mixed type depends on $filter, returns false on failure, null is not set.
+ */
+function req_raw ($name, $filter = FILTER_UNSAFE_RAW, $options = FILTER_REQUIRE_SCALAR) {
+    $value = filter_input(INPUT_POST, $name, $filter, $options);
+    if (is_null($value)) {
+        $value = filter_input(INPUT_GET, $name, $filter, $options);
+    }
+    return $value;
+}
+

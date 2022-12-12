@@ -12,6 +12,11 @@
 require_once './core/functions.php';
 require_once './engines/youtube.php';
 
+/**
+ * input
+ */
+$title = req_string('title');
+
 // decode entities to care for numeric html escapes of JS single quotes
 $trailer = youtubeSearch(html_entity_decode_all($title));
 
@@ -24,4 +29,3 @@ $smarty->assign('trailer', $trailer);
 // display templates
 smarty_display('trailer.tpl');
 
-?>
