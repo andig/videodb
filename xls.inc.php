@@ -34,6 +34,13 @@ $config['xls_mark_lent']       = 1;
 /* 
  * $config['xls_extra_fields'] is now set in config.inc.php 
  * 
+ * Below code included only to stop problems if users
+ * config.inc.php has not been updated inline with config.sample.php
+ * as not sure how to enforce.
+ * 
 */
-
+    if (!isset($config['xls_extra_fields']))
+    {
+        $config['xls_extra_fields']    = 'title (plot), diskid, genres, language, mediatype, runtime, year, custom1, custom2, custom3, custom4, insertdate, owner, lent';
+    }
 ?>
