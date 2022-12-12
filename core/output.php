@@ -80,6 +80,7 @@ function out_genres($selected)
  */
 function out_genres2($item_genres = null)
 {
+    global $config;
 	// get detailed genres
     $all_genres = getGenres();
     $adultgenres = array();
@@ -165,7 +166,7 @@ function out_languageflags($flags)
  * @author  Chinamann <chinamann@users.sourceforge.net>
  * @param   string  $prefix         Predefined additional Array entries
  * @param   string  $permission     Honor permissions for selectbox
- * @return  string                  Array with keys=ownernames and values=ownerids
+ * @return  array                  Array with keys=ownernames and values=ownerids
  */
 function out_owners($prefix = null, $permission = false, $keyIsId = false)
 {
@@ -241,6 +242,7 @@ function sizetostring($size, $precision = 0)
     return round($size, $precision).$sizes[$total];
 }
 
+// @todo unused
 function img_avg_color($filename, $format=0)
 {
 	// networked file

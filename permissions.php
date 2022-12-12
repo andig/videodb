@@ -13,7 +13,6 @@ require_once './core/functions.php';
 localnet_or_die();
 permission_or_die(PERM_ADMIN);
 
-
 /**
  * Return if Checkbox is checked
  *
@@ -25,6 +24,17 @@ function getStateOfCheckbox($name)
     global $$name;
     return (!empty($$name));
 }
+
+/**
+ * input
+ */
+$id = req_int('id');
+$diskid = req_int('diskid');
+$from_uid = req_int('from_uid');
+$save = req_int('save');
+$message = req_string('message');
+
+$permlist = [];
 
 if (!empty($from_uid))
 {
@@ -132,4 +142,3 @@ $smarty->assign('message', $message);
 // display templates
 tpl_display('permissions.tpl');
 
-?>

@@ -4,7 +4,7 @@
  *
  * @package Core
  * @author  Andreas Gohr    <a.gohr@web.de>
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  * @version $Id: setup.core.php,v 1.12 2013/03/16 10:10:07 andig2 Exp $
  */
 
@@ -20,13 +20,13 @@ $SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault',
                       'custom2type', 'custom3type', 'custom4type', 'enginedefault', 
                       'proxy_host', 'proxy_port', 'actorpics', 'thumbAge', 'listcolumns', 
                       'shownew', 'imdbBrowser', 'multiuser', 'denyguest', 'adultgenres',
-                      'pageno', 'showtools');
+                      'pageno', 'showtools', 'showcasttoggle');
 
 $SETUP_QUICK  = array('template');
 
 $SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'filterdefault', 
                       'showtv', 'orderallbydisk', 'template', 'languageflags', 
-                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles');
+                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles', 'showcasttoggle');
 
 /**
  * Build config options array
@@ -65,6 +65,7 @@ function setup_mkOptions($isprofile = false)
     $setup[] = setup_addOption($isprofile, 'removearticles', 'boolean');
     $setup[] = setup_addOption($isprofile, 'adultgenres', 'multi', setup_getGenres(), @explode('::', $config['adultgenres']));
     $setup[] = setup_addOption($isprofile, 'showtools', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'showcasttoggle', 'boolean');
 
     if (!$isprofile) $setup[] = setup_addSection('opt_custom');
     $setup[] = setup_addOption($isprofile, 'custom', 'special', setup_mkCustoms());
@@ -215,7 +216,7 @@ function setup_getLanguages()
  * Find available templates/styles
  * Extended to search for template screenshots
  *
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  */
 function setup_getTemplates(&$screenshots)
 {
@@ -350,4 +351,3 @@ function update_session()
     if ($showtv) $_SESSION['vdb']['showtv'] = $showtv;
 }
 
-?>

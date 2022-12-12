@@ -145,7 +145,7 @@ switch ($step)
                 // connect to database server
                 $dbh = mysqli_connect($db_server, $db_user, $db_password);
 				if (mysqli_connect_error()) {
-					error("Can't connect: ".mysqli_error());
+					error("Can't connect: ".mysqli_connect_error());
 					$step--;
 					break;
 				}
@@ -210,7 +210,7 @@ switch ($step)
 					if (!isset($dbh))
                     {
 						$dbh = @mysqli_connect($db_server, $db_user, $db_password);
-                        if (mysqli_connect_error()) trigger_error("Can't connect: ".mysqli_error(), E_USER_ERROR);
+                        if (mysqli_connect_error()) trigger_error("Can't connect: ".mysqli_connect_error(), E_USER_ERROR);
 						mysqli_select_db($dbh, $db_database) or trigger_error("Can't select database: ".mysqli_error($dbh), E_USER_ERROR);
 					}
 
@@ -279,7 +279,7 @@ switch ($step)
 					// re-connect if not continued from step 3
 					if (!$dbh) {
 						$dbh = @mysqli_connect($db_server, $db_user, $db_password);
-                        if (mysqli_connect_error()) trigger_error("Can't connect: ".mysqli_error(), E_USER_ERROR);
+                        if (mysqli_connect_error()) trigger_error("Can't connect: ".mysqli_connect_error(), E_USER_ERROR);
 						mysqli_select_db($dbh, $db_database) or trigger_error("Can't select database: ".mysqli_error($dbh), E_USER_ERROR);
 					}
 
@@ -513,7 +513,7 @@ switch ($step)
 	default:	// start setup
 
 ?>				<tr><td colspan="2">
-					<br/>This is the installer for <span style="font-weight:bold;"><a style="color://333399" href="https://github.com/andig/videodb.git">videoDB</a></span>. You will require:
+					<br/>This is the installer for <span style="font-weight:bold;"><a style="color:#333399" href="https://github.com/andig/videodb.git">videoDB</a></span>. You will require:
 					<ol>
 						<li><b>PHP &gt;= 5.5.0</b> with GD library and session support configured.</li><br/><br/>
 						<li>A <b>MySQL database</b>, login (username and password) with create/drop table rights.</li><br/><br/>

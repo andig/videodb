@@ -5,7 +5,7 @@
  * Enable use of HTTP 304 headers for unmodified content to save bandwidth
  *
  * @package Core
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  * @version $Id: httpcache.php,v 1.5 2010/11/05 10:38:47 andig2 Exp $
  */
 

@@ -352,7 +352,7 @@ function get_actor_thumbnails_batched(&$actors)
 {
     if (!count($actors)) return;
     
-    $ids    = "'".join("','", array_map('addslashes', array_column($actors, 'id')))."'";
+    $ids    = "'".join("','", array_map('escapeSQL', array_column($actors, 'id')))."'";
 
     $SQL    = 'SELECT actorid, name, imgurl, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(checked) AS cacheage
                  FROM '.TBL_ACTORS.' WHERE actorid IN ('.$ids.')';
@@ -447,7 +447,18 @@ function tpl_show($video)
     $video['comment']  = nl2br($video['comment']);
 
 	// cast
-	$video['cast']     = prepare_cast($video['actors']);
+    $smarty->assign('cast_toggle', $config['showcasttoggle']);
+    $show_cast = true;
+    if ($config['showcasttoggle'])
+    {
+        $show_cast = (isset($_GET['show_cast']) && $_GET['show_cast'] == '1');
+    }
+    $smarty->assign('show_cast', $show_cast);
+    $video['cast'] = [];
+    if ($show_cast)
+    {
+    	$video['cast'] = prepare_cast($video['actors']);
+    }
 
     // prepare the custom fields
     customfields($video, 'out');

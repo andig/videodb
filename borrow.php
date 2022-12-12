@@ -18,6 +18,13 @@ localnet_or_die();
 // permission check
 permission_or_die(PERM_WRITE, PERM_ANY); 
 
+/**
+ * input
+ */
+$diskid = req_int('diskid');
+$return = req_string('return');
+$who = req_string('who');
+
 // borrowmanagement for single disk
 $editable = false;
 if (!empty($diskid))
@@ -26,18 +33,17 @@ if (!empty($diskid))
 	{
 		$editable = true;
 		if ($return) {
-            $SQL    = "DELETE FROM ".TBL_LENT." WHERE diskid = '".addslashes($diskid)."'";
+            $SQL    = "DELETE FROM ".TBL_LENT." WHERE diskid = '".escapeSQL($diskid)."'";
             runSQL($SQL);
 		}
 		if (!empty($who)) {
-			$who = addslashes($who);
-            $SQL    = "INSERT INTO ".TBL_LENT." SET who = '".addslashes($who)."', diskid = '".addslashes($diskid)."'";
+            $SQL    = "INSERT INTO ".TBL_LENT." SET who = '".escapeSQL($who)."', diskid = '".escapeSQL($diskid)."'";
             runSQL($SQL);
 		}
 
         $SQL    = "SELECT who, DATE_FORMAT(dt,'%d.%m.%Y') AS dt 
                      FROM ".TBL_LENT." 
-                    WHERE diskid = '".addslashes($diskid)."'";
+                    WHERE diskid = '".escapeSQL($diskid)."'";
         $result = runSQL($SQL);
 		
 		$who = $result[0]['who'];
@@ -65,7 +71,7 @@ if ($config['multiuser'])
     }
         
     // further limit to single owner
-    if ($owner != $all) $WHERES .= " AND ".TBL_USERS.".name = '".addslashes($owner)."'";
+    if ($owner != $all) $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";
 }
 
 // overview on lent disks
@@ -99,4 +105,4 @@ $smarty->assign('borrowlist', $result);
 // display templates
 tpl_display('borrow.tpl');
 
-?>
+

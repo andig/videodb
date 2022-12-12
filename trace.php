@@ -19,6 +19,13 @@ $urlid      = 'videodburl';
 $striptags  = array('iframe','object','embed','ads','html','head','body','!DOCTYPE');
 
 /**
+ * input
+ */
+$iframe = req_int('iframe');
+$videodburl = req_string('videodburl'); // #18
+$videodbreload = req_int('videodbreload');
+
+/**
  * Figures out which part of a given URI is server and path
  * Result in global $base_server and $base_path variables
  *
@@ -103,7 +110,7 @@ function is_known_item($id, &$sp_id, &$sp_diskid)
 {
     $SQL = "SELECT imdbID, id, diskid
               FROM ".TBL_DATA."
-             WHERE imdbID = '".addslashes($id)."'
+             WHERE imdbID = '".escapeSQL($id)."'
              ORDER BY diskid DESC";
     $result = runSQL($SQL);
 
@@ -201,7 +208,7 @@ function _replace_enclosed_tag_traced($matches)
 		if (preg_match("#exec/obidos/tg/detail/-/([0-9A-Z]{10,})/#", $url, $m)) 
 		{
 			$id = $m[1];
-			$append .= ' <a href="edit.php?save=1&amp;lookup=2&amp;imdbID='.urlencode('amazon:'.$id).
+			$append = ' <a href="edit.php?save=1&amp;lookup=2&amp;imdbID='.urlencode('amazon:'.$id).
 				       '"><img src="'.img('add.gif').'" valign="absmiddle" border="0" alt="Add Movie"/></a>';
 		}
 	}
@@ -332,7 +339,7 @@ function request($urlonly=false)
 	
 	// get or post?
 	$pass = ($_POST) ? $_POST : $_GET;
-
+    $request = '';
 	// don't use $_REQUEST or cookies will screw up the query	
 	foreach ($pass as $key => $value) 
     {
@@ -542,6 +549,7 @@ function replace_javascript_fix_href_cast ($html,$js_file_name,$js_file_data,$ca
 {
     global $iframe;
     // allow for iframe templates
+    $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
     // find_string  "/title/".concat and  "/name/".concat
@@ -550,11 +558,9 @@ function replace_javascript_fix_href_cast ($html,$js_file_name,$js_file_data,$ca
 //echo "<br> js file - search/title href"; var_dump($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
-        $js_file_data = preg_replace_callback($pattern, 
-                                              function ($matches) 
-                                              { return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
-                                              },
-                                              $js_file_data);
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) {
+            return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
+        }, $js_file_data);
     }
 
     $file_path = './'.$cachefolder.'imdb-clone-'.'href-cast-override'.'.js';
@@ -575,6 +581,7 @@ function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefo
 {
     global $iframe;
     // allow for iframe templates
+    $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
     // drop down for seasopn no and year
@@ -607,11 +614,9 @@ function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefo
 //echo "<br> js file - search/title href"; var_dump($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
-        $js_file_data = preg_replace_callback($pattern, 
-                                              function ($matches) 
-                                              { return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
-                                              },
-                                              $js_file_data);
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) {
+            return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
+        }, $js_file_data);
     }
 
     $file_path = './'.$cachefolder.'imdb-clone-'.'browse-episodes-override'.'.js';
@@ -632,6 +637,7 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
 {
     global $uri, $iframe;
     // allow for iframe templates
+    $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
 
 // test code to debug if statement match
@@ -730,6 +736,7 @@ function replace_javascript_seasonyear ($html,$js_file_name,$js_file_data,$cache
 //echo "<br> in replace_javascript";
 //echo "<br>".$js_file_name; echo "   ".$cachefolder;
     // allow for iframe templates
+    $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
     $file_path = './'.$cachefolder.'imdb-clone-seasonyear-change.js';
@@ -878,4 +885,3 @@ $smarty->assign('fetchtime', $fetchtime);
 // display templates
 tpl_display('trace.tpl');
 
-?>

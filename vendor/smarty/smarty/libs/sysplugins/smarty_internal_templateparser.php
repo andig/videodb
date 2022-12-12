@@ -2169,8 +2169,13 @@ class Smarty_Internal_Templateparser
     // line 255 "../smarty/lexer/smarty_internal_templateparser.y"
     public function yy_r2()
     {
-        $this->current_buffer->append_subtree($this,
-            $this->compiler->processText($this->yystack[ $this->yyidx + 0 ]->minor));
+    	$text = $this->yystack[ $this->yyidx + 0 ]->minor;
+
+	    if ((string)$text == '') {
+	    	$this->current_buffer->append_subtree($this, null);
+	    }
+
+	    $this->current_buffer->append_subtree($this, new Smarty_Internal_ParseTree_Text($text, $this->strip));
     }
 
     // line 259 "../smarty/lexer/smarty_internal_templateparser.y"
@@ -2252,7 +2257,7 @@ class Smarty_Internal_Templateparser
                 -$this->compiler->getRdelLength()));
         if ($tag == 'strip') {
             $this->strip = true;
-            $this->_retvalue = null;;
+            $this->_retvalue = null;
         } else {
             if (defined($tag)) {
                 if ($this->security) {
@@ -2832,6 +2837,10 @@ class Smarty_Internal_Templateparser
     // line 765 "../smarty/lexer/smarty_internal_templateparser.y"
     public function yy_r95()
     {
+        if ($this->security && $this->security->static_classes !== array()) {
+            $this->compiler->trigger_template_error('dynamic static class not allowed by security setting');
+        }
+
         $prefixVar = $this->compiler->getNewPrefixVariable();
         if ($this->yystack[ $this->yyidx + -2 ]->minor[ 'var' ] === '\'smarty\'') {
             $this->compiler->appendPrefixCode("<?php {$prefixVar} = " .

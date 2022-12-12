@@ -9,7 +9,7 @@
  *
  * @package Search
  * @author  Andreas Gohr    <a.gohr@web.de>
- * @author  Andreas Götz	<cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz	<cpuidle@gmx.de>
  * @version $Id: queryparser.php,v 1.9 2007/12/19 18:42:11 andig2 Exp $
  */
 
@@ -163,12 +163,12 @@ function cleanoperators($ops, &$errors)
     // clean unnormal conditions
     if (strstr($opstr, 'AND OR')) 
     {
-        $errors	.="Die logische Verknüpfung 'AND OR' ist nicht erlaubt und wurde in 'OR' umgewandelt.\n";
+        $errors	.= "Die logische VerknÃ¼pfung 'AND OR' ist nicht erlaubt und wurde in 'OR' umgewandelt.\n";
         $opstr	 = str_replace('AND OR', 'OR', $opstr);
     }
     if (strstr($opstr, 'OR NOT')) 
     {
-        $errors	.="Die logische Verknüpfung 'OR NOT' ist nicht erlaubt und wurde in 'AND' umgewandelt.\n";
+        $errors	.= "Die logische VerknÃ¼pfung 'OR NOT' ist nicht erlaubt und wurde in 'AND' umgewandelt.\n";
         $opstr	 = str_replace('OR NOT', 'AND', $opstr);
     }
     if ($opstr == 'NOT') 
@@ -179,4 +179,4 @@ function cleanoperators($ops, &$errors)
     return $opstr;
 }
 
-?>
+

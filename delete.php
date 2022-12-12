@@ -12,6 +12,12 @@
 require_once './core/functions.php';
 
 /**
+ * input
+ */
+$id = req_int('id');
+$redirect = req_int('redirect');
+
+/**
  * Remove image from cache
  *
  * @author Andreas Goetz <cpuidle@gmx.de>
@@ -31,6 +37,8 @@ function removeCacheFile($url)
 
 // check for localnet
 localnet_or_die();
+
+// @todo check if post, fail if not?
 
 // multiuser permission check
 permission_or_die(PERM_WRITE, get_owner_id($id));
@@ -66,4 +74,4 @@ tpl_page();
 // display templates
 tpl_display('delete.tpl');
 
-?>
+

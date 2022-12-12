@@ -12,6 +12,13 @@
 require_once './core/functions.php';
 require_once './core/httpclient.php';
 
+/**
+ * input
+ */
+$name = req_string('name');
+$actorid = req_string('actorid');
+$url = req_url('url');
+
 /* 
  * Note:
  *
@@ -68,7 +75,7 @@ if ($name)
     {
         // write only if HTTP lookup physically successful
         $SQL = 'REPLACE '.TBL_ACTORS." (name, imgurl, actorid, checked)
-                 VALUES ('".addslashes($name)."', '".addslashes($url)."', '".addslashes($actorid)."', NOW())";
+                 VALUES ('".escapeSQL($name)."', '".escapeSQL($url)."', '".escapeSQL($actorid)."', NOW())";
         runSQL($SQL);
     }
 }
@@ -103,4 +110,3 @@ $file = preg_replace('/img\.php$/', $file, $_SERVER['PHP_SELF']);
 
 header('Location: '.$file);
 
-?>
