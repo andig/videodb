@@ -12,7 +12,6 @@
  * @version $Id: index.php,v 2.102 2013/03/21 16:27:57 andig2 Exp $
  */
 
-require_once './core/session.php';
 require_once './core/functions.php';
 require_once './core/output.php';
 
