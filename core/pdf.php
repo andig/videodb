@@ -351,6 +351,11 @@ function pdfexport($WHERE)
 		$pdf->Cell(0, 0, $title, 0,1, 'L',0,$link);
 
 		// [muddle] technical details
+                unset($tech['Y']);
+		if ($row['year']) {
+			$tech['Y'] = "Year: ".$row['year'];
+		}
+                
 		unset($tech['V']);
 		if ($row['video_width'] and $row['video_height'])
 		{

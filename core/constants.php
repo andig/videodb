@@ -14,7 +14,7 @@
 define('CONFIG_FILE', './config.inc.php');
 define('VERSION', '4.1.0');
 
-define('LOG_FILE', 'log.txt');
+define('LOG_FILE', 'debug.log');
 
 // User Permission bit masks
 define('PERM_ADMIN', 1);
