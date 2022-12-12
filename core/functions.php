@@ -17,16 +17,31 @@
 // add pwd to include_path
 ini_set('include_path', '.' . PATH_SEPARATOR . ini_get('include_path'));
 
-$config = [];
+/**
+ * catch22 with these three constants, these are used for thumbnail generation
+ * should be in constants.php but that file needs $config to be available for
+ * the TBL_* constants. So for now put them here so they can be used in config.
+ */
+define('TUMB_NO_SCALE',   -1); // no scaling   - use of thumbnails is disabled
+define('TUMB_REDUCE_ONLY', 0); // reduce only  - create thumbnails when requested image dimensions are smaller than original image
+define('TUMB_SCALE',       1); // always scale - create thumbnails for all images (applies aliasing when scaling)
 
-// global const CONFIG_FILE is not yet defined at this point
+/**
+ * Load the config.sample so we have all available configuration options loaded (with sane/safe defaults)
+ */
+$config = [];
+require_once './config.sample.php';
+/**
+ * Now load this installation's config and overwrite the ones that are set.
+ * global const CONFIG_FILE is not yet defined at this point
+ */
 if (!@include_once './config.inc.php')
 {
     errorpage('Could not find configuration file <code>config.inc.php</code>',
               "<p>Please make sure you've run the <a href='install.php'>installation script</a>.</p>");
 }
 
-if (@$config['offline'])
+if ($config['offline'])
 {
     errorpage('Maintenance', 'videoDB is currently offline for maintenance. Please check back later.');
 }
@@ -58,10 +73,6 @@ if (isset($config['debug']) && $config['debug']) ini_set('error_log', 'error.log
 
 // Remove environment variables from global scope- ensures clean namespace
 foreach (array_keys($_ENV) as $key) unset($GLOBALS[$key]);
-
-// security check // @todo move to parent files
-if ($id) validate_input($id);
-if ($ajax_update) validate_input($ajax_update);
 
 // Smarty setup
 $smarty = new SmartyBC();
