@@ -73,19 +73,31 @@ $config['thumbnail_quality']    = 80;
 require_once 'pdf.inc.php';
 
 /*
- * To enable XLS export you can uncomment the following line and edit 
- * the settings in xls.inc.php. This option requires the additional installation
- * of "Spreadsheet OLE" and "Spreadsheet Excel Writer". They have to be accessible 
- * from the "include_path" which is set inside "php.ini".
- * 
- * In the Apache Distribution XAMPP it is included by default.
- * On gentoo linux systems you can easily add it by typing 
- *     emerge dev-php/PEAR-Spreadsheet_Excel_Writer
- *  
- * Official Website:
- * http://pear.php.net/package/Spreadsheet_Excel_Writer/
+  * To enable XLS export you can uncomment the following line.
+ * The required libraries are now included via composer in folders
+ * vendor/pear/ole and Vendor/pear/spreadsheet_excel_writer
  */
-// require_once 'xls.inc.php';
+require_once 'xls.inc.php';
+/*
+ * Build your own list, where you define which fields you want and in 
+ * which order they should appear.
+ * 
+ * Supported fields are: 
+ *    title       diskid    language    mediatype    runtime    year
+ *    custom1     custom2   custom3     custom4      owner      lent 
+ *    insertdate  genres    plot
+ * 
+ *  The length of the plot is limited to 253 characters!!!
+ * 
+ *  It's possible to use those fields also as an Excel note. For example if you want 
+ *  to see the title of the movie, followed by the diskid and the running time. As 
+ *  note you want to see the plot next to the title and the owner next to the diskid. 
+ *  For this example the xls_extra_fields list would look like this:
+ * 
+ *  $config['xls_extra_fields'] = 'title (plot), diskid (owner), runtime';
+ * 
+ */
+$config['xls_extra_fields']    = 'title (plot), diskid, genres, language, mediatype, runtime, year, custom1, custom2, custom3, custom4, insertdate, owner, lent';
 
 /*
  *  To get access to FSK18 rated movies in the german dvdb engine you

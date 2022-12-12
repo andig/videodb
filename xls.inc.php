@@ -32,38 +32,15 @@ $config['xls_mark_unseen']     = 1;
 $config['xls_mark_lent']       = 1;
 
 /* 
- * Build your own list, where you define which fields you want and in 
- * which order they should appear.
+ * $config['xls_extra_fields'] is now set in config.inc.php 
  * 
- * Supported fields are: 
- * 
- *    title 
- *    diskid
- *    language 
- *    mediatype 
- *    runtime 
- *    year
- *    custom1 
- *    custom2 
- *    custom3 
- *    custom4 
- *    owner 
- *    lent 
- *    insertdate 
- *    genres 
- *    plot
- * 
- * 	The length of the plot is limited to 253 characters!!!
- * 
- *  It's possible to use those fields also as an Excel note. For example if you want 
- *  to see the title of the movie, followed by the diskid and the running time. As 
- *  note you want to see the plot next to the title and the owner next to the diskid. 
- *  For this example the xls_extra_fields list would look like this:
- * 
- *  $config['xls_extra_fields'] = 'title (plot), diskid (owner), runtime';
- * 
+ * Below code included only to stop problems if users
+ * config.inc.php has not been updated inline with config.sample.php
+ * as not sure how to enforce.
  * 
 */
-$config['xls_extra_fields']    = 'title (plot), diskid, genres, language, mediatype, runtime, year, custom1, custom2, custom3, custom4, insertdate, owner, lent';
-
+    if (!isset($config['xls_extra_fields']))
+    {
+        $config['xls_extra_fields']    = 'title (plot), diskid, genres, language, mediatype, runtime, year, custom1, custom2, custom3, custom4, insertdate, owner, lent';
+    }
 ?>
