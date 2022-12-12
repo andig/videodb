@@ -5,7 +5,7 @@
  * Lets you browse through your movie collection
  *
  * @package Core
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  * @author	Kokanovic Branko    <branko.kokanovic@gmail.com>
  * @version $Id: xml.php,v 1.34 2013/03/10 16:25:35 andig2 Exp $
  */

@@ -19,6 +19,13 @@ $urlid      = 'videodburl';
 $striptags  = array('iframe','object','embed','ads','html','head','body','!DOCTYPE');
 
 /**
+ * input
+ */
+$iframe = req_int('iframe');
+$videodburl = req_string('videodburl'); // #18
+$videodbreload = req_int('videodbreload');
+
+/**
  * Figures out which part of a given URI is server and path
  * Result in global $base_server and $base_path variables
  *
@@ -103,7 +110,7 @@ function is_known_item($id, &$sp_id, &$sp_diskid)
 {
     $SQL = "SELECT imdbID, id, diskid
               FROM ".TBL_DATA."
-             WHERE imdbID = '".addslashes($id)."'
+             WHERE imdbID = '".escapeSQL($id)."'
              ORDER BY diskid DESC";
     $result = runSQL($SQL);
 
@@ -201,7 +208,7 @@ function _replace_enclosed_tag_traced($matches)
 		if (preg_match("#exec/obidos/tg/detail/-/([0-9A-Z]{10,})/#", $url, $m)) 
 		{
 			$id = $m[1];
-			$append .= ' <a href="edit.php?save=1&amp;lookup=2&amp;imdbID='.urlencode('amazon:'.$id).
+			$append = ' <a href="edit.php?save=1&amp;lookup=2&amp;imdbID='.urlencode('amazon:'.$id).
 				       '"><img src="'.img('add.gif').'" valign="absmiddle" border="0" alt="Add Movie"/></a>';
 		}
 	}
@@ -332,7 +339,7 @@ function request($urlonly=false)
 	
 	// get or post?
 	$pass = ($_POST) ? $_POST : $_GET;
-
+    $request = '';
 	// don't use $_REQUEST or cookies will screw up the query	
 	foreach ($pass as $key => $value) 
     {
@@ -438,7 +445,7 @@ function fixup_javascript($html)
         if (!$season_year_done)
         {
             // for season, year change drop down list on episode list
-            $find_string = 'if(d!==c){var e="/title/"';
+            $find_string = 'bySeason';
             $pattern = preg_quote('#'.$find_string.'#');  // add escape delimiters
             if (preg_match($pattern, $js_file_data, $matches) )
             {
@@ -516,6 +523,7 @@ function fixup_javascript($html)
 
 function fixup_json($json)
 {
+/*  section commented out as not needed as of june 2022 - code left incase needed in future
     // insert / after title no - fixes issue with title no being deleted in $uri in function get_base
     // "id":"tt5996792" allow for different digits in page
     $pattern = '#(\"id\":\"tt)(\d+)(\")#';
@@ -529,6 +537,7 @@ function fixup_json($json)
                              '"id":"tt'.$tt_no.'/"',            
                              $json);
     }
+ */
 // testing code
 //$pattern = '#\"id\":\"tt.*?.\"#';
 //preg_match_all($pattern,$page, $mm_after);
@@ -540,6 +549,7 @@ function replace_javascript_fix_href_cast ($html,$js_file_name,$js_file_data,$ca
 {
     global $iframe;
     // allow for iframe templates
+    $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
     // find_string  "/title/".concat and  "/name/".concat
@@ -548,11 +558,9 @@ function replace_javascript_fix_href_cast ($html,$js_file_name,$js_file_data,$ca
 //echo "<br> js file - search/title href"; var_dump($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
-        $js_file_data = preg_replace_callback($pattern, 
-                                              function ($matches) 
-                                              { return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
-                                              },
-                                              $js_file_data);
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) {
+            return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
+        }, $js_file_data);
     }
 
     $file_path = './'.$cachefolder.'imdb-clone-'.'href-cast-override'.'.js';
@@ -573,6 +581,7 @@ function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefo
 {
     global $iframe;
     // allow for iframe templates
+    $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
     // drop down for seasopn no and year
@@ -605,11 +614,9 @@ function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefo
 //echo "<br> js file - search/title href"; var_dump($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
-        $js_file_data = preg_replace_callback($pattern, 
-                                              function ($matches) 
-                                              { return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
-                                              },
-                                              $js_file_data);
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) {
+            return '"http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4];
+        }, $js_file_data);
     }
 
     $file_path = './'.$cachefolder.'imdb-clone-'.'browse-episodes-override'.'.js';
@@ -630,6 +637,7 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
 {
     global $uri, $iframe;
     // allow for iframe templates
+    $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
 
 // test code to debug if statement match
@@ -703,9 +711,62 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
 
 function replace_javascript_search ($html,$js_file_name,$js_file_data,$cachefolder)
 {
-     global $iframe;
-    $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
     $file_path = './'.$cachefolder.'imdb-clone-'.'search-override'.'.js';
+
+    // do replace for search bar fields in this file
+    $js_file_data = replace_javascript_search_common ($js_file_data);
+      
+    // save file to cache (overwritten if present)
+    //add comment line to file and save to cache (overwritten if present) 
+    file_put_contents($file_path, '/* Processed by - replace_javascript_search : this files original name - '.$js_file_name.' */');
+    // save js data file to cache
+    file_put_contents($file_path, $js_file_data, FILE_APPEND);
+    
+    $pattern = preg_quote('#'.$js_file_name.'#');  // escape all delimitters in file name
+//echo $pattern;
+    $html = preg_replace($pattern,$file_path,$html);
+
+    return $html;
+}
+
+function replace_javascript_seasonyear ($html,$js_file_name,$js_file_data,$cachefolder)
+{
+    global $iframe;
+    
+//echo "<br> in replace_javascript";
+//echo "<br>".$js_file_name; echo "   ".$cachefolder;
+    // allow for iframe templates
+    $iframe_val = '';
+    if ($iframe) $iframe_val = "&iframe=".$iframe;
+    
+    $file_path = './'.$cachefolder.'imdb-clone-seasonyear-change.js';
+    //string -    if(d!==c){var e="/title/"
+    $pattern = '#(if\(.!==.\){var .=)(\"/title/\")#';
+//echo "<br>".$pattern;
+    preg_match($pattern, $js_file_data, $matches);
+//echo "<br> js file - find for season"; var_dump($matches);
+    $js_file_data = preg_replace($pattern,
+                                 $matches[1].'"trace.php?'.$iframe_val.'&videodburl=https://www.imdb.com"+'.$matches[2],
+                                 $js_file_data);
+
+    // do replace for search bar fields in this file
+    $js_file_data = replace_javascript_search_common ($js_file_data);
+    
+    //add comment line to file and save to cache (overwritten if present) 
+    file_put_contents($file_path, '/* Processed by - replace_javascript_seasonyear : this files original name - '.$js_file_name.' */');
+    // save js data file to cache
+    file_put_contents($file_path, $js_file_data, FILE_APPEND);
+    
+    $pattern = preg_quote('#'.$js_file_name.'#');  // escape all delimitters in file name
+    $html = preg_replace($pattern,$file_path,$html);
+//echo "<BR> - pattern-".$pattern;
+    return $html;
+}
+
+function replace_javascript_search_common ($js_file_data)
+{
+    global $iframe;
+    $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
     
     // look for   search:{searchEndpoint:"https://v2.sg.media-imdb.com/suggestion",queryTemplate:"%s%s/%s.json",formAction:"/find",formMethod:"get",inputName:"q",hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]},
     $pattern = '#(search:\{searchEndpoint:")(.*?)(",queryTemplate:")(.*?)((".*?formAction:")(.*?)(".*?hiddenFields:\[))(.*?\]\},)#';
@@ -717,53 +778,16 @@ function replace_javascript_search ($html,$js_file_name,$js_file_data,$cachefold
     $js_file_data = preg_replace($pattern,$replace_val, $js_file_data);
 
     //"search-result--const",href:e.url} and "search-result--video",href:e.url} and "search-result--link",href:e.url}
-    $pattern = '#(",href:)(e\.url\})#';
+    $pattern = '#(",href:)(.\.url\})#';
     preg_match($pattern, $js_file_data, $matches);
 //echo "<br> interactive search js matches - "; var_dump($matches);
     $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;    
     $replace_val = $matches[1].'"'.$url.'?'.$iframe_val.'&videodburl=https://www.imdb.com"'.'+'.$matches[2];
 //echo var_dump($replace_val);
-    $js_file_data = preg_replace($pattern,$replace_val, $js_file_data);            
-    // save file to cache (overwritten if present)
-    //add comment line to file and save to cache (overwritten if present) 
-    file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
-    // save js data file to cache
-    file_put_contents($file_path, $js_file_data, FILE_APPEND);
+    $js_file_data = preg_replace($pattern,$replace_val, $js_file_data); 
     
-    $pattern = preg_quote('#'.$js_file_name.'#');  // escape all delimitters in file name
-//echo $pattern;
-    $html = preg_replace($pattern,$file_path,$html);
-
-    return $html;
-}
-function replace_javascript_seasonyear ($html,$js_file_name,$js_file_data,$cachefolder)
-{
-    global $iframe;
-    
-//echo "<br> in replace_javascript";
-//echo "<br>".$js_file_name; echo "   ".$cachefolder;
-    // allow for iframe templates
-    if ($iframe) $iframe_val = "&iframe=".$iframe;
-    
-    $file_path = './'.$cachefolder.'imdb-clone-seasonyear-change.js';
-    //string -    if(d!==c){var e="/title/"
-    $pattern = '#(if\(d!==c\){var e=)(\"/title/\")#';
-//echo "<br>".$pattern;
-    preg_match($pattern, $js_file_data, $matches);
-//echo "<br> js file - find for season"; var_dump($matches);
-    $js_file_data = preg_replace($pattern,
-                                 $matches[1].'"trace.php?'.$iframe_val.'&videodburl=https://www.imdb.com"+'.$matches[2],
-                                 $js_file_data);
-    //add comment line to file and save to cache (overwritten if present) 
-    file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
-    // save js data file to cache
-    file_put_contents($file_path, $js_file_data, FILE_APPEND);
-    
-    $pattern = preg_quote('#'.$js_file_name.'#');  // escape all delimitters in file name
-    $html = preg_replace($pattern,$file_path,$html);
-//echo "<BR> - pattern-".$pattern;
-    return $html;
+    return $js_file_data;
 }
 
 // make sure this is a local access
@@ -861,4 +885,3 @@ $smarty->assign('fetchtime', $fetchtime);
 // display templates
 tpl_display('trace.tpl');
 
-?>

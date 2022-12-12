@@ -88,7 +88,7 @@ function InsertMovie($imdb_id,&$ret_title,$seen,$mediatype){
 	
 	// set owner
     	if (!empty($owner_id))
-        	$SETS = 'owner_id = '.addslashes($owner_id);
+        	$SETS = 'owner_id = '.escapeSQL($owner_id);
 
 	$imdbID=$imdb_id;
     	// update all fields according to list
@@ -111,7 +111,7 @@ function InsertMovie($imdb_id,&$ret_title,$seen,$mediatype){
             		}
         	}
 
-        	$SET = "$name = '".addslashes($$name)."'";
+        	$SET = "$name = '".escapeSQL($$name)."'";
 
         	if (empty($$name)){
             		if (in_array($name, $db_null_fields))

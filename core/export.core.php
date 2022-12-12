@@ -3,7 +3,7 @@
  * Export functions. Returns standardized data for export.
  *
  * @package videoDB
- * @author  Andreas Götz <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz <cpuidle@gmx.de>
  * @author  Chinamann <chinamann@users.sourceforge.net>
  * @version $Id: export.core.php,v 1.8 2013/03/15 16:42:46 andig2 Exp $
  */

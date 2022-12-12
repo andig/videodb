@@ -29,6 +29,13 @@ function clear_session()
     setcookie('VDBpassword', '', time()-7200, $subdir);
 }
 
+/**
+ * input
+ */
+$username = req_string('username');
+$password = req_string('password');
+$refer = req_string('refer');
+
 // make sure caches are clean
 clear_permission_cache();
 
@@ -87,4 +94,3 @@ else
     tpl_display('login.tpl');
 }
 
-?>

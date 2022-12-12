@@ -20,9 +20,14 @@ function _replace_anchors_callback($matches)
 	return $matches[1].$matches[2].$matches[3];
 }
 
+/**
+ * input
+ */
+$page = req_string('page');
 
-if (empty($page)) $page='index.html';
-$page = 'doc/manual/'.$page;
+if (empty($page) || !preg_match('#^([a-z]{3,20})\.html$#', $page, $match)) $page = 'index.html';
+$page = 'doc/manual/' . $page;
+if (!file_exists($page)) $page = 'doc/manual/index.html';
 
 $html = file_get_contents($page);
 $html = preg_replace_callback("/(<a\s+.*?href\s*=\s*\")(.*?)(\".*?>)/is", '_replace_anchors_callback', $html);
@@ -37,4 +42,3 @@ $smarty->assign('helptext', $html);
 // display templates
 tpl_display('help.tpl');
 
-?>

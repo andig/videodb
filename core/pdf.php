@@ -7,7 +7,7 @@
  *
  * @package Core
  * @link    http://www.fpdf.org
- * @author  Andreas G�tz    <cpuidle@gmx.de>
+ * @author  Andreas Götz    <cpuidle@gmx.de>
  * @version $Id: pdf.php,v 1.36 2013/03/15 16:42:46 andig2 Exp $
  */
 
@@ -351,6 +351,11 @@ function pdfexport($WHERE)
 		$pdf->Cell(0, 0, $title, 0,1, 'L',0,$link);
 
 		// [muddle] technical details
+                unset($tech['Y']);
+		if ($row['year']) {
+			$tech['Y'] = "Year: ".$row['year'];
+		}
+                
 		unset($tech['V']);
 		if ($row['video_width'] and $row['video_height'])
 		{

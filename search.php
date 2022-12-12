@@ -18,11 +18,24 @@ require_once './core/output.php';
 // multiuser permission check
 permission_or_die(PERM_READ, PERM_ANY);
 
+/**
+ * input
+ */
+$listcolumns = req_int('listcolumns');
+$genres = req_array('genres');
+$owner = req_string('owner');
+$fields = req_array('fields');
+$isname = req_string('isname'); // isname=Y|1
+$nowild = req_int('nowild');
+$q = req_string('q');
+$ajax_quicksearch = req_int('ajax_quicksearch');
+$ajax_render = req_int('ajax_render');
+$default = req_string('default');
+$export = req_string('export');
+
 // set defaults and update session
 session_default('listcolumns', $config['listcolumns']);
-
 session_set('genres', $genres = isset($genres) ? $genres : array());
-
 // enable redirects to last list view for delete.php
 session_set('listview', 'search.php');
 
@@ -33,7 +46,7 @@ session_set('listview', 'search.php');
  */
 function ajax_render()
 {
-    global $smarty, $result;
+    global $smarty, $result, $config;
 
     // add some delay for debugging
     if ($config['debug'] && $_SERVER['SERVER_ADDR'] == '127.0.0.1')  usleep(rand(200,1000)*1000);
@@ -43,7 +56,7 @@ function ajax_render()
     tpl_list($result);
 
     $content = $smarty->fetch('list.tpl');
-#    file_append('log.txt', $content);
+#    file_append(LOG_FILE, $content);
 
     header('X-JSON: '.json_encode(array('count' => count($result))));
     echo $content;
@@ -140,7 +153,7 @@ if (isset($q) &! (isset($default) && empty($q)))
 		foreach ($tokens as $token)
 		{
             // escape search token
-			$token['token'] = addslashes($token['token']);
+			$token['token'] = escapeSQL($token['token']);
 
             // concatenate tokens with token operator
 			$WHERES .= $token['ops'].' (';
@@ -190,7 +203,7 @@ if (isset($q) &! (isset($default) && empty($q)))
         }
 
         // further limit to single owner
-        if ($owner && $owner != $all) $WHERES .= " AND ".TBL_USERS.".name = '".addslashes($owner)."'";
+        if ($owner && $owner != $all) $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";
     }
 
     // XML / PDF export
@@ -223,11 +236,11 @@ if (isset($q) &! (isset($default) && empty($q)))
 
     $result = runSQL($select);
 
+    $actors = '';
 /*
 	// prepare actors table if searching for them
 	if (in_array('actors', $fields))
 	{
-		$actors = '';
 		foreach ($result as $row)
 		{
 			$actors .= $row['actors']."\n";
@@ -313,4 +326,3 @@ smarty_display('search.tpl');
 smarty_display('list.tpl');
 smarty_display('footer.tpl');
 
-?>

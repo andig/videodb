@@ -273,7 +273,7 @@ function custom_orgtitle_input($cn,$cv)
         // we need to save our self here!
         if (!empty($id) && $cv != '')
         {
-            $qcv = addslashes($cv);
+            $qcv = escapeSQL($cv);
             $UPDATE = "UPDATE ".TBL_DATA." SET $cn = '$qcv' WHERE id = $id";
             runSQL($UPDATE);
         }
@@ -306,9 +306,9 @@ function custom_movix_input($cn,$cv)
 {
     $output ='<select name="'.$cn.'">
                 <option selected value=""></option>
-                <option value=eMovix>eMovix</option>
-                <option value=Movix>Movix</option>
-                <option value=Movix²>Movix²</option>
+                <option value="eMovix">eMovix</option>
+                <option value="Movix">Movix</option>
+                <option value="Movix²">Movix²</option>
               </select>';
     return $output;
 }
@@ -339,7 +339,7 @@ function custom_mpaa_input($cn,$cv)
         //we need to save our self here!
         if(!empty($id) && $cv != '')
         {
-            $qcv = addslashes($cv);
+            $qcv = escapeSQL($cv);
             $UPDATE = "UPDATE ".TBL_DATA." SET $cn = '$qcv' WHERE id = $id";
             runSQL($UPDATE);
         }
@@ -400,7 +400,7 @@ function custom_bbfc_input($cn,$cv)
         //we need to save our self here!
         if(!empty($id) && $cv != '')
         {
-            $qcv = addslashes($cv);
+            $qcv = escapeSQL($cv);
             $UPDATE = "UPDATE ".TBL_DATA." SET $cn = '$qcv' WHERE id = $id";
             runSQL($UPDATE);
         }

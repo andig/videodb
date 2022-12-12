@@ -16,15 +16,74 @@ require_once './core/functions.php';
 require_once './core/genres.php';
 require_once './core/custom.php';
 require_once './core/edit.core.php';
-
 require_once './engines/engines.php';
-
 
 // check for localnet
 localnet_or_die();
 
+/**
+ * input id
+ */
+$id = req_int('id');
+
 // multiuser permission check
 permission_or_die(PERM_WRITE, ($id) ? get_owner_id($id) : PERM_ANY);
+
+/**
+ * input
+ */
+$save = req_int('save');
+$ajax_type = req_string('ajax_type');
+$ajax_prefetch_id = req_string('ajax_prefetch_id'); // elegant only
+$ajax_autocomplete_title = req_string('ajax_autocomplete_title'); // elegent and nexgen
+$ajax_autocomplete_subtitle = req_string('ajax_autocomplete_subtitle'); // not used
+$ajax_check_duplicate = req_string('ajax_check_duplicate'); // not used
+$import = req_string('import');
+$lookup = req_int('lookup');
+$engine = req_string('engine');
+$genres = req_array('genres');
+$copy = req_int('copy');
+$copyid = req_int('copyid');
+// $imdb_set_fields
+$md5 = req_string('md5');
+$title = req_string('title');
+$subtitle = req_string('subtitle');
+$language = req_string('language');
+$diskid = req_string('diskid');
+$mediatype = req_string('mediatype');
+$comment = req_string('comment');
+$disklabel = req_string('disklabel');
+$imdbID = req_string('imdbID');
+$year = req_string('year');
+$imgurl = req_string('imgurl');
+$director = req_string('director');
+$actors = req_string('actors');
+$runtime = req_string('runtime');
+$country = req_string('country');
+$plot = req_string('plot');
+$filename = req_string('filename');
+$filesize = req_string('filesize');
+$filedate = req_string('filedate');
+$audio_codec = req_string('audio_codec');
+$video_codec = req_string('video_codec');
+$video_width = req_string('video_width');
+$video_height = req_string('video_height');
+$istv = req_int('istv');
+$rating = req_string('rating');
+$custom1 = req_string('custom1');
+$custom2 = req_string('custom2');
+$custom3 = req_string('custom3');
+$custom4 = req_string('custom4');
+// from engineGetData (specific imdb)
+$mpaa = req_string('mpaa'); // if customXtype == mpaa => imdbdata[mpaa]
+$origtitle = req_string('origtitle'); // ?
+$tvseries_id = req_string('tvseries_id'); // ?
+// from edit.tpl
+$autoid = req_string('autoid');
+$oldmediatype = req_string('oldmediatype');
+$owner_id = req_int('owner_id');
+$seen = req_int('seen');
+$add_flag = req_int('add_flag');
 
 // clean input data
 $genres = (is_array($genres)) ? array_filter($genres) : array();
@@ -50,7 +109,7 @@ if ($ajax_prefetch_id || $ajax_autocomplete_title || $ajax_autocomplete_subtitle
         tpl_language();
         tpl_edit($data);
         $content = $smarty->fetch('edit.tpl');
-#       file_append('log.txt', $content);
+#       file_append(LOG_FILE, $content);
 
         echo $content;
 */
@@ -63,7 +122,7 @@ if ($ajax_prefetch_id || $ajax_autocomplete_title || $ajax_autocomplete_subtitle
     				engineSearch($ajax_autocomplete_subtitle, engineGetDefault(), true);
     
     if ($ajax_type == 'json') {
-#        file_append('log.txt', $res);
+#        file_append(LOG_FILE, $res);
 		header("Content-Type: application/json");
 		echo(json_encode($data));
 		exit;
@@ -109,9 +168,9 @@ if ($config['xml'] && ($import == 'xml'))
         $error      = '';
         $item_id    = 0;
 
-	    require_once './core/xmlimport.php';
+	    require_once './core/xmlimport.php'; // @todo 404
 
-        if (($xmlitems = xmlimport($xmldata, $error)) !== false)
+        if (function_exists('xmlimport') && ($xmlitems = xmlimport($xmldata, $error)) !== false)
         {
             // multiple items imported
             if ($xmlitems === true)
@@ -304,6 +363,7 @@ if ($save)
 // load existing data
 if ($id)
 {
+    $SELECT = '';
 	// select all fields according to list, plus id
 	foreach ($imdb_set_fields as $name)
     {
@@ -357,4 +417,3 @@ if ($config['xml'] && empty($id)) $smarty->assign('xmlimport', true);
 // display templates
 tpl_display('edit.tpl');	
 
-?>

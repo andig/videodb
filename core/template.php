@@ -352,7 +352,7 @@ function get_actor_thumbnails_batched(&$actors)
 {
     if (!count($actors)) return;
     
-    $ids    = "'".join("','", array_map('addslashes', array_column($actors, 'id')))."'";
+    $ids    = "'".join("','", array_map('escapeSQL', array_column($actors, 'id')))."'";
 
     $SQL    = 'SELECT actorid, name, imgurl, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(checked) AS cacheage
                  FROM '.TBL_ACTORS.' WHERE actorid IN ('.$ids.')';

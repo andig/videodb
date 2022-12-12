@@ -8,7 +8,7 @@
  * @package Core
  * @link    http://pear.php.net/package/Spreadsheet_Excel_Writer
  * @author  Chinamann <chinamann@users.sourceforge.net>
- * @author  Andreas Götz    <cpuidle@gmx.de>
+ * @author  Andreas GÃ¶tz    <cpuidle@gmx.de>
  * @version $Id: xls.php,v 1.8 2008/01/05 13:50:29 andig2 Exp $
  */
 
@@ -17,7 +17,7 @@ require_once './core/export.core.php';
 require_once './engines/engines.php';
 
 #error_reporting(E_ALL^E_NOTICE);
-require_once 'Spreadsheet/Excel/Writer.php';
+require_once 'vendor/autoload.php';
 
 /**
  * Export PDF document
@@ -70,9 +70,9 @@ function xlsexport($WHERE)
     $titleFormatLent         =& $workbook->addFormat(array('Bold' => 1, 'Pattern' => 1));
     $titleFormatLent         -> setFgColor(14);
 
-    $plotFormatNormal        =& $workbook->addFormat();
+    $plotFormatNormal        =& $workbook->addFormat(array('Align' => 'top'));
     $plotFormatNormal        -> setTextWrap();
-    $plotFormatLent          =& $workbook->addFormat(array('Pattern' => 1));
+    $plotFormatLent          =& $workbook->addFormat(array('Align' => 'top','Pattern' => 1));
     $plotFormatLent          -> setTextWrap();
     $plotFormatLent          -> setFgColor(14);
 
@@ -147,7 +147,8 @@ function xlsexport($WHERE)
                         if ($rowindex == 1) $worksheet->setColumn($columnindex, $columnindex, 50);
                         $imdb = $row['imdbID'];
                         $link = ($imdb) ? engineGetContentUrl($imdb, engineGetEngine($imdb)) : '';
-                        $worksheet->writeUrl($rowindex, $columnindex, $link, html_entity_decode($title), $format);
+                        if($link <> '') $worksheet->writeUrl($rowindex, $columnindex, $link, html_entity_decode($title), $format);
+                        else            $worksheet->writeString($rowindex, $columnindex, leftString(html_entity_decode($row['title']),$text_length), $format);
                     }
                     $columnindex++;
                 }
