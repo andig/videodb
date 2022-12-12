@@ -79,7 +79,7 @@ function engineGetData($id, $engine = 'imdb')
 {
 	global $lang, $cache;
 
-	require_once($engine.'.php');
+    if (!engine_load_engine($engine)) return array();
 	$func = $engine.'Data';
 
     $result = array();
@@ -119,7 +119,7 @@ function engineSearch($find, $engine = 'imdb', $para1 = null, $para2 = null)
 {
     global $lang, $cache;
 
-    require_once($engine.'.php');
+    if (!engine_load_engine($engine)) return array();
     $func = $engine.'Search';
 
     $result = array();
@@ -164,8 +164,8 @@ function engineSearch($find, $engine = 'imdb', $para1 = null, $para2 = null)
 function engineGetContentUrl($id, $engine = 'imdb')
 {
     if (empty($id)) return '';
-    
-    require_once($engine.'.php');
+    if (!engine_load_engine($engine)) return '';
+
     $func = $engine.'ContentUrl';
     
     $result = '';
@@ -191,7 +191,7 @@ function engineGetRecommendations($id, $rating, $year, $engine = 'imdb')
 {
     if (empty($id)) return '';
 
-    require_once($engine.'.php');
+    if (!engine_load_engine($engine)) return '';
     $func = $engine.'Recommendations';
 
     if (function_exists($func))
@@ -212,7 +212,7 @@ function engineGetRecommendations($id, $rating, $year, $engine = 'imdb')
  */
 function engineGetSearchUrl($find, $engine = 'imdb')
 {
-    require_once($engine.'.php');
+    if (!engine_load_engine($engine)) return '';
     $func = $engine.'SearchUrl';
     
     $result = '';
@@ -249,7 +249,7 @@ function engineMeta()
 {
     $engines = array();
     
-    if ($dh = @opendir('./engines'))
+    if ($dh = @opendir(__DIR__))
     {
         while (($file = readdir($dh)) !== false)
         {
@@ -259,7 +259,8 @@ function engineMeta()
                 $engine = $matches[1];
 
                 // get meta data
-                require_once('./engines/'.$engine.'.php');
+                engine_load_engine($engine);
+
                 $func = $engine.'Meta';
 
                 if (function_exists($func))
@@ -313,7 +314,7 @@ function engineGetActorEngine($id)
  */
 function engineGetActorUrl($name, $id, $engine = 'imdb')
 {
-    require_once($engine.'.php');
+    if (!engine_load_engine($engine)) return '';
     $func = $engine.'ActorUrl';
     
     $result = '';
@@ -339,7 +340,7 @@ function engineActor($name, $id, $engine = 'imdb')
 {
     global $cache;
 
-    require_once($engine.'.php');
+    if (!engine_load_engine($engine)) return array();
     $func = $engine.'Actor';
 
     $result = array();
@@ -439,4 +440,18 @@ function engine_deduplicate_result($data)
     return $data;
 }
 
-?>
+/**
+ * Load the selected engine without errors
+ * 
+ * @param string $engine
+ * @return bool
+ */
+function engine_load_engine($engine) {
+    if (file_exists(__DIR__ . '/' . $engine.'.php')) {
+        include_once __DIR__ . '/' . $engine.'.php';
+        return true;
+    }
+    return false;
+}
+
+
