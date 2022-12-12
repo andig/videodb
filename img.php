@@ -16,7 +16,7 @@ require_once './core/httpclient.php';
  * input
  */
 $name = req_string('name');
-$actorid = req_int('actorid');
+$actorid = req_string('actorid');
 $url = req_url('url');
 
 /* 
