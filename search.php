@@ -68,8 +68,7 @@ function ajax_render()
 if ($config['multiuser'])
 {
     // get owner from session- or use current user
-    session_default('owner', get_username(get_current_user_id()));
-
+    session_default_owner();
     $all = $lang['filter_any'];
 }
 
