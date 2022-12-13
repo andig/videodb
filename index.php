@@ -172,16 +172,17 @@ if (!$showtv) $WHERES .= ' AND istv = 0';
 // any user has automatically read permissions for his personal data
 if ($config['multiuser']) 
 {
+    // check if current user has any entries
+    $hasAny = runSQL('SELECT COUNT(*) AS num FROM '.TBL_DATA.' WHERE '.TBL_DATA.'.owner_id = ' . get_current_user_id());
+    $hasAny = ($hasAny && isset($hasAny[0]['num']) && $hasAny[0]['num'] > 0);
     // get owner from session- or use current user
-    session_default('owner', get_username(get_current_user_id()));
-    
+    session_default('owner', ($hasAny ? get_username(get_current_user_id()) : $lang['filter_any']));
     // if we don't have read all permissions, limit visibility using cross-user permissions
     if (!check_permission(PERM_READ))
     {
         $JOINS   = ' LEFT JOIN '.TBL_PERMISSIONS.' ON '.TBL_DATA.'.owner_id = '.TBL_PERMISSIONS.'.to_uid';
         $WHERES .= ' AND '.TBL_PERMISSIONS.'.from_uid = '.get_current_user_id().' AND '.TBL_PERMISSIONS.'.permissions & '.PERM_READ.' != 0';
     }
-        
     // further limit to single owner
     if ($owner != $lang['filter_any']) $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";
 }
