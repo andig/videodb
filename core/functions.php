@@ -18,15 +18,6 @@
 ini_set('include_path', '.' . PATH_SEPARATOR . ini_get('include_path'));
 
 /**
- * catch22 with these three constants, these are used for thumbnail generation
- * should be in constants.php but that file needs $config to be available for
- * the TBL_* constants. So for now put them here so they can be used in config.
- */
-define('TUMB_NO_SCALE',   -1); // no scaling   - use of thumbnails is disabled
-define('TUMB_REDUCE_ONLY', 0); // reduce only  - create thumbnails when requested image dimensions are smaller than original image
-define('TUMB_SCALE',       1); // always scale - create thumbnails for all images (applies aliasing when scaling)
-
-/**
  * Load the config.sample so we have all available configuration options loaded (with sane/safe defaults)
  */
 $config = [];

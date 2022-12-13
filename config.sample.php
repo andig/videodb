@@ -56,13 +56,13 @@ $config['rss']              = 1;        // Set to 1 to enable RSS Feed
  * image quality by applying smooth scaling, use the following settings to control the behavior.
  *
  * Define when thumbnails are created and which jpeg quality to use:
- * TUMB_NO_SCALE    : no scaling   - use of thumbnails is disabled
- * TUMB_REDUCE_ONLY : reduce only  - create thumbnails when requested image dimensions are smaller than original image
- * TUMB_SCALE       : always scale - create thumbnails for all images (applies aliasing when scaling)
+ * -1 : no scaling   - use of thumbnails is disabled
+ *  0 : reduce only  - create thumbnails when requested image dimensions are smaller than original image
+ *  1 : always scale - create thumbnails for all images (applies aliasing when scaling)
  * 
  * or define a positive integer to check filesize - thumbnail is created when existing file is bigger than specified value
  */
-$config['thumbnail_level']      = TUMB_SCALE;
+$config['thumbnail_level']      = 1;
 $config['thumbnail_quality']    = 80;
 
 // PDF Export
