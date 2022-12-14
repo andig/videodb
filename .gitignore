@@ -3,3 +3,4 @@ config.inc.php
 cache
 # ignore logfiles
 *.log
+**/Thumbs.db
