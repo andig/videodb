@@ -74,8 +74,10 @@ ul.itemlist {
     ul.itemlist a div {
         color: rgb(43, 43, 43) !important;
         font-weight: bold;
+        font-size: 80%;
         text-align: center;
         height: 1.6em;
+        line-height: 2;
         overflow: hidden;
         opacity: 0.7; }
 

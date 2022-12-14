@@ -168,6 +168,7 @@ if(!$ORDER)
 
 if (!$showtv) $WHERES .= ' AND istv = 0';
 
+
 // owner selection for multiuser mode- by default this is the logged in user
 // any user has automatically read permissions for his personal data
 if ($config['multiuser']) 
@@ -183,7 +184,9 @@ if ($config['multiuser'])
     }
         
     // further limit to single owner
-    if ($owner != $lang['filter_any']) $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";
+    if (html_entity_decode($owner) != $lang['filter_any']) {
+        $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";
+    }
 }
 
 // searching?

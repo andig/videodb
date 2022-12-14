@@ -284,7 +284,7 @@ function load_config($force_reload = false)
         {
             if ($file) $file .= '_';
             $file .= $language;
-            @include './language/'.$file.'.php';
+            include './language/'.$file.'.php';
 
             // convert languages to utf-8 encoding
             if ($lang['encoding'] != 'utf-8')
