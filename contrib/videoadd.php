@@ -373,14 +373,14 @@ foreach ($moviesFS as $movie) {
     $title = str_replace('_', ' ', $title);
 
     $filePath = $moviesFS[end($filePathParts)];
-    $fileSize = getFileSize($filePath);
+    $fileSize = (int) getFileSize($filePath);
     $fileDate = getFileTimeLinux($filePath);
 
     $metadata = getMetadata($filePath);
     $audioCodec = $metadata['audioCodec'];
     $videoCodec = $metadata['videoCodec'];
-    $videoWidth = $metadata['videoWidth'];
-    $videoHeight = $metadata['videoHeight'];
+    $videoWidth = (int) $metadata['videoWidth'];
+    $videoHeight = (int) $metadata['videoHeight'];
 
     echo "<tr>
               <td>$filePath</td>
@@ -413,7 +413,7 @@ $rows = runSQL($SELECT);
 
 echo '<br><br><h3><New movies added (click to edit):</h3>';
 foreach ($rows as $row) {
-    echo "<a href='../edit.php?id={$row['id']}'>{$row[title]}</a><br>";
+    echo "<a href='../edit.php?id={$row['id']}'>{$row['title']}</a><br>";
 }
 
 ?>
