@@ -60,6 +60,12 @@ if ($name)
 
     // name given
 	$name   = html_entity_decode($name);
+        // save data to pass to functions.php - erropage 
+        // if engineActor fails in httpclient it goes directly to errorpage which loses
+        // message set in httpCLient
+        // this is a cause of broken actor images appearing
+        $save_data_if_error_getting_name =  'Name: '.$name.' - Actorid: '.$actorid;
+        
 	$result = engineActor($name, $actorid, engineGetActorEngine($actorid));
 
 	if (!empty($result)) {

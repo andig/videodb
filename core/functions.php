@@ -307,8 +307,34 @@ function load_config($force_reload = false)
  */
 function errorpage($title = 'An error occured', $body = '', $stacktrace = false)
 {
-    global $lang;
+    global $lang,  $save_data_if_error_getting_name;
+    
+    // this captures the message from img.php if httpclient signals error exception,
+    // as img.php is called from browser which has already displayed data this message 
+    // is lost. writing to a log file
+    // this is a cause of broken actor images appearing
+    if ($body & $save_data_if_error_getting_name)
+    {
+        $file_path = './actorimage_error.log';
+        // only keep log of 2 days
+        if (file_exists( $file_path ) )
+        {
+            $mytime = time();
+            $ftime = filemtime($file_path);
+            $diftime= $mytime - $ftime;
+            if (time()-filemtime($file_path) > 3600 * 24 * 2)
+            {
+                unlink($file_path);
+            }            
+        }
+        $line = strtok($body, "\n");
+        $current_time = date("Y-m-d")." T".date("H-i-s");
 
+        file_put_contents($file_path, $current_time." - ".$save_data_if_error_getting_name." - ".$line."\n", FILE_APPEND);
+    //    file_put_contents($file_path, $line."\n", FILE_APPEND);
+        unset($save_data_if_error_getting_name);
+    }
+    
     $encoding   = ($lang['encoding']) ? $lang['encoding'] : 'iso-8859-1';
 
     // stacktrace desired and available?
