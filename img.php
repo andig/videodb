@@ -16,7 +16,7 @@ require_once './core/httpclient.php';
  * input
  */
 $name = req_string('name');
-$actorid = req_string('actorid');
+$actorid = req_int('actorid');
 $url = req_url('url');
 
 /* 
@@ -35,6 +35,8 @@ session_write_close();
  */
 function checkAmazonSmallImage($url, $ext, $file)
 {
+   global $config;    
+    
 	if (preg_match('/^(.+)L(Z{7,}.+)$/', $url, $m)) 
     {
 		if (list($width, $height, $type, $attr) = getimagesize($file)) {
@@ -60,15 +62,22 @@ if ($name)
 
     // name given
 	$name   = html_entity_decode($name);
-        // save data to pass to functions.php - erropage 
-        // if engineActor fails in httpclient it goes directly to errorpage which loses
-        // message set in httpCLient
-        // this is a cause of broken actor images appearing
-        $save_data_if_error_getting_image =  'Name: '.$name.' - Actorid: '.$actorid;
+ 
+        if ( $config['debug'] )
+        {
+            // save data to pass to functions.php - erropage 
+            // if engineActor fails in httpclient it goes directly to errorpage which loses
+            // message set in httpCLient
+            // this is a cause of broken actor images appearing
+            $save_data_if_error_getting_image =  'Name: '.$name.' - Actorid: '.$actorid;
+        }
         
 	$result = engineActor($name, $actorid, engineGetActorEngine($actorid));
 
-	unset($save_data_if_error_getting_image);
+        if ( $config['debug}'] )
+        {
+            unset($save_data_if_error_getting_image);
+        }
 	
 	if (!empty($result)) {
 		$url = $result[0][1];

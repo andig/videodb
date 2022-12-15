@@ -307,32 +307,23 @@ function load_config($force_reload = false)
  */
 function errorpage($title = 'An error occured', $body = '', $stacktrace = false)
 {
-    global $lang,  $save_data_if_error_getting_image;
+    global $lang,  $save_data_if_error_getting_image, $config;
     
-    // this captures the message from img.php if httpclient signals error exception,
-    // as img.php is called from browser which has already displayed data this message 
-    // is lost. writing to a log file
-    // this is a cause of broken actor images appearing
-    if ($body & $save_data_if_error_getting_image)
-    {
-        $file_path = './actorimage_error.log';
-        // only keep log of 2 days
-        if (file_exists( $file_path ) )
+    if ( $config['debug'] )
+    {    
+        // this captures the message from img.php if guzzle signals error exception,
+        // as img.php is called from browser which has already displayed data this message 
+        // is lost. writing to debug log file
+        // this is a cause of broken actor images appearing
+        if ($save_data_if_error_getting_image)
         {
-            $mytime = time();
-            $ftime = filemtime($file_path);
-            $diftime= $mytime - $ftime;
-            if (time()-filemtime($file_path) > 3600 * 24 * 2)
-            {
-                unlink($file_path);
-            }            
+            $line = strtok($body, "\n");
+            $current_time = date("Y-m-d")." T".date("H-i-s");
+            $var = $current_time." - ".$save_data_if_error_getting_image." - ".$line;
+            dlog($var);
+        //    file_put_contents($file_path, $current_time." - ".$save_data_if_error_getting_image." - ".$line."\n", FILE_APPEND);
+            unset($save_data_if_error_getting_image);
         }
-        $line = strtok($body, "\n");
-        $current_time = date("Y-m-d")." T".date("H-i-s");
-
-        file_put_contents($file_path, $current_time." - ".$save_data_if_error_getting_image." - ".$line."\n", FILE_APPEND);
-    //    file_put_contents($file_path, $line."\n", FILE_APPEND);
-        unset($save_data_if_error_getting_image);
     }
     
     $encoding   = ($lang['encoding']) ? $lang['encoding'] : 'iso-8859-1';
