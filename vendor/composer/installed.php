@@ -7,7 +7,7 @@
         'aliases' => array(),
         'reference' => NULL,
         'name' => 'andig/videodb',
-        'dev' => false,
+        'dev' => true,
     ),
     'versions' => array(
         'andig/videodb' => array(
@@ -44,6 +44,15 @@
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
             'aliases' => array(),
             'reference' => 'e98e3e6d4f86621a9b75f623996e6bbdeb4b9318',
+            'dev_requirement' => false,
+        ),
+        'james-heinrich/phpthumb' => array(
+            'pretty_version' => 'v1.7.19',
+            'version' => '1.7.19.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../james-heinrich/phpthumb',
+            'aliases' => array(),
+            'reference' => 'f580578bd119b50719772705f14158b9b72aaf2c',
             'dev_requirement' => false,
         ),
         'paragonie/random_compat' => array(

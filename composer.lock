@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "982106a1c2a593492638c32f9e967bad",
+    "content-hash": "6fa0a66bc53ce70c0b87e10cc5d5b630",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -314,6 +314,63 @@
                 }
             ],
             "time": "2022-06-20T21:43:03+00:00"
+        },
+        {
+            "name": "james-heinrich/phpthumb",
+            "version": "v1.7.19",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JamesHeinrich/phpThumb.git",
+                "reference": "f580578bd119b50719772705f14158b9b72aaf2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JamesHeinrich/phpThumb/zipball/f580578bd119b50719772705f14158b9b72aaf2c",
+                "reference": "f580578bd119b50719772705f14158b9b72aaf2c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "ext-gd": "PHP GD library",
+                "ext-imagick": "PHP ImageMagick"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "phpthumb.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-1.0-or-later",
+                "LGPL-3.0-only",
+                "MPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "James Heinrich",
+                    "email": "info@silisoftware.com",
+                    "homepage": "http://www.silisoftware.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The PHP thumbnail generator",
+            "homepage": "http://phpthumb.sourceforge.net/",
+            "keywords": [
+                "ImageMagick",
+                "gd",
+                "image",
+                "magic",
+                "thumb",
+                "thumbnail"
+            ],
+            "support": {
+                "issues": "https://github.com/JamesHeinrich/phpThumb/issues",
+                "source": "https://github.com/JamesHeinrich/phpThumb/tree/v1.7.19"
+            },
+            "time": "2022-11-24T15:39:54+00:00"
         },
         {
             "name": "paragonie/random_compat",

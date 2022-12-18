@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////
-///  phpThumb() by James Heinrich <info@silisoftware.com>   //
-//        available at http://phpthumb.sourceforge.net     ///
-//////////////////////////////////////////////////////////////
-///                                                         //
-//    Frequently Asked Questions (FAQ) about phpThumb()     //
-//                                                         ///
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//   phpThumb() by James Heinrich <info@silisoftware.com>       //
+//        available at http://phpthumb.sourceforge.net          //
+//             and/or https://github.com/JamesHeinrich/phpThumb //
+//////////////////////////////////////////////////////////////////
+///                                                             //
+//    Frequently Asked Questions (FAQ) about phpThumb()         //
+//                                                             ///
+//////////////////////////////////////////////////////////////////
 
 
-Q: My question isn't answered here and I can't find any
-   forums, how do I get support?
-A: Please email me directly at info@silisoftware.com with
-   any questions, suggestions, donations, etc.
+Q: My question isn't answered here, how do I get support?
+A: Please visit http://support.silisoftware.com for any
+   questions, suggestions, bugs, etc.
 
 
 Q: I think I found a bug, what's the first thing I should do?
-A: Please make sure you're using the latest version. There's
-   a good chance I may have already fixed the bug, so please
-   make sure you can reproduce it with the latest version
+A: Please make sure you're using the latest version:
+   https://github.com/JamesHeinrich/phpThumb
+   There's a good chance I may have already fixed the bug, so
+   please make sure you can reproduce it with the latest version
    before reporting the bug.
 
 
@@ -63,6 +64,22 @@ A: Your PHP installation does not have a high enough memory_limit
    nothing).
 
 
+Q: Is there are way to determine the new height and width of the
+   generated thumbnail (so I can put it in the <img> width/height)?
+A: The problem is that phpThumb.php returns an image -- there is no
+   way to pass on any additional info such as width/height.
+   However, you can do something like this:
+     require_once('phpthumb.functions.php');
+     $pic = 'picture.jpg';
+     list($source_w, $source_h) = GetImageSize($pic);
+     $max_w = 375;
+     $max_h = 400;
+     list($newW, $newH) = phpthumb_functions::ProportionalResize(
+       $source_w, $source_h, $max_w, $max_h);
+     $url = 'phpThumb.php?src='.$pic.'&w='.$max_w.'&h='.$max_h;
+     echo "<img src=\"$url\" width=\"$newW\" height=\"$newH\">';
+
+
 Q: I'm getting is this error message:
    Failed: RenderToFile(<filename>) failed because
    !is_resource($this->gdimg_output)
@@ -94,7 +111,9 @@ A: Check that these two values are present and properly
    configured in phpThumb.config.php (introduced in v1.6.0):
     $PHPTHUMB_CONFIG['allow_src_above_docroot']  (default=false)
     $PHPTHUMB_CONFIG['allow_src_above_phpthumb'] (default=true)
-   If your images are outside DOCUMENT_ROOT then you will have
+   If your images are outside DOCUMENT_ROOT (this includes if
+    you have an image upload form, most likely the images will
+    get uploaded to "/tmp/<file>" or similar) then you will have
     to configure 'allow_src_above_docroot' to true.
    Make sure whatever user the webserver is running as has read
     permission to the file/directory you're reading from
@@ -121,13 +140,10 @@ Q: The first time I go to a page which contains thumbnails I
 A: You can try and see if it works better with
      $PHPTHUMB_CONFIG['cache_force_passthru'] = false;
    but typically the default setting works better.
-   This is something of an unresolved issue on some servers,
-   where for whatever reason I haven't (yet?) been able to
-   figure out a setting that always works the first time. If the
-   above config setting doesn't help, you might be stuck with
-   having to manually or automagically pre-cache thumbnails as
-   they're created.  Please email info@silisoftware.com if you
-   have a better solution...
+   Note: There were some maybe-undefined variables prior to
+   v1.7.9 that contributed to this behavior. If you notice
+   this happening in v1.7.9 or newer please email me at
+   info@silisoftware.com
 
 
 Q: Are there any front-end GUI interfaces to phpThumb()?
@@ -254,6 +270,14 @@ A: phpThumb fits the rotated image into the 'w' and 'h' dimensions.
    (in actual fact the canvas size is enlarged to fit the rotated image in it).
 
 
+Q: phpThumb.demo.check.php says Safe Mode is off for Master but on for Local,
+   and I checked php.ini and it's already set off. How do I disable safe mode?
+A: Your PHP was probably installed as an Apache module. If so, you have to set
+     php_admin_value safe_mode "Off"
+   in your domain settings (usually between <VirtualHost> tags in httpd.conf).
+   Then you have to restart Apache.
+
+
 Q: How can I purge cached files when I delete the source image?
 A: You can either let phpThumb's built-in cache purging features (see phpThumb.config.php)
    take effect, or you can manually walk through your source images to delete and find
@@ -267,6 +291,23 @@ A: You can either let phpThumb's built-in cache purging features (see phpThumb.c
        }
        closedir($dh);
      }
+
+
+Q: Is it safe to delete cache files?
+A: Yes, it is safe to delete any cache files and/or directories. phpThumb will
+   automatically re-create them as needed.  Also, take a look at the "cache_max*"
+   settings in phpThumb.config.php for automatic cache purging.
+
+
+Q: How can I find the filename that phpThumb.php will use to
+   cache a particular image?
+A: It's not easily possible to get the cache filename. You can
+   see the method used to calculate it in SetCacheFilename()
+   in phpthumb.class.php (around line 2991-3090). If you need
+   to know where an image will be rendered to, it may be
+   easier and better to call phpThumb as an object and handle
+   your own caching. See /demo/phpThumb.demo.object.simple.php
+   for an example.
 
 
 Q: Can I make thumbnails from a PDF?
@@ -285,6 +326,32 @@ A: Possibly, but it's not easy. Theoretically, if you have
    be possible, but I have not tested that.  Other projects that
    attempt to generate thumbnails from webpages include:
    http://www.boutell.com/webthumb/
+
+
+Q: When I resize an animated GIF the new "smaller" version is
+   actually a larger file size -- why?
+A: Animated GIFs use a variety of temporal and spatial compression
+   techniques. The source GIF is probably very well optimized, but
+   when each frame is resized some of the desirable compression
+   properties could be negatively affected (the number of colours
+   can increase; dithered areas compress very poorly compared to
+   solid areas of colour). ImageMagick may also not produce the
+   most filesize-optimized animated GIF possible.
+
+
+Q: Can I use source images from (same or another) server that uses
+   a script with parameters to display images? For example:
+   http://sourceforge.net/sflogo.php?group_id=106407&type=5
+   (displays a PNG image, 210x62)
+A: Yes, you should be able to use phpThumb like that no problem.
+   If the source image is on a different server you need to set
+   $PHPTHUMB_CONFIG['nohotlink_valid_domains'] to contain the source
+   domain(s) [eg: sourceforge.net] if it's a small list of possible
+   source domains, or make sure $PHPTHUMB_CONFIG['nohotlink_enabled']
+   is set to false to allow creating source images from any domain/IP.
+   You will also need to properly encode the image source (using PHP
+   function rawurlencode):
+   /phpThumb.php?src=http%3A%2F%2Fsourceforge.net%2Fsflogo.php%3Fgroup_id%3D106407%26type%3D5&w=100
 
 
 Q: phpThumb is the best software in the world, how can I donate?
