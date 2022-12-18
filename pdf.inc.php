@@ -17,10 +17,6 @@
 //      set to 1 to enable PDF data im/export
 $config['pdf'] = 1;                     
 
-// path to FPDF
-//	    enter the path to fpdf.php (include trailing slash)
-$config['pdf_module']       = './lib/fpdf/';
-
 // font settings
 //      if you want to use fonts not included in the FPDF distribution,
 //      you'll need to do a one-time import into FPDF like this:
