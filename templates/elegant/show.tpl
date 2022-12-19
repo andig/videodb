@@ -289,35 +289,45 @@ Event.observe(document, 'dom:loaded', function() {
 {/if}
 {if $video.actors}
 <div id="showcast">
-    <h3>{$lang.cast}:</h3>
-    <table width="100%">
-    {counter start=0 print=false name=castcount}
-    {foreach $video.cast as $actor}
-        {if $count == 0}
-        <tr>
-        {/if}
-            <td width="{floor(100/$config.castcolumns)}%">
-                {if $actor.imgurl}
-                    {assign var="link" value=$actor.imdburl}
-                    <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{html_image file=$actor.imgurl max_width=45 max_height=60 class="thumb canzoom" targetimg=$actor.imgurl}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
-                {/if}
-                <a href="search.php?q=%22{$actor.name|escape:url}%22&amp;isname=Y">{$actor.name}</a>
-                {foreach $actor.roles as $role}
-                    <br/>{$role}
-                {/foreach}
-            </td>
-        {counter assign=count name=castcount}
-        {if $count == $config.castcolumns}
-        </tr>{counter start=0 print=false name=castcount}
-        {/if}
-    {/foreach}
-    {if $count != 0}
-        {section name="columnLoop" start=$count loop=$config.castcolumns}
-            <td>&nbsp;</td>
-        {/section}
-        </tr>
+    <h3>{$lang.cast}:
+    {if $cast_toggle}
+            {if $show_cast}
+                <a href="show.php?id={$video.id}" class="button submit">{$lang.hidecast}</a>
+            {else}
+                 <a href="show.php?id={$video.id}&amp;show_cast=1" class="button submit">{$lang.showcast}</a>
+            {/if}
     {/if}
-    </table>
+    </h3>
+    {if $show_cast}
+        <table width="100%">
+        {counter start=0 print=false name=castcount}
+        {foreach $video.cast as $actor}
+            {if $count == 0}
+            <tr>
+            {/if}
+                <td width="{floor(100/$config.castcolumns)}%">
+                    {if $actor.imgurl}
+                        {assign var="link" value=$actor.imdburl}
+                        <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{html_image file=$actor.imgurl max_width=45 max_height=60 class="thumb canzoom" targetimg=$actor.imgurl}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
+                    {/if}
+                    <a href="search.php?q=%22{$actor.name|escape:url}%22&amp;isname=Y">{$actor.name}</a>
+                    {foreach $actor.roles as $role}
+                        <br/>{$role}
+                    {/foreach}
+                </td>
+            {counter assign=count name=castcount}
+            {if $count == $config.castcolumns}
+            </tr>{counter start=0 print=false name=castcount}
+            {/if}
+        {/foreach}
+        {if $count != 0}
+            {section name="columnLoop" start=$count loop=$config.castcolumns}
+                <td>&nbsp;</td>
+            {/section}
+            </tr>
+        {/if}
+        </table>
+    {/if}
 </div>
 <!-- /showcast -->
 {/if}
