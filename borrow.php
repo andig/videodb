@@ -56,8 +56,7 @@ $WHERES = '';
 if ($config['multiuser']) 
 {
     // get owner from session- or use current user
-    session_default('owner', get_username(get_current_user_id()));
-
+    session_default_owner();
     // build html select box
     $all = $lang['filter_any'];
     $smarty->assign('owners', out_owners(array($all => $all), PERM_READ));

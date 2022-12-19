@@ -65,4 +65,12 @@ define('DB_COLLATION', '');
 // Required database version
 define('DB_REQUIRED', 41);
 
-?>
+/**
+ * These used to be defined inside config.sample and therefore config.inc
+ * Removed the need for them inside config.* but since their definition can still
+ * be inside config.inc prefixed here with a check
+ */
+if (!defined('TUMB_NO_SCALE')) define('TUMB_NO_SCALE', -1); // no scaling - use of thumbnails is disabled
+if (!defined('TUMB_REDUCE_ONLY')) define('TUMB_REDUCE_ONLY', 0); // reduce only - create thumbnails when requested image dimensions are smaller than original image
+if (!defined('TUMB_SCALE')) define('TUMB_SCALE', 1); // always scale - create thumbnails for all images (applies aliasing when scaling)
+

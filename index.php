@@ -12,7 +12,6 @@
  * @version $Id: index.php,v 2.102 2013/03/21 16:27:57 andig2 Exp $
  */
 
-require_once './core/session.php';
 require_once './core/functions.php';
 require_once './core/output.php';
 
@@ -174,15 +173,13 @@ if (!$showtv) $WHERES .= ' AND istv = 0';
 if ($config['multiuser']) 
 {
     // get owner from session- or use current user
-    session_default('owner', get_username(get_current_user_id()));
-    
+    session_default_owner();
     // if we don't have read all permissions, limit visibility using cross-user permissions
     if (!check_permission(PERM_READ))
     {
         $JOINS   = ' LEFT JOIN '.TBL_PERMISSIONS.' ON '.TBL_DATA.'.owner_id = '.TBL_PERMISSIONS.'.to_uid';
         $WHERES .= ' AND '.TBL_PERMISSIONS.'.from_uid = '.get_current_user_id().' AND '.TBL_PERMISSIONS.'.permissions & '.PERM_READ.' != 0';
     }
-        
     // further limit to single owner
     if (html_entity_decode($owner) != $lang['filter_any']) {
         $WHERES .= " AND ".TBL_USERS.".name = '".escapeSQL($owner)."'";

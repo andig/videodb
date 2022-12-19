@@ -12,7 +12,7 @@ require_once './core/functions.php';
 require_once './core/custom.php';
 require_once './core/output.php';
 
-$SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault', 
+$SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault', 'acclangbrowser', 
                       'filterdefault', 'showtv', 'orderallbydisk', 'removearticles',
                       'localnet', 'IMDBage', 'thumbnail', 
                       'castcolumns', 'template', 'languageflags', 'custom1', 
@@ -24,7 +24,7 @@ $SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault',
 
 $SETUP_QUICK  = array('template');
 
-$SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'filterdefault', 
+$SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'acclangbrowser', 'filterdefault', 
                       'showtv', 'orderallbydisk', 'template', 'languageflags', 
                       'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles',
                       'showcasttoggle', 'browse_include_title');
@@ -58,6 +58,7 @@ function setup_mkOptions($isprofile = false)
     
     $setup[] = setup_addOption($isprofile, 'mediadefault', 'dropdown', setup_getMediatypes());
     $setup[] = setup_addOption($isprofile, 'langdefault', 'text');
+    $setup[] = setup_addOption($isprofile, 'acclangbrowser', 'boolean');
     $setup[] = setup_addOption($isprofile, 'filterdefault', 'dropdown', array('all'=>$lang['radio_all'], 'unseen'=>$lang['radio_unseen'], 'new'=>$lang['radio_new'], 'wanted'=>$lang['radio_wanted']));
     $setup[] = setup_addOption($isprofile, 'showtv', 'boolean');
     $setup[] = setup_addOption($isprofile, 'shownew', 'text');

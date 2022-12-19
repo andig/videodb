@@ -4,3 +4,4 @@ cache
 # ignore logfiles
 *.log
 **/Thumbs.db
+.idea

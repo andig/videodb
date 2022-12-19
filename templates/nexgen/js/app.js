@@ -111,4 +111,15 @@ $(document).ready(function() {
 			return(false);
 		});
 	});
+
+	$('li a.seen').each(function() {
+		$(this).click(function(e) {
+			e.preventDefault();
+			var a = $(this);
+			var u = a.attr('href').replace('id=', 'ajax_update=');
+			$.get(u, function() {
+				a.addClass('disabled');
+			});
+		});
+    });
 });

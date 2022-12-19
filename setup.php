@@ -9,8 +9,7 @@
  * @author  Andreas Götz    <cpuidle@gmx.de>
  * @version $Id: setup.php,v 2.50 2013/03/10 16:22:22 andig2 Exp $
  */
- 
-require_once './core/session.php';
+
 require_once './core/functions.php';
 require_once './core/setup.core.php';
 
