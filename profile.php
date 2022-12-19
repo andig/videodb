@@ -8,8 +8,7 @@
  * @author  Andreas Gohr    <a.gohr@web.de>
  * @version $Id: profile.php,v 2.19 2008/04/20 17:31:20 andig2 Exp $
  */
- 
-require_once './core/session.php';
+
 require_once './core/functions.php';
 require_once './core/setup.core.php';
 

@@ -30,13 +30,14 @@ if (!function_exists('errorpage')) {
 function dump($var, $ret = false, $plain = false)
 {
     global $argv;
+    if (isset($argv) && is_array($argv) && count($argv) > 0) $plain = true;
 
     if (is_array($var) || is_object($var))
         $var = print_r($var, 1);
     else if (is_bool($var))
     	$var = ($var) ? 'TRUE' : 'FALSE';
 
-    $var .= (count($argv) > 0 || $plain) ? "\n" : "<br/>\n";
+    $var .= ($plain) ? "\n" : "<br/>\n";
 
     if ($ret) return $var;
     echo $var;
