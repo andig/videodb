@@ -37,7 +37,7 @@ function dump($var, $ret = false, $plain = false)
     else if (is_bool($var))
     	$var = ($var) ? 'TRUE' : 'FALSE';
 
-    $var .= ($plain) ? "\n" : "<br/>\n";
+    $var .= (is_array($argv)&&count($argv) > 0 || $plain) ? "\n" : "<br/>\n";
 
     if ($ret) return $var;
     echo $var;

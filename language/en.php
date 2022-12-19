@@ -335,13 +335,18 @@ $lang['help_showtoolsn']     = "Show tools";
 $lang['help_showtools']      = "The tools menu will show the contents of the <code>contrib</code> directory. Contents of the contrib directory are useful contributions to videoDB, but not fully tested and might be hazardous to security.";
 $lang['help_showcasttogglen'] = "Show Cast Button";
 $lang['help_showcasttoggle'] = "Checking this will display a &lsquo;Show Cast&rsquo; or &lsquo;Hide Cast&rsquo; button on the details page. Speeds up that page if you aren't always interested in the cast of a movie.";
+$lang['help_browse_include_titlen'] = "Browse page includes title";
+$lang['help_browse_include_title'] = "This will determine if/where the title of the movie is being displayed on the Browse page. Selecting <em>None</em> will not show the title, selecting <em>Top</em> will display the title above the cover-image, selecting <em>Bottom</em> will display the title below the cover-image, and selecting <em>Both</em> will display the title above and below the cover-image.";
 
 $lang['page']                = "Page";
 $lang['of']                  = "of";
 $lang['records']             = "records";
+$lang['none']                = "None";
+$lang['top']                 = "Top";
+$lang['bottom']              = "Bottom";
+$lang['both']                = "Both";
 
 $lang['warn_noOwner']        = "Data not saved - you have to select an owner first!";
 
 $lang['order']				 = "Sort by";
 
-?>
