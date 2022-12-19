@@ -29,6 +29,7 @@ function boxeePlay(id) {
 			<ul class="button-group">
 				<li><a class="button small {if !$video.copyable}disabled{/if}" href="edit.php?copyid={$video.id}&amp;save=1">{$lang.copy}</a></li>
 				<li><a class="button small {if !$video.editable}disabled{/if}" href="borrow.php?id={$video.id}&amp;diskid={$video.diskid}">{$lang.borrow}</a></li>
+				{if !$video.seen}<li><a class="button small seen" href="show.php?id={$video.id}&amp;seen=1">{$lang.seen|lower}</a></li>{/if}
 			</ul><!-- button-group -->
 			<ul class="button-group">
 				<li><a class="button small {if !$video.copyable}disabled{/if}" href="edit.php?id={$video.id}">{$lang.edit}</a></li>
