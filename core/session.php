@@ -13,8 +13,6 @@
 // start session
 session_start();
 
-#require_once './core/functions.php';  // needed for remove_magic_quotes
-
 /**
  * Get session value or specified default
  */
@@ -64,3 +62,4 @@ function session_default_owner()
     }
     return session_default('owner');
 }
+

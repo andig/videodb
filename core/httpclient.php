@@ -151,7 +151,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     }
 
     if (empty($requestConfig['headers']['Accept'])) $requestConfig['headers']['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
-    if (empty($requestConfig['headers']['Accept-Language'])) $requestConfig['headers']['Accept-Language'] = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE'); // @todo make this configurable
+    if (empty($requestConfig['headers']['Accept-Language'])) $requestConfig['headers']['Accept-Language'] = ((isset($config['acclangbrowser']) && $config['acclangbrowser']) ? filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE') : 'en-US;q=0.7,en;q=0.3');
     if (empty($requestConfig['headers']['DNT'])) $requestConfig['headers']['DNT'] = '1';
     if (empty($requestConfig['headers']['User-Agent'])) $requestConfig['headers']['User-Agent'] = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT');
     if (empty($requestConfig['headers']['Referer'])) $requestConfig['headers']['Referer'] = $referer;
