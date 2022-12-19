@@ -203,40 +203,47 @@
   <tr>
     <td width="100%" colspan="2">
       {if $video.actors != ''}
-        <b>{$lang.cast}:</b>
-        <table width="100%">
-    {counter start=0 print=false name=castcount}
-    {foreach item=actor from=$video.cast}
+        <b>{$lang.cast}:
+            {if $cast_toggle}
+                {if $show_cast}
+                    <a href="show.php?id={$video.id}" class="button submit">{$lang.hidecast}</a>
+                {else}
+                    <a href="show.php?id={$video.id}&amp;show_cast=1" class="button submit">{$lang.showcast}</a>
+                {/if}
+            {/if}
+        </b>
+        {if $show_cast}
+            <table width="100%">
+            {counter start=0 print=false name=castcount}
+            {foreach item=actor from=$video.cast}
 
-    {if $count == 0}
-    <tr class="{cycle values="odd,even"}">
-    {/if}
+                {if $count == 0}
+                <tr class="{cycle values="odd,even"}">
+                {/if}
+                    <td width="{math equation="floor(100 / x)" x=$castcolumns}%">
+                        <dl>
+                            {if $actor.imgurl != ''}
+                               <a href="{$actor.imdburl}"><img src="{$actor.imgurl}" width="38" height="52" border="0" align="left"></a>
+                            {/if}
+                            <dt>
+                                <a href="search.php?q=%22{$actor.name|escape:url}%22&isname=Y">{$actor.name}</a>
+                            </dt>
+                            <dd>
+                                {foreach item=role from=$actor.roles}
+                                    {$role}<br/>
+                                {/foreach}
+                            </dd>
+                        </dl>
+                    </td>
+                    {counter assign=count name=castcount}
+                    {if $count == $castcolumns}
+                    {counter start=0 print=false name=castcount}
+                </tr>
+                    {/if}
+            {/foreach}
 
-            <td width="{math equation="floor(100 / x)" x=$castcolumns}%">
-            <dl>
-              {if $actor.imgurl != ''}
-                 <a href="{$actor.imdburl}"><img src="{$actor.imgurl}" width="38" height="52" border="0" align="left"></a>
-              {/if}
-
-              <dt>
-                <a href="search.php?q=%22{$actor.name|escape:url}%22&isname=Y">{$actor.name}</a>
-              </dt>
-              <dd>
-                {foreach item=role from=$actor.roles}
-                  {$role}<br/>
-                {/foreach}
-              </dd>
-            </dl>
-            </td>
-
-      {counter assign=count name=castcount}
-      {if $count == $castcolumns}
-      {counter start=0 print=false name=castcount}
-      </tr>
-      {/if}
-         {/foreach}
-
-        </table>
+            </table>
+        {/if}        
         <br />
       {/if}
     </td>
