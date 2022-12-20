@@ -5,7 +5,9 @@
         "guzzlehttp/guzzle": "^6.3",
         "smarty/smarty": "^3.1",
         "pear/ole": "^v1.0.0RC8",
-        "pear/spreadsheet_excel_writer": "^v0.9.7"
+        "pear/spreadsheet_excel_writer": "^v0.9.7",
+        "setasign/fpdf": "^1.8",
+        "james-heinrich/phpthumb": "v1.7.19"
     },
     "authors": [
         {

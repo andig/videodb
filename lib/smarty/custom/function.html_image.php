@@ -7,7 +7,7 @@
  * @author  Andreas Goetz   <cpuidle@gmx.de>
  */
 
-require_once('./lib/phpthumb/phpthumb.class.php');
+require_once('./vendor/james-heinrich/phpthumb/phpthumb.class.php');
 
 define('THUMB_CACHE_SOURCE', true);
 define('THUMB_CACHE_TARGET', true);

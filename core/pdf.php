@@ -17,11 +17,11 @@ require_once './core/export.core.php';
 require_once './engines/engines.php';
 require_once './core/VariableStream.class.php';
 
-define('FPDF', './lib/fpdf');
+define('FPDF', './vendor/setasign/fpdf');
 define('FPDF_FONTPATH', FPDF.'/font/');
 
 require_once FPDF.'/fpdf.php';
-require_once FPDF.'/fpdf2file.php';
+require_once './lib/fpdf2file/fpdf2file.php';
 
 /**
  * Copied from FPDF tutorial 3
@@ -67,7 +67,7 @@ class PDF extends FPDF2File
 		parent::Image('var://'.$name, $x, $y, $w, $h, $type, $link);
 	}
 
-	function Image($file, $x, $y, $w=0, $h=0, $ext='', $link='')
+	function Image($file, $x=null, $y=null, $w=0, $h=0, $ext='', $link='')
 	{
 		global $config;
 
@@ -262,6 +262,12 @@ class PDF extends FPDF2File
 		$text = rtrim($text);
 		return $count;
 	}
+        
+        function SaveFile($filename)
+        {
+            FPDF::Output('D', 'videoDB.pdf', $isUTF8=false);
+            readfile($filename);
+        }      
 }
 
 /**
@@ -440,7 +446,7 @@ function pdfexport($WHERE)
 		}
 	}
 
-	$pdf->Output('videoDB.pdf', 'D');
+        $pdf->SaveFile($filename);
 
 	// get rid of temp file
 	@unlink($filename);
