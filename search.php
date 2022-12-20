@@ -10,7 +10,6 @@
  * @version $Id: search.php,v 2.61 2013/03/16 14:29:47 andig2 Exp $
  */
 
-require_once './core/session.php';
 require_once './core/functions.php';
 require_once './core/queryparser.php';
 require_once './core/output.php';
@@ -68,8 +67,7 @@ function ajax_render()
 if ($config['multiuser'])
 {
     // get owner from session- or use current user
-    session_default('owner', get_username(get_current_user_id()));
-
+    session_default_owner();
     $all = $lang['filter_any'];
 }
 

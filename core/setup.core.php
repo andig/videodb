@@ -12,7 +12,7 @@ require_once './core/functions.php';
 require_once './core/custom.php';
 require_once './core/output.php';
 
-$SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault', 
+$SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault', 'acclangbrowser', 
                       'filterdefault', 'showtv', 'orderallbydisk', 'removearticles',
                       'localnet', 'IMDBage', 'thumbnail', 
                       'castcolumns', 'template', 'languageflags', 'custom1', 
@@ -20,13 +20,14 @@ $SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault',
                       'custom2type', 'custom3type', 'custom4type', 'enginedefault', 
                       'proxy_host', 'proxy_port', 'actorpics', 'thumbAge', 'listcolumns', 
                       'shownew', 'imdbBrowser', 'multiuser', 'denyguest', 'adultgenres',
-                      'pageno', 'showtools', 'showcasttoggle');
+                      'pageno', 'showtools', 'showcasttoggle', 'browse_include_title');
 
 $SETUP_QUICK  = array('template');
 
-$SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'filterdefault', 
+$SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'acclangbrowser', 'filterdefault', 
                       'showtv', 'orderallbydisk', 'template', 'languageflags', 
-                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles', 'showcasttoggle');
+                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles',
+                      'showcasttoggle', 'browse_include_title');
 
 /**
  * Build config options array
@@ -57,6 +58,7 @@ function setup_mkOptions($isprofile = false)
     
     $setup[] = setup_addOption($isprofile, 'mediadefault', 'dropdown', setup_getMediatypes());
     $setup[] = setup_addOption($isprofile, 'langdefault', 'text');
+    $setup[] = setup_addOption($isprofile, 'acclangbrowser', 'boolean');
     $setup[] = setup_addOption($isprofile, 'filterdefault', 'dropdown', array('all'=>$lang['radio_all'], 'unseen'=>$lang['radio_unseen'], 'new'=>$lang['radio_new'], 'wanted'=>$lang['radio_wanted']));
     $setup[] = setup_addOption($isprofile, 'showtv', 'boolean');
     $setup[] = setup_addOption($isprofile, 'shownew', 'text');
@@ -66,6 +68,7 @@ function setup_mkOptions($isprofile = false)
     $setup[] = setup_addOption($isprofile, 'adultgenres', 'multi', setup_getGenres(), @explode('::', $config['adultgenres']));
     $setup[] = setup_addOption($isprofile, 'showtools', 'boolean');
     $setup[] = setup_addOption($isprofile, 'showcasttoggle', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'browse_include_title', 'dropdown', array('none' => $lang['none'], 'top' => $lang['top'], 'bottom' => $lang['bottom'], 'both' => $lang['both']));
 
     if (!$isprofile) $setup[] = setup_addSection('opt_custom');
     $setup[] = setup_addOption($isprofile, 'custom', 'special', setup_mkCustoms());
