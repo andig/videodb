@@ -313,7 +313,7 @@ function imdbData($imdbID)
     }
 
     // Director
-    preg_match('/<li role="presentation" class="ipc-inline-list__item">(<a class="ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link" rel="" href="\/name\/nm.+?\/?ref_=tt_ov_dr">.+?<\/a>.+?)<\/div>/si', $resp['data'], $ary);
+    preg_match('/<li role="presentation" class="ipc-metadata-list__item" data-testid="title-pc-principal-credit">.+?Director.+?(<a.+?href="\/name\/nm11.+?\/?ref_=tt_ov_dr".+?<\/a><\/li><\/ul>)<\/div><\/li>/si', $resp['data'], $ary);
     preg_match_all('/<a class=.+? href="\/name\/nm.+?">(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
     // TODO: Update templates to use multiple directors
     $data['director']  = trim(join(', ', $ary[1]));
