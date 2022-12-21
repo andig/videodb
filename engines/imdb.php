@@ -235,8 +235,8 @@ function imdbData($imdbID)
     // fetch mainpage
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
     //testing code save resp data from imdb
-    //$file_path = './cache/httpclient-php_imdbData.html';
-    //file_put_contents($file_path, $resp['data']);
+    $file_path = './cache/httpclient-php_imdbData.html';
+    file_put_contents($file_path, $resp['data']);
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
@@ -313,7 +313,7 @@ function imdbData($imdbID)
     }
 
     // Director
-    preg_match('/<li role="presentation" class="ipc-metadata-list__item" data-testid="title-pc-principal-credit">.+?Director.+?(<a.+?href="\/name\/nm11.+?\/?ref_=tt_ov_dr".+?<\/a><\/li><\/ul>)<\/div><\/li>/si', $resp['data'], $ary);
+    preg_match('/<li role="presentation" class="ipc-metadata-list__item" data-testid="title-pc-principal-credit">.+?Director.+?(<li.+?<a.+?href="\/name\/nm.+?\/?ref_=tt_ov_dr".+?<\/a>.+?<\/ul>)<\/div><\/li>/si', $resp['data'], $ary);
     preg_match_all('/<a class=.+? href="\/name\/nm.+?">(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
     // TODO: Update templates to use multiple directors
     $data['director']  = trim(join(', ', $ary[1]));
