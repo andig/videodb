@@ -819,7 +819,7 @@ else
     $page = request();
     
  //testing code page from call to imdb
- //$file_path = './cache/pagedata-html-before-processing.txt';
+ //$file_path = './cache/'.date("Y-m-d")." T".date("H-i-s").' - pagedata-html-before-processing.log';
  //file_put_contents($file_path, $page);
     
     $fetchtime = time() - $fetchtime;
@@ -829,7 +829,7 @@ else
     $page = fixup_javascript($page);
     
 //testing code page after our processing
-//$file_path = './cache/pagedata-html-after-processing.txt';
+//$file_path = './cache/'.date("Y-m-d")." T".date("H-i-s").' - pagedata-html-after-processing.log';
 //file_put_contents($file_path, $page);
 }
 
@@ -873,14 +873,22 @@ if (    $iframe == 2 ||
     exit();
 }
 
-// mode 0 or 1: prepare templates
+// mode 0 or 1: prepare templates 
 tpl_page('imdbbrowser');
     //testing code save page before send to browser
-    //$file_path = './cache/pagedata.html';
+    //$file_path = './cache/'.date("Y-m-d")." T".date("H-i-s").' - pagedata-html-before-sent-to-browser.log';
     //file_put_contents($file_path, $page);
 $smarty->assign('url', $url);
 $smarty->assign('page', $page);
 $smarty->assign('fetchtime', $fetchtime);
+
+// extract meta element to pass to header
+//            <meta name="next-head-count" content="nn"/>
+preg_match('#\<meta name\="next\-head\-count" content\="\d+"/\>#',$page,$m1);
+if ($m1[0])
+{
+    $smarty->assign('meta1', $m1[0]);
+}
 
 // display templates
 tpl_display('trace.tpl');
