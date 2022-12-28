@@ -313,7 +313,7 @@ function imdbData($imdbID)
     }
 
     // Director
-    preg_match('/<li role="presentation" class="ipc-metadata-list__item" data-testid="title-pc-principal-credit">.+?Director.+?(<li.+?<a.+?href="\/name\/nm.+?\/?ref_=tt_ov_dr".+?<\/a>.+?<\/ul>)<\/div><\/li>/si', $resp['data'], $ary);
+    preg_match('/<li.+?<button.+?Director.+?(<li.+?<a.+?href="\/name\/nm.+?\/?ref_=tt_ov_dr".+?<\/a>.+?<\/ul>)<\/div><\/li>/si', $resp['data'], $ary);
     preg_match_all('/<a class=.+? href="\/name\/nm.+?">(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
     // TODO: Update templates to use multiple directors
     $data['director']  = trim(join(', ', $ary[1]));
@@ -327,7 +327,7 @@ function imdbData($imdbID)
     $data['country'] = trim(join(', ', $ary[1]));
 
     // Languages
-	preg_match_all('/<a class=".+?" rel="" href="\/search\/title\?title_type=feature&amp;primary_language=.+?&amp;sort=moviemeter,asc&amp;ref_=tt_dt_ln">(.+?)<\/a>/', $resp['data'], $ary, PREG_PATTERN_ORDER);
+	preg_match_all('/<a class=".+?" href="\/search\/title\?title_type=feature&amp;primary_language=.+?&amp;sort=moviemeter,asc&amp;ref_=tt_dt_ln">(.+?)<\/a>/', $resp['data'], $ary, PREG_PATTERN_ORDER);
     $data['language'] = trim(strtolower(join(', ', $ary[1])));
 
     // Genres (as Array)
