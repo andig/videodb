@@ -309,8 +309,25 @@ function load_config($force_reload = false)
  */
 function errorpage($title = 'An error occured', $body = '', $stacktrace = false)
 {
-    global $lang;
-
+    global $lang,  $save_data_if_error_getting_image, $config;
+    
+    if ( $config['debug'] )
+    {    
+        // this captures the message from img.php if guzzle signals error exception,
+        // as img.php is called from browser which has already displayed data this message 
+        // is lost. writing to debug log file
+        // this is a cause of broken actor images appearing
+        if ($save_data_if_error_getting_image)
+        {
+            $line = strtok($body, "\n");
+            $current_time = date("Y-m-d")." T".date("H-i-s");
+            $var = $current_time." - ".$save_data_if_error_getting_image." - ".$line;
+            dlog($var);
+        //    file_put_contents($file_path, $current_time." - ".$save_data_if_error_getting_image." - ".$line."\n", FILE_APPEND);
+            unset($save_data_if_error_getting_image);
+        }
+    }
+    
     $encoding   = ($lang['encoding']) ? $lang['encoding'] : 'iso-8859-1';
 
     // stacktrace desired and available?

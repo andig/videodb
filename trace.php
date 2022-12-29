@@ -446,7 +446,7 @@ function fixup_javascript($html)
         {
             // for season, year change drop down list on episode list
             $find_string = 'bySeason';
-            $pattern = '#' . preg_quote($find_string, '#') . '#';  // add escape delimiters
+            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
             if (preg_match($pattern, $js_file_data, $matches) )
             {
                 $html = replace_javascript_seasonyear ($html,$js_file,$js_file_data,$cachefolder);
@@ -458,7 +458,7 @@ function fixup_javascript($html)
         {        
             // for search bar and interactive search list
             $find_string = 'hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]';
-            $pattern = '#' . preg_quote($find_string, '#') . '#';  // add escape delimiters
+            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
             if (preg_match($pattern, $js_file_data, $matches)  )
             {
                 $html = replace_javascript_search ($html,$js_file,$js_file_data,$cachefolder);
@@ -470,7 +470,7 @@ function fixup_javascript($html)
         { 
             // add add/show movie links    
             $find_string = 'titleData.productionStatus';
-            $pattern = '#' . preg_quote($find_string, '#') . '#';  // add escape delimiters
+            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
             if (preg_match($pattern, $js_file_data, $matches) )
             {
                 $html = replace_javascript_addmovie ($html,$js_file,$js_file_data,$cachefolder);
@@ -482,7 +482,7 @@ function fixup_javascript($html)
         {
             // on main series page for season, year select drop down list on browse episodes
             $find_string = 'return window.location.href="SEE_ALL"';
-            $pattern = '#' . preg_quote($find_string, '#') . '#';  // add escape delimiters
+            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
             // fix title href
             $pattern_1 = '#HEADER:function\(.\){return#';
             if (preg_match($pattern, $js_file_data, $matches) || 
@@ -497,7 +497,7 @@ function fixup_javascript($html)
         {
             // on main series page fix title href's all cast & crew, creator, director, writer
             $find_string = '"/title/".concat(b.id,"/fullcredits")';
-            $pattern = '#' . preg_quote($find_string, '#') . '#';  // add escape delimiters
+            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
             if (preg_match($pattern, $js_file_data, $matches))
             {
                 $html = replace_javascript_fix_href_cast ($html,$js_file,$js_file_data,$cachefolder);
@@ -570,7 +570,7 @@ function replace_javascript_fix_href_cast ($html,$js_file_name,$js_file_data,$ca
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
 
 //echo "<BR> - $js_file_name-".$js_file_name;
-    $pattern = '#' . preg_quote($js_file_name, '#') . '#';  // escape all delimitters in file name
+    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
 //echo "<BR> - pattern-".$pattern;
     $html = preg_replace($pattern,$file_path,$html);
 
@@ -626,7 +626,7 @@ function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefo
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
 
 //echo "<BR> - $js_file_name-".$js_file_name;
-    $pattern = '#' . preg_quote($js_file_name, '#') . '#';  // escape all delimitters in file name
+    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
 //echo "<BR> - pattern-".$pattern;
     $html = preg_replace($pattern,$file_path,$html);
 
@@ -702,7 +702,7 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
     // save js data file to cache
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
 
-    $pattern = '#' . preg_quote($js_file_name, '#') . '#';  // escape all delimitters in file name
+    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
 //echo "<BR> - pattern-".$pattern;
     $html = preg_replace($pattern,$file_path,$html);
     
@@ -722,7 +722,7 @@ function replace_javascript_search ($html,$js_file_name,$js_file_data,$cachefold
     // save js data file to cache
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
     
-    $pattern = '#' . preg_quote($js_file_name, '#') . '#';  // escape all delimitters in file name
+    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
 //echo $pattern;
     $html = preg_replace($pattern,$file_path,$html);
 
@@ -757,7 +757,7 @@ function replace_javascript_seasonyear ($html,$js_file_name,$js_file_data,$cache
     // save js data file to cache
     file_put_contents($file_path, $js_file_data, FILE_APPEND);
     
-    $pattern = '#' . preg_quote($js_file_name, '#') . '#';  // escape all delimitters in file name
+    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
     $html = preg_replace($pattern,$file_path,$html);
 //echo "<BR> - pattern-".$pattern;
     return $html;
@@ -819,7 +819,7 @@ else
     $page = request();
     
  //testing code page from call to imdb
- //$file_path = './cache/pagedata-html-before-processing.txt';
+ //$file_path = './cache/'.date("Y-m-d")." T".date("H-i-s").' - pagedata-html-before-processing.log';
  //file_put_contents($file_path, $page);
     
     $fetchtime = time() - $fetchtime;
@@ -829,7 +829,7 @@ else
     $page = fixup_javascript($page);
     
 //testing code page after our processing
-//$file_path = './cache/pagedata-html-after-processing.txt';
+//$file_path = './cache/'.date("Y-m-d")." T".date("H-i-s").' - pagedata-html-after-processing.log';
 //file_put_contents($file_path, $page);
 }
 
@@ -873,14 +873,21 @@ if (    $iframe == 2 ||
     exit();
 }
 
-// mode 0 or 1: prepare templates
+// mode 0 or 1: prepare templates 
 tpl_page('imdbbrowser');
     //testing code save page before send to browser
-    //$file_path = './cache/pagedata.html';
+    //$file_path = './cache/'.date("Y-m-d")." T".date("H-i-s").' - pagedata-html-before-sent-to-browser.log';
     //file_put_contents($file_path, $page);
 $smarty->assign('url', $url);
 $smarty->assign('page', $page);
 $smarty->assign('fetchtime', $fetchtime);
+
+// extract meta element to pass to header
+//                <meta name="next-head-count" content="nn"/>
+if (preg_match('#\<meta name\="next\-head\-count" content\="\d+"/\>#',$page,$m1))
+{
+    $smarty->assign('meta1', $m1[0]);
+}
 
 // display templates
 tpl_display('trace.tpl');
