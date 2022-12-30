@@ -452,9 +452,19 @@ function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true)
 	// identify actor by unique actor id, of by name
     if ($actorid && $idSearchAllowed) {
         $result = runSQL($SQL." WHERE actorid='".escapeSQL($actorid)."'");
-	}
-	if (!$actorid || (count($result) == 0)) {
-        $result = runSQL($SQL." WHERE name='".escapeSQL(html_entity_decode($name))."'");
+    }
+    // code for pre php 7.3
+    if (version_compare(PHP_VERSION_ID, 703007) < 0 && !function_exists("is_countable")) {
+        function is_countable($value) { 
+            return is_array($value) 
+                || $value instanceof Countable 
+                || $value instanceof ResourceBundle 
+                || $value instanceof SimpleXmlElement; 
+        }
+    }
+    // end for pre php 7.3
+    if (!$actorid || (is_countable($result) && count($result) == 0)) {
+    $result = runSQL($SQL." WHERE name='".escapeSQL(html_entity_decode($name))."'");
 	}
 
     $imgurl = get_actor_image_from_cache($result[0], $name, $actorid);
