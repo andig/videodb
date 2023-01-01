@@ -431,91 +431,70 @@ function fixup_javascript($html)
 //echo "<br> list all js files - "; var_dump($unique_matches);
     // loop thru files
     $x = 0;
-    $season_year_done = false;
-    $search_bar_done = false;
-    $add_movie_done = false;
-    $fix_href_done = false;
-    $fix_href_cast_done = False;
-    
-    foreach ($unique_matches as $js_file)
+    foreach ($unique_matches as $js_file_name)
     {
+        $partfilename = '';
 //echo "<br>x is ".$x."  file name - ".$js_file;
-        $js_file_data = file_get_contents($js_file);
+        $js_file_data = file_get_contents($js_file_name);
         
-        if (!$season_year_done)
+        // for season, year change drop down list on episode list
+        $pattern = '#bySeason#';
+        if (preg_match($pattern, $js_file_data, $matches) )
         {
-            // for season, year change drop down list on episode list
-            $find_string = 'bySeason';
-            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
-            if (preg_match($pattern, $js_file_data, $matches) )
-            {
-                $html = replace_javascript_seasonyear ($html,$js_file,$js_file_data,$cachefolder);
-                $season_year_done = true;
-            }
+            $js_file_data = replace_javascript_seasonyear ($js_file_data);
+            $partfilename .= '-seasonyear';
+        }
+        // for search bar and interactive search list
+        $find_string = 'hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]';
+        $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
+        if (preg_match($pattern, $js_file_data, $matches)  )
+        {
+            $js_file_data = replace_javascript_search ($js_file_data);
+            $partfilename .= '-search';
+        }
+        // add add/show movie links    
+        $find_string = 'titleData.productionStatus';
+        $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
+        if (preg_match($pattern, $js_file_data, $matches) )
+        {
+            $js_file_data = replace_javascript_addmovie ($js_file_data);
+            $partfilename .= '-addmovie';
+        }
+        // on main series page for season, year select drop down list on browse episodes
+        $find_string = 'return window.location.href="SEE_ALL"';
+        $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
+        // fix title href
+        $pattern_1 = '#HEADER:function\(.\){return#';
+        if (preg_match($pattern, $js_file_data, $matches) || 
+            preg_match($pattern_1, $js_file_data, $matches_1) )
+        {
+            $js_file_data = replace_javascript_fix_href ($js_file_data);
+            $partfilename .= '-href';
+        }   
+        // on main series page fix title href's all cast & crew, creator, director, writer
+        // string  '"/title/".concat(h.id,"/fullcredits")'; h is variable
+        $pattern = '#"/title/"\.concat\(.*?\.id,"/fullcredits"\)#';  // add escape delimiters
+        if (preg_match($pattern, $js_file_data, $matches))
+        {
+            $js_file_data = replace_javascript_fix_href_cast ($js_file_data);
+            $partfilename .= '-hrefcast';
         }
         
-        if (!$search_bar_done)
-        {        
-            // for search bar and interactive search list
-            $find_string = 'hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]';
-            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
-            if (preg_match($pattern, $js_file_data, $matches)  )
-            {
-                $html = replace_javascript_search ($html,$js_file,$js_file_data,$cachefolder);
-                $search_bar_done = true;
-            }
-        }
-
-        if (!$add_movie_done)
-        { 
-            // add add/show movie links    
-            $find_string = 'titleData.productionStatus';
-            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
-            if (preg_match($pattern, $js_file_data, $matches) )
-            {
-                $html = replace_javascript_addmovie ($html,$js_file,$js_file_data,$cachefolder);
-                $add_movie_done = true;
-            }
-        }
-        
-        if (!$fix_href_done)
+        if ($partfilename <> '')
         {
-            // on main series page for season, year select drop down list on browse episodes
-            $find_string = 'return window.location.href="SEE_ALL"';
-            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
-            // fix title href
-            $pattern_1 = '#HEADER:function\(.\){return#';
-            if (preg_match($pattern, $js_file_data, $matches) || 
-                preg_match($pattern_1, $js_file_data, $matches_1) )
-            {
-                $html = replace_javascript_fix_href ($html,$js_file,$js_file_data,$cachefolder);
-                $fix_href_done = true;
-            }   
-        }
+            $file_path = './'.$cachefolder.'imdb-clone'.$partfilename.'.js';
+            //add comment line to file and save to cache (overwritten if present) 
+            file_put_contents($file_path, '/* Processed by - replace_javascript_('.$partfilename.') : this files original name - '.$js_file_name.' */');
+            // save js data file to cache
+            file_put_contents($file_path, $js_file_data, FILE_APPEND);
 
-        if (!$fix_href_cast_done)
-        {
-            // on main series page fix title href's all cast & crew, creator, director, writer
-            $find_string = '"/title/".concat(b.id,"/fullcredits")';
-            $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
-            if (preg_match($pattern, $js_file_data, $matches))
-            {
-                $html = replace_javascript_fix_href_cast ($html,$js_file,$js_file_data,$cachefolder);
-                $fix_href_cast_done = true;
-            }   
+            $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
+            $html = preg_replace($pattern,$file_path,$html);
         }
-
         // release file data from memory to avoid memory exceeeded error 
         $js_file_data = '';     
         unset($js_file_data);
         
-        // check if all needed files have been processed and break out
-        if ($season_year_done && $search_bar_done && 
-            $add_movie_done   && $fix_href_done   &&
-            $fix_href_cast_done )
-        { 
-            break;
-        }
         $x++ ;
     }
     return ($html);
@@ -545,7 +524,7 @@ function fixup_json($json)
     return $json;  
 }
 
-function replace_javascript_fix_href_cast ($html,$js_file_name,$js_file_data,$cachefolder)
+function replace_javascript_fix_href_cast ($js_file_data)
 {
     global $iframe;
     // allow for iframe templates
@@ -563,28 +542,17 @@ function replace_javascript_fix_href_cast ($html,$js_file_name,$js_file_data,$ca
         }, $js_file_data);
     }
 
-    $file_path = './'.$cachefolder.'imdb-clone-'.'href-cast-override'.'.js';
-    //add comment line to file and save to cache (overwritten if present) 
-    file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
-    // save js data file to cache
-    file_put_contents($file_path, $js_file_data, FILE_APPEND);
-
-//echo "<BR> - $js_file_name-".$js_file_name;
-    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
-//echo "<BR> - pattern-".$pattern;
-    $html = preg_replace($pattern,$file_path,$html);
-
-    return $html;
+    return $js_file_data;
 }
 
-function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefolder)
+function replace_javascript_fix_href ($js_file_data)
 {
     global $iframe;
     // allow for iframe templates
     $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
     
-    // drop down for seasopn no and year
+    // drop down for season no and year on main series page
     //string -    "https://".concat(window.location.host)
     $pattern = '#("https://")(\.concat\(window\.location\.host\))#';
 //echo "<br>".$pattern;
@@ -595,7 +563,6 @@ function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefo
                                      '"http://"'.$matches[2].'.concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com")',
                                      $js_file_data); 
     }
-    
     // title href
     // string - {return"/title/" - occurs in multiple places
     $pattern = '#({return")(/title/)(")#';
@@ -619,21 +586,10 @@ function replace_javascript_fix_href ($html,$js_file_name,$js_file_data,$cachefo
         }, $js_file_data);
     }
 
-    $file_path = './'.$cachefolder.'imdb-clone-'.'browse-episodes-override'.'.js';
-    //add comment line to file and save to cache (overwritten if present) 
-    file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
-    // save js data file to cache
-    file_put_contents($file_path, $js_file_data, FILE_APPEND);
-
-//echo "<BR> - $js_file_name-".$js_file_name;
-    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
-//echo "<BR> - pattern-".$pattern;
-    $html = preg_replace($pattern,$file_path,$html);
-
-    return $html;
+    return $js_file_data;
 }
 
-function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefolder)
+function replace_javascript_addmovie ($js_file_data)
 {
     global $uri, $iframe;
     // allow for iframe templates
@@ -696,74 +652,10 @@ function replace_javascript_addmovie ($html,$js_file_name,$js_file_data,$cachefo
                                  $js_file_data);
     }
     
-    $file_path = './'.$cachefolder.'imdb-clone-'.'addmovie-override'.'.js';
-    //add comment line to file and save to cache (overwritten if present) 
-    file_put_contents($file_path, '/* this files original name - '.$js_file_name.' */');
-    // save js data file to cache
-    file_put_contents($file_path, $js_file_data, FILE_APPEND);
-
-    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
-//echo "<BR> - pattern-".$pattern;
-    $html = preg_replace($pattern,$file_path,$html);
-    
-    return $html; 
+    return $js_file_data; 
 }
 
-function replace_javascript_search ($html,$js_file_name,$js_file_data,$cachefolder)
-{
-    $file_path = './'.$cachefolder.'imdb-clone-'.'search-override'.'.js';
-
-    // do replace for search bar fields in this file
-    $js_file_data = replace_javascript_search_common ($js_file_data);
-      
-    // save file to cache (overwritten if present)
-    //add comment line to file and save to cache (overwritten if present) 
-    file_put_contents($file_path, '/* Processed by - replace_javascript_search : this files original name - '.$js_file_name.' */');
-    // save js data file to cache
-    file_put_contents($file_path, $js_file_data, FILE_APPEND);
-    
-    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
-//echo $pattern;
-    $html = preg_replace($pattern,$file_path,$html);
-
-    return $html;
-}
-
-function replace_javascript_seasonyear ($html,$js_file_name,$js_file_data,$cachefolder)
-{
-    global $iframe;
-    
-//echo "<br> in replace_javascript";
-//echo "<br>".$js_file_name; echo "   ".$cachefolder;
-    // allow for iframe templates
-    $iframe_val = '';
-    if ($iframe) $iframe_val = "&iframe=".$iframe;
-    
-    $file_path = './'.$cachefolder.'imdb-clone-seasonyear-change.js';
-    //string -    if(d!==c){var e="/title/"
-    $pattern = '#(if\(.!==.\){var .=)(\"/title/\")#';
-//echo "<br>".$pattern;
-    preg_match($pattern, $js_file_data, $matches);
-//echo "<br> js file - find for season"; var_dump($matches);
-    $js_file_data = preg_replace($pattern,
-                                 $matches[1].'"trace.php?'.$iframe_val.'&videodburl=https://www.imdb.com"+'.$matches[2],
-                                 $js_file_data);
-
-    // do replace for search bar fields in this file
-    $js_file_data = replace_javascript_search_common ($js_file_data);
-    
-    //add comment line to file and save to cache (overwritten if present) 
-    file_put_contents($file_path, '/* Processed by - replace_javascript_seasonyear : this files original name - '.$js_file_name.' */');
-    // save js data file to cache
-    file_put_contents($file_path, $js_file_data, FILE_APPEND);
-    
-    $pattern = '#'.preg_quote($js_file_name, '#').'#';  // escape all delimitters in file name
-    $html = preg_replace($pattern,$file_path,$html);
-//echo "<BR> - pattern-".$pattern;
-    return $html;
-}
-
-function replace_javascript_search_common ($js_file_data)
+function replace_javascript_search ($js_file_data)
 {
     global $iframe;
     $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
@@ -786,6 +678,28 @@ function replace_javascript_search_common ($js_file_data)
     $replace_val = $matches[1].'"'.$url.'?'.$iframe_val.'&videodburl=https://www.imdb.com"'.'+'.$matches[2];
 //echo var_dump($replace_val);
     $js_file_data = preg_replace($pattern,$replace_val, $js_file_data); 
+    
+    return $js_file_data;
+}
+
+function replace_javascript_seasonyear ($js_file_data)
+{
+    global $iframe;
+    
+//echo "<br> in replace_javascript_seasonyear";
+//echo "<br>".$js_file_name; echo "   ".$cachefolder;
+    // allow for iframe templates
+    $iframe_val = '';
+    if ($iframe) $iframe_val = "&iframe=".$iframe;
+    
+    //string -    if(d!==c){var e="/title/"
+    $pattern = '#(if\(.!==.\){var .=)(\"/title/\")#';
+//echo "<br>".$pattern;
+    preg_match($pattern, $js_file_data, $matches);
+//echo "<br> js file - find for season"; var_dump($matches);
+    $js_file_data = preg_replace($pattern,
+                                 $matches[1].'"trace.php?'.$iframe_val.'&videodburl=https://www.imdb.com"+'.$matches[2],
+                                 $js_file_data);
     
     return $js_file_data;
 }
