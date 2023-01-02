@@ -454,7 +454,7 @@ function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true)
         $result = runSQL($SQL." WHERE actorid='".escapeSQL($actorid)."'");
     }
     // code for pre php 7.3
-    if (version_compare(PHP_VERSION_ID, 703007) < 0 && !function_exists("is_countable")) {
+    if (version_compare(PHP_VERSION, "7.3") < 0 && !function_exists("is_countable")) {
         function is_countable($value) { 
             return is_array($value) 
                 || $value instanceof Countable 
