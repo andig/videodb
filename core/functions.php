@@ -453,7 +453,7 @@ function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true)
     if ($actorid && $idSearchAllowed) {
         $result = runSQL($SQL." WHERE actorid='".escapeSQL($actorid)."'");
     }
-    if (!$actorid || (is_array($result) && count($result) == 0)) {
+    if (!$actorid || ((is_array($result) && count($result) == 0)) ) {
         $result = runSQL($SQL." WHERE name='".escapeSQL(html_entity_decode($name))."'");
     }
 
