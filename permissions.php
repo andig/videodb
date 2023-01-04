@@ -29,7 +29,7 @@ function getStateOfCheckbox($name)
  * input
  */
 $id = req_int('id');
-$diskid = req_int('diskid');
+$diskid = req_string('diskid');
 $from_uid = req_int('from_uid');
 $save = req_int('save');
 $message = req_string('message');

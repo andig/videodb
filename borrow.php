@@ -21,7 +21,7 @@ permission_or_die(PERM_WRITE, PERM_ANY);
 /**
  * input
  */
-$diskid = req_int('diskid');
+$diskid = req_string('diskid');
 $return = req_string('return');
 $who = req_string('who');
 

@@ -19,7 +19,7 @@ require_once './core/output.php';
  * input
  */
 $id = req_int('id');
-$diskid = req_int('diskid');
+$diskid = req_string('diskid');
 // start session'd settings
 $filter = req_string('filter');
 $showtv = req_int('showtv');
