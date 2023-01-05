@@ -45,7 +45,7 @@ function xmlexport($WHERE)
         {
             if (!empty($value))
             {
-                if (($key != 'owner_id') && ($key != 'actors'))
+                if (($key != 'owner_id') && ($key != 'actors') && ($key != 'genres'))
                 {
                     $tag       = strtolower($key);
                     $xml_item .= createTag($tag, trim(html_entity_decode_all($value)));
