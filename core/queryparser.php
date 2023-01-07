@@ -98,7 +98,7 @@ function tokenizer($qstring)
 
     for ($i=0; $i < strlen($qstring); $i++)
     {
-        $char = $qstring{$i};
+        $char = $qstring[$i];
 
         // match current separator?
         if (preg_match("/$sep/", $char))
