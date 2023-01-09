@@ -120,9 +120,11 @@ function getItemGenres($id, $names = false)
  */
 function setItemGenres($id, $genres)
 {
+    // Delete all genres for id
+    runSQL('DELETE FROM '.TBL_VIDEOGENRE.' WHERE video_id = '.$id);  
+    
     if (count($genres))
     {
-        runSQL('DELETE FROM '.TBL_VIDEOGENRE.' WHERE video_id = '.$id);
         $genres = array_unique($genres);
 
         foreach($genres as $genre)
