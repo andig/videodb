@@ -333,7 +333,7 @@ smarty_display('list.tpl', get_current_user_id().'|'.$WHERES);
 smarty_display('footer.tpl');
 
 // caching enabled?
-if ($config['httpcaching'])
+if ($config['http_caching'])
 {
     httpCacheOutput('index', httpCacheCaptureEnd());
 }

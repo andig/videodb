@@ -108,6 +108,13 @@ $config['hierarchical'] = 1;
 $config['cache_pruning'] = 1;
 
 /**
+ * Enable use of HTTP 304 headers for unmodified content to save bandwidth
+ * Set to 1 to enable, 0 to disable
+ * @default 0
+ */
+$config['http_caching'] = 0;
+
+/**
  * Defaults for external data lookup when editing entries
  * Set to 0 to ignore external data
  * Set to 1 to lookup missing data
@@ -182,14 +189,6 @@ $config['rss'] = 1;
  * @default 1
  */
 $config['pdf'] = 1; 
-
-/**
- * path to FPDF
- * enter the path to fpdf.php (include trailing slash)
- * should be no need to change the default
- * @default './lib/fpdf/';
- */
-$config['pdf_module'] = './lib/fpdf/';
 
 /**
  * Here you can set the fonts used for title. Available fonts:
