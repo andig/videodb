@@ -452,10 +452,10 @@ function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true)
 	// identify actor by unique actor id, of by name
     if ($actorid && $idSearchAllowed) {
         $result = runSQL($SQL." WHERE actorid='".escapeSQL($actorid)."'");
-	}
-	if (!$actorid || (count($result) == 0)) {
+    }
+    if (!$actorid || ((is_array($result) && count($result) == 0)) ) {
         $result = runSQL($SQL." WHERE name='".escapeSQL(html_entity_decode($name))."'");
-	}
+    }
 
     $imgurl = get_actor_image_from_cache($result[0], $name, $actorid);
 
