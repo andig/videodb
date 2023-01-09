@@ -47,9 +47,9 @@ function exportData($WHERE)
     // do adultcheck
     if (is_array($result))
     {
-        $result = array_filter($result, create_function('$video', 'return adultcheck($video["id"]);'));
+         $result = array_filter($result, function($video) {return adultcheck($video["id"]);});
     }
-
+               
     // genres
     for($i=0; $i<count($result); $i++)
     {

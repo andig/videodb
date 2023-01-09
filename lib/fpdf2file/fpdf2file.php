@@ -9,6 +9,7 @@
  * @license Freeware 
  * @version $Id: fpdf2file.php,v 1.3 2010/04/04 08:51:06 andig2 Exp $
  * @version updated for fpdf v1.8 or above  copperhead 2022/12/18
+ * @override for FPDF_VERSION constant added copperhead 2023/01/05
  */
 
 //not requied by vidoeDB
@@ -20,7 +21,10 @@ protected $f;
 
 function Open($file='doc.pdf')
 {
-    if(FPDF_VERSION<'1.8')
+//  The FPDF_VERSION constant was replaced by a class constant in FPDF V1.85
+//  FPDF2FILE extension to lower memory consumption not yet updated  @ 2023/01/05
+//  if(FPDF_VERSION<'1.8')
+    if(self::VERSION<'1.8')
         $this->Error('Version 1.8 or above is required by this extension');
     $this->f=fopen($file,'wb');
     if(!$this->f)
