@@ -26,7 +26,7 @@ if (empty($user))
  * input
  */
 $id = req_int('id');
-$diskid = req_int('diskid');
+$diskid = req_string('diskid');
 
 if (empty($id) || empty($diskid)) 
 {
