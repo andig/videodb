@@ -75,8 +75,15 @@ $smarty->loadFilter('output', 'trimwhitespace');        // remove whitespace fro
 #$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 #$smarty->force_compile  = true;
 #$smarty->debugging      = true;
-$smarty->error_reporting = E_ERROR;//E_ALL & ~E_NOTICE;           // added for Smarty 3
-
+if ($config['debug'])
+{
+    $smarty->error_reporting = E_ALL & ~E_NOTICE;           // added for Smarty 3
+    $smarty->force_compile  = true;
+}
+else
+{
+    $smarty->error_reporting = E_ERROR;           // added for Smarty 3    
+}
 // load config
 load_config();
 

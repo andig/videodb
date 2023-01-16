@@ -22,11 +22,11 @@
 	<!-- top-bar contents -->
 	<section class="top-bar-section">
 		<ul class="left">
-			{if $header.trace}<li{if $header.active == 'trace'} class="active"{/if}><a href="{$header.trace}?iframe=1">IMDB</a></li>{/if}
+			{if isset($header.trace)}<li{if $header.active == 'trace'} class="active"{/if}><a href="{$header.trace}?iframe=1">IMDB</a></li>{/if}
 
-			{if $header.new}<li{if $header.active == 'new' || $header.active == 'edit'} class="active"{/if}><a href="{$header.new}">{$lang.create}</a></li>{/if}
+			{if isset($header.new)}<li{if $header.active == 'new' || $header.active == 'edit'} class="active"{/if}><a href="{$header.new}">{$lang.create}</a></li>{/if}
 
-			{if $header.browse}
+			{if isset($header.browse)}
 			<li class="has-dropdown hide-for-small {if $header.active == 'browse'}active{/if}">
 				<a href="{$header.browse}">{$lang.browse}</a>
 
@@ -76,7 +76,7 @@
 			</li>
 			{/if}
 
-			{if $header.browse}
+			{if isset($header.browse)}
 			<li class="hide-for-medium-up {if $header.active == 'browse'}active{/if}">
 				<a href="{$header.browse}">{$lang.browse}</a>
 			</li>
@@ -134,20 +134,20 @@
 				<a href="#">{$lang.manage}</a>
 
 				<ul class="dropdown">
-					{if $header.borrow}<li{if $header.active == 'borrow'} class="active"{/if}><a href="{$header.borrow}">{$lang.borrow}</a></li>{/if}
-					{if $header.stats}<li{if $header.active == 'stats'} class="active"{/if}><a href="{$header.stats}">{$lang.statistics}</a></li>{/if}
+					{if isset($header.borrow)}<li{if $header.active == 'borrow'} class="active"{/if}><a href="{$header.borrow}">{$lang.borrow}</a></li>{/if}
+					{if isset($header.stats)}<li{if $header.active == 'stats'} class="active"{/if}><a href="{$header.stats}">{$lang.statistics}</a></li>{/if}
 				</ul>
 			</li>
 
-			{if $header.contrib || $header.profile || $header.setup}
+			{if isset($header.contrib) || isset($header.profile) || isset($header.setup)}
 			<li class="has-dropdown {if $header.active == 'setup' || $header.active == 'profile' || $header.active == 'contrib'}active{/if}">
-				<a href="{if $header.setup}{$header.setup}{else}{if $header.profile}{$header.profile}{else}#{/if}{/if}">{$lang.options}</a>
+				<a href="{if isset($header.setup)}{$header.setup}{else}{if isset($header.profile)}{$header.profile}{else}#{/if}{/if}">{$lang.options}</a>
 
 				<ul class="dropdown">
-					{if $header.setup}<li{if $header.active == 'setup'} class="active"{/if}><a href="{$header.setup}">{$lang.setup}</a></li>{/if}
-					{if $header.profile}<li{if $header.active == 'profile'} class="active"{/if}><a href="{$header.profile}">{$lang.profile}</a></li>{/if}
-					{if $header.users}<li{if $header.active == 'users'} class="active"{/if}><a href="{$header.users}">{$lang.users}</a></li>{/if}
-					{if $header.contrib}<li{if $header.active == 'contrib'} class="active"{/if}><a href="{$header.contrib}">{$lang.contrib}</a></li>{/if}
+					{if isset($header.setup)}<li{if $header.active == 'setup'} class="active"{/if}><a href="{$header.setup}">{$lang.setup}</a></li>{/if}
+					{if isset($header.profile)}<li{if $header.active == 'profile'} class="active"{/if}><a href="{$header.profile}">{$lang.profile}</a></li>{/if}
+					{if isset($header.users)}<li{if $header.active == 'users'} class="active"{/if}><a href="{$header.users}">{$lang.users}</a></li>{/if}
+					{if isset($header.contrib)}<li{if $header.active == 'contrib'} class="active"{/if}><a href="{$header.contrib}">{$lang.contrib}</a></li>{/if}
 				</ul>
 			</li>
 			{/if}
@@ -169,7 +169,7 @@
 				</form>
 			</li>
 
-			{if $header.login}
+			{if isset($header.login)}
 			<li>
 				<a href="{$header.login}">{if $loggedin}{$lang.logout}{else}{$lang.login}{/if}</a>
 			</li>

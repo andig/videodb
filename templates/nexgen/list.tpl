@@ -5,7 +5,7 @@
 
 <!-- {$smarty.template} -->
 
-{if $deleted}
+{if isset($deleted)}
 <div class="alert-box alert sticky">
 	{$lang.deleted}
 	<a href="#" class="close">&times;</a>
@@ -17,7 +17,7 @@
 
 		{assign var=max_width value=300}
 		{assign var=max_height value=500}
-
+                {if isset($list)}
 		<ul class="small-block-grid-2 large-block-grid-{$listcolumns} itemlist">
 			{foreach $list as $video name=col}
 			<li>
@@ -38,6 +38,6 @@
 			</li><!--col-->
 			{/foreach}
 		</ul><!--row-->
-
+                {/if}
 	</div><!--column-->
 </div><!--row-->

@@ -10,7 +10,7 @@
 	<td><a href="#top"><img src="images/top.gif" alt=""/></a></td>
 	<td style="text-align:center" nowrap="nowrap">
 		<span class="version">
-		{if $pageno && $maxpageno}
+		{if isset($pageno) && isset($maxpageno)}
 			{if $pageno != 1}<a href="?pageno={$pageno-1}">&#171;</a>{/if}
 			Page {$pageno} of {$maxpageno}
 			{if $pageno != $maxpageno}<a href="?pageno={$pageno+1}">&#187;</a>{/if}
@@ -33,7 +33,7 @@
 		{if $rss}
 			<a href="{$rss}export=rss" target="_blank"><img src="images/rssexport.png" style="float:right;margin-left:3px;"/></a>
 		{/if}
-		<a href="https://github.com/andig/videodb.git" class="splitbrain">v.{$version|strip}</a>{if $loggedin}<span class="version">, {$lang.loggedinas} {$loggedin}</span>{/if}
+		<a href="https://github.com/andig/videodb.git" class="splitbrain">v.{$version|strip}</a>{if isset($loggedin)}<span class="version">, {$lang.loggedinas} {$loggedin}</span>{/if}
 	</td>
 </tr>
 </table>

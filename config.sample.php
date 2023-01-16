@@ -177,6 +177,13 @@ $config['thumbnail_quality'] = 80;
 $config['xml'] = 0;
 
 /**
+ *XML export thumbnail URLs
+ * Set to 1 to enable, set to 0 to disable
+ * @default 0
+ */
+$config['xml_thumbnails'] = 0;
+
+/**
  * RSS Feed
  * Set to 1 to enable RSS Feed, set to 0 to disable
  * @default 1

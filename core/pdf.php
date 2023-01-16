@@ -49,7 +49,7 @@ class PDF extends FPDF2File
 		$this->HREF='';
 	}
 
-	function GDImage($file, $x, $y, $w=0, $h=0, $im, $link='', $type='png')
+        function GDImage($file, $x, $y, $im, $w=0, $h=0, $link='', $type='png')
 	{
 		// ouput the GD image $im
 		ob_start();
@@ -107,7 +107,7 @@ class PDF extends FPDF2File
 			$white  = imagecolorallocate($target, 255, 255, 255);
 			imagefilledrectangle($target, 0, 0, $thumb_x, $thumb_y, $white);
 			imagecopyresampled($target, $im, 0,0, 0,0, $thumb_x,$thumb_y, $width,$height);
-			$this->GDImage($file, $x, $y, $w, $h, $target, $link, 'jpeg');  // change to png if you receive acrobat errors
+			$this->GDImage($file, $x, $y, $target, $w, $h, $link, 'jpeg');  // change to png if you receive acrobat errors
 			imagedestroy($target);
 		}
 		elseif ($ext == 'gif') {
@@ -118,7 +118,7 @@ class PDF extends FPDF2File
 				imageinterlace($im, false);
 			}
 
-			$this->GDImage($file, $x, $y, $w, $h, $im, $link);
+			$this->GDImage($file, $x, $y, $im, $w, $h,  $link);
 		}
 		else {
 			parent::Image($file, $x, $y, $w, $h, $ext, $link);
@@ -323,7 +323,7 @@ function pdfexport($WHERE)
 	$pdf->SetRightMargin($right_margin);
 
 	// add downscaling
-	if ($config['pdf_scale'])
+	if (array_key_exists('pdf_scale', $config))
 	{
 		$pdf->Scale     = $config['pdf_scale'];
 		$pdf->max_width = $config['pdf_image_max_width'];
@@ -333,6 +333,8 @@ function pdfexport($WHERE)
 	// get data
 	$result = iconv_array('utf-8', 'iso-8859-1', exportData($WHERE));
 
+        $tech = array();
+        
 	foreach ($result as $row)
 	{
 		set_time_limit(300); // rise per movie execution timeout limit if safe_mode is not set in php.ini

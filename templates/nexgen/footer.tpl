@@ -5,7 +5,7 @@
 
 <!-- {$smarty.template} -->
 
-{if $pageno && $maxpageno}
+{if isset($pageno) && isset($maxpageno)}
 <footer>
 	<div class="pagination-centered">
 		<ul class="pagination">

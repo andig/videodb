@@ -227,7 +227,7 @@ function engine_setup_meta($engine, $meta)
 {
     global $config;
 
-    if (is_array($meta['capabilities'])) {
+    if (array_key_exists( 'capabilities', $meta )) {
         foreach ($meta['capabilities'] as $caps) {
             $config['engine'][$caps][] = $engine;
         }
@@ -264,7 +264,7 @@ function engineMeta()
                     $engines[$engine] = $meta;
 
                     // required php version present?
-                    if ($engines[$engine]['php'] && (version_compare(phpversion(), $engines[$engine]['php']) < 0))
+                    if (array_key_exists( 'php', $engines[$engine] ) && (version_compare(phpversion(), $engines[$engine]['php']) < 0))
                     {
                         unset($engines[$engine]);
                     }
@@ -360,7 +360,7 @@ function engine_get_capability($engine, $searchtype)
     // get the meta information
     $engine = $config['engines'][$engine];
 
-    if (is_array($engine['capabilities']))
+    if (array_key_exists( 'capabilities', $engine))
     {
         return in_array($searchtype, $engine['capabilities']);
     }
