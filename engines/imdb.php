@@ -378,7 +378,7 @@ function imdbData($imdbID)
     }
 
     // Plot
-    preg_match('/<h2>Storyline<\/h2>.*?<p>(.*?)</si', $resp['data'], $ary);
+    preg_match('/"\plot"\:\{"plotText"\:\{"plainText"\:"(.*?)".*?\:"Plot"\}/si', $resp['data'], $ary);
     $data['plot'] = $ary[1];
 
     // Fetch credits
