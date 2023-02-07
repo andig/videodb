@@ -323,7 +323,7 @@ function pdfexport($WHERE)
 	$pdf->SetRightMargin($right_margin);
 
 	// add downscaling
-	if (array_key_exists('pdf_scale', $config))
+	if (array_key_exists('pdf_scale', $config) && $config['pdf_scale'])
 	{
 		$pdf->Scale     = $config['pdf_scale'];
 		$pdf->max_width = $config['pdf_image_max_width'];

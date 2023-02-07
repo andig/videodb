@@ -227,7 +227,7 @@ function engine_setup_meta($engine, $meta)
 {
     global $config;
 
-    if (array_key_exists( 'capabilities', $meta )) {
+   if (array_key_exists('capabilities', $meta) && is_array($meta['capabilities'])) {
         foreach ($meta['capabilities'] as $caps) {
             $config['engine'][$caps][] = $engine;
         }
@@ -360,7 +360,7 @@ function engine_get_capability($engine, $searchtype)
     // get the meta information
     $engine = $config['engines'][$engine];
 
-    if (array_key_exists( 'capabilities', $engine))
+    if (array_key_exists( 'capabilities', $engine) && is_array($engine['capabilities']))
     {
         return in_array($searchtype, $engine['capabilities']);
     }

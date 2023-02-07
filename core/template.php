@@ -475,7 +475,7 @@ function tpl_show($video)
     }
 
     // add episodes information
-    if (array_key_exists( 'episodes', $video ))
+    if (array_key_exists('episodes', $video) && is_array($video['episodes']))
     {
         // allow multiple columns
         $smarty->assign('listcolumns', session_get('listcolumns'));

@@ -196,6 +196,7 @@ function smarty_function_html_image($params, $template)
     $path_prefix = '';
     $server_vars = $_SERVER;
     $basedir = isset($server_vars['DOCUMENT_ROOT']) ? $server_vars['DOCUMENT_ROOT'] : '';
+    $no_scaling = false;
     
     foreach($params as $_key => $_val) {
         switch($_key) {
@@ -307,7 +308,7 @@ function smarty_function_html_image($params, $template)
          * - scale mode TUMB_REDUCE_ONLY and dimensions > target dimensions
          * - scale mode is any other numeric and filesize > scale mode
          */
-        if ($max_width && $max_height && !isset($no_scaling))
+        if ($max_width && $max_height && !$no_scaling)
         {
             // even if thumbnails are not generated we should get aspect ratio right
             if ($config['thumbnail_level'] == TUMB_NO_SCALE)
