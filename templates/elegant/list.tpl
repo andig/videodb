@@ -5,7 +5,7 @@
 
 <!-- {$smarty.template} -->
 
-{if isset($listcolumns) and $listcolumns == 1}
+{if !empty($listcolumns) and $listcolumns == 1}
     {assign var=IMGWIDTH value="35"}
     {assign var=IMGHEIGHT value="48"}
 {else}
@@ -17,7 +17,7 @@
 {*include file="covereffect.tpl"*}
 
 <div id="content">
-{if isset($list)}
+{if !empty($list)}
     {counter assign=count start=0 print=false name=videocount}
     {foreach $list as $video}
     {if $count == 0}
@@ -74,7 +74,7 @@
                         <div class="list_language">
                             {foreach $video.language as $itemlang}
                                 {if $itemlang}<a href="search.php?q={$itemlang|escape:url}&amp;fields=language">
-                                    {if isset($video.flagfile[$itemlang])}
+                                    {if !empty($video.flagfile[$itemlang])}
                                         <img src="{$video.flagfile[$itemlang]}" alt="{$itemlang}"/>
                                     {else}
                                         {$itemlang}

@@ -3,7 +3,7 @@
   $Id: list.tpl,v 2.18 2013/03/14 17:17:27 andig2 Exp $
 *}
 
-{if isset($list)}
+{if !empty($list)}
     <table width="100%" class="tableborder">
       {foreach item=video from=$list}
         {cycle values="even,odd" assign=CLASS print=false}
@@ -43,7 +43,7 @@
             <br />
         {foreach item=itemlang from=$video.language}
             {if $itemlang}<a href="search.php?q={$itemlang|escape:url}&fields=language">
-                {if isset($video.flagfile[$itemlang])}
+                {if !empty($video.flagfile[$itemlang])}
                     <img src="{$video.flagfile[$itemlang]}" border="0" alt="{$itemlang}"/>
                 {else}
                     {$itemlang}

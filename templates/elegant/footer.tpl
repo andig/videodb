@@ -29,7 +29,7 @@
     <div id="footerpages">
         <a href="#top"><img src="images/top.gif" alt=""/></a>
 
-        {if isset($pageno) && isset($maxpageno)}
+        {if !empty($pageno) && !empty($maxpageno)}
             {if $pageno != 1}<a href="?pageno={$pageno-1}">&#171;</a>{/if}
             Page <span id="pageno">{$pageno}</span> of <span id="maxpageno">{$maxpageno}</span>
             {if $pageno != $maxpageno}<a href="?pageno={$pageno+1}">&#187;</a>{/if}
