@@ -210,15 +210,13 @@ function iconv_array($source_encoding, $target_encoding, $data)
         // recursive call for array conversion
         foreach ($data as $key => $val)
         {
-            if (is_null($val)) {$val = '';} // Null not allowed
             $data[$key] = iconv_array($source_encoding, $target_encoding, $val);
         }
     }
     else
     {
         // finally convert string value
-        if (is_null($data)) {$data = '';}  // Null not allowed
-        $data = iconv($source_encoding, $target_encoding, $data);
+        $data = iconv($source_encoding, $target_encoding, (string)$data);
         if ($data === FALSE) errorpage('Character set conversion error', "Error converting from $source_encoding to $target_encoding.");
     }
     
