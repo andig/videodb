@@ -800,7 +800,7 @@ $smarty->assign('fetchtime', $fetchtime);
 //                <meta name="next-head-count" content="nn"/>
 if (preg_match('#\<meta name\="next\-head\-count" content\="\d+"/\>#',$page,$m1))
 {
-    $smarty->assign('meta1', $m1[0]);
+    $smarty->assign('trace_meta', $m1[0]);
 }
 
 // display templates

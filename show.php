@@ -147,7 +147,7 @@ if (empty($id))
     }
 
     // limit random to not unseen movies only
-    if ($config['showrandomunseen'])
+    if (array_key_exists( 'showrandomunseen', $config) && $config['showrandomunseen'])
     {
         // WARNING: this may make the SQL query expensive for large databases
         $WHERES .= ' AND ('.TBL_DATA.'.id NOT IN (SELECT video_id FROM '.TBL_USERSEEN.'))';

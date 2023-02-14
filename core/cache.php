@@ -113,6 +113,7 @@ function cache_prune_folders($cache_folder, $cache_max_age, $force_prune = false
  */
 function cache_create_folders($dir, $levels = 0)
 {
+    $error = '';
     if (!is_dir($dir))
     {
         if (!@mkdir($dir, 0700)) $error = 'Directory <code>'.$dir.'</code> does not exist.<br/>';

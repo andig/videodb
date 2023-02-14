@@ -37,7 +37,7 @@ function is_utf8($str)
 }
 
 /**
- * @author   "Sebastián Grignoli" <grignoli@framework2.com.ar>
+ * @author   "Sebastiï¿½n Grignoli" <grignoli@framework2.com.ar>
  * @package  Encoding
  * @version  1.1
  * @link     http://www.framework2.com.ar/dzone/forceUTF8-es/
@@ -216,7 +216,7 @@ function iconv_array($source_encoding, $target_encoding, $data)
     else
     {
         // finally convert string value
-        $data = iconv($source_encoding, $target_encoding, $data);
+        $data = iconv($source_encoding, $target_encoding, (string)$data);
         if ($data === FALSE) errorpage('Character set conversion error', "Error converting from $source_encoding to $target_encoding.");
     }
     

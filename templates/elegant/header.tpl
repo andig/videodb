@@ -17,11 +17,11 @@
         <a href="https://github.com/andig/videodb.git">videoDB</a>
     </div>
     <ul id="headernav2">
-        {if $header.login}<li><div id="logologin"><a href="{$header.login}">{if $loggedin}{$lang.logout}{else}{$lang.login}{/if}</a>
-        {if $loggedin}({$lang.loggedinas} {$loggedin}){/if}</div></li>{/if}
+        {if !empty($header.login)}<li><div id="logologin"><a href="{$header.login}">{if !empty($loggedin)}{$lang.logout}{else}{$lang.login}{/if}</a>
+        {if !empty($loggedin)}({$lang.loggedinas} {$loggedin}){/if}</div></li>{/if}
 
-        {if $header.profile}<li><div id="logoprofile"><a href="{$header.profile}">{$lang.profile}</a></div></li>{/if}
-        {if $header.help}<li><div id="logohelp"><a href="{$header.help}">{$lang.help}</a></div></li>{/if}
+        {if !empty($header.profile)}<li><div id="logoprofile"><a href="{$header.profile}">{$lang.profile}</a></div></li>{/if}
+        {if !empty($header.help)}<li><div id="logohelp"><a href="{$header.help}">{$lang.help}</a></div></li>{/if}
         <li><div id="logoversion"><a href="https://github.com/andig/videodb.git">v{$version|strip|replace:"_":"."|replace:" ":""}</a></div></li>
     </ul>
 </div>
@@ -29,21 +29,21 @@
 
 <div id="header">
     <ul id="headernav">
-        {if $header.browse}<li class="{if $header.active == 'browse'}tabActive{else}tabInactive{/if}"><a href="{$header.browse}{if $browseid}#{$browseid}{/if}" accesskey="i">{$lang.browse}</a></li>{/if}
-        {if $header.trace}<li class="{if $header.active == 'trace'}tabActive{else}tabInactive{/if}"><a href="{$header.trace}">{$lang.imdbbrowser}</a></li>{/if}
-        {if $header.random}<li class="{if $header.active == 'random'}tabActive{else}tabInactive{/if}"><a href="{$header.random}">{$lang.random}</a></li>{/if}
-        {if $header.search}<li class="{if $header.active == 'search'}tabActive{else}tabInactive{/if}"><a href="{$header.search}">{$lang.search}</a></li>{/if}
-        {if $header.new}<li class="{if $header.active == 'new'}tabActive{else}tabInactive{/if}"><a href="{$header.new}" accesskey="n">{$lang.n_e_w}</a></li>{/if}
-        {if $header.active == 'show'}<li class="tabActive"><a href="{php}echo $_SERVER['REQUEST_URI'];{/php}">{$lang.view}</a></li> {/if}
+        {if !empty($header.browse)}<li class="{if $header.active == 'browse'}tabActive{else}tabInactive{/if}"><a href="{$header.browse}{if !empty($browseid)}#{$browseid}{/if}" accesskey="i">{$lang.browse}</a></li>{/if}
+        {if !empty($header.trace)}<li class="{if $header.active == 'trace'}tabActive{else}tabInactive{/if}"><a href="{$header.trace}">{$lang.imdbbrowser}</a></li>{/if}
+        {if !empty($header.random)}<li class="{if $header.active == 'random'}tabActive{else}tabInactive{/if}"><a href="{$header.random}">{$lang.random}</a></li>{/if}
+        {if !empty($header.search)}<li class="{if $header.active == 'search'}tabActive{else}tabInactive{/if}"><a href="{$header.search}">{$lang.search}</a></li>{/if}
+        {if !empty($header.new)}<li class="{if $header.active == 'new'}tabActive{else}tabInactive{/if}"><a href="{$header.new}" accesskey="n">{$lang.n_e_w}</a></li>{/if}
+        {if $header.active == 'show'}<li class="tabActive"><a href="{$header.request_uri}">{$lang.view}</a></li> {/if}
         {if $header.active == 'edit'}<li class="tabActive"><a href="{$header.edit}">{$lang.edit}</a></li> {/if}
-        {if $header.borrow}<li class="{if $header.active == 'borrow'}tabActive{else}tabInactive{/if}"><a href="{$header.borrow}">{$lang.borrow}</a></li>{/if}
-        {if $header.stats}<li class="{if $header.active == 'stats'}tabActive{else}tabInactive{/if}"><a href="{$header.stats}">{$lang.statistics}</a></li>{/if}
-        {if $header.contrib}<li class="{if $header.active == 'contrib'}tabActive{else}tabInactive{/if}"><a href="{$header.contrib}">{$lang.contrib}</a></li>{/if}
-        {if $header.setup}<li class="{if $header.active == 'setup'}tabActive{else}tabInactive{/if}"><a href="{$header.setup}">{$lang.setup}</a></li>{/if}
+        {if !empty($header.borrow)}<li class="{if $header.active == 'borrow'}tabActive{else}tabInactive{/if}"><a href="{$header.borrow}">{$lang.borrow}</a></li>{/if}
+        {if !empty($header.stats)}<li class="{if $header.active == 'stats'}tabActive{else}tabInactive{/if}"><a href="{$header.stats}">{$lang.statistics}</a></li>{/if}
+        {if !empty($header.contrib)}<li class="{if $header.active == 'contrib'}tabActive{else}tabInactive{/if}"><a href="{$header.contrib}">{$lang.contrib}</a></li>{/if}
+        {if !empty($header.setup)}<li class="{if $header.active == 'setup'}tabActive{else}tabInactive{/if}"><a href="{$header.setup}">{$lang.setup}</a></li>{/if}
 
-        {if $header.profile}<li class="{if $header.active == 'profile'}tabActive{else}tabInactive{/if}"><div id="headerprofile"<a href="{$header.profile}">{$lang.profile}</a></div></li>{/if}
-        {if $header.help}<li class="{if $header.active == 'help'}tabActive{else}tabInactive{/if}"><div id="headerhelp"><a href="{$header.help}">{$lang.help}</a></div></li>{/if}
-        {if $header.login}<li class="{if $header.active == 'login'}tabActive{else}tabInactive{/if}"><div id="headerlogin"><a href="{$header.login}">{if $loggedin}{$lang.logout}{else}{$lang.login}{/if}</a></div></li>{/if}
+        {if !empty($header.profile)}<li class="{if $header.active == 'profile'}tabActive{else}tabInactive{/if}"><div id="headerprofile"<a href="{$header.profile}">{$lang.profile}</a></div></li>{/if}
+        {if !empty($header.help)}<li class="{if $header.active == 'help'}tabActive{else}tabInactive{/if}"><div id="headerhelp"><a href="{$header.help}">{$lang.help}</a></div></li>{/if}
+        {if !empty($header.login)}<li class="{if $header.active == 'login'}tabActive{else}tabInactive{/if}"><div id="headerlogin"><a href="{$header.login}">{if !empty($loggedin)}{$lang.logout}{else}{$lang.login}{/if}</a></div></li>{/if}
     </ul>
     <!-- /headernav -->
 </div>
