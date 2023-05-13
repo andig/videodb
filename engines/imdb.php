@@ -235,8 +235,8 @@ function imdbData($imdbID)
     // fetch mainpage
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
     //testing code save resp data from imdb
-    //$file_path = './cache/httpclient-php_imdbData.html';
-    //file_put_contents($file_path, $resp['data']);
+    $file_path = './cache/httpclient-php_imdbData.html';
+    file_put_contents($file_path, $resp['data']);
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
@@ -378,9 +378,9 @@ function imdbData($imdbID)
     }
 
     // Plot
-    preg_match('/"\plot"\:\{"plotText"\:\{"plainText"\:"(.*?)".*?\:"Plot"\}/si', $resp['data'], $ary);
-    $data['plot'] = $ary[1];
-
+    preg_match('/"plot"\:\{"plotText"\:\{"plainText"\:"(.*?)","__typename.*?\:"Plot"\}/si', $resp['data'], $ary);
+    $data['plot'] = str_replace('\"','"',$ary[1]);
+    
     // Fetch credits
     $resp = imdbFixEncoding($data, httpClient($imdbServer.'/title/tt'.$imdbID.'/fullcredits', $cache));
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
