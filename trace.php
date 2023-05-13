@@ -444,6 +444,7 @@ function fixup_javascript($html)
             $js_file_data = replace_javascript_seasonyear ($js_file_data);
             $partfilename .= '-seasonyear';
         }
+        
         // for search bar and interactive search list
         $find_string = 'hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]';
         $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
@@ -452,14 +453,16 @@ function fixup_javascript($html)
             $js_file_data = replace_javascript_search ($js_file_data);
             $partfilename .= '-search';
         }
-        // add add/show movie links    
-        $find_string = 'titleData.productionStatus';
+        
+        // for add/show movie links    
+        $find_string = 'displayableProperty.value.plainText}),(0';
         $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
         if (preg_match($pattern, $js_file_data, $matches) )
         {
             $js_file_data = replace_javascript_addmovie ($js_file_data);
             $partfilename .= '-addmovie';
         }
+ 
         // on main series page for season, year select drop down list on browse episodes
         $find_string = 'return window.location.href="SEE_ALL"';
         $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
@@ -471,6 +474,7 @@ function fixup_javascript($html)
             $js_file_data = replace_javascript_fix_href ($js_file_data);
             $partfilename .= '-href';
         }   
+        
         // on main series page fix title href's all cast & crew, creator, director, writer
         // string  '"/title/".concat(h.id,"/fullcredits")'; h is variable
         $pattern = '#"/title/"\.concat\(.*?\.id,"/fullcredits"\)#';  // add escape delimiters
@@ -599,14 +603,14 @@ function replace_javascript_addmovie ($js_file_data)
 // test code to debug if statement match
 //preg_match("#/title/tt(\d+)#", $uri['path'], $m);
 //echo "<br> title - addmovie"; var_dump($m); 
-    if (preg_match("#/title/tt(\d+)#", $uri['path'], $m)) 
+    if (preg_match("#/title/tt(\d+)#", $uri['path'], $m)) // $m[1] is imdb tltle no
     {
-        //   look for     rating)&&(0,r.jsxs)(f.InlineListItem,{children:[(0,r.jsx)(Mp,{text:  - var tokens can change randomly
-        //                         111111111111111111111111111111111111111111111111111111111       
-        $pattern = "#rating\)&&(.*?.InlineListItem.*?.,\{text:)#";
+        // look for &&S.push({text:p.displayableProperty.value.plainText}),(0,r.jsx)   S p and r can change
+        $pattern = "#&&(.?\.push\(\{text\:)(.?\.displayableProperty\.value\.plainText\}\),\(0,.?\.jsx\))#";
+        //              111111111111111111  22222222222222222222222222222222222222222222222222222222222
         preg_match($pattern, $js_file_data, $matches);
 //echo "<br> js data - function names"; var_dump($matches);
-        $append = ','.$matches[1].'"Add Movie",href:"edit.php?save=1&lookup=2&imdbID=imdb:'.$m[1].'"})]}),';
+        $append = $matches[1].'"Add Movie", link: "edit.php?save=1&lookup=2&imdbID=imdb:'.$m[1].'"}),';
         if (is_known_item('imdb:'.$m[1], $sp_id, $sp_diskid))
         {
             $diskid = "";
@@ -614,31 +618,17 @@ function replace_javascript_addmovie ($js_file_data)
             {
                 $diskid = " (Diskid:".$sp_diskid.")";
             }
-            $append.= $matches[1].'"Show Movie'.$diskid.'",href:"show.php?id='.$sp_id.'"})]}),';
+            $append.= $matches[1].'"Show Movie'.$diskid.'", link: "show.php?id='.$sp_id.'"}),';
         }
-        //  string to find for in replace  - format:"{hours} {minutes}",unitDisplay:"narrow"})})]})}
-        //                                   1111111111111111111111111111111111111111111111111112222
-        $pattern = '#(format:"{hours} {minutes}",unitDisplay:"narrow"}\)}\))(]}\)})#';        
-        preg_match($pattern, $js_file_data, $matches);
-//echo "<br> js file - addmovie"; var_dump($matches);
+        $pattern = "#(&&.?\.push\(\{text\:.?\.displayableProperty\.value\.plainText\}\),)(\(0,.?\.jsx\))#"; 
+        //            111111111111111111111111111111111111111111111111111111111111111111  2222222222222
+        preg_match($pattern, $js_file_data, $matches_1);
+//echo "<br> js file - addmovie"; var_dump($matches_1);
         $js_file_data = preg_replace($pattern,
-                                     $matches[1].$append.$matches[2],            
+                                     $matches_1[1].$append.$matches_1[2],            
                                      $js_file_data);
     }
-    
-    // fix hrefs - title
-    //            var n="/title/".concat(e.titleData.id,"/fullcredits/")
-    $pattern = '#(var n=")(/title/)(")(\.concat\(e\.titleData.id,"/fullcredits/"\))#';
-//echo preg_match($pattern, $js_file_data, $matches);
-//echo "<br> js data - function names"; var_dump($matches);            
-    if (preg_match($pattern, $js_file_data, $matches))
-    {
-//echo "<br> js file - find for href with title"; var_dump($matches);
-        $js_file_data = preg_replace($pattern,
-                                     $matches[1].'http://".concat(window.location.host).concat(window.location.pathname).concat("?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2].'")'.$matches[4],
-                                     $js_file_data);
-    }
-    
+        
     // fix hrefs - name
     //  href:"/name/".concat
     $pattern = '#(href:")(/name/)(")(\.concat)#';
