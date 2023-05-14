@@ -379,7 +379,7 @@ function imdbData($imdbID)
 
     // Plot
     preg_match('/"plot"\:\{"plotText"\:\{"plainText"\:"(.*?)","__typename.*?\:"Plot"\}/si', $resp['data'], $ary);
-    $data['plot'] = str_replace('\"','"',$ary[1]);
+    $data['plot'] = stripslashes($ary[1]);
     
     // Fetch credits
     $resp = imdbFixEncoding($data, httpClient($imdbServer.'/title/tt'.$imdbID.'/fullcredits', $cache));
