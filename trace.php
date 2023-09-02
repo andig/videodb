@@ -715,7 +715,6 @@ function replace_javascript_episodelist ($js_file_data, $html)
     global $iframe;
 //echo "<br> in replace_javascript_episodelist";
 //echo "<br>".$js_file_name; echo "   ".$cachefolder;
-
 //file_put_contents('./cache/orig_eposidelist.js', $js_file_data);
 
     // allow for iframe templates
@@ -768,18 +767,20 @@ function replace_javascript_episodelist ($js_file_data, $html)
 //file_put_contents('./cache/html_new.text', $html);  // for debugging
 
     // get js code to clone
-                //aggregateRating}}),I&&!E&&!_&&(0,a.jsx)(ut,{onClick:function(){return f(!0)},width:"no-padding",children:x({id:"common_buttons_watchOptions",defaultMessage:"Watch options"}
-                //1111111111111111111111111111112222222222222233333333333333333333333333333333333333333333333333334444444444444445555555555555555555555555555566666666666666667777777777777777
-    $pattern = '#(aggregateRating\}\}\),.*?_&&)(\(0,.*?\,\{)(onClick.*?padding",)(children\:.*?:)("common_buttons_watchOptions")(.*?)("Watch options"\})#';
-                //1111111111111111111111111111  22222222222  3333333333333333333  44444444444444  55555555555555555555555555555  666  77777777777777777
-    preg_match($pattern, $js_file_data, $matches_2);
+                //{aggregateRating:s.aggregateRating,voteCount:s.voteCount},refMarker:{prefix:C}}),I&&!E&&!S&&(0,a.jsx)(vt,{onClick:function(){return g(!0)},width:"half-padding",children:x({id:"common_buttons_watchOptions",defaultMessage:"Watch options"}
+                //111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111112222222222222233333333333333333333333333333333333333333333333333334444444444444445555555555555555555555555555566666666666666667777777777777777
+    $pattern = '#(\{aggregateRating:..aggregate.*?&&.*?&&)(\(0,.*?\,\{)(onClick.*?padding",)(children\:.*?:)("common_buttons_watchOptions")(.*?)("Watch options"\})#';
+                //111111111111111111111111111111111111111  22222222222  3333333333333333333  44444444444444  55555555555555555555555555555  666  77777777777777777
+preg_match($pattern, $js_file_data, $matches_2);
     // bits needed 
     $part1 = $matches_2[2];  // (0,a.jsx)(ut,{    a and ut variable
     $part2 = $matches_2[4];    // children:x({id:   x variable and id maybe variable
     $part3 = $matches_2[6];    // ,defaultMessage:  maybe variable
     // get varaiable which holds episode data from json after processing in js 
                  //({titleId:s.id})
+                 //1111111111233333
     $pattern = '#(\({titleId:)(.*?)(\.id}\))#';
+                //11111111111  222  3333333
     preg_match($pattern, $js_file_data, $matches_4);
     $part_4 = $matches_4[2];   // s is variable
     
