@@ -234,9 +234,14 @@ function imdbData($imdbID)
 
     // fetch mainpage
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
-    //testing code save resp data from imdb
-    //$file_path = './cache/httpclient-php_imdbData.html';
-    //file_put_contents($file_path, $resp['data']);
+//testing code save resp data from imdb
+//$file_path = './cache/httpclient-php_imdbData.html';
+//file_put_contents($file_path, $resp['data']);
+    preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\</script\>)#',$resp['data'],$matches_1);
+//file_put_contents('./cache/nextdata.json', $matches_1[2]);  // for debugging
+    $json_data = json_decode($matches_1[2],true);
+//file_put_contents('./cache/nextdata-decoded.json', $rtime);  // for debugging
+
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
@@ -295,7 +300,10 @@ function imdbData($imdbID)
     $data['mpaa'] = trim($ary[1]);
 
     // Runtime
-    if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
+    if (filter_var($json_data["props"]["pageProps"]["aboveTheFoldData"]["runtime"]["seconds"], FILTER_SANITIZE_NUMBER_INT) > 0) {
+        # use the runtime from the next_data json data
+        $data['runtime'] = filter_var($json_data["props"]["pageProps"]["aboveTheFoldData"]["runtime"]["seconds"], FILTER_SANITIZE_NUMBER_INT) / 60;
+    } else if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
         # handles Hours and maybe minutes. Some movies are exactly 1 hours.
         $minutes = intval($ary[2]);
     	if (is_numeric($ary[1])) {
