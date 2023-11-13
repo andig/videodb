@@ -234,14 +234,14 @@ function imdbData($imdbID)
 
     // fetch mainpage
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
-//testing code save resp data from imdb
-//$file_path = './cache/httpclient-php_imdbData.html';
-//file_put_contents($file_path, $resp['data']);
-    preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\</script\>)#',$resp['data'],$matches_1);
-//file_put_contents('./cache/nextdata.json', $matches_1[2]);  // for debugging
-    $json_data = json_decode($matches_1[2],true);
-//file_put_contents('./cache/nextdata-decoded.json', $rtime);  // for debugging
-
+    #testing code save resp data from imdb
+    #file_put_contents('./cache/httpclient-php_imdbData.html', $resp['data']);  // write page data to file
+    // extract json data from page
+    preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\</script\>)#',$resp['data'],$matches);
+    #file_put_contents('./cache/nextdata.json', $matches[2]);  // write json data to file
+    $json_data = json_decode($matches[2],true);
+    #file_put_contents('./cache/nextdata-decoded.json', print_r($json_data, true));  // write formated json data to file
+    
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // add encoding
@@ -386,8 +386,7 @@ function imdbData($imdbID)
     }
 
     // Plot
-    preg_match('/"plot"\:\{"plotText"\:\{"plainText"\:"(.*?)","__typename.*?\:"Plot"\}/si', $resp['data'], $ary);
-    $data['plot'] = stripslashes($ary[1]);
+    $data['plot'] = stripslashes($json_data["props"]["pageProps"]["aboveTheFoldData"]["plot"]["plotText"]["plainText"]);
     
     // Fetch credits
     $resp = imdbFixEncoding($data, httpClient($imdbServer.'/title/tt'.$imdbID.'/fullcredits', $cache));
