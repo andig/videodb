@@ -234,10 +234,18 @@ function imdbData($imdbID)
 
     // fetch mainpage
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
-    //testing code save resp data from imdb
-    //$file_path = './cache/httpclient-php_imdbData.html';
-    //file_put_contents($file_path, $resp['data']);
+    #testing code save resp data from imdb
+    #file_put_contents('./cache/httpclient-php_imdbData_title.html', $resp['data']);  // write page data to file
+    
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
+
+    // extract json data from page
+    if (preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\</script\>)#',$resp['data'],$matches))
+    {
+        #file_put_contents('./cache/nextdata.json', $matches[2]);  // write json data to file
+        $json_data = json_decode($matches[2],true);
+        #file_put_contents('./cache/nextdata-decoded.json', print_r($json_data, true));  // write formated json data to file
+    } 
 
     // add encoding
     $data['encoding'] = $resp['encoding'];
@@ -295,7 +303,10 @@ function imdbData($imdbID)
     $data['mpaa'] = trim($ary[1]);
 
     // Runtime
-    if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
+    if (filter_var($json_data["props"]["pageProps"]["aboveTheFoldData"]["runtime"]["seconds"], FILTER_SANITIZE_NUMBER_INT) > 0) {
+        # use the runtime from the next_data json data
+        $data['runtime'] = filter_var($json_data["props"]["pageProps"]["aboveTheFoldData"]["runtime"]["seconds"], FILTER_SANITIZE_NUMBER_INT) / 60;
+    } else if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
         # handles Hours and maybe minutes. Some movies are exactly 1 hours.
         $minutes = intval($ary[2]);
     	if (is_numeric($ary[1])) {
@@ -378,8 +389,10 @@ function imdbData($imdbID)
     }
 
     // Plot
-    preg_match('/"plot"\:\{"plotText"\:\{"plainText"\:"(.*?)","__typename.*?\:"Plot"\}/si', $resp['data'], $ary);
-    $data['plot'] = stripslashes($ary[1]);
+    if (array_key_exists('plainText', $json_data["props"]["pageProps"]["aboveTheFoldData"]["plot"]["plotText"]) )
+    {
+        $data['plot'] = stripslashes($json_data["props"]["pageProps"]["aboveTheFoldData"]["plot"]["plotText"]["plainText"]);
+    }
     
     // Fetch credits
     $resp = imdbFixEncoding($data, httpClient($imdbServer.'/title/tt'.$imdbID.'/fullcredits', $cache));
