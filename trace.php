@@ -808,6 +808,10 @@ function replace_javascript_eposidelistmain ($js_file_data, $html)
     global $iframe;
 //echo "<br> in replace_javascript_episodelist";
 //echo "<br>".$js_file_name; echo "   ".$cachefolder;
+//
+//$file_path = './cache/pre_file_data.js';
+//file_put_contents($file_path, $js_file_data);
+//
     // allow for iframe templates
     $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;    
@@ -819,9 +823,9 @@ function replace_javascript_eposidelistmain ($js_file_data, $html)
     $json_data = json_decode($matches_1[2],true);
     $imdb_id = filter_var($json_data["props"]["pageProps"]["contentData"]["entityMetadata"]["id"], FILTER_SANITIZE_NUMBER_INT);
      // get js codeto clone
-    // ,{children:[(0,r.jsx)(X,{preIcon
-    // 1111111111112222222222222333333333
-    $pattern = '#(,\{children\:\[)(.*?)(preIcon)#';
+    // bottomPadding:"xs",children:[(0,o.jsxs)(ee,{children:[(0,o.jsx)(j.xE,{preIcon
+    // 11111111111111111111111111111111111111111111111111111122222222222222223333333
+    $pattern = '#(bottomPadding.*?children.*?,\{children\:\[)(.*?)(preIcon)#';
     preg_match($pattern, $js_file_data, $matches_2);
     // build add episode js code
     $append = $matches_2[2].'text:"\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0"}),';   // add spaces before link
@@ -844,6 +848,9 @@ function replace_javascript_eposidelistmain ($js_file_data, $html)
     $js_file_data = preg_replace($pattern,
                                  $matches_3[0].$append,
                                  $js_file_data); 
+
+//$file_path = './cache/post_file_data.js';
+//file_put_contents($file_path, $js_file_data);
 
     return ($js_file_data);
 }
