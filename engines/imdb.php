@@ -299,8 +299,8 @@ function imdbData($imdbID)
     $data['coverurl'] = imdbGetCoverURL($resp['data']);
 
     // MPAA Rating
-    preg_match('/<div class="subtext">(.+?)</is', $resp['data'], $ary);
-    $data['mpaa'] = trim($ary[1]);
+    $data['mpaa'] = "";
+    $data['mpaa'] = $json_data["props"]["pageProps"]["aboveTheFoldData"]["certificate"]["rating"];
 
     // Runtime
     if (filter_var($json_data["props"]["pageProps"]["aboveTheFoldData"]["runtime"]["seconds"], FILTER_SANITIZE_NUMBER_INT) > 0) {
