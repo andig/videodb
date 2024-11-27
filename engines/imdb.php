@@ -324,11 +324,17 @@ function imdbData($imdbID)
     }
 
     // Director
-    preg_match('/<li.+?<button.+?Director.+?(<li.+?<a.+?href="\/name\/nm.+?\/?ref_=tt_ov_dr".+?<\/a>.+?<\/ul>)<\/div><\/li>/si', $resp['data'], $ary);
-    preg_match_all('/<a class=.+? href="\/name\/nm.+?">(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER);
+    $data['director'] = "";
     // TODO: Update templates to use multiple directors
-    $data['director']  = trim(join(', ', $ary[1]));
-
+    if ($json_data["props"]["pageProps"]["mainColumnData"]["directors"]["0"]["totalCredits"] > 0)
+    {
+        foreach ($json_data["props"]["pageProps"]["mainColumnData"]["directors"]["0"]["credits"] as $directordata)
+        {
+            $directorarray[] = trim($directordata["name"]["nameText"]["text"]);
+        }
+        $data['director'] = trim(join(', ',$directorarray));
+    } 
+    
     // Rating
     preg_match('/<div data-testid="hero-rating-bar__aggregate-rating__score" class="sc-.+?"><span class="sc-.+?">(.+?)<\/span><span>\/<!-- -->10<\/span><\/div>/si', $resp['data'], $ary);
     $data['rating'] = trim($ary[1]);
