@@ -325,6 +325,7 @@ function imdbData($imdbID)
 
     // Director
     $data['director'] = "";
+    // TODO: Update templates to use multiple directors
     if ($json_data["props"]["pageProps"]["mainColumnData"]["directors"]["0"]["totalCredits"] > 0)
     {
         foreach ($json_data["props"]["pageProps"]["mainColumnData"]["directors"]["0"]["credits"] as $directordata)
