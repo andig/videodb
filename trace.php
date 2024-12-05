@@ -411,10 +411,10 @@ function fixup_javascript($html)
     }
 
     // testing only
-    $cachefolder = cache_get_folder('javascript-preclone');
-    $error = cache_create_folders($cachefolder, 0); // ensure folder exists
-    // empty javascript cache as imdb keep changing things
-    array_map('unlink', glob($cachefolder."/*.*"));    
+//    $cachefolder = cache_get_folder('javascript-preclone');
+//    $error = cache_create_folders($cachefolder, 0); // ensure folder exists
+//    // empty javascript cache as imdb keep changing things
+//    array_map('unlink', glob($cachefolder."/*.*"));    
     
     // get cache folder
     $cachefolder = cache_get_folder('javascript');  //get cache root folder
@@ -438,8 +438,8 @@ function fixup_javascript($html)
         $js_file_data = file_get_contents($js_file_name);
 
         // testing/debugging only - use to get copy of all javascript before cloning
-        $file_path = './cache/javascript-preclone/pre_'.$x.'.js';
-        file_put_contents($file_path, $js_file_data); 
+//        $file_path = './cache/javascript-preclone/pre_'.$x.'.js';
+//        file_put_contents($file_path, $js_file_data); 
         
         $pattern = '#'.preg_quote('fragment BaseTitleCard on Title', '#').'#';  // add escape delimiters
         if ( preg_match($pattern, $js_file_data, $matches))
