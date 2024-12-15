@@ -913,6 +913,10 @@ function replace_javascript_srchlist ($js_file_data, $html)
  
     // add add title and show title for all except episodes
     // add variables to data blob
+    
+preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
+file_put_contents('./cache/nextdata_episodedata_allBefore.json', $matches[2]);  // for debugging
+
     unset($matches);
     preg_match('#(\<script id\="__NEXT_DATA__".*?)("titleResults"\:\{"results"\:.*?)(,"companyResults"\:)#',$html,$matches);
 file_put_contents('./cache/nextdata_episodedata_part.json', $matches[2]);  // for debugging
@@ -921,8 +925,8 @@ file_put_contents('./cache/nextdata_episodedata_part.json', $matches[2]);  // fo
     $x = 0;
     foreach ($title_data['titleResults']['results'] as $object) 
     {
-        $imdb_id = filter_var($object['id'], FILTER_SANITIZE_NUMBER_INT);
-        $title_data['titleResults']['results'][$x]['imdbid'] = $imdb_id;
+            $imdb_id = filter_var($object['id'], FILTER_SANITIZE_NUMBER_INT);
+            $title_data['titleResults']['results'][$x]['imdbid'] = $imdb_id;
         
         $title_data['titleResults']['results'][$x]['videodbid'] = 0;
          if (is_known_item('imdb:'.$imdb_id, $sp_id, $sp_diskid))
@@ -961,19 +965,36 @@ file_put_contents('./cache/nextdata_episodedata_allAfter.json', $matches[2]);  /
     preg_match($pattern,$js_file_data,$matches);
     $jasondata_var = $matches[2];
         
-    // get place to insert js data and code to use
+    // get place to insert js data and code to use for all except episodes
     //return n&&T.push({text:n}),l&&T.push({text:l}),(0,s.jsx)(c.MetaDataListSummaryItem
     //1111111111111111111111111111112222222233333344455555555555555555555555555555555555               
     //            code to insert    XXXXXXXXXXXXXXXX                            
-    $pattern = '#(return .&&..push\({text:.}\),.&&)(..push\({)(text:l)(}\),)(\(0,s.jsx\)\(c.MetaDataListSummaryItem)#';
-               // 11111111111111111111111111111111  222222222  333333  4444  55555555555555555555555555555555555555  
-preg_match_all($pattern,$js_file_data,$matches_all);
+    $pattern = '#(return .&&..push\({text:.}\),.&&)'
+              . '(..push\({)'
+              . '(text:.)'
+              . '(}\),)'
+              . '(\(.,..jsx\)\(..MetaDataListSummaryItem)#';
+preg_match_all($pattern,$js_file_data,$matches_all);  // for debugging
     unset($matches);
     preg_match($pattern,$js_file_data,$matches);
     //T.push({text: 'Add Title',href: 'edit.php?save=1&lookup=2&imdbID=imdb:' + e.imdbid}),
     $add = $matches[2]."text:'Add Title',href:'edit.php?save=1&lookup=2&imdbID=imdb:'+".$jasondata_var.".imdbid}),";
     $show = $jasondata_var.".videodbid != 0 &&".$matches[2]."text:'Show Title',href:'show.php?id='+".$jasondata_var.".videodbid}),";
 
+    $replace_val = $matches[1].$matches[2].$matches[3].$matches[4].$add.$show.$matches[5];
+    $js_file_data = preg_replace($pattern,$replace_val, $js_file_data);
+    
+    // get place to insert js data and code to use for episodes
+    //text:e.join(".")}),l&&T.push({text:l}),(0,s.jsx)(c.MetaDataListSummaryItem,
+    //111111111111111111111122222222333333444555555555555555555555555555555555555    
+    $pattern = '#(text:..join\("."\)}\),.&&)'
+              . '(..push\(\{)'
+              . '(text:.)'
+              . '(}\),)'
+              . '(\(.,..jsx\)\(..MetaDataListSummaryItem,)#';
+preg_match_all($pattern,$js_file_data,$matches_all);   // for debugging
+    unset($matches);
+    preg_match($pattern,$js_file_data,$matches);
     $replace_val = $matches[1].$matches[2].$matches[3].$matches[4].$add.$show.$matches[5];
     $js_file_data = preg_replace($pattern,$replace_val, $js_file_data);
  
