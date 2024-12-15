@@ -403,7 +403,7 @@ function request($urlonly=false)
  */
 function fixup_javascript($html)
 {
-    global $uri;
+    global $uri, $config;
     
     if (stristr($uri['host'], 'imdb') === false)
     {
@@ -411,7 +411,7 @@ function fixup_javascript($html)
     }
 
     // testing only use to clear copy of all javascript before cloning
-    if ($debug)
+    if ($config['debug'])
     {     
         $cachefolder = cache_get_folder('javascript-preclone');
         $error = cache_create_folders($cachefolder, 0); // ensure folder exists
@@ -441,7 +441,7 @@ function fixup_javascript($html)
         $js_file_data = file_get_contents($js_file_name);
 
         // testing/debugging only - use to get copy of all javascript before cloning
-        if ($debug)
+        if ($config['debug'])
         { 
             $file_path = './cache/javascript-preclone/pre_'.$x.'.js';
             file_put_contents($file_path, $js_file_data); 
@@ -832,7 +832,16 @@ function replace_javascript_search ($js_file_data)
  */
 function replace_javascript_srchlist ($js_file_data, $html)
 {
-    global $iframe;
+    global $iframe, $config;
+    
+    if ($config['debug'])
+    {     
+        $cachefolder = cache_get_folder('nextdata');
+        $error = cache_create_folders($cachefolder, 0); // ensure folder exists
+        // empty javascript cache as imdb keep changing things
+        array_map('unlink', glob($cachefolder."/*.*"));    
+    }
+    
     $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
     $iframe_val = '';
     if ($iframe) 
@@ -910,16 +919,21 @@ function replace_javascript_srchlist ($js_file_data, $html)
                                                         {return $matches[0]."'?$iframe_val&videodburl=https://www.imdb.com'+";
                                                         }, $js_file_data);
     }
- 
     // add add title and show title for all except episodes
     // add variables to data blob
-    
-preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
-file_put_contents('./cache/nextdata_episodedata_allBefore.json', $matches[2]);  // for debugging
+    if ($config['debug'])
+    {     
+        preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
+        file_put_contents('./cache/nextdata/srchlst_allBefore.json', $matches[2]);  // for debugging
+    }
 
     unset($matches);
     preg_match('#(\<script id\="__NEXT_DATA__".*?)("titleResults"\:\{"results"\:.*?)(,"companyResults"\:)#',$html,$matches);
-file_put_contents('./cache/nextdata_episodedata_part.json', $matches[2]);  // for debugging
+
+    if ($config['debug'])
+    { 
+        file_put_contents('./cache/nextdata/srchlst_part.json', $matches[2]);  // for debugging
+    }
     // Decode the JSON file - add { for syntax
     $title_data = json_decode("{".$matches[2]."}",true);
     $x = 0;
@@ -945,59 +959,58 @@ file_put_contents('./cache/nextdata_episodedata_part.json', $matches[2]);  // fo
     $title_data_new = json_encode($title_data, JSON_UNESCAPED_SLASHES );
     // strip out added delimiters '{' '}' added in earlier
     $title_data_new = substr($title_data_new, 1, -1);
-file_put_contents('./cache/nextdata_new_encoded.json', $title_data_new);   // for debugging
- 
+    
+    if ($config['debug'])
+    { 
+        file_put_contents('./cache/nextdata/srchlst_new_encoded.json', $title_data_new);   // for debugging
+        file_put_contents('./cache/nextdata/srchlst_new_js.js', $matches[1].$title_data_new.$matches[3]);   // for debugging
+    }
     //update htlm with added ids in amended json
-file_put_contents('./cache/nextdata_new_js.js', $matches[1].$title_data_new.$matches[3]);   // for debugging
-
     $html = preg_replace('#(\<script id\="__NEXT_DATA__".*?)("titleResults"\:\{"results"\:.*?)(,"companyResults"\:)#',
                          $matches[1].$title_data_new.$matches[3],
                          $html);
     
-preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
-file_put_contents('./cache/nextdata_episodedata_allAfter.json', $matches[2]);  // for debugging
+    if ($config['debug'])
+    { 
+        preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
+        file_put_contents('./cache/nextdata/srchlst_allAfter.json', $matches[2]);  // for debugging
+    }
 
-    // get js variable holding json elements   
-    //!Number.isNaN(Number.parseInt(e)),eD=e=>
-    $pattern = '#(!Number.is...\(Number.parseInt...\),..\=)(e)(\=>)#';
-               // 1111111111111111111111111111111111111111  2  333
+    // assign my fields to a var
+    // let{id:t,titleNameText:a,hasSearchType:i,index:r,
+    $pattern = '#(let{)(id:.,titleNameText:.,)#';
     unset($matches);
-    preg_match($pattern,$js_file_data,$matches);
-    $jasondata_var = $matches[2];
-        
-    // get place to insert js data and code to use for all except episodes
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[1]."imdbid:imdbid,videodbid:videodbid,videodbdiskid:videodbdiskid,".$matches[2],
+                                     $js_file_data);
+    }
+
+    // get place to insert js data
+    // pattern for all except episodes
     //return n&&T.push({text:n}),l&&T.push({text:l}),(0,s.jsx)(c.MetaDataListSummaryItem
     //1111111111111111111111111111112222222233333344455555555555555555555555555555555555               
-    //            code to insert    XXXXXXXXXXXXXXXX                            
-    $pattern = '#(return .&&..push\({text:.}\),.&&)'
+    //            code to insert    XXXXXXXXXXXXXXXX  
+    // pattern for episodes
+    //text:e.join(".")}),l&&T.push({text:l}),(0,s.jsx)(c.MetaDataListSummaryItem,
+    //111111111111111111111122222222333333444555555555555555555555555555555555555 
+    $pattern = '#(return .&&..push\({text:.}\),.&&'
+                . '|'
+                . 'text:..join\("."\)}\),.&&)'
               . '(..push\({)'
               . '(text:.)'
               . '(}\),)'
               . '(\(.,..jsx\)\(..MetaDataListSummaryItem)#';
-preg_match_all($pattern,$js_file_data,$matches_all);  // for debugging
     unset($matches);
     preg_match($pattern,$js_file_data,$matches);
-    //T.push({text: 'Add Title',href: 'edit.php?save=1&lookup=2&imdbID=imdb:' + e.imdbid}),
-    $add = $matches[2]."text:'Add Title',href:'edit.php?save=1&lookup=2&imdbID=imdb:'+".$jasondata_var.".imdbid}),";
-    $show = $jasondata_var.".videodbid != 0 &&".$matches[2]."text:'Show Title',href:'show.php?id='+".$jasondata_var.".videodbid}),";
+    $add = $matches[2]."text:'Add Title',href:'edit.php?save=1&lookup=2&imdbID=imdb:'+imdbid}),";
+    $show = "videodbid != 0 &&".$matches[2]."text:'Show Title '+videodbdiskid,href:'show.php?id='+videodbid}),";
 
-    $replace_val = $matches[1].$matches[2].$matches[3].$matches[4].$add.$show.$matches[5];
-    $js_file_data = preg_replace($pattern,$replace_val, $js_file_data);
-    
-    // get place to insert js data and code to use for episodes
-    //text:e.join(".")}),l&&T.push({text:l}),(0,s.jsx)(c.MetaDataListSummaryItem,
-    //111111111111111111111122222222333333444555555555555555555555555555555555555    
-    $pattern = '#(text:..join\("."\)}\),.&&)'
-              . '(..push\(\{)'
-              . '(text:.)'
-              . '(}\),)'
-              . '(\(.,..jsx\)\(..MetaDataListSummaryItem,)#';
-preg_match_all($pattern,$js_file_data,$matches_all);   // for debugging
-    unset($matches);
-    preg_match($pattern,$js_file_data,$matches);
-    $replace_val = $matches[1].$matches[2].$matches[3].$matches[4].$add.$show.$matches[5];
-    $js_file_data = preg_replace($pattern,$replace_val, $js_file_data);
- 
+    $js_file_data = preg_replace_callback($pattern, function ($matches) use($add, $show)
+                                                    {return $matches[1].$matches[2].$matches[3].$matches[4].$add.$show.$matches[5];
+                                                    }, $js_file_data);
+
     return array($js_file_data,$html);
 }
 
@@ -1029,8 +1042,8 @@ function replace_javascript_episodelist ($js_file_data, $html)
     // find the json data in html containing title id each episode
     unset($matches);
     preg_match('#(\<script id\="__NEXT_DATA__".*?)("episodes"\:\{"items"\:.*?)(,"currentSeason")#',$html,$matches);
-    //file_put_contents('./cache/nextdata_episodedata_all.json', $matches[0]);  // for debugging
-    //file_put_contents('./cache/nextdata_episodedata_seasons.json', "{".$matches[2]."}");  // for debugging
+    //file_put_contents('./cache/nextdata/episodedata_all.json', $matches[0]);  // for debugging
+    //file_put_contents('./cache/nextdata/episodedata_seasons.json', "{".$matches[2]."}");  // for debugging
     // Decode the JSON file
     $ep_data = json_decode("{".$matches[2]."}",true);
 
@@ -1054,10 +1067,10 @@ function replace_javascript_episodelist ($js_file_data, $html)
         $x  = $x + 1;
     }
     $ep_data_new = json_encode($ep_data, JSON_UNESCAPED_SLASHES );
-    //file_put_contents('./cache/nextdata_new_encoded.json', $ep_data_new);   // for debugging
+    //file_put_contents('./cache/nextdata/episodelsit_new_encoded.json', $ep_data_new);   // for debugging
     // strip out added delimiters added in earlier
     $ep_data_new = substr($ep_data_new, 1, -1);   
-    //file_put_contents('./cache/nextdata_new_trimmed.json', $ep_data_new);  // for debugging
+    //file_put_contents('./cache/nextdata/episodelsit_new_trimmed.json', $ep_data_new);  // for debugging
     //update htlm with added ids in amended json
     $html = preg_replace('#\<script id\="__NEXT_DATA__".*?"episodes"\:\{"items"\:.*?,"currentSeason"#',
                          $matches[1].$ep_data_new.$matches[3],
