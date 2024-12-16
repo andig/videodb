@@ -403,27 +403,17 @@ function request($urlonly=false)
  */
 function fixup_javascript($html)
 {
-    global $uri, $config;
-    
+    global $uri, $debug_trace, $trace_dirs;
+
     if (stristr($uri['host'], 'imdb') === false)
     {
         return $html;
     }
 
-    // testing only use to clear copy of all javascript before cloning
-    if ($config['debug'])
-    {     
-        $cachefolder = cache_get_folder('javascript-preclone');
-        $error = cache_create_folders($cachefolder, 0); // ensure folder exists
-        // empty javascript cache as imdb keep changing things
-        array_map('unlink', glob($cachefolder."/*.*"));    
-    }
-    
-    // get cache folder
+    // get cache folder for overridden js files
     $cachefolder = cache_get_folder('javascript');  //get cache root folder
     $error = cache_create_folders($cachefolder, 0); // ensure folder exists
-    // empty javascript cache as imdb keep changing things
-    array_map('unlink', glob($cachefolder."/*.*"));
+    array_map('unlink', glob($cachefolder."/*.*")); // delete files
 
     // find all imdb javascript files
     preg_match_all('#[\"\']\s*\Khttps?:[^\"\']+?\.js#',
@@ -441,9 +431,9 @@ function fixup_javascript($html)
         $js_file_data = file_get_contents($js_file_name);
 
         // testing/debugging only - use to get copy of all javascript before cloning
-        if ($config['debug'])
+        if ($debug_trace)
         { 
-            $file_path = './cache/javascript-preclone/pre_'.$x.'.js';
+            $file_path = $trace_dirs['preclone'].'pre_'.$x.'.js';
             file_put_contents($file_path, $js_file_data); 
         }
         
@@ -832,15 +822,7 @@ function replace_javascript_search ($js_file_data)
  */
 function replace_javascript_srchlist ($js_file_data, $html)
 {
-    global $iframe, $config;
-    
-    if ($config['debug'])
-    {     
-        $cachefolder = cache_get_folder('nextdata');
-        $error = cache_create_folders($cachefolder, 0); // ensure folder exists
-        // empty javascript cache as imdb keep changing things
-        array_map('unlink', glob($cachefolder."/*.*"));    
-    }
+    global $iframe, $debug_trace, $trace_dirs;
     
     $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
     $iframe_val = '';
@@ -921,18 +903,18 @@ function replace_javascript_srchlist ($js_file_data, $html)
     }
     // add add title and show title for all except episodes
     // add variables to data blob
-    if ($config['debug'])
+    if ($debug_trace)
     {     
         preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
-        file_put_contents('./cache/nextdata/srchlst_allBefore.json', $matches[2]);  // for debugging
+        file_put_contents($trace_dirs['srchlst'].'allBefore.json', $matches[2]);  // for debugging
     }
 
     unset($matches);
     preg_match('#(\<script id\="__NEXT_DATA__".*?)("titleResults"\:\{"results"\:.*?)(,"companyResults"\:)#',$html,$matches);
 
-    if ($config['debug'])
+    if ($debug_trace)
     { 
-        file_put_contents('./cache/nextdata/srchlst_part.json', $matches[2]);  // for debugging
+        file_put_contents($trace_dirs['srchlst'].'part.json', $matches[2]);  // for debugging
     }
     // Decode the JSON file - add { for syntax
     $title_data = json_decode("{".$matches[2]."}",true);
@@ -960,20 +942,20 @@ function replace_javascript_srchlist ($js_file_data, $html)
     // strip out added delimiters '{' '}' added in earlier
     $title_data_new = substr($title_data_new, 1, -1);
     
-    if ($config['debug'])
+    if ($debug_trace)
     { 
-        file_put_contents('./cache/nextdata/srchlst_new_encoded.json', $title_data_new);   // for debugging
-        file_put_contents('./cache/nextdata/srchlst_new_js.js', $matches[1].$title_data_new.$matches[3]);   // for debugging
+        file_put_contents($trace_dirs['srchlst'].'new_encoded.json', $title_data_new);   // for debugging
+        file_put_contents($trace_dirs['srchlst'].'new_js.js', $matches[1].$title_data_new.$matches[3]);   // for debugging
     }
     //update htlm with added ids in amended json
     $html = preg_replace('#(\<script id\="__NEXT_DATA__".*?)("titleResults"\:\{"results"\:.*?)(,"companyResults"\:)#',
                          $matches[1].$title_data_new.$matches[3],
                          $html);
     
-    if ($config['debug'])
+    if ($debug_trace)
     { 
         preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
-        file_put_contents('./cache/nextdata/srchlst_allAfter.json', $matches[2]);  // for debugging
+        file_put_contents($trace_dirs['srchlst'].'allAfter.json', $matches[2]);  // for debugging
     }
 
     // assign my fields to a var
@@ -1015,15 +997,15 @@ function replace_javascript_srchlist ($js_file_data, $html)
 }
 
 /**
- * @param   string  $js_file_data  imdb supplied javascript
+ *  @param   string  $js_file_data  imdb supplied javascript
  * @param   string  $html          html data        
  * @return  string  $js_file_data   amended javascript and html.
  * @return  string  $html            amended  html.
  */
 function replace_javascript_episodelist ($js_file_data, $html)
 {
-    global $iframe;
-
+    global $iframe, $debug_trace, $trace_dirs;
+ 
     // allow for iframe templates
     $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
@@ -1042,8 +1024,13 @@ function replace_javascript_episodelist ($js_file_data, $html)
     // find the json data in html containing title id each episode
     unset($matches);
     preg_match('#(\<script id\="__NEXT_DATA__".*?)("episodes"\:\{"items"\:.*?)(,"currentSeason")#',$html,$matches);
-    //file_put_contents('./cache/nextdata/episodedata_all.json', $matches[0]);  // for debugging
-    //file_put_contents('./cache/nextdata/episodedata_seasons.json', "{".$matches[2]."}");  // for debugging
+    
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'all.json', $matches[0]);  // for debugging
+        file_put_contents($trace_dirs['episodelst'].'seasons.json', "{".$matches[2]."}");  // for debugging
+    }
+
     // Decode the JSON file
     $ep_data = json_decode("{".$matches[2]."}",true);
 
@@ -1067,15 +1054,26 @@ function replace_javascript_episodelist ($js_file_data, $html)
         $x  = $x + 1;
     }
     $ep_data_new = json_encode($ep_data, JSON_UNESCAPED_SLASHES );
-    //file_put_contents('./cache/nextdata/episodelsit_new_encoded.json', $ep_data_new);   // for debugging
+        
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'new_encoded.json', $ep_data_new);   // for debugging
+    }
     // strip out added delimiters added in earlier
-    $ep_data_new = substr($ep_data_new, 1, -1);   
-    //file_put_contents('./cache/nextdata/episodelsit_new_trimmed.json', $ep_data_new);  // for debugging
+    $ep_data_new = substr($ep_data_new, 1, -1);
+        
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'new_trimmed.json', $ep_data_new);  // for debugging
+    }
     //update htlm with added ids in amended json
     $html = preg_replace('#\<script id\="__NEXT_DATA__".*?"episodes"\:\{"items"\:.*?,"currentSeason"#',
                          $matches[1].$ep_data_new.$matches[3],
                          $html);
-    //file_put_contents('./cache/html_new.text', $html);  // for debugging
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'html_new.text', $html);   // for debugging
+    }
     // get js code to clone
                 //{aggregateRating:s.aggregateRating,voteCount:s.voteCount},refMarker:{prefix:C}}),I&&!E&&!S&&(0,a.jsx)(vt,{onClick:function(){return g(!0)},width:"half-padding",children:x({id:"common_buttons_watchOptions",defaultMessage:"Watch options"}
                 //111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111112222222222222233333333333333333333333333333333333333333333333333334444444444444445555555555555555555555555555566666666666666667777777777777777
@@ -1234,6 +1232,30 @@ function replace_javascript_qlnk ($js_file_data)
     return ($js_file_data);
 }
 
+/**
+ * @parm    array    $dirs
+ * @return  none
+ */
+function setup_debug_trace_folders ($debug, $dirs)
+{
+    foreach($dirs as $dir)
+    {
+        if ($debug)
+        {            
+            $error = cache_create_folders($dir, 0); // ensure folder exists
+            array_map('unlink', glob($dir."/*.*")); // delete files   
+        }
+        else
+        {
+            if (is_dir($dir))
+            {
+                array_map('unlink', glob($dir."/*.*")); //delete files
+                rmdir($dir);                           // remove directory
+            }
+        }
+    }
+}
+
 // make sure this is a local access
 if (!preg_match('/^https?:\/\/'.$_SERVER['SERVER_NAME'].'/i', $_SERVER['HTTP_REFERER']))
 {
@@ -1270,7 +1292,14 @@ else
     
     $fetchtime = time() - $fetchtime;
 
-	// convert HTML for output
+    // trace dirs
+    $debug_trace = 0;   // @todo move to config inc ???
+    $trace_dirs=array('preclone' => cache_get_folder('trace_javascript_preclone'),
+                      'srchlst' => cache_get_folder('trace_nextdata_srchlst'),
+                      'episodelst' => cache_get_folder('trace_nextdata_episodelst'));
+    setup_debug_trace_folders ($debug_trace, $trace_dirs);   
+
+    // convert HTML for output
     $page = fixup_HTML($page);
     $page = fixup_javascript($page);
     
