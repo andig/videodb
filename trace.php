@@ -291,7 +291,7 @@ function fixup_HTML($html)
 {
 	global $striptags, $config, $uri;
 
-	// base
+// base
 	if (preg_match("/<base\s+href=(\"|')(.*?)\\1/i", $html, $matches)) get_base($matches[2]);
 
 	// replace unwanted tags
@@ -403,24 +403,17 @@ function request($urlonly=false)
  */
 function fixup_javascript($html)
 {
-    global $uri;
-    
+    global $uri, $debug_trace, $trace_dirs;
+
     if (stristr($uri['host'], 'imdb') === false)
     {
         return $html;
     }
 
-    // testing only
-//    $cachefolder = cache_get_folder('javascript-preclone');
-//    $error = cache_create_folders($cachefolder, 0); // ensure folder exists
-//    // empty javascript cache as imdb keep changing things
-//    array_map('unlink', glob($cachefolder."/*.*"));    
-    
-    // get cache folder
+    // get cache folder for overridden js files
     $cachefolder = cache_get_folder('javascript');  //get cache root folder
     $error = cache_create_folders($cachefolder, 0); // ensure folder exists
-    // empty javascript cache as imdb keep changing things
-    array_map('unlink', glob($cachefolder."/*.*"));
+    array_map('unlink', glob($cachefolder."/*.*")); // delete files
 
     // find all imdb javascript files
     preg_match_all('#[\"\']\s*\Khttps?:[^\"\']+?\.js#',
@@ -438,8 +431,11 @@ function fixup_javascript($html)
         $js_file_data = file_get_contents($js_file_name);
 
         // testing/debugging only - use to get copy of all javascript before cloning
-//        $file_path = './cache/javascript-preclone/pre_'.$x.'.js';
-//        file_put_contents($file_path, $js_file_data); 
+        if ($debug_trace)
+        { 
+            $file_path = $trace_dirs['preclone'].'pre_'.$x.'.js';
+            file_put_contents($file_path, $js_file_data); 
+        }
         
         $pattern = '#'.preg_quote('fragment BaseTitleCard on Title', '#').'#';  // add escape delimiters
         if ( preg_match($pattern, $js_file_data, $matches))
@@ -493,11 +489,11 @@ function fixup_javascript($html)
         }    
         
         // for search result page
-        $find_string = 'className:y,href:`/title';
+        $find_string = 'defaultMessage:"Exact matches"';
         $pattern = '#'.$find_string.'#';
         if (preg_match($pattern, $js_file_data, $matches) )
         {
-            $js_file_data = replace_javascript_srchlist  ($js_file_data);
+            list($js_file_data, $html) = replace_javascript_srchlist  ($js_file_data, $html);
             $partfilename .= '-srchlist';
         }  
       
@@ -750,7 +746,31 @@ function replace_javascript_addmovie ($js_file_data)
                                      $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
                                      $js_file_data);
     }
-             
+      
+    // various lnks - director writer ....
+    $pattern = '#text:..name.nameText\?.text\|\|"",href:#';
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[0]."'?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
+                                     $js_file_data);
+    }
+
+    // interest lnks
+    //"data-testid":"interests",arrowBackgroundColorShade:"shade3",children:[E&&c?.map((e,t)=>l.jsx(w.Chip,{label:e.text,href:
+    // o({refSuffix:{t: B.Cd.GENRE,n:t+1},query:{genres:e.id.toLowerCase(),explore:"title_type,genres"}})},e.id)),p&&p.map((e,t)=>(0,l.jsx)(w.Chip,{label:e.node.primaryText?.text,href:
+    $pattern = '#("data-testid":"interests".*?href:)(.*?href:)#';
+    preg_match($pattern, $js_file_data, $matches);
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[1]."'?$iframe_val&videodburl=https://www.imdb.com"."'"."+"
+                                    .$matches[2]."'?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
+                                     $js_file_data);
+    }
+    
     return $js_file_data; 
 }
 
@@ -795,29 +815,38 @@ function replace_javascript_search ($js_file_data)
 }
 
 /**
- * @param   string  $js_file_data  imdb supplied javascript      
- * @return  string  $js_file_data   amended javascript
+ * @param   string  $js_file_data  imdb supplied javascript
+ * @param   string  $html          html data        
+ * @return  string  $js_file_data   amended javascript and html.
+ * @return  string  $html            amended  html.
  */
-function replace_javascript_srchlist ($js_file_data)
+function replace_javascript_srchlist ($js_file_data, $html)
 {
-    global $iframe;
+    global $iframe, $debug_trace, $trace_dirs;
+    
     $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
     $iframe_val = '';
     if ($iframe) 
     {
         $iframe_val = "&iframe=".$iframe;
     }   
-    
-   // find_string  `/title/ or  `/name/ or `/interest/
-    $pattern = '#(`)(/title/|/name/|/interest/)#';
+        
+    // title name interest links
+    // {titleMainLinkBuilder:_}=(0,E.WOb)(),M=[i?Q.C.TITLE:Q.C.ALL,{t: Q.C.TITLE,n:r}],C=
+    // {interestSingleLinkBuilder:p}=(0,E.WOb)(),u=
+    // {nameMainLinkBuilder:g}=(0,E.WOb)(),f=
+    $pattern = '#({titleMainLinkBuilder:.}=.*?TITLE.*?='
+              . '|{nameMainLinkBuilder:.}=.*?='
+              . '|{interestSingleLinkBuilder:.}=.*?=)#';
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
         $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) 
-                                                {return $matches[1].'?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2];
+                                                {return $matches[0]."'?".$iframe_val."&videodburl=https://www.imdb.com'"."+";
                                                 }, $js_file_data);
     }
     
+    // exact match or not exact match lnks
     // find_string  TextButton,{href:
     $pattern = '#TextButton,{href:#';
     unset($matches);
@@ -828,19 +857,155 @@ function replace_javascript_srchlist ($js_file_data)
                                      $js_file_data);
     }
     
-    return $js_file_data;
+    // lnk for refining to movie, series ... etc
+    // label:g,href:
+    $pattern = '#label:.,href:#';
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) 
+                                                        {return $matches[0]."'?$iframe_val&videodburl=https://www.imdb.com'+";
+                                                        }, $js_file_data);
+    }
+    
+    // defaultMessage:"Quotes"}),href:
+    // defaultMessage:"Plot Summaries"}),href:
+    // defaultMessage:"Biographies"}),href:
+    // defaultMessage:"Movies, TV & more"}),href:
+    // defaultMessage:"People"}),href:
+    // defaultMessage:"Collaborations"}),href:
+    $pattern = '#defaultMessage:'
+              . '("Quotes"}\),href:'
+              . '|"Plot Summaries"}\),href:'
+              . '|"Biographies"}\),href:'
+              . '|"Movies, TV & more"}\),href:'
+              . '|"People"}\),href:'
+              . '|"Collaborations"}\),href:)#';   
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) 
+                                                        {return $matches[0]."'?$iframe_val&videodburl=https://www.imdb.com'+";
+                                                        }, $js_file_data);
+    }
+
+    // "data-testid":"advanced-search-link-genres",href:
+    // "data-testid":"advanced-search-link-keywords",href:
+        $pattern = '#"data-testid":'
+              . '("advanced-search-link-genres",href:'
+              . '|"advanced-search-link-keywords",href:)#';   
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) 
+                                                        {return $matches[0]."'?$iframe_val&videodburl=https://www.imdb.com'+";
+                                                        }, $js_file_data);
+    }
+    // add add title and show title for all except episodes
+    // add variables to data blob
+    if ($debug_trace)
+    {     
+        preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
+        file_put_contents($trace_dirs['srchlst'].'allBefore.json', $matches[2]);  // for debugging
+    }
+
+    unset($matches);
+    preg_match('#(\<script id\="__NEXT_DATA__".*?)("titleResults"\:\{"results"\:.*?)(,"companyResults"\:)#',$html,$matches);
+
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['srchlst'].'part.json', $matches[2]);  // for debugging
+    }
+    // Decode the JSON file - add { for syntax
+    $title_data = json_decode("{".$matches[2]."}",true);
+    $x = 0;
+    foreach ($title_data['titleResults']['results'] as $object) 
+    {
+            $imdb_id = filter_var($object['id'], FILTER_SANITIZE_NUMBER_INT);
+            $title_data['titleResults']['results'][$x]['imdbid'] = $imdb_id;
+        
+        $title_data['titleResults']['results'][$x]['videodbid'] = 0;
+         if (is_known_item('imdb:'.$imdb_id, $sp_id, $sp_diskid))
+        {
+            $diskid = "";
+            if ($sp_diskid <> "no_diskid") 
+            {
+                $diskid = " (Diskid:".$sp_diskid.")";
+            }
+            // add videodb id and diskid to html json
+            $title_data['titleResults']['results'][$x]['videodbid'] = $sp_id;
+            $title_data['titleResults']['results'][$x]['videodbdiskid'] = $diskid;
+        } 
+        $x = $x +1;     
+    }
+    $title_data_new = json_encode($title_data, JSON_UNESCAPED_SLASHES );
+    // strip out added delimiters '{' '}' added in earlier
+    $title_data_new = substr($title_data_new, 1, -1);
+    
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['srchlst'].'new_encoded.json', $title_data_new);   // for debugging
+        file_put_contents($trace_dirs['srchlst'].'new_js.js', $matches[1].$title_data_new.$matches[3]);   // for debugging
+    }
+    //update htlm with added ids in amended json
+    $html = preg_replace('#(\<script id\="__NEXT_DATA__".*?)("titleResults"\:\{"results"\:.*?)(,"companyResults"\:)#',
+                         $matches[1].$title_data_new.$matches[3],
+                         $html);
+    
+    if ($debug_trace)
+    { 
+        preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\<\/script\>)#',$html,$matches); // for debugging
+        file_put_contents($trace_dirs['srchlst'].'allAfter.json', $matches[2]);  // for debugging
+    }
+
+    // assign my fields to a var
+    // let{id:t,titleNameText:a,hasSearchType:i,index:r,
+    $pattern = '#(let{)(id:.,titleNameText:.,)#';
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[1]."imdbid:imdbid,videodbid:videodbid,videodbdiskid:videodbdiskid,".$matches[2],
+                                     $js_file_data);
+    }
+
+    // get place to insert js data
+    // pattern for all except episodes
+    //return n&&T.push({text:n}),l&&T.push({text:l}),(0,s.jsx)(c.MetaDataListSummaryItem
+    //1111111111111111111111111111112222222233333344455555555555555555555555555555555555               
+    //            code to insert    XXXXXXXXXXXXXXXX  
+    // pattern for episodes
+    //text:e.join(".")}),l&&T.push({text:l}),(0,s.jsx)(c.MetaDataListSummaryItem,
+    //111111111111111111111122222222333333444555555555555555555555555555555555555 
+    $pattern = '#(return .&&..push\({text:.}\),.&&'
+                . '|'
+                . 'text:..join\("."\)}\),.&&)'
+              . '(..push\({)'
+              . '(text:.)'
+              . '(}\),)'
+              . '(\(.,..jsx\)\(..MetaDataListSummaryItem)#';
+    unset($matches);
+    preg_match($pattern,$js_file_data,$matches);
+    $add = $matches[2]."text:'Add Title',href:'edit.php?save=1&lookup=2&imdbID=imdb:'+imdbid}),";
+    $show = "videodbid != 0 &&".$matches[2]."text:'Show Title '+videodbdiskid,href:'show.php?id='+videodbid}),";
+
+    $js_file_data = preg_replace_callback($pattern, function ($matches) use($add, $show)
+                                                    {return $matches[1].$matches[2].$matches[3].$matches[4].$add.$show.$matches[5];
+                                                    }, $js_file_data);
+
+    return array($js_file_data,$html);
 }
 
 /**
- * @param   string  $js_file_data  imdb supplied javascript
+ *  @param   string  $js_file_data  imdb supplied javascript
  * @param   string  $html          html data        
  * @return  string  $js_file_data   amended javascript and html.
  * @return  string  $html            amended  html.
  */
 function replace_javascript_episodelist ($js_file_data, $html)
 {
-    global $iframe;
-
+    global $iframe, $debug_trace, $trace_dirs;
+ 
     // allow for iframe templates
     $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
@@ -859,8 +1024,13 @@ function replace_javascript_episodelist ($js_file_data, $html)
     // find the json data in html containing title id each episode
     unset($matches);
     preg_match('#(\<script id\="__NEXT_DATA__".*?)("episodes"\:\{"items"\:.*?)(,"currentSeason")#',$html,$matches);
-    //file_put_contents('./cache/nextdata_episodedata_all.json', $matches[0]);  // for debugging
-    //file_put_contents('./cache/nextdata_episodedata_seasons.json', "{".$matches[2]."}");  // for debugging
+    
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'all.json', $matches[0]);  // for debugging
+        file_put_contents($trace_dirs['episodelst'].'seasons.json', "{".$matches[2]."}");  // for debugging
+    }
+
     // Decode the JSON file
     $ep_data = json_decode("{".$matches[2]."}",true);
 
@@ -884,15 +1054,26 @@ function replace_javascript_episodelist ($js_file_data, $html)
         $x  = $x + 1;
     }
     $ep_data_new = json_encode($ep_data, JSON_UNESCAPED_SLASHES );
-    //file_put_contents('./cache/nextdata_new_encoded.json', $ep_data_new);   // for debugging
+        
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'new_encoded.json', $ep_data_new);   // for debugging
+    }
     // strip out added delimiters added in earlier
-    $ep_data_new = substr($ep_data_new, 1, -1);   
-    //file_put_contents('./cache/nextdata_new_trimmed.json', $ep_data_new);  // for debugging
+    $ep_data_new = substr($ep_data_new, 1, -1);
+        
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'new_trimmed.json', $ep_data_new);  // for debugging
+    }
     //update htlm with added ids in amended json
     $html = preg_replace('#\<script id\="__NEXT_DATA__".*?"episodes"\:\{"items"\:.*?,"currentSeason"#',
                          $matches[1].$ep_data_new.$matches[3],
                          $html);
-    //file_put_contents('./cache/html_new.text', $html);  // for debugging
+    if ($debug_trace)
+    { 
+        file_put_contents($trace_dirs['episodelst'].'html_new.text', $html);   // for debugging
+    }
     // get js code to clone
                 //{aggregateRating:s.aggregateRating,voteCount:s.voteCount},refMarker:{prefix:C}}),I&&!E&&!S&&(0,a.jsx)(vt,{onClick:function(){return g(!0)},width:"half-padding",children:x({id:"common_buttons_watchOptions",defaultMessage:"Watch options"}
                 //111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111112222222222222233333333333333333333333333333333333333333333333333334444444444444445555555555555555555555555555566666666666666667777777777777777
@@ -1051,6 +1232,30 @@ function replace_javascript_qlnk ($js_file_data)
     return ($js_file_data);
 }
 
+/**
+ * @parm    array    $dirs
+ * @return  none
+ */
+function setup_debug_trace_folders ($debug, $dirs)
+{
+    foreach($dirs as $dir)
+    {
+        if ($debug)
+        {            
+            $error = cache_create_folders($dir, 0); // ensure folder exists
+            array_map('unlink', glob($dir."/*.*")); // delete files   
+        }
+        else
+        {
+            if (is_dir($dir))
+            {
+                array_map('unlink', glob($dir."/*.*")); //delete files
+                rmdir($dir);                           // remove directory
+            }
+        }
+    }
+}
+
 // make sure this is a local access
 if (!preg_match('/^https?:\/\/'.$_SERVER['SERVER_NAME'].'/i', $_SERVER['HTTP_REFERER']))
 {
@@ -1087,7 +1292,14 @@ else
     
     $fetchtime = time() - $fetchtime;
 
-	// convert HTML for output
+    // trace dirs
+    $debug_trace = 0;   // @todo move to config inc ???
+    $trace_dirs=array('preclone' => cache_get_folder('trace_javascript_preclone'),
+                      'srchlst' => cache_get_folder('trace_nextdata_srchlst'),
+                      'episodelst' => cache_get_folder('trace_nextdata_episodelst'));
+    setup_debug_trace_folders ($debug_trace, $trace_dirs);   
+
+    // convert HTML for output
     $page = fixup_HTML($page);
     $page = fixup_javascript($page);
     
