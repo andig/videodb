@@ -338,11 +338,41 @@ function errorpage($title = 'An error occured', $body = '', $stacktrace = false)
     $encoding   = ($lang['encoding']) ? $lang['encoding'] : 'iso-8859-1';
 
     // stacktrace desired and available?
-    if ($stacktrace && function_exists('xdebug_get_function_stack'))
+    if ($stacktrace)
     {
-        $body .= '<br/>'.dump(xdebug_get_function_stack(), true);
-    }
-
+        if (function_exists('xdebug_get_function_stack'))
+        {
+            $body .= '<br/>'.dump(xdebug_get_function_stack(), true);
+        }
+        elseif (function_exists('debug_backtrace'))  // php funtion
+          {
+            $details = debug_backtrace();
+            $body .= '<br><br>***Stack Traceback - Raw***<br>';
+            $body .= var_export($details, True);
+            $body .= '<br><br>***End Stack Traceback - Raw***<br>';
+            
+            $body .= '<br><br>***Stack Traceback - Formated***<br>';
+            foreach($details AS $detail) 
+            {
+                foreach($detail AS $key => $var) 
+                {
+                  if($key == 'args') 
+                  {
+                    foreach($var AS $key_arg => $var_arg) 
+                    {
+                      $body .= $key_arg.': '.$var_arg.'<br>';
+                    }
+                  } 
+                  else 
+                  {
+                    $body .=  $key.': '.$var.'<br>';
+                  }  
+                }
+            }
+            $body .= '<br>***End Stack Traceback - Formated***<br>';
+        }
+    }    
+    
     echo '<?xml version="1.0" encoding="en"?>';
     echo "
     <html xmlns='http:// www.w3.org/1999/xhtml' xml:lang='en' lang='en' dir='ltr'>

@@ -486,8 +486,17 @@ function fixup_javascript($html)
         {
             $js_file_data = replace_javascript_qlnk  ($js_file_data);
             $partfilename .= '-qlnk';
-        }    
+        }
         
+        // breadcrum links
+        $find_string = 'defaultMessage:"Back"';
+        $pattern = '#'.$find_string.'#';
+        if (preg_match($pattern, $js_file_data, $matches) )
+        {
+            $js_file_data = replace_javascript_brcrumb  ($js_file_data);
+            $partfilename .= '-brcrumb';
+        }        
+      
         // for search result page
         $find_string = 'defaultMessage:"Exact matches"';
         $pattern = '#'.$find_string.'#';
@@ -1162,7 +1171,8 @@ function replace_javascript_episodemain ($js_file_data, $html)
     // prevoius and next cevrons around all episodes
     //previousEpisode?.id,p=u?
     //nextEpisode?.id,c=f?
-    $pattern = '#(previousEpisode\?.id,p\=u\?|nextEpisode\?.id,c\=f\?)#';
+    $pattern = '#(previousEpisode\?.id,.\=.\?'
+              . '|nextEpisode\?.id,.\=.\?)#';
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
@@ -1170,7 +1180,6 @@ function replace_javascript_episodemain ($js_file_data, $html)
              return $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+";
         }, $js_file_data);
     }
-    
     
     return ($js_file_data);
 }
@@ -1188,9 +1197,13 @@ function replace_javascript_qlnk ($js_file_data)
 
     // do links upper right of episode main page  
     // Cast & crew
-    // uder reviews
-    // Truvia
-    $pattern = '#(defaultMessage:"Cast & crew"}\),href:|defaultMessage:"User reviews"}\),href:|defaultMessage:"Trivia"}\),href:)#';
+    // user reviews
+    // Trivia
+    // FAQ
+    $pattern = '#(defaultMessage:"Cast & crew"}\),href:'
+              . '|defaultMessage:"User reviews"}\),href:'
+              . '|defaultMessage:"Trivia"}\),href:'
+              . '|defaultMessage:"FAQ"}\),href:)#';
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
@@ -1199,25 +1212,16 @@ function replace_javascript_qlnk ($js_file_data)
                            return $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+";
                         }, $js_file_data);
     }    
- 
-    // back button of episode list page
-    //    href:Q,"data-testid": n.BackButton
-    $pattern = '#(href:)(.,"data\-testid":..BackButton)#';
-    unset($matches);
-    if (preg_match($pattern, $js_file_data, $matches))
-    {
-        $js_file_data = preg_replace($pattern,
-                                     $matches[1]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+".$matches[2],
-                                     $js_file_data);
-    }  
-    
+
     // various links of eposide list page
     // defaultMessage:"Videos"},href:(e,t)=>
     // defaultMessage:"Cast & crew"},href:(e,t)=>
     // defaultMessage:"Trivia"},href:(e, t)=>
     // defaultMessage:"Photos"},href:(e, t)=>
-    $pattern = '#defaultMessage:"Trivia"\},href:\(.,.\)\=>|defaultMessage:"Videos"\},href:\(.,.\)\=\>'
-             . '|defaultMessage:"Photos"\},href:\(.,.\)\=>|defaultMessage:"Cast & crew"\},href:\(.,.\)\=\>'
+    $pattern = '#defaultMessage:"Trivia"\},href:\(.,.\)\=>'
+             . '|defaultMessage:"Videos"\},href:\(.,.\)\=\>'
+             . '|defaultMessage:"Photos"\},href:\(.,.\)\=>'
+             . '|defaultMessage:"Cast & crew"\},href:\(.,.\)\=\>'
              . '|defaultMessage:"Taglines"\},href:\(.,.\)\=\>#';
 
     unset($matches);
@@ -1228,6 +1232,44 @@ function replace_javascript_qlnk ($js_file_data)
                                return $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+";
                             }, $js_file_data);
         } 
+
+    return ($js_file_data);
+}
+
+/**
+ * @param   string  $js_file_data   imdb supplied javascript
+ * @return  string  $js_file_data   amended javascript
+ */
+function replace_javascript_brcrumb ($js_file_data)
+{
+    global $iframe;
+    // allow for iframe templates
+    $iframe_val = '';
+    if ($iframe) $iframe_val = "&iframe=".$iframe;    
+ 
+    // back button of episode list page
+    //    href:Q,"data-testid": n.BackButton
+    $pattern = '#(href:)(.,"data\-testid":..BackButton)#';
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[1]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+".$matches[2],
+                                     $js_file_data);
+    }
+  
+    // lnk in photo 
+    // loading:"eager"},dynamicWidth:!0,href:f?u({tconst:d,refSuffix:[A.C.HERO,A.C.POSTER]}):
+    // 11111111111111111111111111111111111111112222222222222222222222222222222222222222222222
+    $pattern = '#(loading:"eager".,dynamicWidth:..,href:.\?)(.*?POSTER...:)#';
+      unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[1]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+"
+                                    .$matches[2]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
+                                     $js_file_data);
+    }
 
     return ($js_file_data);
 }
