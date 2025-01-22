@@ -3,7 +3,7 @@
   $Id: list.tpl,v 2.35 2013/03/14 17:17:27 andig2 Exp $
 *}
 
-{if $listcolumns == 1}
+{if !empty($listcolumns) && $listcolumns == 1}
     {assign var=IMGWIDTH value="35"}
     {assign var=IMGHEIGHT value="48"}
     {assign var=ROWSPAN value="2"}

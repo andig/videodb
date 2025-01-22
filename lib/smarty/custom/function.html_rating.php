@@ -49,7 +49,10 @@ function smarty_function_html_rating($params, &$smarty)
 
     $_output = '';
 
-    $rcv = ceil($value);
+    $rcv = 0;
+    if (is_numeric($value))
+    {   $rcv = ceil($value); }
+    
     for ($i=0; $i< $rcv; $i++)
     {
         $_output .= '<img src="'.img('goldstar.gif').'" width="20" height="18" />';

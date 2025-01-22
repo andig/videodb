@@ -156,7 +156,10 @@ function prepareSQL($data, $setonly = false)
         
         // sanitize input
         $$name = removeEvilTags($$name);
-        $$name = html_entity_decode($$name);
+        if (!is_null($$name))
+        {        
+            $$name = html_entity_decode($$name);
+        }
         
         // make sure no formatting contained in basic data
         if (in_array($name, array('title', 'subtitle')))

@@ -183,7 +183,7 @@ function smarty_function_html_image($params, $template)
 	global $config;
 
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
-
+    
     $alt = '';
     $file = '';
     $border = 0;

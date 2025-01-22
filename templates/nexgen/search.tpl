@@ -13,18 +13,18 @@
 <form action="search.php" id="search" name="search" method="get">
 
 	<div class="row">
-		{if $imgurl}
-		<div class="large-2 columns hide-for-small search-cover">
+		{if !empty($imgurl)}
+                    <div class="large-2 columns hide-for-small search-cover">
 			{assign var=link value=$q|regex_replace:"/&quot;|\"|%22/":""|escape:url}
 			{assign var=link value="http://www.imdb.com/find?q=$link&s=all"}
-	        {if $config.imdbBrowser}
+                    {if $config.imdbBrowser}
 				{assign var="link" value="trace.php?iframe=1&videodburl=$link"}
-	        {/if}
+                    {/if}
 			<a href='{$link}' class="th radius">{html_image file=$imgurl max_width=$max_width max_height=$max_height}</a>
-		</div>
+                    </div>
 		{/if}
 
-		<div class="small-12 large-10 columns {if !$imgurl}large-centered{/if} search-parameters">
+		<div class="small-12 large-10 columns {if empty($imgurl)}large-centered{/if} search-parameters">
 
 			<h4 class="subheader">{$lang.search}</h4>
 
@@ -65,7 +65,7 @@
 						<dt>{$lang.fieldselect}:</dt>
 					</dl>
 				</div><!-- col -->
-				<div class="small-10 {if $owners}large-7{else}large-11{/if} columns">
+				<div class="small-10 {if !empty($owners)}large-7{else}large-11{/if} columns">
 					<dl class="sub-nav" input-checkbox>
 						{foreach from=$search_fields key=k item=v}
 						<dd {if $k|in_array:$selected_fields}class="active"{/if}><a href="fields[]" value="{$k}">{$v|escape}</a></dd>
@@ -73,7 +73,7 @@
 					</dl>
 				</div><!-- col -->
 
-				{if $owners}
+				{if !empty($owners)}
 				<div class="small-2 large-1 columns">
 					<dl class="sub-nav" input-radio>
 						<dt>{$lang.owner}:</dt>
@@ -98,7 +98,7 @@
 				<div class="small-10 large-11 columns">
 					<dl class="sub-nav" input-checkbox>
 						{foreach $genres as $genre}
-						<dd {if $genre.checked}class="active"{/if}><a href="genres[]" value="{$genre.id}">{$genre.name}</a></dd>
+						<dd {if !empty($genre.checked)}class="active"{/if}><a href="genres[]" value="{$genre.id}">{$genre.name}</a></dd>
 						{/foreach}
 					</dl>
 				</div><!-- col -->

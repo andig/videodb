@@ -25,7 +25,7 @@
     <td align="center" style="text-align:center">
       {if $video.diskid != ''}
         <span class="show_id"><a href="search.php?q={$video.diskid}&fields=diskid&nowild=1">{$video.diskid}</a></span>
-        {if $video.who != ''}
+        {if !empty($video.who) && $video.who != ''}
           <br />
           {$lang.notavail} {$video.who}
         {/if}
@@ -97,7 +97,7 @@
           <tr><td><b>{$lang.mediatype}:</b></td><td><a href="search.php?q=%22{$video.mediatype|escape:url}%22&fields=mediatype&nowild=1">{$video.mediatype}</a></td></tr>
         {/if}
 
-        {if $video.owner != ''}
+        {if !empty($video.owner)}
           <tr>
             <td><b>{$lang.owner}:</b></td>
             <td>
@@ -167,28 +167,28 @@
           </tr>
         {/if}
 
-        {if $video.custom1name != '' && $video.custom1out != ''}
+        {if !empty($video.custom1name) && !empty($video.custom1out)}
           <tr>
             <td><b>{$video.custom1name}:</b></td>
             <td>{$video.custom1out}</td>
           </tr>
         {/if}
 
-        {if $video.custom2name != '' && $video.custom2out != ''}
+        {if !empty($video.custom2name) && !empty($video.custom2out)}
           <tr>
             <td><b>{$video.custom2name}:</b></td>
             <td>{$video.custom2out}</td>
           </tr>
         {/if}
 
-        {if $video.custom3name != '' && $video.custom3out != ''}
+        {if !empty($video.custom3name) && !empty($video.custom3out)}
           <tr>
             <td><b>{$video.custom3name}:</b></td>
             <td>{$video.custom3out}</td>
           </tr>
         {/if}
 
-        {if $video.custom4name != '' && $video.custom4out != ''}
+        {if !empty($video.custom4name) && !empty($video.custom4out)}
           <tr>
             <td><b>{$video.custom4name}:</b></td>
             <td>{$video.custom4out}</td>
@@ -214,7 +214,7 @@
         </b>
         {if $show_cast}
             <table width="100%">
-            {counter start=0 print=false name=castcount}
+            {counter start=0 print=false name=castcount assign=count}
             {foreach item=actor from=$video.cast}
 
                 {if $count == 0}

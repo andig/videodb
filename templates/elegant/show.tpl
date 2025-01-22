@@ -16,12 +16,12 @@ Event.observe(document, 'dom:loaded', function() {
     bindRating({$video.id}, {if $video.editable}'show.php'{else}false{/if}, 'rating_control', 'rating_value',
                {if $video.rating}{$video.rating}{else}0{/if}, {if $video.editable}true{else}false{/if});
 
-{if $engines.trailer}
+{if !empty($engines.trailer)}
     // Youtube
     bindYoutube("{$video.title|escape:javascript|escape:html}");
 {/if}
 
-{if $engines.purchase}
+{if !empty($engines.purchase)}
     // Purchase
 //    bindRenderer("{$video.title|escape:javascript|escape:html}", 'purchase',
 //		new Array({foreach key=k item=v from=$engines.purchase name=dary}'{$k}'{if !$smarty.foreach.dary.last},{/if}{/foreach}));
@@ -29,7 +29,7 @@ Event.observe(document, 'dom:loaded', function() {
 		new Array({foreach item=eng from=$engines.purchase name=dary}'{$eng}'{if !$smarty.foreach.dary.last},{/if}{/foreach}));
 {/if}
 
-{if $engines.download}
+{if !empty($engines.download)}
     // Torrents
     bindTorrent("{$video.title|escape:javascript|escape:html}",
 		new Array({foreach item=eng from=$engines.download name=tary}'{$eng}'{if !$smarty.foreach.tary.last},{/if}{/foreach}));
@@ -111,7 +111,7 @@ Event.observe(document, 'dom:loaded', function() {
     <td class="center">
       {if $video.diskid}
           <h2><a href="search.php?q={$video.diskid}&amp;fields=diskid&amp;nowild=1">{$video.diskid}</a></h2>
-          {if $video.who}
+          {if !empty($video.who)}
             <br/>
             {$lang.notavail} {$video.who}
           {/if}
@@ -150,9 +150,9 @@ Event.observe(document, 'dom:loaded', function() {
           <tr>
             <td colspan="2">
 				<div>
-					{if $engines.trailer}<span id="youtube" class="hidden"><a href="#" onclick='showTrailer("{$video.title|escape:javascript|escape:html}"); return false;'><img src="{$template}images/youtube32.png" alt="{$lang.trailer_show}" /></a></span>&nbsp;{/if}
-					{if $engines.purchase}<span id="purchase" class="hidden"><a href="#" onclick="toggler('purchases');return false;"><img src="{$template}images/rss32.png" alt="" /></a></span>&nbsp;{/if}
-					{if $engines.download}<span id="torrent" class="hidden"><a href="#" onclick="toggler('torrents');return false"><img src="{$template}images/torrent32.png" alt="" /></a></span>&nbsp;{/if}
+					{if !empty($engines.trailer)}<span id="youtube" class="hidden"><a href="#" onclick='showTrailer("{$video.title|escape:javascript|escape:html}"); return false;'><img src="{$template}images/youtube32.png" alt="{$lang.trailer_show}" /></a></span>&nbsp;{/if}
+					{if !empty($engines.purchase)}<span id="purchase" class="hidden"><a href="#" onclick="toggler('purchases');return false;"><img src="{$template}images/rss32.png" alt="" /></a></span>&nbsp;{/if}
+					{if !empty($engines.download)}<span id="torrent" class="hidden"><a href="#" onclick="toggler('torrents');return false"><img src="{$template}images/torrent32.png" alt="" /></a></span>&nbsp;{/if}
 				</div>
             </td>
           </tr>
@@ -176,7 +176,7 @@ Event.observe(document, 'dom:loaded', function() {
         {if $video.mediatype}
             <tr><td><h3>{$lang.mediatype}:</h3></td><td><a href="search.php?q=%22{$video.mediatype|escape:url}%22&amp;fields=mediatype&amp;nowild=1">{$video.mediatype}</a></td></tr>
         {/if}
-        {if $video.owner}
+        {if !empty($video.owner)}
             <tr>
                 <td><h3>{$lang.owner}:</h3></td>
                 <td><a href="search.php?q={$video.owner|escape:url}&amp;fields=owner&amp;nowild=1">{$video.owner}</a>
@@ -194,25 +194,25 @@ Event.observe(document, 'dom:loaded', function() {
                 </td>
             </tr>
 
-        {if $video.custom1name && $video.custom1out}
+        {if !empty($video.custom1name) && $video.custom1out}
             <tr>
                 <td><h3>{$video.custom1name}:</h3></td>
                 <td>{$video.custom1out}</td>
             </tr>
         {/if}
-        {if $video.custom2name && $video.custom2out}
+        {if !empty($video.custom2name) && $video.custom2out}
             <tr>
                 <td><h3>{$video.custom2name}:</h3></td>
                 <td>{$video.custom2out}</td>
             </tr>
         {/if}
-        {if $video.custom3name && $video.custom3out}
+        {if !empty($video.custom3name) && $video.custom3out}
             <tr>
                 <td><h3>{$video.custom3name}:</h3></td>
                 <td>{$video.custom3out}</td>
             </tr>
         {/if}
-        {if $video.custom4name && $video.custom4out}
+        {if !empty($video.custom4name) && $video.custom4out}
             <tr>
                 <td><h3>{$video.custom4name}:</h3></td>
                 <td>{$video.custom4out}</td>
@@ -255,7 +255,7 @@ Event.observe(document, 'dom:loaded', function() {
 </div>
 <!-- /showplot -->
 {/if}
-{if $video.episodes}{include file="episodes.tpl"}{/if}
+{if !empty($video.episodes)}{include file="episodes.tpl"}{/if}
 {if $video.filename}
 <div id="showfile">
     <table>
@@ -300,7 +300,7 @@ Event.observe(document, 'dom:loaded', function() {
     </h3>
     {if $show_cast}
         <table width="100%">
-        {counter start=0 print=false name=castcount}
+        {counter start=0 print=false name=castcount assign=count}
         {foreach $video.cast as $actor}
             {if $count == 0}
             <tr>

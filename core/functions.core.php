@@ -76,7 +76,11 @@ function dlog($var)
  */
 function formvar($name)
 {
+    if (!is_null($name))
+    {
 	return htmlspecialchars($name);
+    }
+    return "";
 }
 
 /**
@@ -124,9 +128,14 @@ function escapeSQL($sql_string)
 {
     global $dbh;
 
-    if (!is_resource($dbh)) $dbh = getConnection();
+    if (!is_null($sql_string))
+    {
+        if (!is_resource($dbh)) $dbh = getConnection();
+    
+        return(mysqli_real_escape_string($dbh, $sql_string));
+    }
 
-    return(mysqli_real_escape_string($dbh, $sql_string));
+    return ("");
 }
 
 /**
@@ -263,7 +272,7 @@ function array_associate($ary, $columnKey, $value = false)
     foreach ($ary as $row)
     {
         $res[$row[$columnKey]] = ($value) ? $row[$value] : $row;
-    }
+        }
     return $res;
 }
 

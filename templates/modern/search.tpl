@@ -37,14 +37,14 @@
             <span class="filterlink" style="font-size:10px; font-weight: bold;"><a href="javascript:selectAllFields()">{$lang.selectall}</a></span>
         </td>
         <td width="60%" rowspan="2">
-            {if $owners}
+            {if !empty($owners)}
             <span class="filterlink">{$lang.owner}:</span>
             {html_options name=owner options=$owners selected=$owner}<br/>
             {/if}
             <span class="filterlink">{$lang.genre_desc}:</span>
             {$genreselect}
         </td>
-        {if $imgurl}
+        {if !empty($imgurl)}
         <td>
 {*
             <a href='http://uk.imdb.com/Name?{$q_q|replace:"&quot;|\"":""|escape:url}'>{html_image file=$imgurl}</a>

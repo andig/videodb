@@ -10,7 +10,7 @@
 	<meta name="description" content="VideoDB" />
 	<link rel="shortcut icon" type="image/ico" href="images/icons/1-favicon.ico" />
 
-	{if $rss}<link rel="alternate" type="application/rss+xml" title="VideoDB RSS" href="index.php?export=rss" />{/if}
+	{if !empty($rss)}<link rel="alternate" type="application/rss+xml" title="VideoDB RSS" href="index.php?export=rss" />{/if}
 
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="lib/foundation4/css/normalize.css" />

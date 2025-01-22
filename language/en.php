@@ -34,6 +34,7 @@ $lang['subtitle']            = "Subtitle";
 $lang['title']               = "Title";
 $lang['tvepisode']           = "TV-Episode";
 $lang['seen']                = "Seen";
+$lang['3d']                = "3D";
 $lang['videocodec']          = "Video Codec";
 $lang['year']                = "Year";
 $lang['yes']                 = "Yes";

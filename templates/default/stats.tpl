@@ -8,7 +8,7 @@
     <td align="center">
 
       <table>
-        {if $owners}
+        {if !empty($owners)}
         <tr>
           <td><b>{$lang.owner}:</b></td>
           <td><form action="stats.php">{html_options name=owner options=$owners selected=$owner onchange="submit()"}</form></td>

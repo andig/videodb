@@ -19,7 +19,7 @@ Event.observe(document, 'dom:loaded', function() {
     /**
      * Rating
      */
-    bindRating('rating_control', 'rating_value', {if $video.rating}{$video.rating}{else}0{/if});
+    bindRating('rating_control', 'rating_value', {if !empty($video.rating)}{$video.rating}{else}0{/if});
 
     /**
      * Image lookup
@@ -28,9 +28,9 @@ Event.observe(document, 'dom:loaded', function() {
 });
 </script>
 
-{if $video.id || $xmlimport}
+{if !empty($video.id) || $xmlimport}
     <div id="actions">
-    {if $video.id}
+    {if !empty($video.id)}
         <form action="show.php" method="get" name="show">
             <input type="hidden" name="id" value="{$video.id}" />
             <input type="submit" class="button" value="{$lang.view}" />
@@ -54,8 +54,8 @@ Event.observe(document, 'dom:loaded', function() {
 <div id="edit">
 
 <form action="edit.php" id="edi" name="edi" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" id="id" value="{$video.id}" />
-    <input type="hidden" name="engine" id="engine" value="{$engine}" />
+    <input type="hidden" name="id" id="id" value="{if !empty($video.id)}{$video.id}{/if}" />
+    <input type="hidden" name="engine" id="engine" value="{if !empty($engine)}{$engine}{/if}" />
     <input type="hidden" name="save" id="save" value="1" />
 
 <table width="100%">
@@ -66,7 +66,7 @@ Event.observe(document, 'dom:loaded', function() {
         <tr>
           <td><h4>{$lang.title}:</h4></td>
           <td>
-            <input type="text" name="title" id="title" value="{$video.q_title}" size="50" autocomplete="off" maxlength="255" />
+            <input type="text" name="title" id="title" value="{if !empty($video.q_title)}{$video.q_title}{/if}" size="50" autocomplete="off" maxlength="255" />
             <div id="title_choices" class="autocomplete" style="display:none"></div>
 
             <a href="javascript:void(lookupData(document.edi.title.value))"><img src="{$template}images/search.gif" alt="" align="top" /></a>
@@ -77,7 +77,7 @@ Event.observe(document, 'dom:loaded', function() {
         <tr>
           <td><h4>{$lang.subtitle}:</h4></td>
           <td>
-            <input type="text" name="subtitle" id="subtitle" value="{$video.q_subtitle}" size="50" maxlength="255" />
+            <input type="text" name="subtitle" id="subtitle" value="{if !empty($video.q_subtitle)}{$video.q_subtitle}{/if}" size="50" maxlength="255" />
             <a href="javascript:void(lookupData(document.edi.subtitle.value))"><img src="{$template}images/search.gif" alt="" align="top" /></a>
           </td>
         </tr>
@@ -90,7 +90,7 @@ Event.observe(document, 'dom:loaded', function() {
         <tr>
           <td><h4>{$lang.diskid}:</h4></td>
           <td>
-            <input type="text" name="diskid" id="diskid" value="{$video.q_diskid}" size="15" maxlength="255" />
+            <input type="text" name="diskid" id="diskid" value="{if !empty($video.q_diskid)}{$video.q_diskid}{/if}" size="15" maxlength="255" />
             <input type="hidden" name="autoid" id="autoid" value="{$autoid}" />
             <input type="hidden" name="oldmediatype" id="oldmediatype" value="{$video.mediatype}" />
             {$lang.mediatype} {html_options name="mediatype" options=$mediatypes selected=$video.mediatype}
@@ -99,44 +99,44 @@ Event.observe(document, 'dom:loaded', function() {
 
         <tr>
           <td><h4><label for="istv">{$lang.tvepisode}</label>:</h4></td>
-          <td><input type="checkbox" name="istv" id="istv" value="1" {if $video.istv}checked="checked"{/if}/></td>
+          <td><input type="checkbox" name="istv" id="istv" value="1" {if !empty($video.istv)}checked="checked"{/if}/></td>
         </tr>
 
         <tr>
           <td><h4><label for="seen">{$lang.seen}</label>:</h4></td>
-          <td><input type="checkbox" name="seen" id="seen" value="1" {if $video.seen}checked="checked"{/if}/></td>
+          <td><input type="checkbox" name="seen" id="seen" value="1" {if !empty($video.seen)}checked="checked"{/if}/></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.filename}:</h4></td>
-          <td><input type="text" name="filename" id="filename" value="{$video.q_filename}" size="50" maxlength="255" /></td>
+          <td><input type="text" name="filename" id="filename" value="{if !empty($video.q_filename)}{$video.q_filename}{/if}" size="50" maxlength="255" /></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.filesize}:</h4></td>
-          <td><input type="text" name="filesize" id="filesize" value="{$video.q_filesize}" size="10" maxlength="15" /> bytes</td>
+          <td><input type="text" name="filesize" id="filesize" value="{if !empty($video.q_filesize)}{$video.q_filesize}{/if}" size="10" maxlength="15" /> bytes</td>
         </tr>
 
         <tr>
           <td><h4>{$lang.filedate}:</h4></td>
-          <td><input type="text" name="filedate" id="filedate" value="{$video.q_filedate}" size="18" maxlength="20" /></td>
+          <td><input type="text" name="filedate" id="filedate" value="{if !empty($video.q_filedate)}{$video.q_filedate}{/if}" size="18" maxlength="20" /></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.audiocodec}:</h4></td>
-          <td><input type="text" name="audio_codec" id="audio_codec" value="{$video.q_audio_codec}" /></td>
+          <td><input type="text" name="audio_codec" id="audio_codec" value="{if !empty($video.q_audio_codec)}{$video.q_audio_codec}{/if}" /></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.videocodec}:</h4></td>
-          <td><input type="text" name="video_codec" id="video_codec" value="{$video.q_video_codec}" /></td>
+          <td><input type="text" name="video_codec" id="video_codec" value="{if !empty($video.q_video_codec)}{$video.q_video_codec}{/if}" /></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.dimension}:</h4></td>
           <td>
-            <input type="text" name="video_width" id="video_width" value="{$video.q_video_width}" size="5" maxlength="4" /> x
-            <input type="text" name="video_height" id="video_height" value="{$video.q_video_height}" size="5" maxlength="4" />
+            <input type="text" name="video_width" id="video_width" value="{if !empty($video.q_video_width)}{$video.q_video_width}{/if}" size="5" maxlength="4" /> x
+            <input type="text" name="video_height" id="video_height" value="{if !empty($video.q_video_height)}{$video.q_video_height}{/if}" size="5" maxlength="4" />
           </td>
         </tr>
 
@@ -144,8 +144,8 @@ Event.observe(document, 'dom:loaded', function() {
         <tr>
           <td><h4>{$lang.rating}:</h4></td>
           <td>
-            <div id="rating_control" class="rating_container"></div>&nbsp;(<span id="rating_value">{if $video.rating}{$video.rating}{else}0{/if}</span>)
-            <input type="hidden" name="rating" id="rating" value="{$video.rating}" />
+            <div id="rating_control" class="rating_container"></div>&nbsp;(<span id="rating_value">{if !empty($video.rating)}{$video.rating}{else}0{/if}</span>)
+            <input type="hidden" name="rating" id="rating" value="{if !empty($video.rating)}{$video.rating}{/if}" />
           </td>
         </tr>
 
@@ -156,7 +156,7 @@ Event.observe(document, 'dom:loaded', function() {
           </td>
         </tr>
 
-        {if $owners}
+        {if !empty($owners)}
         <tr>
             <td>{$lang.owner}</td>
             <td>
@@ -165,14 +165,14 @@ Event.observe(document, 'dom:loaded', function() {
         </tr>
         {/if}
 
-        {if $video.custom1name}
+        {if !empty($video.custom1name)}
         <tr>
             <td><h4>{$video.custom1name}:</h4></td>
             <td>{$video.custom1in}</td>
         </tr>
         {/if}
 
-        {if $video.custom3name}
+        {if !empty($video.custom3name)}
         <tr>
             <td><h4>{$video.custom3name}:</h4></td>
             <td>{$video.custom3in}</td>
@@ -188,14 +188,14 @@ Event.observe(document, 'dom:loaded', function() {
         <tr>
           <td><h4>{$lang.extid}:</h4></td>
           <td>
-            <input type="text" name="imdbID" id="imdbID" value="{$video.q_imdbID}" size="15" maxlength="30" onchange="changedId()" />
-            {if $link}<h4><a href="{$link}" target="_blank">{$lang.visit}</a></h4>{/if}</td>
+            <input type="text" name="imdbID" id="imdbID" value="{if !empty($video.q_imdbID)}{$video.q_imdbID}{/if}" size="15" maxlength="30" onchange="changedId()" />
+            {if !empty($link)}<h4><a href="{$link}" target="_blank">{$lang.visit}</a></h4>{/if}</td>
         </tr>
 
         <tr>
           <td><h4>{$lang.coverurl}:</h4></td>
           <td>
-            <input type="text" name="imgurl" id="imgurl" value="{$video.q_imgurl}" size="50" maxlength="255" />
+            <input type="text" name="imgurl" id="imgurl" value="{if !empty($video.q_imgurl)}{$video.q_imgurl}{/if}" size="50" maxlength="255" />
             <a href="javascript:void(lookupImage(document.edi.title.value))"><img src="{$template}images/search.gif" alt="" align="top" /></a>
           </td>
         </tr>
@@ -207,46 +207,46 @@ Event.observe(document, 'dom:loaded', function() {
 
         <tr>
           <td><h4>{$lang.country}:</h4></td>
-          <td><input type="text" name="country" id="country" value="{$video.q_country}" size="50" maxlength="255" /></td>
+          <td><input type="text" name="country" id="country" value="{if !empty($video.q_country)}{$video.q_country}{/if}" size="50" maxlength="255" /></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.director}:</h4></td>
-          <td><input type="text" name="director" id="director" value="{$video.q_director}" size="50" maxlength="255" /></td>
+          <td><input type="text" name="director" id="director" value="{if !empty($video.q_director)}{$video.q_director}{/if}" size="50" maxlength="255" /></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.runtime}:</h4></td>
           <td>
-            <input type="text" name="runtime" id="runtime" value="{$video.q_runtime}" size="5" maxlength="5" />min
+            <input type="text" name="runtime" id="runtime" value="{if !empty($video.q_runtime)}{$video.q_runtime}{/if}" size="5" maxlength="5" />min
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$lang.year}
-            <input type="text" name="year" id="year" value="{if $video.year}{$video.year}{/if}" size="5" maxlength="4" />
+            <input type="text" name="year" id="year" value="{if !empty($video.year)}{$video.year}{/if}" size="5" maxlength="4" />
           </td>
         </tr>
 
         <tr>
           <td><h4>{$lang.plot}:</h4></td>
-          <td><textarea cols="40" rows="8" name="plot" id="plot" wrap="virtual">{$video.q_plot}</textarea></td>
+          <td><textarea cols="40" rows="8" name="plot" id="plot" wrap="virtual">{if !empty($video.q_plot)}{$video.q_plot}{/if}</textarea></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.cast}:</h4></td>
-          <td><textarea cols="40" rows="8" name="actors" id="actors" wrap="off">{$video.q_actors}</textarea></td>
+          <td><textarea cols="40" rows="8" name="actors" id="actors" wrap="off">{if !empty($video.q_actors)}{$video.q_actors}{/if}</textarea></td>
         </tr>
 
         <tr>
           <td><h4>{$lang.comment}:</h4></td>
-          <td><textarea cols="40" rows="3" name="comment" id="comment" wrap="virtual">{$video.q_comment}</textarea></td>
+          <td><textarea cols="40" rows="3" name="comment" id="comment" wrap="virtual">{if !empty($video.q_comment)}{$video.q_comment}{/if}</textarea></td>
         </tr>
 
-        {if $video.custom2name}
+        {if !empty($video.custom2name)}
         <tr>
             <td><h4>{$video.custom2name}:</h4></td>
             <td>{$video.custom2in}</td>
         </tr>
         {/if}
 
-        {if $video.custom4name}
+        {if !empty($video.custom4name)}
         <tr>
             <td><h4>{$video.custom4name}:</h4></td>
             <td>{$video.custom4in}</td>
@@ -260,7 +260,7 @@ Event.observe(document, 'dom:loaded', function() {
 
 <div id="editbuttons">
 	{$lang.radio_look_caption}: {html_radios name=lookup options=$lookup checked="$lookup_id"}
-	<label for="add_flag"><input type="checkbox" name="add_flag" id="add_flag" value="1" {if $add_flag}checked="checked"{/if}/>{$lang.add_another}</label>
+	<label for="add_flag"><input type="checkbox" name="add_flag" id="add_flag" value="1" {if !empty($add_flag)}checked="checked"{/if} />{$lang.add_another}</label>
 	<input type="submit" class="button" value="{$lang.save}" id="savebutton" accesskey="s" />
 </div>
 

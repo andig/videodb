@@ -133,6 +133,8 @@ foreach ($fields as $search_field)
 }
 
 // prepare search query
+$result = '';
+$actors = '';
 if (isset($q) &! (isset($default) && empty($q)))
 {
     $JOINS  = '';
@@ -175,19 +177,20 @@ if (isset($q) &! (isset($default) && empty($q)))
 	}
 	
     // filter by genres
+        $FILTER = '';
 	if (count($genres))
 	{
-        $JOINS  .= ' LEFT JOIN '.TBL_VIDEOGENRE.' ON '.TBL_DATA.'.id = '.TBL_VIDEOGENRE.'.video_id ';
-        $WHERES .= ' AND '.TBL_DATA.'.id = '.TBL_VIDEOGENRE.'.video_id AND (';
+            $JOINS  .= ' LEFT JOIN '.TBL_VIDEOGENRE.' ON '.TBL_DATA.'.id = '.TBL_VIDEOGENRE.'.video_id ';
+            $WHERES .= ' AND '.TBL_DATA.'.id = '.TBL_VIDEOGENRE.'.video_id AND (';
 
-		foreach ($genres as $genre)
-        {
-            $FILTER .= 'OR '.TBL_VIDEOGENRE.'.genre_id = '.$genre.' ';
-		}
-		
-        $FILTER  = preg_replace('/^OR/', '', $FILTER);
-		$WHERES .= $FILTER;
-		$WHERES .= ')';
+            foreach ($genres as $genre)
+            {
+                $FILTER .= 'OR '.TBL_VIDEOGENRE.'.genre_id = '.$genre.' ';
+            }
+
+            $FILTER  = preg_replace('/^OR/', '', $FILTER);
+                    $WHERES .= $FILTER;
+                    $WHERES .= ')';
 	}
 
     // limit visibility
@@ -234,7 +237,6 @@ if (isset($q) &! (isset($default) && empty($q)))
 
     $result = runSQL($select);
 
-    $actors = '';
 /*
 	// prepare actors table if searching for them
 	if (in_array('actors', $fields))
@@ -257,6 +259,7 @@ if (isset($q) &! (isset($default) && empty($q)))
     // autocomplete textbox
     if ($ajax_quicksearch)
     {
+        $ret = null;
         foreach ($result as $item)
         {
             $title  = $item['title'];

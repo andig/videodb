@@ -21,6 +21,8 @@ require_once './engines/engines.php';
 // check for localnet
 localnet_or_die();
 
+global $CLIENTERROR;
+
 /**
  * input id
  */
@@ -195,7 +197,7 @@ if ($config['xml'] && ($import == 'xml'))
 }
 
 // legacy
-if ($imdb) $lookup = 1;
+if (isset($imdb) && $imdb) {$lookup = 1;}
 
 // get default lookup mode (0=ignore, 1=lookup, 2=overwrite) if not set
 if (!isset($lookup)) $lookup = (empty($id)) ? $lookup = $config['lookupdefault_new'] : $config['lookupdefault_edit'];
@@ -339,7 +341,12 @@ if ($save)
     set_userseen($id, $seen);
 
     // uploaded cover?
-    processUpload($id, $_FILES['coverupload']['tmp_name'], $_FILES['coverupload']['type'], $_FILES['coverupload']['name']);
+    if (isset($_FILES['coverupload']['tmp_name']) && 
+        isset($_FILES['coverupload']['type']) &&
+        isset($_FILES['coverupload']['name']))
+    {
+        processUpload($id, $_FILES['coverupload']['tmp_name'], $_FILES['coverupload']['type'], $_FILES['coverupload']['name']);
+    }
 
     // make sure no artifacts
     $smarty->clearCache('list.tpl');
@@ -394,9 +401,13 @@ if ($config['autoid'] && (empty($diskid) || $add_flag) && $mediatype != MEDIA_WI
 {
     $video[0]['diskid'] = getDiskId();
     
-	// Fix for Bugreport [1122052] Automatic DiskID generation problem
-	$smarty->assign('autoid', $result[0]['max']);
+    // Fix for Bugreport [1122052] Automatic DiskID generation problem
+    $smarty->assign('autoid', $result[0]['max']);
 }
+else 
+ {
+    $smarty->assign('autoid', "");
+ }
 
 if (empty($video[0]['owner_id']) && !empty($owner_id))
 {

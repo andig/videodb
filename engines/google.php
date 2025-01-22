@@ -37,6 +37,8 @@ function googleSearch($title)
 {
     global $CLIENTERROR;
     global $cache;
+    global $config;
+    global $savedata_for_errorpage;
 
     $page = 1;
     $data = array();
@@ -45,7 +47,23 @@ function googleSearch($title)
     do
     {
         $url  = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=large&q=".urlencode($title)."&start=".count($data);
+        
+        if ( $config['debug'] )
+        {
+            // save data to pass to functions.php - erropage 
+            // if url fails in httpclient it can go directly to errorpage which loses
+            // message set in httpCLient
+            // this is a cause of not finding cover url 
+            $savedata_for_errorpage =  'Module->google.php, Message->';
+        }
+        
         $resp = httpClient($url, $cache);
+        
+        if ( $config['debug'] )
+        {
+            unset($savedata_for_errorpage);
+        }
+        
         if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
         $json = json_decode($resp['data']);

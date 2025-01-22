@@ -28,10 +28,10 @@
             <input type="text" class="autoenable" {*disabled="disabled" *}name="quicksearch" id="quicksearch" autocomplete="off" value="{$lang.search}" onblur="clearInput('quicksearch', '{$lang.search}')" onfocus="clearInput('quicksearch', '{$lang.search}')"/>
 			<div id="item_choices" class="autocomplete" style="display:none"></div>
 
-			{if $owners}{html_options name=owner id=owner options=$owners selected=$owner}{/if}
+			{if !empty($owners)}{html_options name=owner id=owner options=$owners selected=$owner}{/if}
 
 			{html_options name="mediafilter" id="mediafilter" options=$mediafilter selected=$mediatype}
-			{if $order_options}
+			{if !empty($order_options)}
 				<span style="font-weight:bold">{$lang.order}:</span>{html_options name="order" id="order" options=$order_options selected=$order}
 			{/if}
             <input type="image" name="submit" src="{$template}images/search.gif" alt="{$lang.search}" align="absmiddle" />
