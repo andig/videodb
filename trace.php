@@ -36,9 +36,9 @@ function get_base($url)
 	global $uri;
 
 	$uri = parse_url($url);
-	if (!$uri['scheme']) $uri['scheme'] = 'http';
-	if (!$uri['host']) $uri['host'] = 'localhost';
-	if (!$uri['path']) $uri['path'] = '/';
+        if (!array_key_exists('scheme', $uri)) {$uri['scheme'] = 'http';}
+        if (!array_key_exists('host', $uri)) {$uri['host'] = 'localhost';} 
+        if (!array_key_exists('path', $uri)) {$uri['path'] = '/';}
 	$uri['server'] = $uri['scheme'].'://'.$uri['host'];
 
 	// remove filename from path if recognized file type
@@ -139,8 +139,8 @@ function _replace_enclosed_tag_traced($matches)
 	$url = preg_replace("/&".session_name()."=[\d|\w]+$/", '', $url);
 
 	// show anchor translation if debugging
+        $note = '';
 	$note = ($config['debug']) ? "($matches[2] -> $url)" : '';
-
 	// enable _top navigation for iframe mode
 	$top = ($iframe) ? ' target="_top"' : '';
 
@@ -150,6 +150,7 @@ function _replace_enclosed_tag_traced($matches)
     // what's our host?
     $engine = (preg_match('/(imdb|amazon|filmweb)/i', $uri['host'], $m)) ? $m[1] : '';
     
+    $append = '';
     if ($engine == 'imdb')
     {
         // imdb
@@ -229,6 +230,8 @@ function _replace_tag($matches)
 	if (in_array('ads', $striptags) && (strtolower($matches[2]) == 'img') && preg_match("/\/ads?\//i", $url)) return '';
 
 	// switch on tag
+        $parameters = '';
+        $append = '';
 	switch (strtolower($matches[2])) {
 		// attn: order is crucial as $url needs be saved to get overwritten
 		case 'form' :	$append = "<input type='hidden' name='$urlid' value='$url'/>";
@@ -363,6 +366,7 @@ function request($urlonly=false)
 	if ($urlonly) return($url);
 
 	// append request parameters
+        $post = "";
         if ($_POST) {
 		$post = $request;
 	} elseif ($request) {
@@ -378,23 +382,29 @@ function request($urlonly=false)
 
     // encode possible spaces, use %20 instead of +
 	$url = preg_replace('/ /','%20', $url);
-        
-    $response = httpClient($url, $_GET['videodbreload'] != 'Y', array('post' => $post));
+
+     $dbreload = "";
+     if (isset($_GET['videodbreload']))
+     {
+         $dbreload = $_GET['videodbreload'];
+     }
+     
+    $response = httpClient($url, $dbreload != 'Y', array('post' => $post));
 
 	// url after redirect
-	get_base($response['url']);
+    get_base($response['url']);
 
-	if ($response['success'] != true)
+    if ($response['success'] != true)
     {
-		$page = 'Error: '.$response['error'];
-		if ($response['header']) $page .= '<br/>Header:<br/>'.nl2br($response['header']);
-	}
+        $page = 'Error: '.$response['error'];
+        if ($response['header']) $page .= '<br/>Header:<br/>'.nl2br($response['header']);
+    }
     else
     {
-		if (!$cache) putHTTPcache($url.$post, $response);
-		$page = $response['data'];
-	}
-	return $page;
+        putHTTPcache($url.$post, $response);
+        $page = $response['data'];
+    }
+    return $page;
 }
 
 /**
@@ -792,6 +802,7 @@ function replace_javascript_search ($js_file_data)
     global $iframe;
     $url = getScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
     $iframe_val = '';
+    $iframe_val_1 = '';
     if ($iframe) 
     {
         $iframe_val = '{name:"iframe",val:"'.$iframe.'"},';
@@ -1006,7 +1017,7 @@ function replace_javascript_srchlist ($js_file_data, $html)
 }
 
 /**
- *  @param   string  $js_file_data  imdb supplied javascript
+ * @param   string  $js_file_data  imdb supplied javascript
  * @param   string  $html          html data        
  * @return  string  $js_file_data   amended javascript and html.
  * @return  string  $html            amended  html.
@@ -1018,17 +1029,59 @@ function replace_javascript_episodelist ($js_file_data, $html)
     // allow for iframe templates
     $iframe_val = '';
     if ($iframe) $iframe_val = "&iframe=".$iframe;
-    
-    // find_string  `/title/ 
-    $pattern = '#(`)(/title/)#';
+
+    // nav lnks
+    // selection of seasons and year tabs
+    // selection of season no or year date
+        //defaultMessage:"Seasons"}),href:s({tconst:t
+        //defaultMessage:"Years"}),href:s({tconst:t
+        //defaultMessage:"Unknown"}):e.value;return{id: e.value,href:s({tconst:t
+    // selection of top rated tab
+        // defaultMessage:"Top-rated"}),href:s({tconst:t
+    // lnk for top rated at top of listing
+        //plotText?(0,n.jsx)(H,{href:o
+    // lnk for each episode
+        //"data-testid":"slate-list-card-title",children:n?(0,i.jsx)(x,{href:n
+    $pattern = '#(defaultMessage:"Seasons"\}\).*?,href:|'
+               . 'defaultMessage:"Years"\}\).*?,href:|'
+               . 'defaultMessage:"Unknown"\}\).*?,href:|'
+               . 'defaultMessage:"Top-rated"\}\).*?,href:|'
+               . 'plotText.\(.,.....\)\(.,\{href:|'
+               . '"data-testid":"slate-list-card-title".*?href:)#';
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
-        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) {
-             return $matches[1].$_SERVER['PHP_SELF'].'?'.$iframe_val.'&videodburl=https://www.imdb.com'.$matches[2];
-        }, $js_file_data);
+        $js_file_data = preg_replace_callback($pattern, 
+                                              function ($matches) use ($iframe_val) 
+                                                {return $matches[0]."'?$iframe_val&videodburl=https://www.imdb.com'+";
+                                                }, $js_file_data);
     }
 
+    // selection of individual season / years
+        //"data-testid":r.SeasonEntry}}),onChange:(e,a,n)=>{(0,H.h)(s({tconst:t,
+        //"data-testid":r.YearEntry}}),display:"chip",value:e.section?.currentYear,onChange:(e,a,n)=>{(0,H.h)(s({tconst:t,
+        //"data-testid":r.SeasonsTab})}return(0,l.jsxs)(G,{children:[(0,l.jsx)(z,{tabs: p.reverse(),value:n,disableUppercase:!0,onChange:(e,t,a)=>{lets=p.find(t=>t.id===e);s&&(0,H.h)(s.href,
+    // lnks - cervons at bottom episode list
+        //r.NextSeason,children:n[l+1],postIcon:"chevron-right",onClick:()=>a.push(
+        //r.PreviousSeason,children:n[l-1],preIcon:"chevron-left",onClick:()=>a.push(
+        //r.NextYear,children:n[l+1],postIcon:"chevron-right",onClick:()=>a.push(
+        //r.PreviousYear,children:n[l-1],preIcon:"chevron-left",onClick:()=>a.push(
+    $pattern = '#("data-testid":..SeasonEntry\}\}\).*?onChange:.*?\)\(|'
+               . '"data-testid":..YearEntry\}\}\).*?onChange:.*?\)\(|'
+               . '"data-testid":..SeasonsTab\}\).*?onChange:.*?\)\(|'
+                . '..NextSeason,children:.*?"chevron-right",onClick:\(\).*?\(|'
+               . '..PreviousSeason,children:.*?"chevron-left",onClick:\(\).*?\(|'
+               . '..NextYear,children:.*?"chevron-right",onClick:\(\).*?\(|'
+               . '..PreviousYear,children:.*?"chevron-left",onClick:\(\).*?\()#';
+    unset($matches);
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace_callback($pattern, 
+                                              function ($matches) use ($iframe_val) 
+                                                {return $matches[0]."'".$_SERVER['PHP_SELF']."?$iframe_val&videodburl=https://www.imdb.com'+";
+                                                }, $js_file_data);
+    }
+    
     // add - add and show to each episode
     // find the json data in html containing title id each episode
     unset($matches);
@@ -1352,11 +1405,14 @@ else
     */
 }
 
-if (    $iframe == 2 || 
-        preg_match('#\/_ajax#', $videodburl, $matches_ajax) || 
-        preg_match('#\.json#', $videodburl, $matches_json)  ||
-        preg_match('#\_json#', $videodburl, $matches_json_1)
-    )
+if (!empty($videodburl))
+{
+    preg_match('#\/_ajax#', $videodburl, $matches_ajax);
+    preg_match('#\.json#', $videodburl, $matches_json);
+    preg_match('#\_json#', $videodburl, $matches_json_1);
+}
+
+if ($iframe == 2 || !empty($matches_ajax) || !empty($matches_json) || !empty($matches_json_1) )
 {
     if ($matches_json)
     {
@@ -1410,16 +1466,21 @@ $file_path = './cache/'.date("Y-m-d")." T".date("H-i-s").' - pagedata-html-befor
 file_put_contents($file_path, $page);
  */
 $smarty->assign('url', $url);
-$smarty->assign('page', $page);
-$smarty->assign('fetchtime', $fetchtime);
 
-// extract meta element to pass to header
-//                <meta name="next-head-count" content="nn"/>
-if (preg_match('#\<meta name\="next\-head\-count" content\="\d+"/\>#',$page,$m1))
+if ($iframe <> 1)
 {
-    $smarty->assign('trace_meta', $m1[0]);
-}
+    // $page & fetchtime not set if nexgen template in use
+    $smarty->assign('page', $page);
+    $smarty->assign('fetchtime', $fetchtime);
+    
+    // extract meta element to pass to header
+    //                <meta name="next-head-count" content="nn"/>
+    if (preg_match('#\<meta name\="next\-head\-count" content\="\d+"/\>#',$page,$m1))
+    {
+        $smarty->assign('trace_meta', $m1[0]);
+    }
 
+}
 // display templates
 tpl_display('trace.tpl');
 

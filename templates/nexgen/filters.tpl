@@ -30,7 +30,7 @@
 </div><!-- row -->
 
 <div class="row">
-	{if $owners}
+	{if !empty($owners)}
 	<div class="small-12 columns">
 		<dl class="sub-nav">
 		<dt>{$lang.owner}:</dt>

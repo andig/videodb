@@ -63,13 +63,18 @@ function customfields(&$video, $inout)
 	$inout_function = ($inout == 'in') ? '_input' : '_output';
 	for ($i=1; $i < 5; $i++) 
     {
-		if (!empty($config['custom'.$i])) 
+        if (!empty($config['custom'.$i])) 
         {
-			$video['custom'.$i.'name'] = $config['custom'.$i];
-			$run = 'custom_'.$config['custom'.$i.'type'].$inout_function;
-			$video['custom'.$i.$inout]  = $run('custom'.$i,$video['custom'.$i]);			
-		}
-	}
+            $video['custom'.$i.'name'] = $config['custom'.$i];
+            $run = 'custom_'.$config['custom'.$i.'type'].$inout_function;
+            $custom_value = null;
+            if (array_key_exists('custom'.$i, $video))
+            {
+                $custom_value = $video['custom'.$i];  
+            }
+            $video['custom'.$i.$inout]  = $run('custom'.$i,$custom_value);			
+        }
+    }
 }
 
 /**
@@ -265,10 +270,10 @@ function custom_orgtitle_input($cn,$cv)
     global $imdbdata;
     global $id;
 
-    if (empty($cv) || ($config['lookupdefault'] > 0)) 
+    if (empty($cv)|| $config['lookupdefault_edit'] > 0 || $config['lookupdefault_new'] > 0)
     {
-        $cv = $imdbdata['title'];
-        if (!empty($imdbdata['subtitle'])) $cv .= ' - '.$imdbdata['subtitle'];
+        if (!empty($imdbdata['title'])) {$cv .= ' - '.$imdbdata['title'];}
+        if (!empty($imdbdata['subtitle'])) {$cv .= ' - '.$imdbdata['subtitle'];}
 
         // we need to save our self here!
         if (!empty($id) && $cv != '')
@@ -331,10 +336,9 @@ function custom_mpaa_input($cn,$cv)
     global $imdbdata;
     global $id;
 
-    if (empty($cv) || ($config['lookupdefault'] > 0))
+    if (empty($cv)|| $config['lookupdefault_edit'] > 0 || $config['lookupdefault_new'] > 0)
     {
-        $cv = $imdbdata['mpaa'];
-        if (!empty($imdbdata['mpaa'])) $cv .= $imdbdata['mpaa'];
+        if (!empty($imdbdata['mpaa'])) {$cv .= $imdbdata['mpaa'];}
 
         //we need to save our self here!
         if(!empty($id) && $cv != '')
@@ -360,11 +364,11 @@ function custom_mpaa_output($cn,$cv)
     global $imdbdata;
     global $id;
 
-    $ratings = array('Rated R' => 'mpaa-R.gif',
-                     'Rated NC-17' => 'mpaa-NC-17.gif',
-                     'Rated PG-13' => 'mpaa-PG-13.gif',
-                     'Rated PG' => 'mpaa-PG.gif',
-                     'Rated G' => 'mpaa-G.gif');
+    $ratings = array('R' => 'mpaa-R.gif',
+                     'NC-17' => 'mpaa-NC-17.gif',
+                     'PG-13' => 'mpaa-PG-13.gif',
+                     'PG' => 'mpaa-PG.gif',
+                     'G' => 'mpaa-G.gif');
 
     $output = custom_text_output($cn,$cv);
     foreach ($ratings as $rating => $image) 
@@ -392,7 +396,7 @@ function custom_bbfc_input($cn,$cv)
     global $imdbdata;
     global $id;
 
-    if (empty($cv) || ($config['lookupdefault'] > 0))
+    if (empty($cv)|| $config['lookupdefault_edit'] > 0 || $config['lookupdefault_new'] > 0)
     {
         $cv = $imdbdata['bbfc'];
         if (!empty($imdbdata['bbfc'])) $cv .= $imdbdata['bbfc'];

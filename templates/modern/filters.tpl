@@ -10,7 +10,7 @@
         <td class="filter" nowrap="nowrap">
             {html_radios name=filter options=$filters checked=$filter label_class="filterlink" onclick="submit()"}
         </td>
-        {if $order_options AND $filter<>'new'}
+        {if !empty($order_options) AND $filter<>'new'}
         <td class="filter" nowrap="nowrap" width="50%">
             <div align="right">
                 <label class="filterlink" for="order">{$lang.order}: </label>{html_options name="order" id="order" options=$order_options selected=$order onchange="submit()"}
@@ -22,7 +22,7 @@
                 <input type="checkbox" name="showtv" id="showtv" value="1" {if $showtv}checked="checked"{/if} onclick="submit()" /><label class="filterlink" for="showtv">{$lang.radio_showtv}</label>
             </div>
         </td>
-        {if $owners}
+        {if !empty($owners)}
         <td class="filter">
             <div align="right">
                 {html_options name=owner options=$owners selected=$owner onchange="submit()"}

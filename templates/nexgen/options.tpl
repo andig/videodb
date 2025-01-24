@@ -10,7 +10,7 @@
 
 {foreach from=$setup item=option}
 
-	{if $option.group}
+	{if !empty($option.group)}
 	<h3 class="subheader">{$lang[$option.group]}</h3>
 	{else}
 
@@ -50,7 +50,7 @@
 		<div class="small-12 large-8 columns">
 			<p>{$option.help}</p>
 
-			{if $option.thumbs}
+			{if !empty($option.thumbs)}
 			<ul class="small-block-grid-4">
 				{foreach item=thumb from=$option.thumbs}
 				<li>

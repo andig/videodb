@@ -27,31 +27,35 @@ $who = req_string('who');
 
 // borrowmanagement for single disk
 $editable = false;
+$dt = null;
 if (!empty($diskid))
 {
     if (check_permission(PERM_WRITE, get_owner_id($diskid,true)))
-	{
-		$editable = true;
-		if ($return) {
+    {
+        $editable = true;
+        if ($return) {
             $SQL    = "DELETE FROM ".TBL_LENT." WHERE diskid = '".escapeSQL($diskid)."'";
             runSQL($SQL);
-		}
-		if (!empty($who)) {
+        }
+        if (!empty($who)) {
             $SQL    = "INSERT INTO ".TBL_LENT." SET who = '".escapeSQL($who)."', diskid = '".escapeSQL($diskid)."'";
             runSQL($SQL);
-		}
+        }
 
         $SQL    = "SELECT who, DATE_FORMAT(dt,'%d.%m.%Y') AS dt 
                      FROM ".TBL_LENT." 
                     WHERE diskid = '".escapeSQL($diskid)."'";
         $result = runSQL($SQL);
-		
-		$who = $result[0]['who'];
-		$dt  = $result[0]['dt'];
-	}
+	
+        if (isset($result[0]['who']))
+        {  $who = $result[0]['who']; }
+        if (isset($result[0]['dt']))
+        {  $dt  = $result[0]['dt'];  }
+    }
 }
 
 $WHERES = '';
+$JOINS = '';
 
 if ($config['multiuser']) 
 {

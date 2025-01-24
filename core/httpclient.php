@@ -73,7 +73,10 @@ function get_response_encoding($response)
 
     if ($header) {
         $parsed = Psr7\parse_header($header);
-        $encoding = strtolower($parsed[0]['charset']);
+        if (array_key_exists('charset', $parsed[0]))
+        {
+            $encoding = strtolower($parsed[0]['charset']);
+        }
     }
 
     if (!$encoding)
@@ -106,7 +109,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     $requestConfig = [];
     $headers = '';  // additional HTTP headers, used for post data
 
-    if ($para['cookies'])
+    if (!empty($para) && array_key_exists('cookies', $para) && $para['cookies'])
     {
         $jar = new GuzzleHttp\Cookie\CookieJar();
         $requestConfig += ['cookies' => $jar];
@@ -145,7 +148,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     }
 
     // additional request headers
-    if ($para['header'])
+    if (!empty($para) && array_key_exists('header', $para) && $para['header'])
     {
         $requestConfig += ['headers' => $para['header']];
     }
@@ -168,6 +171,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     if ($config['debug']) echoHeaders($response['header'])."<p>";
     if ($config['debug']) echo "data:<br>".htmlspecialchars($response['data'])."<p>";
 
+    
     // log response
     if ($config['httpclientlog'])
     {

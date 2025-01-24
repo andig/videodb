@@ -11,7 +11,7 @@
 
     <h3 class="subheader">{$lang.statistics}</h3>
 
-    {if $owners}
+    {if !empty($owners)}
     <h6 class="subheader">{$lang.statistics_for}</h6>
     <form action="stats.php">
     	{html_options name=owner options=$owners selected=$owner class="autosubmit"}

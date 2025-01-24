@@ -48,8 +48,12 @@ function _callbackRemoveEvilAttributes($matches)
 function removeEvilTags($source)
 {
     global $allowedTags;
-    $source = strip_tags($source, $allowedTags);
-    return preg_replace_callback('/(<)(.*?)(>)/i', "_callbackRemoveEvilAttributes", $source);
+    if (!is_null($source))
+    {    
+        $source = strip_tags($source, $allowedTags);
+        return preg_replace_callback('/(<)(.*?)(>)/i', "_callbackRemoveEvilAttributes", $source);
+    }
+    return $source;
 }
 
 ?>

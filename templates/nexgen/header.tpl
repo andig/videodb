@@ -50,7 +50,7 @@
 						</dl>
 					</li>
 
-					{if $owners}
+					{if !empty($owners)}
 					<li>
 						<dl class="sub-nav">
 						<dt>{$lang.owner}:</dt>
@@ -61,7 +61,7 @@
 					</li>
 					{/if}
 					
-					{if $order_options}
+					{if !empty($order_options)}
 					<li>
 						<dl class="sub-nav">
 						<dt>{$lang.order}:</dt>
@@ -104,7 +104,7 @@
 						</ul>
 					</li>
 
-					{if $owners}
+					{if !empty($owners)}
 					<li class="has-dropdown">
 						<a href="#">{$lang.owner}</a>
 						<ul class="dropdown">
@@ -118,14 +118,14 @@
 			</li>
 			{/if}
 
-			{if $pdf || $xls || $xml}
+			{if !empty($pdf) || !empty($xls) || !empty($xml)}
 			<li class="has-dropdown">
 				<a href="#">{$lang.export}</a>
 
 				<ul class="dropdown">
-					{if $pdf}<li><a href="{$pdf}export=pdf&ext=.pdf">Adobe PDF</a></li>{/if}
-					{if $xls}<li><a href="{$xls}export=xls&ext=.xls">Microsoft Excel</a></li>{/if}
-					{if $xml}<li><a href="{$xml}export=xml">XML</a></li>{/if}
+					{if !empty($pdf)}<li><a href="{$pdf}export=pdf&ext=.pdf">Adobe PDF</a></li>{/if}
+					{if !empty($xls)}<li><a href="{$xls}export=xls&ext=.xls">Microsoft Excel</a></li>{/if}
+					{if !empty($xml)}<li><a href="{$xml}export=xml">XML</a></li>{/if}
 				</ul>
 			</li>
 			{/if}

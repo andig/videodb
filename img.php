@@ -69,23 +69,24 @@ if ($name)
             // if engineActor fails in httpclient it goes directly to errorpage which loses
             // message set in httpCLient
             // this is a cause of broken actor images appearing
-            $save_data_if_error_getting_image =  'Name: '.$name.' - Actorid: '.$actorid;
+            $savedata_for_errorpage =  'Module->img.php, Name->'.$name.', Actorid->'.$actorid;
         }
         
 	$result = engineActor($name, $actorid, engineGetActorEngine($actorid));
 
-        if ( $config['debug}'] )
+        if ( $config['debug'] )
         {
-            unset($save_data_if_error_getting_image);
+            unset($savedata_for_errorpage);
         }
-	
-	if (!empty($result)) {
+        
+        if (!empty($result)) 
+        {
 		$url = $result[0][1];
-	}
-	if (preg_match('/nohs(-[f|m])?.gif$/', $url)) {
-        // imdb no-image picture
-		$url = '';
-	} 
+            if (preg_match('/nohs(-[f|m])?.gif$/', $url)) {
+            // imdb no-image picture
+                    $url = '';
+            }
+        }
 
     // write actor last checked record
     // NOTE: this is only called if the template preparation has determined the actor record needs checking
@@ -98,7 +99,7 @@ if ($name)
 }
 
 // Get cached image for the given url
-if (preg_match('/\.(jpe?g|gif|png)$/i', $url, $matches))
+if (!is_null($url) && preg_match('/\.(jpe?g|gif|png)$/i', $url, $matches))
 {
     // calculate cache filename if we're not looking into the cache again- otherwise this is done by cache_file_exists
     // $file is further needed for downloading the file

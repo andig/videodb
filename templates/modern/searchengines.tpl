@@ -10,7 +10,7 @@
     <input type="hidden" name="s" value="all" />
 </form>
 
-{if $engine.tvcom}
+{if !empty($engine.tvcom)}
 {assign var="link" value="http://www.tv.com/search.php"}
 <form action="trace.php" id="searchTvcom" name="searchTvcom" method="get" {if !$config.imdbBrowser}target="_blank"{/if}>
     {if $config.imdbBrowser}<input type="hidden" name="videodburl" value="{$link}"/>{/if}
@@ -19,7 +19,7 @@
 </form>
 {/if}
 
-{if $engine.filmweb}
+{if !empty($engine.filmweb)}
 {assign var="link" value="http://www.filmweb.pl/Find"}
 <form action="trace.php" id="searchFilmweb" name="searchFilmweb" method="get" {if !$config.imdbBrowser}target="_blank"{/if}>
        {if $config.imdbBrowser}<input type="hidden" name="videodburl" value="{$link}"/>{/if}
@@ -28,7 +28,7 @@
 </form>
 {/if}
 
-{if $engine.amazon || $engine.amazoncom || $engine.amazonxml}
+{if !empty($engine.amazon) || !empty($engine.amazoncom) || !empty($engine.amazonxml)}
 {assign var="link" value="http://www.amazon.com/exec/obidos/search-handle-form/ref=dp_sr_00/102-0276103-8470541"}
 <form action="trace.php" id="searchAmazon" name="searchAmazon" method="post" {if !$config.imdbBrowser}target="_blank"{/if}>
     {if $config.imdbBrowser}<input type="hidden" name="videodburl" value="{$link}"/>{/if}

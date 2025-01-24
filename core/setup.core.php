@@ -71,7 +71,7 @@ function setup_mkOptions($isprofile = false)
     $setup[] = setup_addOption($isprofile, 'browse_include_title', 'dropdown', array('none' => $lang['none'], 'top' => $lang['top'], 'bottom' => $lang['bottom'], 'both' => $lang['both']));
 
     if (!$isprofile) $setup[] = setup_addSection('opt_custom');
-    $setup[] = setup_addOption($isprofile, 'custom', 'special', setup_mkCustoms());
+    $setup[] = setup_addOption($isprofile, 'custom', 'special', setup_mkCustoms(), 'custom', $lang['help_customn'], $lang['help_custom']);
     
     if (!$isprofile) $setup[] = setup_addSection('opt_engines');
     $setup[] = setup_addOption($isprofile, 'enginedefault', 'dropdown', setup_getEngines($config['engines']), null , $lang['help_defaultenginen'], $lang['help_defaultengine']);
@@ -79,15 +79,15 @@ function setup_mkOptions($isprofile = false)
     foreach ($config['engines'] as $engine => $meta)
     {
         $title      = $meta['name'];
-        $enabled    = $config['engine'][$engine];        
+        if (array_key_exists($engine,$config['engine'])) {$enabled = $config['engine'][$engine];} else {$enabled = null;}
         $helptext   = sprintf($lang['help_engine'], $title);
-        $helptext  .= ' '.$lang['help_engine'.$engine];
-        if (!$meta['stable']) $helptext .= ' '.$lang['help_engexperimental'];
-        
+        if (array_key_exists('help_engine' . $engine, $lang)) {$helptext .= ' ' . $lang['help_engine' . $engine];}
+        if (!array_key_exists('stable', $meta) || $meta['stable'] == 0) {$helptext .= ' ' . $lang['help_engexperimental'];}
+
         $setup[] = setup_addOption($isprofile, 'engine'.$engine, 'boolean', null, $enabled, $title, $helptext);
 
         // add engine-specific options
-        if (is_array($meta['config']))
+        if (array_key_exists('config', $meta) && is_array($meta['config']))
         {
             foreach ($meta['config'] as $setting)
             {
@@ -102,15 +102,15 @@ function setup_mkOptions($isprofile = false)
         }
     }
 
-    if (!$isprofile) $setup[] = setup_addSection('opt_security');
-	$setup[] = setup_addOption($isprofile, 'localnet', 'text');
-	$setup[] = setup_addOption($isprofile, 'multiuser', 'boolean');
-	$setup[] = setup_addOption($isprofile, 'denyguest', 'boolean');
-    $setup[] = setup_addOption($isprofile, 'usermanager', 'link', 'users.php');
-	$setup[] = setup_addOption($isprofile, 'proxy_host', 'text');
-	$setup[] = setup_addOption($isprofile, 'proxy_port', 'text');
+    if (!$isprofile) {$setup[] = setup_addSection('opt_security');}
+    $setup[] = setup_addOption($isprofile, 'localnet', 'text');
+    $setup[] = setup_addOption($isprofile, 'multiuser', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'denyguest', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'usermanager', 'link', 'users.php', 'usermanager');
+    $setup[] = setup_addOption($isprofile, 'proxy_host', 'text');
+    $setup[] = setup_addOption($isprofile, 'proxy_port', 'text');
 
-    if (!$isprofile) $setup[] = setup_addSection('opt_caching');
+    if (!$isprofile) {$setup[] = setup_addSection('opt_caching');}
     $setup[] = setup_addOption($isprofile, 'thumbnail', 'boolean');
     $setup[] = setup_addOption($isprofile, 'imdbBrowser', 'boolean');
     $setup[] = setup_addOption($isprofile, 'IMDBage', 'text');
@@ -136,7 +136,7 @@ function setup_additionalSettings()
     foreach ($config['engines'] as $engine => $meta)
     {
         // add engine-specific options
-        if (is_array($meta['config']))
+        if (array_key_exists('config', $meta) && is_array($meta['config']))
         {
             foreach ($meta['config'] as $setting)
             {

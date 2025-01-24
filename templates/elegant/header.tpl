@@ -34,7 +34,7 @@
         {if !empty($header.random)}<li class="{if $header.active == 'random'}tabActive{else}tabInactive{/if}"><a href="{$header.random}">{$lang.random}</a></li>{/if}
         {if !empty($header.search)}<li class="{if $header.active == 'search'}tabActive{else}tabInactive{/if}"><a href="{$header.search}">{$lang.search}</a></li>{/if}
         {if !empty($header.new)}<li class="{if $header.active == 'new'}tabActive{else}tabInactive{/if}"><a href="{$header.new}" accesskey="n">{$lang.n_e_w}</a></li>{/if}
-        {if $header.active == 'show'}<li class="tabActive"><a href="{$header.request_uri}">{$lang.view}</a></li> {/if}
+        {if $header.active == 'show'}<li class="tabActive">{if !empty($header.request_uri)}<a href="{$header.request_uri}"> {/if} {$lang.view}</a></li> {/if}
         {if $header.active == 'edit'}<li class="tabActive"><a href="{$header.edit}">{$lang.edit}</a></li> {/if}
         {if !empty($header.borrow)}<li class="{if $header.active == 'borrow'}tabActive{else}tabInactive{/if}"><a href="{$header.borrow}">{$lang.borrow}</a></li>{/if}
         {if !empty($header.stats)}<li class="{if $header.active == 'stats'}tabActive{else}tabInactive{/if}"><a href="{$header.stats}">{$lang.statistics}</a></li>{/if}

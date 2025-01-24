@@ -216,10 +216,14 @@ function iconv_array($source_encoding, $target_encoding, $data)
     else
     {
         // finally convert string value
-        $data = iconv($source_encoding, $target_encoding, (string)$data);
-        if ($data === FALSE) errorpage('Character set conversion error', "Error converting from $source_encoding to $target_encoding.");
+        $data_saved = $data;  // save data for output on error page if signalled
+        $data = iconv($source_encoding, $target_encoding."//TRANSLIT", (string)$data);
+        if ($data === FALSE) 
+        {
+            errorpage('Character set conversion error', "Error converting from $source_encoding to $target_encoding. <br> String <br> $data_saved");
+        }
     }
-    
+
     return $data;
 }
 

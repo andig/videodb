@@ -7,7 +7,7 @@
 
 {foreach from=$setup item=option}
 <div class="{cycle values="optionseven,optionsodd"}">
-    {if $option.group}
+    {if !empty($option.group)}
     <div class="center">
         <h2><a name="{$option.group}"></a>{$lang[$option.group]}</h2>
     </div>
@@ -47,7 +47,7 @@
         <div class="optionsright">
             {$option.help}
 
-            {if $option.thumbs}
+            {if !empty($option.thumbs)}
                 {include file="options_thumbs.tpl"}
             {/if}
         </div>

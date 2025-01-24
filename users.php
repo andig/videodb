@@ -77,6 +77,7 @@ elseif ($adultflag) $perm |= PERM_ADULT;
 if ($writeflag) $perm |= PERM_READ + PERM_WRITE;
 elseif ($readflag) $perm |= PERM_READ;
 
+$message = '';
 // new user?
 if ($newuser)
 {
@@ -155,6 +156,7 @@ foreach ($result as $user)
 clear_permission_cache();
 
 // prepare templates
+if (isset($id)) {unset($id);} // unset as template wants videodata id not user id
 tpl_page('usermanager');
 
 $smarty->assign('userlist', $userlist);

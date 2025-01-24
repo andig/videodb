@@ -34,6 +34,7 @@ function clear_session()
 $username = req_string('username');
 $password = req_string('password');
 $refer = req_string('refer');
+$permanent = req_string('permanent');
 
 // make sure caches are clean
 clear_permission_cache();
@@ -48,6 +49,7 @@ if (!isset($username) && !isset($password) &&
 
 // login not yet successful
 $login = false;
+$error = '';
 
 // Check that user entered stuff in username and password boxes
 if (!empty($username) && !empty($password))

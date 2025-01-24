@@ -11,6 +11,6 @@ commented out to avoid IE switching to quirksmode, see http://www.quirksmode.org
     {if !empty($delete_meta)} {$delete_meta} {/if}
     <meta name="description" content="VideoDB" />
     <link rel="stylesheet" href="{$style}" type="text/css" />
-    {if $rss}<link rel="alternate" type="application/rss+xml" title="VideoDB RSS" href="index.php?export=rss" />
+    {if !empty($rss)}<link rel="alternate" type="application/rss+xml" title="VideoDB RSS" href="index.php?export=rss" />
     {/if}<link rel="shortcut icon" href="images/icons/1-favicon.ico" type="image/ico" />
 </head>

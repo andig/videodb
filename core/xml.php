@@ -81,9 +81,30 @@ function xmlexport($WHERE)
             {
                 $xml_actor_data = '';
                 $actor_data = explode("::",$actor);
-                $xml_actor_data .= createTag('name', $actor_data[0]);
-                $xml_actor_data .= createTag('role', $actor_data[1]);
-                $xml_actor_data .= createTag('imdbid', $actor_data[2]);
+                if (array_key_exists('1', $actor_data))
+                {
+                    $xml_actor_data .= createTag('name', $actor_data[0]);
+                }
+                else
+                {
+                    $xml_actor_data .= createTag('name', '');
+                }
+                if (array_key_exists('1', $actor_data))
+                {
+                    $xml_actor_data .= createTag('role', $actor_data[1]);
+                }
+                else
+                {
+                    $xml_actor_data .= createTag('role', '');
+                }          
+                if (array_key_exists('2', $actor_data))
+                {
+                    $xml_actor_data .= createTag('imdbid', $actor_data[2]);
+                }
+                else
+                {
+                    $xml_actor_data .= createTag('imdbid', '');
+                } 
                 $xml_actors .= createContainer('actor', $xml_actor_data);
             }
             $xml_item .= createContainer('actors', $xml_actors);

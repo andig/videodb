@@ -13,7 +13,7 @@
 
     <form action="search.php" id="search" name="search" method="get">
 
-    {if $imgurl}
+    {if !empty($imgurl)}
     <div id="searchimage">
         <span class="img-shadow">
         <a href='http://uk.imdb.com/Name?{$q|replace:"&quot;|\"":""|escape:url}'>{html_image file=$imgurl max_width=97 max_height=144 id="actorimg"}</a>
@@ -35,7 +35,7 @@
         <br/>
         {include file="searchradios.tpl"}
 
-        {if $owners}
+        {if !empty($owners)}
             <p>
             <h3>{$lang.owner}:</h3>
             {html_options name=owner id=owner options=$owners selected=$owner}<br/>

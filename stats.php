@@ -40,9 +40,14 @@ function collapse_multiple_languages($langs)
             $lang = ucwords($lang);
             
             $templangs[$lang]['language'] = $lang;
+            
+            if (!array_key_exists('count', $templangs[$lang]))
+            {
+                $templangs[$lang]['count'] = 0;
+            }
             $templangs[$lang]['count']   += $val['count'];
         }
-    }
+    }  
     usort($templangs, 'compare_count');
     
     return $templangs;
