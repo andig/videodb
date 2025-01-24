@@ -22,6 +22,7 @@ class VariableStream
 {
     var $position;
     var $varname;
+    var $context;
     
     function stream_open($path, $mode, $options, &$opened_path) {
         $url = parse_url($path);
