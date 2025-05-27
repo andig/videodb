@@ -405,30 +405,89 @@ function imdbData($imdbID)
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
 
     // Cast
-    if (preg_match('#<table class="cast_list">(.*)#si', $resp['data'], $match))
+    #testing code save resp data from imdb
+    #file_put_contents('./cache/httpclient-php_imdbData_cast.html', $resp['data']);  // write page data to file    
+
+    // Increase the PCRE backtrack limit for a potentially large regex operation
+    $origBacktrackLimit = ini_get('pcre.backtrack_limit');
+    $newBacktrackLimit  = '10000000';
+    ini_set('pcre.backtrack_limit', $newBacktrackLimit);
+    
+    // extract json data from page
+    if (preg_match('#(\<script id\="__NEXT_DATA__".*?\>)(.*?)(\</script\>)#s',$resp['data'],$matches))
     {
-        // no idea why it does not always work with (.*?)</table
-        // could be some maximum length of .*?
-        // anyways, I'm cutting it here
-        $casthtml = substr($match[1], 0, strpos($match[1], '</table'));
-        $cast = '';
-        if (preg_match_all('#<td class=\"primary_photo\">\s+<a href=\"\/name\/(nm\d+)\/?.*?".+?<a .+?>(.+?)<\/a>.+?<td class="character">(.*?)<\/td>#si', $casthtml, $ary, PREG_PATTERN_ORDER))
+        #file_put_contents('./cache/nextdata.json-cast', $matches[2]);  // write json data to file
+        $json_data_cast = json_decode($matches[2],true);
+        #file_put_contents('./cache/nextdata-decoded.json-cast', print_r($json_data_cast, true));  // write formated json data to file
+    }
+    
+    //revert the PCRE limits back to their original values after regex operation,
+    ini_set('pcre.backtrack_limit', $origBacktrackLimit);
+    
+    $cast = '';
+    if (isset($json_data_cast['props']['pageProps']['contentData']['categories']) &&
+        is_array($json_data_cast['props']['pageProps']['contentData']['categories'])) 
+    {
+        foreach ($json_data_cast['props']['pageProps']['contentData']['categories'] as $index => $category) 
         {
-            for ($i=0; $i < sizeof($ary[0]); $i++)
+            // Make sure 'id' exists for this category, then check if it equals "cast"
+            if (isset($category['id']) && $category['id'] === "cast") 
             {
-                $actorid    = trim(strip_tags($ary[1][$i]));
-                $actor      = trim(strip_tags($ary[2][$i]));
-                $character  = trim( preg_replace('/\s+/', ' ', strip_tags( preg_replace('/&nbsp;/', ' ', $ary[3][$i]))));
-                $cast  .= "$actor::$character::$imdbIdPrefix$actorid\n";
+                // Ensure that 'section' and its 'items' exist and are an array
+                if (isset($category['section']['items']) && is_array($category['section']['items'])) 
+                {
+                    // Loop through each item in the items array
+                    foreach ($category['section']['items'] as $item) 
+                    {
+                        // Check if the required keys exist.
+                        $actorid   = isset($item['id']) ? $item['id'] : "";
+                        $actor     = isset($item['rowTitle']) ? $item['rowTitle'] : "";
+                        // Build the $character string from characters and attributes
+                        if (isset($item['characters']) && is_array($item['characters']) && !empty($item['characters'])) 
+                        {
+                            // Join all characters if available
+                            $character = implode(" / ", $item['characters']);
+                            // Append attributes if present
+                            if (isset($item['attributes']) && !empty($item['attributes'])) 
+                            {
+                                $character .= " " . $item['attributes'];
+                            }
+                        }   
+                        elseif (isset($item['attributes']) && !empty($item['attributes'])) 
+                            {
+                                // Use only attributes if characters are not set or empty
+                                $character = $item['attributes'];
+                            } 
+                            else 
+                            {
+                                // Default to an empty string if neither field is available
+                                $character = "";
+                            }
+                        // Append episodic credit data if available
+                        if (isset($item['episodicCreditData']) && is_array($item['episodicCreditData'])) 
+                        {
+                            $episodicParts = [];
+                            if (isset($item['episodicCreditData']['episodesText']) && !empty($item['episodicCreditData']['episodesText'])) {
+                                $episodicParts[] = $item['episodicCreditData']['episodesText'];
+                            }
+                            if (isset($item['episodicCreditData']['tenureText']) && !empty($item['episodicCreditData']['tenureText'])) {
+                                $episodicParts[] = $item['episodicCreditData']['tenureText'];
+                            }
+                            if (!empty($episodicParts)) {
+                                $character .= " " . implode(", ", $episodicParts);
+                            }
+                        }
+                        // Append the current actor's details
+                        $cast .= "$actor::$character::$imdbIdPrefix$actorid\n";
+                    }
+                }
+                // break out of the cast data
+                break;
             }
         }
-
-        // remove html entities and replace &nbsp; with simple space
-        $data['cast'] = html_clean_utf8($cast);
-
-        // sometimes appearing in series (e.g. Scrubs)
-        $data['cast'] = preg_replace('#/ ... #', '', $data['cast']);
     }
+
+    $data['cast'] = $cast;
 
     // Fetch plot
     $resp = $resp = imdbFixEncoding($data, httpClient($imdbServer.'/title/tt'.$imdbID.'/plotsummary', $cache));
