@@ -1402,7 +1402,7 @@ else
     $fetchtime = time() - $fetchtime;
 
     // trace dirs
-    $debug_trace = 1;   // @todo move to config inc ???
+    $debug_trace = 0;   // @todo move to config inc ???
     $trace_dirs=array('preclone' => cache_get_folder('trace_javascript_preclone'),
                       'srchlst' => cache_get_folder('trace_nextdata_srchlst'),
                       'episodelst' => cache_get_folder('trace_nextdata_episodelst'));
