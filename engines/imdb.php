@@ -420,7 +420,6 @@ function imdbData($imdbID)
         $json_data_cast = json_decode($matches[2],true);
         #file_put_contents('./cache/nextdata-decoded.json-cast', print_r($json_data_cast, true));  // write formated json data to file
     }
-    
     //revert the PCRE limits back to their original values after regex operation,
     ini_set('pcre.backtrack_limit', $origBacktrackLimit);
     
@@ -436,49 +435,16 @@ function imdbData($imdbID)
                 // Ensure that 'section' and its 'items' exist and are an array
                 if (isset($category['section']['items']) && is_array($category['section']['items'])) 
                 {
-                    // Loop through each item in the items array
-                    foreach ($category['section']['items'] as $item) 
+                    $pageSize = $category['pagination']['queryVariables']['first'];
+                    $total_cast = $category['section']['total'];
+
+                    if ($total_cast > $pageSize) 
                     {
-                        // Check if the required keys exist.
-                        $actorid   = isset($item['id']) ? $item['id'] : "";
-                        $actor     = isset($item['rowTitle']) ? $item['rowTitle'] : "";
-                        // Build the $character string from characters and attributes
-                        if (isset($item['characters']) && is_array($item['characters']) && !empty($item['characters'])) 
-                        {
-                            // Join all characters if available
-                            $character = implode(" / ", $item['characters']);
-                            // Append attributes if present
-                            if (isset($item['attributes']) && !empty($item['attributes'])) 
-                            {
-                                $character .= " " . $item['attributes'];
-                            }
-                        }   
-                        elseif (isset($item['attributes']) && !empty($item['attributes'])) 
-                            {
-                                // Use only attributes if characters are not set or empty
-                                $character = $item['attributes'];
-                            } 
-                            else 
-                            {
-                                // Default to an empty string if neither field is available
-                                $character = "";
-                            }
-                        // Append episodic credit data if available
-                        if (isset($item['episodicCreditData']) && is_array($item['episodicCreditData'])) 
-                        {
-                            $episodicParts = [];
-                            if (isset($item['episodicCreditData']['episodesText']) && !empty($item['episodicCreditData']['episodesText'])) {
-                                $episodicParts[] = $item['episodicCreditData']['episodesText'];
-                            }
-                            if (isset($item['episodicCreditData']['tenureText']) && !empty($item['episodicCreditData']['tenureText'])) {
-                                $episodicParts[] = $item['episodicCreditData']['tenureText'];
-                            }
-                            if (!empty($episodicParts)) {
-                                $character .= " " . implode(", ", $episodicParts);
-                            }
-                        }
-                        // Append the current actor's details
-                        $cast .= "$actor::$character::$imdbIdPrefix$actorid\n";
+                        $cast = imdbCastExtra($imdbID);
+                    }
+                    else
+                    {
+                        $cast = imdbCast($category['section']['items']);
                     }
                 }
                 // break out of the cast data
@@ -651,3 +617,137 @@ function imdbActor($name, $actorid)
     return $ary;
 }
 
+function imdbCast(array $items)
+{
+    global $imdbIdPrefix;
+    
+    // Loop through each item in the items array
+    foreach ($items as $item) 
+    {
+        // Check if the required keys exist.
+        $actorid   = isset($item['id']) ? $item['id'] : "";
+        $actor     = isset($item['rowTitle']) ? $item['rowTitle'] : "";
+        // Build the $character string from characters and attributes
+        if (isset($item['characters']) && is_array($item['characters']) && !empty($item['characters'])) 
+        {
+            // Join all characters if available
+            $character = implode(" / ", $item['characters']);
+            // Append attributes if present
+            if (isset($item['attributes']) && !empty($item['attributes'])) 
+            {
+                $character .= " " . $item['attributes'];
+            }
+        }   
+        elseif (isset($item['attributes']) && !empty($item['attributes'])) 
+            {
+                // Use only attributes if characters are not set or empty
+                $character = $item['attributes'];
+            } 
+            else 
+            {
+                // Default to an empty string if neither field is available
+                $character = "";
+            }
+        // Append episodic credit data if available
+        if (isset($item['episodicCreditData']) && is_array($item['episodicCreditData'])) 
+        {
+            $episodicParts = [];
+            if (isset($item['episodicCreditData']['episodesText']) && !empty($item['episodicCreditData']['episodesText'])) {
+                $episodicParts[] = $item['episodicCreditData']['episodesText'];
+            }
+            if (isset($item['episodicCreditData']['tenureText']) && !empty($item['episodicCreditData']['tenureText'])) {
+                $episodicParts[] = $item['episodicCreditData']['tenureText'];
+            }
+            if (!empty($episodicParts)) {
+                $character .= " " . implode(", ", $episodicParts);
+            }
+        }
+        // Append the current actor's details
+        $cast .= "$actor::$character::$imdbIdPrefix$actorid\n";
+    }
+    
+    return $cast;
+}
+
+function imdbCastExtra($imdbID)
+{
+    global $imdbIdPrefix;
+    global $CLIENTERROR;
+    global $cache;
+
+    $param = ['header' => ['Accept' => 'application/json',
+                           'User-Agent' => 'Mozilla/5.0',
+                           'Content-Type' => 'application/json',
+                          ]
+             ];
+    $after = '';
+    $cast = '';
+    
+    do 
+    {
+        $url = 'https://caching.graphql.imdb.com/?operationName=TitleCreditSubPagePagination&variables={"after":"'.$after.'","category":"cast","const":"tt'.$imdbID.'","first":250,"locale":"en-US","originalTitleText":false,"tconst":"tt'.$imdbID.'"}&extensions={"persistedQuery":{"sha256Hash":"716fbcc1b308c56db263f69e4fd0499d4d99ce1775fb6ca75a75c63e2c86e89c","version":1}}';
+
+        $resp = httpClient($url, $cache, $param);
+        if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
+
+        // Cast
+        #testing code save resp data from imdb
+        #file_put_contents('./cache/httpclient-php_imdbData_castextra.html', $resp['data']);  // write page data to file    
+        #file_put_contents('./cache/json-castextra', $resp['data']);  // write json data to file
+        $json_data_castextra = json_decode( $resp['data'],true);
+        #file_put_contents('./cache/jsonDecoded-castextra', print_r($json_data_castextra, true));  // write formated json data to file
+
+        if (isset($json_data_castextra['data']['title']['credits']) &&
+            is_array($json_data_castextra['data']['title']['credits'])) 
+        {
+            $credits = $json_data_castextra['data']['title']['credits'];
+            // Loop through each item in the items array
+            foreach ($credits['edges'] as $edge) 
+            {
+                // Check if the required keys exist.
+                $actorId   = isset($edge['node']['name']['id']) ? $edge['node']['name']['id'] : "";
+                $actor     = isset($edge['node']['name']['nameText']['text']) ? $edge['node']['name']['nameText']['text'] : "";
+                // Build the $character string from characters and attributes
+
+                if (is_array($edge['node']['characters'])) 
+                {
+                    $characterNames = array_map(function ($char) 
+                                                {
+                                                    return $char['name'];
+                                                }, $edge['node']['characters']);
+                    $role = implode(' / ', $characterNames);
+
+                    if ($edge['node']['attributes']) 
+                    {
+                        foreach($edge['node']['attributes'] as $attr) 
+                        {
+                            $role .= " (" . $attr['text'] . ")";
+                        }
+                    }
+                } 
+                else 
+                {
+                    $role = $edge['node']['attributes']['text'];
+                }
+                if ($edge['node']['episodeCredits'] && $edge['node']['episodeCredits']['total'] > 0) 
+                {
+                    $total = $edge['node']['episodeCredits']['total'];
+                    $from = $edge['node']['episodeCredits']['yearRange']['year'];
+                    $to = $edge['node']['episodeCredits']['yearRange']['endYear'];
+
+                    $role .= ", $total episodes, $from";
+                    if ($to) 
+                    {
+                        $role .= "-$to";
+                    }
+                }
+                // Append the current actor's details
+                $cast .= "$actor::$role::$imdbIdPrefix$actorId\n";
+            }
+        }
+    
+        $after = $credits['pageInfo']['endCursor'];
+    } while ($credits['pageInfo']['hasNextPage']);
+    
+    return $cast;
+}
