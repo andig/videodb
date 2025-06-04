@@ -204,6 +204,18 @@ if (!function_exists('linkinfo'))
 }
 
 /**
+ * Polyfill for PHP 4 - PHP 7 
+ * introduced in PHP 8
+ */
+if (!function_exists('str_contains')) 
+{
+    function str_contains(string $haystack, string $needle): bool 
+    {
+        return strpos($haystack, $needle) !== false;
+    }
+}
+
+/**
  * This file is part of the array_column library
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
