@@ -711,9 +711,9 @@ function replace_javascript_lnksbody  ($js_file_data)
                                                 }, $js_file_data);
     } 
     
-    // creator and ???? lnks in body
-    //titleFullCreditsLinkBuilder:o}=(0,B.WO)(),l=(0,eF.N)(rm);if(!a.length)return null;let d=rA(i.id),c=
-    $pattern = '#titleFullCreditsLinkBuilder\:.\}=\(.,....\)\(\),.=\(.,....\)\(..\)\;if\(...length\)return null\;let .=..\(....\),.=#';
+    // creator, writer, director lnks to full list page
+    //           titleFullCreditsLinkBuilder:l}=(0,B.WO)(),d=(0,eF.N)(rg),c=(0,eo.hg)({weblabID:es.lh.IMDB_WEB_PACE_CREDITS_1201882,treatments:{T1:!0}});if(!a.length)return null;let u=r>a.length,p=c?i.id:rk(i.id),m=//
+    $pattern = '#titleFullCreditsLinkBuilder\:.\}=\(.,....\)\(\),.=\(.,....\)\(..\).*?if\(...length\)return null\;let .=.*?.=.*?=#';
     unset($matches);
     if ( preg_match($pattern, $js_file_data, $matches))
     {
