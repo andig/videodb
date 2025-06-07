@@ -1282,9 +1282,9 @@ function replace_javascript_lnkstop ($js_file_data)
                                      $js_file_data);
     }
     
-// creator and stars lnks near top page 
-    //nameMainLinkBuilder:r}=(0,l.WO)();return t?(0,a.jsx)(a.Fragment,{children:t.map(t=>{let s=t.category.id.toLowerCase(),l=
-    $pattern = '#nameMainLinkBuilder:.*?toLowerCase\(\),.=#';
+    // creator and stars lnks near top page 
+    // nameMainLinkBuilder:g}=(0,l.WO)();return i?(0,a.jsx)(a.Fragment,{children:i.map((i,s)=>{let l=t?i.grouping:i.category,c=
+    $pattern = '#nameMainLinkBuilder:.*?category,.=#';
     unset($matches);
     if ( preg_match($pattern, $js_file_data, $matches))
     {
