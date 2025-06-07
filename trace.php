@@ -697,16 +697,19 @@ function replace_javascript_lnksbody  ($js_file_data)
                                                 }, $js_file_data);
     }
     
-    // creator and stars lnks near top page 
-    //tH.countLimit)(t.cast?.total):void 0,y=
-    $pattern = '#...countLimit\)\(..cast\?.total\)\:void 0,.=#';
+    //Top cast
+    //all cast & crew
+    // "data-testid":"title-cast",children:[(0,n.jsx)(tU.O,{title:c,editHref:f,subtitleProps:{href
+    // "data-testid":"title-cast-allcast-link",labelTitle:u,labelLink: 
+    $pattern = '#"data-testid":"title-cast".*?href:'
+             . '|"data-testid":"title-cast-allcast-link".*?labelLink:#';
     unset($matches);
     if ( preg_match($pattern, $js_file_data, $matches))
     {
-        $js_file_data = preg_replace($pattern,
-                            $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
-                             $js_file_data);
-    }        
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) 
+                                                {return $matches[0]."'?".$iframe_val."&videodburl=https://www.imdb.com'"."+";
+                                                }, $js_file_data);
+    } 
     
     // creator and ???? lnks in body
     //titleFullCreditsLinkBuilder:o}=(0,B.WO)(),l=(0,eF.N)(rm);if(!a.length)return null;let d=rA(i.id),c=
@@ -718,7 +721,7 @@ function replace_javascript_lnksbody  ($js_file_data)
                             $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
                              $js_file_data);
     } 
-
+  
     //  names for actors and characters etc links full cast page
     //  titleCharacterLinkBuilder:j}=(0,m.WO)(),k=A({nconst:t,refSuffix:E}),R=j({nconst:t,tconst:M,refSuffix:E}),
     //  111111111111111111111111111111111111111111222222222222222222222222222233333333333333333333333333333333333
