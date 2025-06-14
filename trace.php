@@ -1134,10 +1134,10 @@ function replace_javascript_episodelist ($js_file_data, $html)
     $part2 = $matches[4];    // children:x({id:   x variable and id maybe variable
     $part3 = $matches[6];    // ,defaultMessage:  maybe variable
     // get varaiable which holds episode data from json after processing in js 
-                 //({titleId:s.id})
-                 //1111111111233333
-    $pattern = '#(\({titleId:)(.*?)(\.id}\))#';
-                //11111111111  222  3333333
+                 //({titleId:s.id,query
+                 //11111111112333333333
+    $pattern = '#(\({titleId:)(.*?)(\.id,query)#';
+                // 11111111111 222  3333333333
     unset($matches);
     preg_match($pattern, $js_file_data, $matches);
     $part_4 = $matches[2];   // s is variable
@@ -1148,15 +1148,12 @@ function replace_javascript_episodelist ($js_file_data, $html)
     $append.= $part_4.'.videodbid != 0 &&'.$part1.'href:"show.php?id=".concat('.$part_4.'.videodbid),'.$part2.'"show_episode"'.$part3.'"Show Episode ".concat('.$part_4.'.videodbdiskid)})}),'; 
   
     // get position to insert cloned js
-              //className:"episode-item-wrapper",children:[(0,a.jsx)(qn,{href:"/title/".concat old
-              //111111111111111111111111111111111111111111122222222222222222222222222222222222  old
-              //className:"episode-item-wrapper",children:[(0,c.jsx)(eG.Z,{href:`
-              //11111111111111111111111111111111111111111112222222222222222222222
+              //className:"episode-item-wrapper",children:[
     unset($matches);
-    $pattern = '#(className\:"episode\-item.*?children\:\[)(\(0,.*?\)\(.*?,\{href\:`)#';
+    $pattern = '#className\:"episode\-item.*?children\:\[#';
     preg_match($pattern, $js_file_data, $matches);
     $js_file_data = preg_replace($pattern,
-                                 $matches[1].$append.$matches[2],
+                                 $matches[0].$append,
                                  $js_file_data);
     
     return array($js_file_data,$html);
