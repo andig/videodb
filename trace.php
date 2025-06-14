@@ -777,6 +777,17 @@ function replace_javascript_lnksbody  ($js_file_data)
                                      $js_file_data);
     }
     
+    // epidsode picture link on episode list page
+    // let D={dynamicWidth:!0,imageProps:{imageModel:t.image,imageType:t.type},href:
+    unset($matches);
+    $pattern = '#let .={dynamicWidth:!0,imageProps:{imageModel:..image,imageType:..type},href:#';
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
+                                     $js_file_data);
+    }
+    
     return $js_file_data; 
 }
 
