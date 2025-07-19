@@ -808,10 +808,10 @@ function replace_javascript_search ($js_file_data)
     }
     
     // fix link for looking glass in search bar
-    // look for   search:{searchEndpoint:"https://v2.sg.media-imdb.com/suggestion",queryTemplate:"%s%s/%s.json",formAction:"/find",formMethod:"get",inputName:"q",hiddenFields:[{name:"ref_",val:"nv_sr_sm"}],
-    //            11111111111111111111111 222222222222222222222222222222222222222 33333333333333334444444444445555555555555566666777777777777777777777777777777777777777777777778888888888888888888888888888888
-    $pattern = '#(search:\{searchEndpoint:")(.*?)(",queryTemplate:")(.*?formAction:")(.*?)(".*?hiddenFields:\[)(.*?\],)#';
-               // 1111111111111111111111111  222  33333333333333333  4444444444444444444  555  6666666666666666666  777777
+    //            return{searchEndpoint:"https://v3.sg.media-imdb.com/suggestion",queryTemplate:"%sx/%s.json?includeVideos=1",formAction:"/find",formMethod:"get",inputName:"q",hiddenFields:[{name:"ref_",val:t([E.Cd.SEARCH_BAR,E.Cd.SEE_MORE])}],
+    //            1111111111111111111111222222222222222222222222222222222222222233333333333333333444444444444444444444444444444444444444445555566666666666666666666666666666666666666666666666777777777777777777777777777777777777777777777777777777
+    $pattern = '#(return\{searchEndpoint:")(.*?)(",queryTemplate:")(.*?formAction:")(.*?)(".*?hiddenFields:\[)(.*?\]\)\}\],)#';
+               // 111111111111111111111111  222  33333333333333333  444444444444444  555  6666666666666666666  777777777777
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
