@@ -463,7 +463,7 @@ function fixup_javascript($html)
         }
         
         // for search bar and interactive search list
-        $find_string = 'hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]';
+        $find_string = 'https://v3.sg.media-imdb.com/suggestion';
         $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
         if (preg_match($pattern, $js_file_data, $matches)  )
         {
@@ -820,9 +820,10 @@ function replace_javascript_search ($js_file_data)
     }
     
     // fix link for drop down list in search bar
-    //"search-result--const",href:e.url} and "search-result--video",href:e.url} and "search-result--link",href:e.url}
-    //                     1111111222222                          1111111222222                         1111111222222  
-    $pattern = '#(",href:)(.\.url\})#';
+    //"search-result--const",href:e.url,children
+    //"search-result--video",href:e.url,children 
+    //"search-result--link",href:e.url,children
+    $pattern = '#(",href:)(.\.url,children)#';
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
