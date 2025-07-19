@@ -344,9 +344,17 @@ function imdbData($imdbID)
     $data['country'] = trim(join(', ', $ary[1]));
 
     // Languages
-	preg_match_all('/<a class=".+?" href="\/search\/title\?title_type=feature&amp;primary_language=.+?&amp;sort=moviemeter,asc&amp;ref_=tt_dt_ln">(.+?)<\/a>/', $resp['data'], $ary, PREG_PATTERN_ORDER);
-    $data['language'] = trim(strtolower(join(', ', $ary[1])));
-
+    $data['language'] = '';
+    if (isset( $json_data["props"]["pageProps"]["mainColumnData"]["spokenLanguages"]["spokenLanguages"]) &&
+        is_array($json_data["props"]["pageProps"]["mainColumnData"]["spokenLanguages"]["spokenLanguages"])) 
+    {
+        foreach ($json_data["props"]["pageProps"]["mainColumnData"]["spokenLanguages"]["spokenLanguages"] as $languagedata)
+        {
+            $languagearray[] = trim($languagedata["text"]);
+        }
+        $data['language'] = trim(strtolower(join(', ',$languagearray)));
+    }
+    
     // Genres (as Array)
     preg_match_all('/class="ipc-chip__text">(.+?)<\/span><\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
     foreach($ary[1] as $genre) {

@@ -463,7 +463,7 @@ function fixup_javascript($html)
         }
         
         // for search bar and interactive search list
-        $find_string = 'hiddenFields:[{name:"ref_",val:"nv_sr_sm"}]';
+        $find_string = 'https://v3.sg.media-imdb.com/suggestion';
         $pattern = '#'.preg_quote($find_string, '#').'#';  // add escape delimiters
         if (preg_match($pattern, $js_file_data, $matches)  )
         {
@@ -697,20 +697,23 @@ function replace_javascript_lnksbody  ($js_file_data)
                                                 }, $js_file_data);
     }
     
-    // creator and stars lnks near top page 
-    //tH.countLimit)(t.cast?.total):void 0,y=
-    $pattern = '#...countLimit\)\(..cast\?.total\)\:void 0,.=#';
+    //Top cast
+    //all cast & crew
+    // "data-testid":"title-cast",children:[(0,n.jsx)(tU.O,{title:c,editHref:f,subtitleProps:{href
+    // "data-testid":"title-cast-allcast-link",labelTitle:u,labelLink: 
+    $pattern = '#"data-testid":"title-cast".*?href:'
+             . '|"data-testid":"title-cast-allcast-link".*?labelLink:#';
     unset($matches);
     if ( preg_match($pattern, $js_file_data, $matches))
     {
-        $js_file_data = preg_replace($pattern,
-                            $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
-                             $js_file_data);
-    }        
+        $js_file_data = preg_replace_callback($pattern, function ($matches) use ($iframe_val) 
+                                                {return $matches[0]."'?".$iframe_val."&videodburl=https://www.imdb.com'"."+";
+                                                }, $js_file_data);
+    } 
     
-    // creator and ???? lnks in body
-    //titleFullCreditsLinkBuilder:o}=(0,B.WO)(),l=(0,eF.N)(rm);if(!a.length)return null;let d=rA(i.id),c=
-    $pattern = '#titleFullCreditsLinkBuilder\:.\}=\(.,....\)\(\),.=\(.,....\)\(..\)\;if\(...length\)return null\;let .=..\(....\),.=#';
+    // creator, writer, director lnks to full list page
+    //           titleFullCreditsLinkBuilder:l}=(0,B.WO)(),d=(0,eF.N)(rg),c=(0,eo.hg)({weblabID:es.lh.IMDB_WEB_PACE_CREDITS_1201882,treatments:{T1:!0}});if(!a.length)return null;let u=r>a.length,p=c?i.id:rk(i.id),m=//
+    $pattern = '#titleFullCreditsLinkBuilder\:.\}=\(.,....\)\(\),.=\(.,....\)\(..\).*?if\(...length\)return null\;let .=.*?.=.*?=#';
     unset($matches);
     if ( preg_match($pattern, $js_file_data, $matches))
     {
@@ -718,7 +721,7 @@ function replace_javascript_lnksbody  ($js_file_data)
                             $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
                              $js_file_data);
     } 
-
+  
     //  names for actors and characters etc links full cast page
     //  titleCharacterLinkBuilder:j}=(0,m.WO)(),k=A({nconst:t,refSuffix:E}),R=j({nconst:t,tconst:M,refSuffix:E}),
     //  111111111111111111111111111111111111111111222222222222222222222222222233333333333333333333333333333333333
@@ -774,6 +777,17 @@ function replace_javascript_lnksbody  ($js_file_data)
                                      $js_file_data);
     }
     
+    // epidsode picture link on episode list page
+    // let D={dynamicWidth:!0,imageProps:{imageModel:t.image,imageType:t.type},href:
+    unset($matches);
+    $pattern = '#let .={dynamicWidth:!0,imageProps:{imageModel:..image,imageType:..type},href:#';
+    if (preg_match($pattern, $js_file_data, $matches))
+    {
+        $js_file_data = preg_replace($pattern,
+                                     $matches[0]."'"."?$iframe_val&videodburl=https://www.imdb.com"."'"."+",
+                                     $js_file_data);
+    }
+    
     return $js_file_data; 
 }
 
@@ -794,10 +808,10 @@ function replace_javascript_search ($js_file_data)
     }
     
     // fix link for looking glass in search bar
-    // look for   search:{searchEndpoint:"https://v2.sg.media-imdb.com/suggestion",queryTemplate:"%s%s/%s.json",formAction:"/find",formMethod:"get",inputName:"q",hiddenFields:[{name:"ref_",val:"nv_sr_sm"}],
-    //            11111111111111111111111 222222222222222222222222222222222222222 33333333333333334444444444445555555555555566666777777777777777777777777777777777777777777777778888888888888888888888888888888
-    $pattern = '#(search:\{searchEndpoint:")(.*?)(",queryTemplate:")(.*?formAction:")(.*?)(".*?hiddenFields:\[)(.*?\],)#';
-               // 1111111111111111111111111  222  33333333333333333  4444444444444444444  555  6666666666666666666  777777
+    //            return{searchEndpoint:"https://v3.sg.media-imdb.com/suggestion",queryTemplate:"%sx/%s.json?includeVideos=1",formAction:"/find",formMethod:"get",inputName:"q",hiddenFields:[{name:"ref_",val:t([E.Cd.SEARCH_BAR,E.Cd.SEE_MORE])}],
+    //            1111111111111111111111222222222222222222222222222222222222222233333333333333333444444444444444444444444444444444444444445555566666666666666666666666666666666666666666666666777777777777777777777777777777777777777777777777777777
+    $pattern = '#(return\{searchEndpoint:")(.*?)(",queryTemplate:")(.*?formAction:")(.*?)(".*?hiddenFields:\[)(.*?\]\)\}\],)#';
+               // 111111111111111111111111  222  33333333333333333  444444444444444  555  6666666666666666666  777777777777
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
@@ -806,9 +820,10 @@ function replace_javascript_search ($js_file_data)
     }
     
     // fix link for drop down list in search bar
-    //"search-result--const",href:e.url} and "search-result--video",href:e.url} and "search-result--link",href:e.url}
-    //                     1111111222222                          1111111222222                         1111111222222  
-    $pattern = '#(",href:)(.\.url\})#';
+    //"search-result--const",href:e.url,children
+    //"search-result--video",href:e.url,children 
+    //"search-result--link",href:e.url,children
+    $pattern = '#(",href:)(.\.url,children)#';
     unset($matches);
     if (preg_match($pattern, $js_file_data, $matches))
     {
@@ -1131,10 +1146,10 @@ function replace_javascript_episodelist ($js_file_data, $html)
     $part2 = $matches[4];    // children:x({id:   x variable and id maybe variable
     $part3 = $matches[6];    // ,defaultMessage:  maybe variable
     // get varaiable which holds episode data from json after processing in js 
-                 //({titleId:s.id})
-                 //1111111111233333
-    $pattern = '#(\({titleId:)(.*?)(\.id}\))#';
-                //11111111111  222  3333333
+                 //({titleId:s.id,query
+                 //11111111112333333333
+    $pattern = '#(\({titleId:)(.*?)(\.id,query)#';
+                // 11111111111 222  3333333333
     unset($matches);
     preg_match($pattern, $js_file_data, $matches);
     $part_4 = $matches[2];   // s is variable
@@ -1145,15 +1160,12 @@ function replace_javascript_episodelist ($js_file_data, $html)
     $append.= $part_4.'.videodbid != 0 &&'.$part1.'href:"show.php?id=".concat('.$part_4.'.videodbid),'.$part2.'"show_episode"'.$part3.'"Show Episode ".concat('.$part_4.'.videodbdiskid)})}),'; 
   
     // get position to insert cloned js
-              //className:"episode-item-wrapper",children:[(0,a.jsx)(qn,{href:"/title/".concat old
-              //111111111111111111111111111111111111111111122222222222222222222222222222222222  old
-              //className:"episode-item-wrapper",children:[(0,c.jsx)(eG.Z,{href:`
-              //11111111111111111111111111111111111111111112222222222222222222222
+              //className:"episode-item-wrapper",children:[
     unset($matches);
-    $pattern = '#(className\:"episode\-item.*?children\:\[)(\(0,.*?\)\(.*?,\{href\:`)#';
+    $pattern = '#className\:"episode\-item.*?children\:\[#';
     preg_match($pattern, $js_file_data, $matches);
     $js_file_data = preg_replace($pattern,
-                                 $matches[1].$append.$matches[2],
+                                 $matches[0].$append,
                                  $js_file_data);
     
     return array($js_file_data,$html);
@@ -1279,9 +1291,9 @@ function replace_javascript_lnkstop ($js_file_data)
                                      $js_file_data);
     }
     
-// creator and stars lnks near top page 
-    //nameMainLinkBuilder:r}=(0,l.WO)();return t?(0,a.jsx)(a.Fragment,{children:t.map(t=>{let s=t.category.id.toLowerCase(),l=
-    $pattern = '#nameMainLinkBuilder:.*?toLowerCase\(\),.=#';
+    // creator and stars lnks near top page 
+    // nameMainLinkBuilder:g}=(0,l.WO)();return i?(0,a.jsx)(a.Fragment,{children:i.map((i,s)=>{let l=t?i.grouping:i.category,c=
+    $pattern = '#nameMainLinkBuilder:.*?category,.=#';
     unset($matches);
     if ( preg_match($pattern, $js_file_data, $matches))
     {
