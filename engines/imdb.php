@@ -437,8 +437,8 @@ function imdbData($imdbID)
     {
         foreach ($json_data_cast['props']['pageProps']['contentData']['categories'] as $index => $category) 
         {
-            // Make sure 'id' exists for this category, then check if it equals "cast"
-            if (isset($category['id']) && $category['id'] === "cast") 
+            // Make sure 'name' exists for this category, then check if it equals "cast"
+            if (isset($category['name']) && strcasecmp($category['name'], "cast") === 0)
             {
                 // Ensure that 'section' and its 'items' exist and are an array
                 if (isset($category['section']['items']) && is_array($category['section']['items'])) 
