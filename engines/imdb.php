@@ -296,7 +296,7 @@ function imdbData($imdbID)
     $data['origtitle'] = trim($ary[1]);
 
     // Cover URL
-    $data['coverurl'] = imdbGetCoverURL($resp['data']);
+    $data['coverurl'] = imdbGetCoverURL($resp['data'], $json_data);
 
     // MPAA Rating
     $data['mpaa'] = "";
@@ -531,15 +531,30 @@ function imdbFixEncoding($data, $resp)
  *
  * @author  Roland Obermayer <robelix@gmail.com>
  * @param   string  $data   IMDB Page data
+ * @param   string  $jsondata IMDB json Data
  * @return  string          Cover Image URL
  */
-function imdbGetCoverURL($data) {
+function imdbGetCoverURL($data, $jsondata = null) {
     global $imdbServer;
     global $CLIENTERROR;
     global $cache;
 
-    // find cover image url
-    if (preg_match('/<a class="ipc-lockup-overlay ipc-focusable" href="(\/title\/tt\d+\/mediaviewer\/\??rm.+?)" aria-label=".*?Poster.*?"><div class="ipc-lockup-overlay__screen"><\/div><\/a>/s', $data, $ary))
+    if ($jsondata !== null) 
+    {
+        $url = '';
+        if (isset($jsondata["props"]["pageProps"]["aboveTheFoldData"]["primaryImage"]))
+        {
+            $url = $jsondata["props"]["pageProps"]["aboveTheFoldData"]["primaryImage"]["url"];
+            // If you want the image to scaled to a certain size you can do this.
+            // UX800 sets the width of the image to 800 with correct aspect ratio with regard to height.
+            // UY800 set the height to 800 with correct aspect ratio with regard to width.
+            // $url= str_replace('.jpg', 'UY800_.jpg', $url);
+        }
+        return $url;
+    }
+
+// find cover image url
+    if (preg_match('/<a class="ipc-lockup-overlay ipc-focusable.*?" href="(\/title\/tt\d+\/mediaviewer\/\??rm.+?)" aria-label=".*?Poster.*?"><div class="ipc-lockup-overlay__screen"><\/div><\/a>/s', $data, $ary))
     {
         // Fetch the image page
         $resp = httpClient($imdbServer.$ary[1], $cache);
