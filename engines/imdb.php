@@ -420,66 +420,45 @@ function imdbData($imdbID)
     //revert the PCRE limits back to their original values after regex operation,
     ini_set('pcre.backtrack_limit', $origBacktrackLimit);
     
-    $cast = '';
+    // cast and directors
+    $data['cast'] = "";
     $data['director'] = "";
-    $cast_done = 0;
-    $director_done = 0;
-    
+    $cast_done = false;
+    $directors_done = false;
+
     if (isset($json_data_cast['props']['pageProps']['contentData']['categories']) &&
         is_array($json_data_cast['props']['pageProps']['contentData']['categories'])) 
     {
-        foreach ($json_data_cast['props']['pageProps']['contentData']['categories'] as $index => $category) 
+        foreach ($json_data_cast['props']['pageProps']['contentData']['categories'] as $category) 
         {
-            if (isset($category['name'])) 
+            if (!isset($category['name'])) 
             {
-                switch (strtolower($category['name'])) {
-                    case "cast":
-                        // Ensure that 'section' and its 'items' exist and are an array
-                        if (isset($category['section']['items']) && is_array($category['section']['items'])) 
-                        {
-                            $pageSize   = $category['pagination']['queryVariables']['first'];
-                            $total_cast = $category['section']['total'];
-                            if ($total_cast > $pageSize) 
-                            {
-                                $cast = imdbCastExtra($imdbID);
-                            } 
-                            else 
-                            {
-                                $cast = imdbCast($category['section']['items']);
-                            }
-                        }
-                        $data['cast'] = $cast;
-                        $cast_done = 1;
-                        break;
-
-                    case "directors":
-                        // Ensure that 'section' and its 'items' exist and are an array
-                        if (isset($category['section']['items']) && is_array($category['section']['items'])) 
-                        {
-                            foreach ($category['section']['items'] as $item) 
-                            {
-                                $directors[] = $item['rowTitle'];
-                            }
-                            $dirs = implode(', ', $directors);
-                            $dirs = substr($dirs, 0, 250);
-                        }
-                        $data['director'] = $dirs;
-                        $director_done = 1;
-                        break;
-
-                    default:
-                        // Other categories can be handled here if needed
-                        break;
-                }
+                continue;
             }
-            // break out of for loop when the cast / director data done
-            if ($cast_done && $director_done)
+            switch (strtolower($category['name'])) 
             {
-              break;
+                case "cast":
+                    $cast = imdbGetCast($category, $imdbID);
+                    $data['cast'] = $cast;
+                    $cast_done = true;
+                    break;
+                case "directors":
+                case "director":
+                    $dirs = imdbGetDirectors($category);
+                    $data['director'] = $dirs;
+                    $directors_done = true;
+                    break;
+                default:
+                    // Other categories can be handled here if needed
+                    break;
+            }
+            if ($cast_done && $directors_done) 
+            {
+                break;
             }
         }
     }
-    
+   
     // Fetch plot
     $resp = $resp = imdbFixEncoding($data, httpClient($imdbServer.'/title/tt'.$imdbID.'/plotsummary', $cache));
     if (!$resp['success']) $CLIENTERROR .= $resp['error']."\n";
@@ -655,6 +634,38 @@ function imdbActor($name, $actorid)
     }
 
     return $ary;
+}
+
+function imdbGetCast(array $category, string $imdbID)
+{
+    $cast = [];
+    if (isset($category['section']['items']) && is_array($category['section']['items'])) {
+        $pageSize   = $category['pagination']['queryVariables']['first'];
+        $total_cast = $category['section']['total'];
+
+        if ($total_cast > $pageSize) {
+            $cast = imdbCastExtra($imdbID);
+        } else {
+            $cast = imdbCast($category['section']['items']);
+        }
+    }
+    return $cast;
+}
+
+function imdbGetDirectors(array $category)
+{
+    $directors = [];
+    if (isset($category['section']['items']) && is_array($category['section']['items'])) {
+        foreach ($category['section']['items'] as $item) {
+            if (isset($item['rowTitle'])) {
+                $directors[] = $item['rowTitle'];
+            }
+        }
+    }
+    $dirs = implode(', ', $directors);
+    $dirs = substr($dirs, 0, 250);
+
+    return $dirs;
 }
 
 function imdbCast(array $items)
